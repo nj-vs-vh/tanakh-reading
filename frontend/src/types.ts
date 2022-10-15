@@ -15,7 +15,7 @@ export enum TextSource {
     FG = "fg"
 }
 
-interface VerseData {
+export interface VerseData {
     verse: number;
     text: Map<TextSource, string>
     comments: Map<string, Array<CommentData>>
