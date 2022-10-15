@@ -1,4 +1,4 @@
-import type { ParshaData } from "./types";
+import type { ParshaData, Metadata } from "./types";
 
 
 // @ts-ignore
@@ -21,7 +21,28 @@ export async function getParsha(index: number): Promise<ParshaData | string> {
             return respText;
         }
     } catch (error) {
-        console.warn(`Error fetching data: ${error}`)
+        console.warn(`Error fetching parsha data: ${error}`)
+        return NETWORKING_ERRMSG;
+    }
+}
+
+
+export async function getMetadata(): Promise<Metadata | string> {
+    console.log(`Fetching metadata`)
+    try {
+        const resp = await fetch(
+            `${BASE_API_URL}/metadata`,
+            { headers: { 'Content-Type': 'application/json' } }
+        )
+        const respText = await resp.text();
+
+        if (resp.ok) {
+            return JSON.parse(respText);
+        } else {
+            return respText;
+        }
+    } catch (error) {
+        console.warn(`Error fetching metadata: ${error}`)
         return NETWORKING_ERRMSG;
     }
 }

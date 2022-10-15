@@ -40,20 +40,24 @@ async def preflight(request: web.Request) -> web.Response:
 
 @routes.get("/metadata")
 async def get_metadata(request: web.Request) -> web.Response:
+    available_parsha = sorted(int(json_file.stem) for json_file in JSON_DIR.iterdir())
     return web.json_response(
         {
             "book_names": metadata.torah_book_names,
             "parsha_ranges": metadata.torah_book_parsha_ranges,
             "parsha_names": metadata.parsha_names,
-            "translations": metadata.translation_about_url,
-            "commenters": metadata.commenter_about_url,
+            "translation_about_links": metadata.translation_about_url,
+            "translation_names": {
+                metadata.Translation.FG: "Перевод Фримы Гурфинкель"
+            },
+            "commenter_about_links": metadata.commenter_about_url,
+            "commenter_names": {
+                metadata.Commenter.SONCHINO: "Сончино",
+                metadata.Commenter.RASHI: "Раши",
+            },
+            "available_parsha": available_parsha,
         }
     )
-
-
-@routes.get("/parsha")
-async def list_available_parsha(request: web.Request) -> web.Response:
-    return web.json_response(sorted(int(json_file.stem) for json_file in JSON_DIR.iterdir()))
 
 
 @routes.get("/parsha/{index}")
