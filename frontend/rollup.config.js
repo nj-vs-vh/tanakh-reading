@@ -7,6 +7,12 @@ import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
 import replace from '@rollup/plugin-replace';
+const fs = require('fs');
+
+fs.copyFile('public/index.html', 'public/200.html', (err) => {
+	if (err) throw err;
+	console.log('index.html copied to 200.html for Surge SPA compatibility');
+});
 
 const production = !process.env.ROLLUP_WATCH;
 
