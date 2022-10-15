@@ -29,7 +29,6 @@ async def cors_middleware(request: web.Request, handler: Handler) -> web.StreamR
     allowed_origin = "https://ru-semantle.surge.sh" if config.IS_PROD else "http://localhost:8080"
     resp.headers[hdrs.ACCESS_CONTROL_ALLOW_ORIGIN] = allowed_origin
     resp.headers[hdrs.ACCESS_CONTROL_ALLOW_HEADERS] = "Content-Type"
-    # not actually true but whatever :)
     resp.headers[hdrs.ACCESS_CONTROL_ALLOW_METHODS] = "POST, GET, OPTIONS"
     return resp
 
