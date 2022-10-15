@@ -3,6 +3,11 @@
     import type { Metadata, ParshaData } from "../types";
     import { TextSource } from "../types";
     import HomeButton from "./shared/HomeButton.svelte";
+    import VerseDetails from "./VerseDetailsModal.svelte";
+    import Asterisk from "./shared/Asterisk.svelte";
+
+    // @ts-ignore
+    const { open } = getContext("simple-modal");
 
     export let parsha: ParshaData;
 
@@ -25,6 +30,15 @@
             {#each chapter.verses as verse}
                 <span class="verse-number">{verse.verse}.</span>
                 <span class="verse-text">{verse.text[TextSource.FG]}</span>
+                {#if Object.keys(verse.comments).length > 0}
+                    <span
+                        class="clickable-tooltip"
+                        on:click={() => open(VerseDetails, { verseData: verse, chapter: chapter.chapter })}
+                        on:keydown={() => open(VerseDetails, { verseData: verse, chapter: chapter.chapter })}
+                    >
+                        <Asterisk />
+                    </span>
+                {/if}
             {/each}
         {/each}
     </div>
@@ -43,14 +57,19 @@
         margin: 1em 0 1em 0;
     }
 
-    span.verse-number {
-        color: grey;
-        margin-right: 0.3em;
-        user-select: none;
+    span.verse-text {
+        margin-right: 0.1em;
     }
 
-    span.verse-text {
-        margin-right: 0.5em;
+    span.clickable-tooltip {
+        cursor: pointer;
+        margin-right: 0.3em;
+    }
+
+    span.verse-number {
+        color: grey;
+        user-select: none;
+        margin-right: 0.2em;
     }
 
     .small-header {

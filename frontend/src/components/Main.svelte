@@ -5,6 +5,7 @@
     import ParshaProvider from "./ParshaProvider.svelte";
     import { TextSource } from "../types";
     import Screen from "./shared/Screen.svelte";
+    import Modal from "svelte-simple-modal";
 
     export let metadata: Metadata;
     setContext("metadata", metadata);
@@ -29,42 +30,47 @@
     }
 </script>
 
-<Router>
-    <Route path="/">
-        <Screen>
-            <div class="container">
-            <h1>Тора</h1>
-            {#each bookIndices as bookIndex}
-                <h2>
-                    {bookIndex}. {metadata.book_names[bookIndex][TextSource.FG]}
-                </h2>
-                {#each parshaArrays[bookIndex] as parshaIndex}
-                    {#if metadata.available_parsha.includes(parshaIndex)}
-                        <Link to={`/${parshaIndex}`}>
-                            <h3>
-                                {parshaIndex}. {metadata.parsha_names[
-                                    parshaIndex
-                                ][TextSource.FG]}
-                            </h3>
-                        </Link>
-                    {:else}
-                        <h3 class="inactive">
-                            {parshaIndex}. {metadata.parsha_names[parshaIndex][
+<Modal styleCloseButton={{ boxShadow: "none" }}>
+    <Router>
+        <Route path="/">
+            <!-- <ParshaProvider parshaIndex={3} /> -->
+            <Screen>
+                <div class="container">
+                    <h1>Тора</h1>
+                    {#each bookIndices as bookIndex}
+                        <h2>
+                            {bookIndex}. {metadata.book_names[bookIndex][
                                 TextSource.FG
                             ]}
-                        </h3>
-                    {/if}
-                {/each}
-            {/each}
-            </div>
-        </Screen>
-    </Route>
-    {#each metadata.available_parsha as parshaIndex}
-        <Route path={`/${parshaIndex}`}>
-            <ParshaProvider {parshaIndex} />
+                        </h2>
+                        {#each parshaArrays[bookIndex] as parshaIndex}
+                            {#if metadata.available_parsha.includes(parshaIndex)}
+                                <Link to={`/${parshaIndex}`}>
+                                    <h3>
+                                        {parshaIndex}. {metadata.parsha_names[
+                                            parshaIndex
+                                        ][TextSource.FG]}
+                                    </h3>
+                                </Link>
+                            {:else}
+                                <h3 class="inactive">
+                                    {parshaIndex}. {metadata.parsha_names[
+                                        parshaIndex
+                                    ][TextSource.FG]}
+                                </h3>
+                            {/if}
+                        {/each}
+                    {/each}
+                </div>
+            </Screen>
         </Route>
-    {/each}
-</Router>
+        {#each metadata.available_parsha as parshaIndex}
+            <Route path={`/${parshaIndex}`}>
+                <ParshaProvider {parshaIndex} />
+            </Route>
+        {/each}
+    </Router>
+</Modal>
 
 <style>
     .container {
@@ -87,6 +93,6 @@
 
     .inactive {
         color: rgb(196, 196, 196);
-        cursor:not-allowed;
+        cursor: not-allowed;
     }
 </style>
