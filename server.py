@@ -68,6 +68,11 @@ async def get_parsha(request: web.Request):
     return web.json_response(text=parsha_file.read_text())
 
 
+@routes.get("/")
+async def index(request: web.Request):
+    return web.Response(text="שְׁמַע יִשְׂרָאֵל יְהוָה אֱלֹהֵינוּ יְהוָה אֶחָֽד׃")
+
+
 if __name__ == "__main__":
     app = web.Application(client_max_size=1024)
     app.middlewares.append(cors_middleware)
