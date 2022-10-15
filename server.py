@@ -77,4 +77,4 @@ if __name__ == "__main__":
     app = web.Application(client_max_size=1024)
     app.middlewares.append(cors_middleware)
     app.add_routes(routes)
-    web.run_app(app, port=80 if config.IS_PROD else 8080)
+    web.run_app(app, port=config.PORT)
