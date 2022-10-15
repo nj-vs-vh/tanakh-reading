@@ -1,12 +1,25 @@
 <script lang="ts">
-    import type { ParshaData } from "../types";
+    import { getContext } from "svelte";
+    import type { Metadata, ParshaData } from "../types";
     import { TextSource } from "../types";
+    import HomeButton from "./shared/HomeButton.svelte";
 
     export let parsha: ParshaData;
+
+    const chapters = parsha.chapters.map((chapterData) => chapterData.chapter);
+    chapters.sort();
+    const metadata: Metadata = getContext("metadata");
 </script>
 
 <div class="page">
     <div class="container">
+        <HomeButton />
+        <span class="small-header">
+            Книга <b>{metadata.book_names[parsha.book][TextSource.FG]}</b>,
+            недельный раздел
+            <b>{metadata.parsha_names[parsha.parsha][TextSource.FG]}</b>, главы
+            с <b>{chapters[0]}</b> по <b>{chapters[chapters.length - 1]}</b>
+        </span>
         {#each parsha.chapters as chapter}
             <h2>Глава {chapter.chapter}</h2>
             {#each chapter.verses as verse}
@@ -22,12 +35,12 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 1em 0 1em 0;
     }
+
     div.container {
         text-align: justify;
         width: max(50vw, 600px);
-        /* font-size: large; */
+        margin: 1em 0 1em 0;
     }
 
     span.verse-number {
@@ -38,5 +51,11 @@
 
     span.verse-text {
         margin-right: 0.5em;
+    }
+
+    .small-header {
+        font-size: medium;
+        font-weight: normal;
+        margin: 0;
     }
 </style>
