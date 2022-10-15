@@ -16,7 +16,7 @@ torah_book_parsha_ranges: dict[int, tuple[int, int]] = {  # upper bound not incl
     2: (13, 24),
     3: (24, 34),
     4: (34, 44),
-    5: (44, 54),
+    5: (44, 55),
 }
 
 
