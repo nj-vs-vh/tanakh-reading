@@ -1,0 +1,27 @@
+import type { ParshaData } from "./types";
+
+
+// @ts-ignore
+const BASE_API_URL = buildTimeReplacedIsProduction ? "https://torah-reading-backend.herokuapp.com" : "http://localhost:8081";
+const NETWORKING_ERRMSG = "Ошибка подключения, попробуйте обновить страницу!";
+
+
+export async function getParsha(index: number): Promise<ParshaData | string> {
+    console.log(`Fetching parsha index ${index}`)
+    try {
+        const resp = await fetch(
+            `${BASE_API_URL}/parsha/${index}`,
+            { headers: { 'Content-Type': 'application/json' } }
+        )
+        const respText = await resp.text();
+
+        if (resp.ok) {
+            return JSON.parse(respText);
+        } else {
+            return respText;
+        }
+    } catch (error) {
+        console.warn(`Error fetching data: ${error}`)
+        return NETWORKING_ERRMSG;
+    }
+}
