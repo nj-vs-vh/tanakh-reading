@@ -2,9 +2,9 @@
     import { getContext } from "svelte";
     import type { Metadata, ParshaData } from "../types";
     import { TextSource } from "../types";
-    import HomeButton from "./shared/HomeButton.svelte";
     import VerseDetails from "./VerseDetailsModal.svelte";
-    import Asterisk from "./shared/Asterisk.svelte";
+    import InlineIcon from "./shared/InlineIcon.svelte";
+    import Icon from "./shared/Icon.svelte";
 
     // @ts-ignore
     const { open } = getContext("simple-modal");
@@ -18,7 +18,6 @@
 
 <div class="page">
     <div class="container">
-        <HomeButton />
         <span class="small-header">
             Книга <b>{metadata.book_names[parsha.book][TextSource.FG]}</b>,
             недельный раздел
@@ -36,7 +35,9 @@
                         on:click={() => open(VerseDetails, { verseData: verse, chapter: chapter.chapter })}
                         on:keydown={() => open(VerseDetails, { verseData: verse, chapter: chapter.chapter })}
                     >
-                        <Asterisk />
+                        <InlineIcon heightEm={0.7}>
+                            <Icon icon={'asterisk'} color={"#606060"}/>
+                        </InlineIcon>
                     </span>
                 {/if}
             {/each}

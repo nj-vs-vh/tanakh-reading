@@ -33,8 +33,8 @@
 <Modal styleCloseButton={{ boxShadow: "none" }}>
     <Router>
         <Route path="/">
-            <!-- <ParshaProvider parshaIndex={3} /> -->
-            <Screen>
+            <ParshaProvider parshaIndex={3} />
+            <!-- <Screen>
                 <div class="container">
                     <h1>Тора</h1>
                     {#each bookIndices as bookIndex}
@@ -62,7 +62,7 @@
                         {/each}
                     {/each}
                 </div>
-            </Screen>
+            </Screen> -->
         </Route>
         {#each metadata.available_parsha as parshaIndex}
             <Route path={`/${parshaIndex}`}>
