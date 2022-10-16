@@ -27,6 +27,7 @@
   "dependencies": {
     "@rollup/plugin-replace": "^5.0.0",
     "sirv-cli": "^2.0.0",
+    "svelte-burger-menu": "^2.0.5",
     "svelte-loading-spinners": "^0.1.7",
     "svelte-routing": "^1.6.0",
     "svelte-simple-modal": "^1.4.1"
