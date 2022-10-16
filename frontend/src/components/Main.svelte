@@ -77,7 +77,7 @@
                     </div>
                 </Screen>
             {:else}
-                <ParshaProvider parshaIndex={3} />
+                <ParshaProvider parshaIndex={2} />
             {/if}
         </Route>
         {#each metadata.available_parsha as parshaIndex}

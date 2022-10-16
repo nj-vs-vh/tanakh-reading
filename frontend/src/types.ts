@@ -12,7 +12,8 @@ interface CommentData {
 
 
 export enum TextSource {
-    FG = "fg"
+    FG = "fg",
+    PLAUT = "plaut",
 }
 
 export interface VerseData {

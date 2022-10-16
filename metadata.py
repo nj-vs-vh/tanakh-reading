@@ -1,6 +1,3 @@
-from typing import Optional
-
-
 class Translation:
     FG = "fg"
     PLAUT = "plaut"

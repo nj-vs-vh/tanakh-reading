@@ -28,7 +28,7 @@
     const chapterNumbers = parsha.chapters.map(
         (chapterData) => chapterData.chapter
     );
-    chapterNumbers.sort();
+    chapterNumbers.sort((a, b) => a - b);
     const firstChapterNo = chapterNumbers[0];
     const lastChapterNo = chapterNumbers[chapterNumbers.length - 1];
 
