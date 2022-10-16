@@ -3,8 +3,8 @@
     import { CommentFormat } from "../types";
     import { getContext } from "svelte";
     import { TextSource, VerseData } from "../types";
-    import { commentSourceFlagsStore } from "../commentSources";
-    import type { CommentSourceFlags } from "../commentSources";
+    import { commentSourceFlagsStore } from "../settings/commentSources";
+    import type { CommentSourceFlags } from "../settings/commentSources";
 
     let commentSourceFlags: CommentSourceFlags;
     commentSourceFlagsStore.subscribe((v) => {
@@ -33,7 +33,7 @@
                         <span>—</span>
                     {/if}
                     {#if commentData.format == CommentFormat.HTML}
-                        <span>{@html commentData.comment}</span>
+                        <span class="html-wrapper">{@html commentData.comment}</span>
                     {:else}
                         <span>{commentData.comment}</span>
                     {/if}

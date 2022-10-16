@@ -7,15 +7,15 @@
     import Screen from "./shared/Screen.svelte";
     import Modal from "svelte-simple-modal";
     import Menu from "./Menu.svelte";
-    import { initCommentSourceFlags } from "../commentSources";
+    import { initCommentSourceFlags } from "../settings/commentSources";
     import { isProduction } from "../config";
-    import { initCommentStyle } from "../commentStyles";
+    import { initTextDecorationStyle } from "../settings/textDecorationStyle";
 
     export let metadata: Metadata;
     setContext("metadata", metadata);
 
     initCommentSourceFlags(metadata);
-    initCommentStyle();
+    initTextDecorationStyle();
 
     const bookIndices = Object.keys(metadata.book_names).map((v) =>
         parseInt(v)
