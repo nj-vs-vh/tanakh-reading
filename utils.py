@@ -10,7 +10,7 @@ def collapse_whitespace(s: str) -> str:
 def postprocess_patched_text(s: str) -> str:
     s = collapse_whitespace(s)
     s = re.sub(r"\s+([,.:;!?)])", r"\1", s)  # removing whitespace before punctuation
-    s = re.sub(r"([(])\s+", r"\1", s)  # removing whitespace after punctuation
+    s = re.sub(r"([('\"])\s+", r"\1", s)  # removing whitespace after punctuation
     s = s.strip()
     return s
 
