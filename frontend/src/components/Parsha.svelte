@@ -29,6 +29,8 @@
         (chapterData) => chapterData.chapter
     );
     chapterNumbers.sort();
+    const firstChapterNo = chapterNumbers[0];
+    const lastChapterNo = chapterNumbers[chapterNumbers.length - 1];
 
     const verseId = (chapterNo: number, verseNo: number): number =>
         chapterNo * 100000 + verseNo;
@@ -48,7 +50,8 @@
     const openVerseDetails = (verse: VerseData, chapter: ChapterData) => {
         if (commentStyle == CommentStyle.MODAL) {
             open(VerseDetailsModal, {
-                verseData: verse,
+                parsha: parsha,
+                verse: verse.verse,
                 chapter: chapter.chapter,
             });
         } else if (commentStyle == CommentStyle.INLINE) {
@@ -68,8 +71,7 @@
             Книга <b>{metadata.book_names[parsha.book][TextSource.FG]}</b>,
             недельный раздел
             <b>{metadata.parsha_names[parsha.parsha][TextSource.FG]}</b>, главы
-            с <b>{chapterNumbers[0]}</b> по
-            <b>{chapterNumbers[chapterNumbers.length - 1]}</b>
+            с <b>{firstChapterNo}</b> по <b>{lastChapterNo}</b>
         </span>
         {#each parsha.chapters as chapter}
             <h2>Глава {chapter.chapter}</h2>
