@@ -16,16 +16,18 @@ def postprocess_patched_text(s: str) -> str:
 
 
 def inner_tag_text(tag: bs4.Tag) -> str:
-    return postprocess_patched_text(tag.get_text(separator=' ', strip=True))
+    return postprocess_patched_text(tag.get_text(separator=" ", strip=True))
 
 
 def strip_html_breaks(html_text: str) -> str:
-    html_text = re.sub(r'^(<br\s*/>)+', '', html_text)
-    html_text = re.sub(r'(<br\s*/>)+$', '', html_text)
+    html_text = re.sub(r"^(<br\s*/>)+", "", html_text)
+    html_text = re.sub(r"(<br\s*/>)+$", "", html_text)
     return html_text
 
 
-def has_class(tag: bs4.Tag, class_name: str):
+def has_class(tag: bs4.Tag, class_name: str) -> bool:
+    if not isinstance(tag, bs4.Tag):
+        return False
     return class_name in tag.attrs.get("class", [])
 
 
