@@ -7,18 +7,18 @@
     import InlineIcon from "./shared/InlineIcon.svelte";
     import Icon from "./shared/Icon.svelte";
     import Menu from "./Menu.svelte";
-    import { CommentStyle, commentStyleStore } from "../commentStyles";
+    import { TextDecorationStyle, textDecorationStyleStore } from "../settings/textDecorationStyle";
 
     const metadata: Metadata = getContext("metadata");
 
-    let commentStyle: CommentStyle;
-    commentStyleStore.subscribe((v) => {
-        commentStyle = v;
+    let textDecorationStyle: TextDecorationStyle;
+    textDecorationStyleStore.subscribe((v) => {
+        textDecorationStyle = v;
     });
 
     // @ts-ignore
     const { open } = getContext("simple-modal");
-    const openVerseData = (verse: VerseData, chapter: ChapterData) =>
+    const openVerseDetails = (verse: VerseData, chapter: ChapterData) =>
         open(VerseDetails, {
             verseData: verse,
             chapter: chapter.chapter,
@@ -44,27 +44,27 @@
             {#each chapter.verses as verse}
                 <span class="verse-number">{verse.verse}.</span>
                 <span
-                    class={commentStyle === CommentStyle.CLICKABLE_TEXT
+                    class={textDecorationStyle === TextDecorationStyle.CLICKABLE_TEXT
                         ? "verse-text clickable"
                         : "verse-text"}
                     on:click={() => {
-                        commentStyle === CommentStyle.CLICKABLE_TEXT
-                            ? openVerseData(verse, chapter)
+                        textDecorationStyle === TextDecorationStyle.CLICKABLE_TEXT
+                            ? openVerseDetails(verse, chapter)
                             : null;
                     }}
                     on:keydown={() => {
-                        commentStyle === CommentStyle.CLICKABLE_TEXT
-                            ? openVerseData(verse, chapter)
+                        textDecorationStyle === TextDecorationStyle.CLICKABLE_TEXT
+                            ? openVerseDetails(verse, chapter)
                             : null;
                     }}
                 >
                     {verse.text[TextSource.FG]}
                 </span>
-                {#if commentStyle === CommentStyle.ASTRERISK}
+                {#if textDecorationStyle === TextDecorationStyle.ASTRERISK}
                     <span
                         class="comment-asterisk"
-                        on:click={() => openVerseData(verse, chapter)}
-                        on:keydown={() => openVerseData(verse, chapter)}
+                        on:click={() => openVerseDetails(verse, chapter)}
+                        on:keydown={() => openVerseDetails(verse, chapter)}
                     >
                         <InlineIcon heightEm={0.7}>
                             <Icon icon={"asterisk"} color={"#606060"} />

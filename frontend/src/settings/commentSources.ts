@@ -1,5 +1,5 @@
 import { Writable, writable } from 'svelte/store';
-import type { Metadata } from './types';
+import type { Metadata } from '../types';
 
 export type CommentSourceFlags = Map<string, boolean>
 

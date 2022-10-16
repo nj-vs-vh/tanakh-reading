@@ -6,22 +6,22 @@
     import {
         commentSourceFlagsStore,
         toggleCommentSourceFlag,
-    } from "../commentSources";
-    import type { CommentSourceFlags } from "../commentSources";
+    } from "../settings/commentSources";
+    import type { CommentSourceFlags } from "../settings/commentSources";
     import { getContext } from "svelte";
     import type { Metadata } from "../types";
-    import { CommentStyle, commentStyleStore, setCommentStyle } from "../commentStyles";
+    import { TextDecorationStyle, textDecorationStyleStore, setTextDecorationStyle } from "../settings/textDecorationStyle";
 
     let commentSourceFlags: CommentSourceFlags;
     commentSourceFlagsStore.subscribe((v) => {
         commentSourceFlags = v;
     });
 
-    let commentStyle: CommentStyle;
-    commentStyleStore.subscribe((v) => {commentStyle = v;})
+    let textDecorationStyle: TextDecorationStyle;
+    textDecorationStyleStore.subscribe((v) => {textDecorationStyle = v;})
 
-    function setCommentStyleFromEvent(e) {
-        setCommentStyle(e.target.value);
+    function setTextDecorationStyleFromEvent(e) {
+        setTextDecorationStyle(e.target.value);
     }
 
     const metadata: Metadata = getContext("metadata");
@@ -108,34 +108,34 @@
                 <label for="all">Все</label>
             </div>
             <div class="settings-block">
-                <h4>Стиль</h4>
-                {#each Object.values(CommentStyle) as style}
-                    {#if style == CommentStyle.ASTRERISK}
+                <h4>Стиль аннотаций</h4>
+                {#each Object.values(TextDecorationStyle) as style}
+                    {#if style == TextDecorationStyle.ASTRERISK}
                         <input
                             type="radio"
                             id={style}
                             name="commentStyle"
                             value={style}
-                            checked={commentStyle == CommentStyle.ASTRERISK}
-                            on:change={setCommentStyleFromEvent}
+                            checked={textDecorationStyle == TextDecorationStyle.ASTRERISK}
+                            on:change={setTextDecorationStyleFromEvent}
                         />
                         <label for={style}>
-                            <span>Окно, звёздочки</span>
+                            <span>Звёздочки</span>
                             <InlineIcon heightEm={0.7}>
                                 <Icon icon={"asterisk"} color={"#606060"} />
                             </InlineIcon>
                         </label>
-                    {:else if style == CommentStyle.CLICKABLE_TEXT}
+                    {:else if style == TextDecorationStyle.CLICKABLE_TEXT}
                         <input
                             type="radio"
                             id={style}
                             name="commentStyle"
                             value={style}
-                            checked={commentStyle == CommentStyle.CLICKABLE_TEXT}
-                            on:change={setCommentStyleFromEvent}
+                            checked={textDecorationStyle == TextDecorationStyle.CLICKABLE_TEXT}
+                            on:change={setTextDecorationStyleFromEvent}
                         />
                         <label for={style}>
-                            <span>Окно, <span class="clickable">нажимаемый текст</span></span>
+                            <span><span class="clickable">Нажимаемый текст</span></span>
                         </label>
                     {/if}
                     <br />
