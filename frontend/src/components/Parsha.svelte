@@ -7,6 +7,8 @@
     import Icon from "./shared/Icon.svelte";
     import Menu from "./Menu.svelte";
 
+    const metadata: Metadata = getContext("metadata");
+
     // @ts-ignore
     const { open } = getContext("simple-modal");
 
@@ -14,7 +16,6 @@
 
     const chapters = parsha.chapters.map((chapterData) => chapterData.chapter);
     chapters.sort();
-    const metadata: Metadata = getContext("metadata");
 </script>
 
 <Menu homeButton />

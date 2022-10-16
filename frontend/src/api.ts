@@ -1,8 +1,9 @@
+import { isProduction } from "./config";
 import type { ParshaData, Metadata } from "./types";
 
 
 // @ts-ignore
-const BASE_API_URL = buildTimeReplacedIsProduction ? "https://torah-reading-backend.herokuapp.com" : "http://localhost:8081";
+const BASE_API_URL = isProduction ? "https://torah-reading-backend.herokuapp.com" : "http://localhost:8081";
 const NETWORKING_ERRMSG = "Ошибка подключения, попробуйте обновить страницу!";
 
 
