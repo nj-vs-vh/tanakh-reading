@@ -1,10 +1,10 @@
 """Parser for http://www.shabat-shalom.info/books/Tanach-ru/"""
 
 import argparse
-from collections import defaultdict
 import copy
 import json
 import re
+from collections import defaultdict
 from pathlib import Path
 from typing import Optional
 
@@ -12,9 +12,17 @@ import bs4
 import requests  # type: ignore
 
 import metadata
-from metadata import Translation, Commenter
+from metadata import Commenter, Translation
 from model import ChapterData, CommentData, ParshaData, VerseData
-from utils import are_strings_close, collapse_whitespace, has_class, inner_tag_text, postprocess_patched_text, strip_html_breaks, strip_leading_dot
+from utils import (
+    are_strings_close,
+    collapse_whitespace,
+    has_class,
+    inner_tag_text,
+    postprocess_patched_text,
+    strip_html_breaks,
+    strip_leading_dot,
+)
 
 
 def parsha_html(idx: int) -> Path:
@@ -95,10 +103,55 @@ def parse_parsha(parsha: int):
         if current_chapter_data is None:
             continue
 
+        def parse_rashi_comment_from_ref_el(el: bs4.Tag):
+            """Rashi comments may include nested comments, so the recursive function is needed"""
+            if has_class(el, "rashi"):
+                return
+
+            if not has_class(el, "rashi_ref") and isinstance(el, bs4.Tag):
+                rashi_ref_descendants = [el_d for el_d in el.descendants if has_class(el_d, "rashi_ref")]
+                if rashi_ref_descendants:
+                    el = rashi_ref_descendants[0]
+
+            if has_class(el, "rashi_ref"):
+                if "id" not in el.attrs:
+                    print(f"WARNING: Rashi ref element without id: {el}")
+                    return
+                comment_id = el.attrs["id"].removeprefix("_commentref")
+                comment_span = main_content.find("span", attrs={"id": "_comment" + comment_id})
+                if comment_span is None:
+                    print(f"WARNING: Rashi comment not found for ref {el}")
+                comment_text_html = ""
+                anchor_phrase = inner_tag_text(el)
+                for comment_span_child in comment_span.children:
+                    parse_rashi_comment_from_ref_el(comment_span_child)
+                    if has_class(comment_span_child, "rashi"):
+                        continue
+                    if isinstance(comment_span_child, bs4.Tag):
+                        if not inner_tag_text(comment_span_child):
+                            continue
+                        if comment_span_child.name == "b" and are_strings_close(
+                            inner_tag_text(comment_span_child), anchor_phrase
+                        ):
+                            continue
+                        if inner_tag_text(comment_span_child) == "(Раши)":
+                            continue
+                    comment_text_html += " " + collapse_whitespace(str(comment_span_child))
+                if current_verse_data is not None:
+                    current_verse_data["comments"][Commenter.RASHI].append(
+                        CommentData(
+                            anchor_phrase=anchor_phrase,
+                            comment=strip_leading_dot(postprocess_patched_text(strip_html_breaks(comment_text_html))),
+                            format="html",
+                        )
+                    )
+
         if isinstance(child, bs4.Tag):
             if has_class(child, "rashi") or has_class(child, "sonch"):
                 # actual comment spans are skipped, we find them later by ids
                 continue
+            if has_class(child, "rashi_ref"):
+                parse_rashi_comment_from_ref_el(child)
             if has_class(child, "comment_handle"):
                 # sonchino comment parsing
                 comment_id = child.attrs["id"].removeprefix("_commentref")
@@ -107,10 +160,7 @@ def parse_parsha(parsha: int):
                 sonchino_comments: list[CommentData] = []
                 current_comment_data: Optional[CommentData] = None
                 for comment_span_child in comment_span.children:
-                    if (
-                        isinstance(comment_span_child, bs4.Tag)
-                        and comment_span_child.name == "b"
-                    ):
+                    if isinstance(comment_span_child, bs4.Tag) and comment_span_child.name == "b":
                         if current_comment_data is not None:
                             sonchino_comments.append(current_comment_data)
                         current_comment_data = CommentData(
@@ -121,7 +171,7 @@ def parse_parsha(parsha: int):
                     else:
                         if current_comment_data is not None:
                             if inner_tag_text(comment_span_child) != "(Сончино)":
-                                current_comment_data["comment"] += collapse_whitespace(str(comment_span_child))
+                                current_comment_data["comment"] += " " + collapse_whitespace(str(comment_span_child))
                         elif inner_tag_text(comment_span_child):
                             current_comment_data = CommentData(
                                 anchor_phrase=None,
@@ -139,30 +189,6 @@ def parse_parsha(parsha: int):
 
                 # the actual handle is not inserted in the final text
                 continue
-            if has_class(child, "rashi_ref"):
-                # rashi comment parsing
-                comment_id = child.attrs["id"].removeprefix("_commentref")
-                comment_span = main_content.find("span", attrs={"id": "_comment" + comment_id})
-                comment_text_html = ""
-                anchor_phrase = inner_tag_text(child)
-                for comment_span_child in comment_span.children:
-                    if isinstance(comment_span_child, bs4.Tag):
-                        if not inner_tag_text(comment_span_child):
-                            continue
-                        if comment_span_child.name == "b" and are_strings_close(inner_tag_text(comment_span_child), anchor_phrase):
-                            continue
-                        if inner_tag_text(comment_span_child) == "(Раши)":
-                            continue
-                    comment_text_html += collapse_whitespace(str(comment_span_child))
-                if current_verse_data is not None:
-                    current_verse_data["comments"][Commenter.RASHI].append(
-                        CommentData(
-                            anchor_phrase=anchor_phrase,
-                            comment=strip_html_breaks(strip_leading_dot(comment_text_html)),
-                            format="html"
-                        )
-                    )
-                
 
         text_part = inner_tag_text(child)
         if not text_part or text_part.startswith("Глава"):  # skipping chapter header and whitespace

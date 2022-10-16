@@ -1,11 +1,11 @@
 import hashlib
 from pathlib import Path
-from aiohttp import web, hdrs
+
+from aiohttp import hdrs, web
 from aiohttp.typedefs import Handler
 
-import metadata
 import config
-
+import metadata
 
 routes = web.RouteTableDef()
 
@@ -18,7 +18,7 @@ JSON_DIR = Path("json")
 
 @web.middleware
 async def auth_middleware(request: web.Request, handler: Handler) -> web.StreamResponse:
-    if request.headers.get('X-Password-Hash', '') != PASSWORD_HASH:
+    if request.headers.get("X-Password-Hash", "") != PASSWORD_HASH:
         raise web.HTTPUnauthorized()
     return await handler(request)
 
@@ -47,9 +47,7 @@ async def get_metadata(request: web.Request) -> web.Response:
             "parsha_ranges": metadata.torah_book_parsha_ranges,
             "parsha_names": metadata.parsha_names,
             "translation_about_links": metadata.translation_about_url,
-            "translation_names": {
-                metadata.Translation.FG: "Перевод Фримы Гурфинкель"
-            },
+            "translation_names": {metadata.Translation.FG: "Перевод Фримы Гурфинкель"},
             "commenter_about_links": metadata.commenter_about_url,
             "commenter_names": {
                 metadata.Commenter.SONCHINO: "Сончино",
@@ -62,12 +60,12 @@ async def get_metadata(request: web.Request) -> web.Response:
 
 @routes.get("/parsha/{index}")
 async def get_parsha(request: web.Request):
-    parsha_index = request.match_info.get('index')
+    parsha_index = request.match_info.get("index")
     if parsha_index is None:
-        raise web.HTTPNotFound(reason='No parsha index in request')
-    parsha_file = JSON_DIR / f'{parsha_index}.json'
+        raise web.HTTPNotFound(reason="No parsha index in request")
+    parsha_file = JSON_DIR / f"{parsha_index}.json"
     if not parsha_file.exists():
-        raise web.HTTPNotFound(reason='No parsha available with such index')
+        raise web.HTTPNotFound(reason="No parsha available with such index")
     return web.json_response(text=parsha_file.read_text())
 
 

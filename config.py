@@ -1,7 +1,5 @@
 import os
 
+IS_PROD = os.getenv("IS_PROD") is not None
 
-IS_PROD = os.getenv('IS_PROD') is not None
-
-PORT = int(os.getenv('PORT', '8081'))
-
+PORT = int(os.getenv("PORT", "8081"))
