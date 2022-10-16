@@ -22,7 +22,7 @@ export interface VerseData {
 }
 
 
-interface ChapterData {
+export interface ChapterData {
     chapter: number;
     verses: Array<VerseData>
 }

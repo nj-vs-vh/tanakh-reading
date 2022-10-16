@@ -9,11 +9,13 @@
     import Menu from "./Menu.svelte";
     import { initCommentSourceFlags } from "../commentSources";
     import { isProduction } from "../config";
+    import { initCommentStyle } from "../commentStyles";
 
     export let metadata: Metadata;
     setContext("metadata", metadata);
 
     initCommentSourceFlags(metadata);
+    initCommentStyle();
 
     const bookIndices = Object.keys(metadata.book_names).map((v) =>
         parseInt(v)
