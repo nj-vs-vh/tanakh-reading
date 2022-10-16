@@ -2,6 +2,10 @@ class Translation:
     FG = "fg"
     PLAUT = "plaut"
 
+    @classmethod
+    def all(cls) -> list[str]:
+        return [cls.FG, cls.PLAUT]
+
 
 torah_book_names = {
     1: {Translation.FG: "Берейшис", Translation.PLAUT: "Genesis"},

@@ -1,15 +1,33 @@
 <script lang="ts">
     import Keydown from "svelte-keydown";
-    import { ParshaData, TextSource, VerseData } from "../types";
+    import {
+        TextSource,
+        ParshaData,
+        VerseData,
+        textSourceShort,
+    } from "../types";
     import { commentSourceFlagsStore } from "../settings/commentSources";
     import type { CommentSourceFlags } from "../settings/commentSources";
     import VerseComments from "./VerseComments.svelte";
     import InlineIcon from "./shared/InlineIcon.svelte";
     import Icon from "./shared/Icon.svelte";
+    import { textSourcesConfigStore } from "../settings/textSources";
 
     let commentSourceFlags: CommentSourceFlags;
     commentSourceFlagsStore.subscribe((v) => {
         commentSourceFlags = v;
+    });
+
+    let textSources: Array<TextSource>;
+
+    textSourcesConfigStore.subscribe((config) => {
+        textSources = [];
+        textSources.push(config.main);
+        for (const [source, isEnabled] of Object.entries(
+            config.enabledInDetails
+        )) {
+            if (isEnabled && source != config.main) textSources.push(source);
+        }
     });
 
     export let parsha: ParshaData;
@@ -120,16 +138,23 @@
             </InlineIcon>
         </span>
     </p>
-    <blockquote>
-        {currentVerseData.text[TextSource.FG]}
-    </blockquote>
+    {#each textSources as textSource}
+        <div class="verse-text-container">
+            <blockquote>
+                {currentVerseData.text[textSource]}
+            </blockquote>
+            <span>
+                {textSourceShort.get(textSource)}
+            </span>
+        </div>
+    {/each}
     <VerseComments verseData={currentVerseData} />
 </div>
 
 <style>
     .container {
         max-width: 60vw;
-        margin: 0.3em 3em 0.3em 0.3em;
+        margin: 0.3em 1em 0.3em 0.3em;
     }
 
     p {
@@ -161,9 +186,18 @@
     }
 
     blockquote {
-        margin: 0.3em 0.5em 0.9em 0.1em;
+        margin: 0.1em;
         padding: 0.1em 0.1em 0.1em 0.5em;
         border-left: solid rgb(179, 179, 179) 2px;
         color: rgb(68, 68, 68);
+        max-width: 90%;
+    }
+
+    .verse-text-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0.3em 0.5em 0.9em 0.1em;
+        color: grey;
     }
 </style>

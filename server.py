@@ -47,7 +47,7 @@ async def get_metadata(request: web.Request) -> web.Response:
             "parsha_ranges": metadata.torah_book_parsha_ranges,
             "parsha_names": metadata.parsha_names,
             "translation_about_links": metadata.translation_about_url,
-            "translation_names": {metadata.Translation.FG: "Перевод Фримы Гурфинкель"},
+            "translations": metadata.Translation.all(),
             "commenter_about_links": metadata.commenter_about_url,
             "commenter_names": {
                 metadata.Commenter.SONCHINO: "Сончино",

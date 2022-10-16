@@ -9,7 +9,8 @@
     } from "../settings/commentSources";
     import type { CommentSourceFlags } from "../settings/commentSources";
     import { getContext } from "svelte";
-    import type { Metadata } from "../types";
+    import { Metadata, textSourceShort } from "../types";
+    import { TextSource } from "../types";
     import {
         TextDecorationStyle,
         textDecorationStyleStore,
@@ -20,6 +21,12 @@
         commentStyleStore,
         setCommentStyle,
     } from "../settings/commentStyle";
+    import {
+    enableTextSource,
+        setMainTextSource,
+        textSourcesConfigStore,
+        toggleTextSourceEnabled,
+    } from "../settings/textSources";
 
     let commentSourceFlags: CommentSourceFlags;
     commentSourceFlagsStore.subscribe((v) => {
@@ -41,6 +48,18 @@
         setCommentStyle(e.target.value);
     }
 
+    let mainTextSource: TextSource;
+    let enabledTextSources: Partial<Record<TextSource, boolean>>;
+    textSourcesConfigStore.subscribe((config) => {
+        mainTextSource = config.main;
+        enabledTextSources = config.enabledInDetails;
+    });
+    function setMainTextSourceFromEvent(e) {
+        const source = e.target.value;
+        setMainTextSource(source);
+        enableTextSource(source);
+    }
+
     const metadata: Metadata = getContext("metadata");
 
     export let homeButton: boolean = false;
@@ -50,6 +69,11 @@
     let commentSettingsFolded = true;
     function toggleCommentSettingsFolded(e) {
         commentSettingsFolded = !commentSettingsFolded;
+    }
+
+    let textSettingsFolded = true;
+    function toggleTextSettingsFolded(e) {
+        textSettingsFolded = !textSettingsFolded;
     }
 </script>
 
@@ -75,6 +99,102 @@
                 </h2>
             </Link>
         {/if}
+
+        <h2
+            on:click={toggleTextSettingsFolded}
+            on:keydown={toggleTextSettingsFolded}
+        >
+            <div class="nav-icon">
+                <InlineIcon heightEm={0.8}>
+                    <Icon icon="torah-scroll" color="black" />
+                </InlineIcon>
+            </div>
+            <span class="nav-caption">Текст</span>
+        </h2>
+        <div class={textSettingsFolded ? "folded" : ""}>
+            <div class="settings-block">
+                <h4>Основной</h4>
+                <div class="input-with-label">
+                    <input
+                        type="radio"
+                        name="mainTextSource"
+                        value={TextSource.FG}
+                        checked={mainTextSource == TextSource.FG}
+                        on:change={setMainTextSourceFromEvent}
+                    />
+                    <label for={TextSource.FG}>
+                        <span>
+                            <span class="text-source-short-name"
+                                >{textSourceShort.get(TextSource.FG)}</span
+                            >
+                            Русский перевод
+                            <a
+                                href={metadata.translation_about_links[
+                                    TextSource.FG
+                                ]}
+                                target="_blank"
+                                rel="noreferrer"
+                                class="external-link"
+                            >
+                                Фримы Гурфинкель
+                            </a>
+                        </span>
+                    </label>
+                </div>
+                <div class="input-with-label">
+                    <input
+                        type="radio"
+                        name="mainTextSource"
+                        value={TextSource.PLAUT}
+                        checked={mainTextSource == TextSource.PLAUT}
+                        on:change={setMainTextSourceFromEvent}
+                    />
+                    <label for={TextSource.PLAUT}>
+                        <span>
+                            <span class="text-source-short-name"
+                                >{textSourceShort.get(TextSource.PLAUT)}</span
+                            >
+                            Английский перевод
+                            <a
+                                href={metadata.translation_about_links[
+                                    TextSource.PLAUT
+                                ]}
+                                target="_blank"
+                                rel="noreferrer"
+                                class="external-link"
+                            >
+                                Гюнтера Плаута
+                            </a>
+                        </span>
+                    </label>
+                </div>
+            </div>
+            <div class="settings-block">
+                <h4>В окне с комментариями</h4>
+                {#each Object.entries(enabledTextSources) as [source, isActive]}
+                    <div class="input-with-label">
+                        <input
+                            type="checkbox"
+                            id={`${source}-in-comments`}
+                            name={`${source}-in-comments`}
+                            checked={isActive || source === mainTextSource}
+                            on:change|preventDefault={(e) => {
+                                if (source === mainTextSource) {
+                                    // @ts-ignore
+                                    e.target.checked = true;
+                                    enableTextSource(source);
+                                } else {
+                                    // @ts-ignore
+                                    toggleTextSourceEnabled(source);
+                                }
+                            }}
+                        />
+                        <label for={`${source}-in-comments`}>{textSourceShort.get(source)}</label>
+                    </div>
+                {/each}
+            </div>
+        </div>
+
         <h2
             on:click={toggleCommentSettingsFolded}
             on:keydown={toggleCommentSettingsFolded}
@@ -86,110 +206,122 @@
             </div>
             <span class="nav-caption">Комментарии</span>
         </h2>
-        <div id="commentSettings" class={commentSettingsFolded ? "folded" : ""}>
+        <div class={commentSettingsFolded ? "folded" : ""}>
             <div class="settings-block">
                 <h4>Авторы</h4>
                 {#each Object.entries(commentSourceFlags) as [commenter, isActive]}
+                    <div class="input-with-label">
+                        <input
+                            type="checkbox"
+                            id={commenter}
+                            name={commenter}
+                            checked={isActive}
+                            on:change={(e) => {
+                                toggleCommentSourceFlag(commenter);
+                            }}
+                        />
+                        <label for={commenter}
+                            >{metadata.commenter_names[commenter]}</label
+                        >
+                    </div>
+                {/each}
+                <div class="input-with-label">
                     <input
                         type="checkbox"
-                        id={commenter}
-                        name={commenter}
-                        checked={isActive}
+                        id="all"
+                        name="all"
+                        checked={Object.values(commentSourceFlags).reduce(
+                            (f1, f2) => f1 & f2,
+                            true
+                        )}
                         on:change={(e) => {
-                            toggleCommentSourceFlag(commenter);
+                            const newFlags = new Map();
+                            for (const commenter of Object.keys(
+                                commentSourceFlags
+                            )) {
+                                // @ts-ignore
+                                newFlags[commenter] = e.target.checked;
+                            }
+                            commentSourceFlagsStore.set(newFlags);
                         }}
                     />
-                    <label for={commenter}
-                        >{metadata.commenter_names[commenter]}</label
-                    ><br />
-                {/each}
-                <input
-                    type="checkbox"
-                    id="all"
-                    name="all"
-                    checked={Object.values(commentSourceFlags).reduce(
-                        (f1, f2) => f1 & f2,
-                        true
-                    )}
-                    on:change={(e) => {
-                        const newFlags = new Map();
-                        for (const commenter of Object.keys(
-                            commentSourceFlags
-                        )) {
-                            // @ts-ignore
-                            newFlags[commenter] = e.target.checked;
-                        }
-                        commentSourceFlagsStore.set(newFlags);
-                    }}
-                />
-                <label for="all">Все</label>
+                    <label for="all">Все</label>
+                </div>
             </div>
             <div class="settings-block">
                 <h4>Стиль аннотаций</h4>
-                <input
-                    type="radio"
-                    id={TextDecorationStyle.ASTRERISK}
-                    name="textDecorationStyle"
-                    value={TextDecorationStyle.ASTRERISK}
-                    checked={textDecorationStyle ==
-                        TextDecorationStyle.ASTRERISK}
-                    on:change={setTextDecorationStyleFromEvent}
-                />
-                <label for={TextDecorationStyle.ASTRERISK}>
-                    <span>Звёздочки</span>
-                    <InlineIcon heightEm={0.7}>
-                        <Icon icon={"asterisk"} color={"#606060"} />
-                    </InlineIcon>
-                </label>
-                <br />
-                <input
-                    type="radio"
-                    id={TextDecorationStyle.CLICKABLE_TEXT}
-                    name="textDecorationStyle"
-                    value={TextDecorationStyle.CLICKABLE_TEXT}
-                    checked={textDecorationStyle ==
-                        TextDecorationStyle.CLICKABLE_TEXT}
-                    on:change={setTextDecorationStyleFromEvent}
-                />
-                <label for={TextDecorationStyle.CLICKABLE_TEXT}>
-                    <span>
-                        <span class="clickable"> Нажимаемый текст </span>
-                    </span>
-                </label>
-                <br />
-                <input
-                    type="radio"
-                    id={TextDecorationStyle.NONE}
-                    name="textDecorationStyle"
-                    value={TextDecorationStyle.NONE}
-                    checked={textDecorationStyle == TextDecorationStyle.NONE}
-                    on:change={setTextDecorationStyleFromEvent}
-                />
-                <label for={TextDecorationStyle.NONE}>
-                    <span> Нет </span>
-                </label>
+                <div class="input-with-label">
+                    <input
+                        type="radio"
+                        id={TextDecorationStyle.ASTRERISK}
+                        name="textDecorationStyle"
+                        value={TextDecorationStyle.ASTRERISK}
+                        checked={textDecorationStyle ==
+                            TextDecorationStyle.ASTRERISK}
+                        on:change={setTextDecorationStyleFromEvent}
+                    />
+                    <label for={TextDecorationStyle.ASTRERISK}>
+                        <span>Звёздочки</span>
+                        <InlineIcon heightEm={0.7}>
+                            <Icon icon={"asterisk"} color={"#606060"} />
+                        </InlineIcon>
+                    </label>
+                </div>
+                <div class="input-with-label">
+                    <input
+                        type="radio"
+                        id={TextDecorationStyle.CLICKABLE_TEXT}
+                        name="textDecorationStyle"
+                        value={TextDecorationStyle.CLICKABLE_TEXT}
+                        checked={textDecorationStyle ==
+                            TextDecorationStyle.CLICKABLE_TEXT}
+                        on:change={setTextDecorationStyleFromEvent}
+                    />
+                    <label for={TextDecorationStyle.CLICKABLE_TEXT}>
+                        <span>
+                            <span class="clickable">Нажимаемый текст </span>
+                        </span>
+                    </label>
+                </div>
+                <div class="input-with-label">
+                    <input
+                        type="radio"
+                        id={TextDecorationStyle.NONE}
+                        name="textDecorationStyle"
+                        value={TextDecorationStyle.NONE}
+                        checked={textDecorationStyle ==
+                            TextDecorationStyle.NONE}
+                        on:change={setTextDecorationStyleFromEvent}
+                    />
+                    <label for={TextDecorationStyle.NONE}>
+                        <span> Нет </span>
+                    </label>
+                </div>
             </div>
             <div class="settings-block">
                 <h4>Стиль комментариев</h4>
-                <input
-                    type="radio"
-                    id={CommentStyle.MODAL}
-                    name="commentStyle"
-                    value={CommentStyle.MODAL}
-                    checked={commentStyle == CommentStyle.MODAL}
-                    on:change={setCommentStyleFromEvent}
-                />
-                <label for={CommentStyle.MODAL}>Окно</label>
-                <br />
-                <input
-                    type="radio"
-                    id={CommentStyle.INLINE}
-                    name="commentStyle"
-                    value={CommentStyle.INLINE}
-                    checked={commentStyle == CommentStyle.INLINE}
-                    on:change={setCommentStyleFromEvent}
-                />
-                <label for={CommentStyle.INLINE}> В тексте </label>
+                <div class="input-with-label">
+                    <input
+                        type="radio"
+                        id={CommentStyle.MODAL}
+                        name="commentStyle"
+                        value={CommentStyle.MODAL}
+                        checked={commentStyle == CommentStyle.MODAL}
+                        on:change={setCommentStyleFromEvent}
+                    />
+                    <label for={CommentStyle.MODAL}>Окно</label>
+                </div>
+                <div class="input-with-label">
+                    <input
+                        type="radio"
+                        id={CommentStyle.INLINE}
+                        name="commentStyle"
+                        value={CommentStyle.INLINE}
+                        checked={commentStyle == CommentStyle.INLINE}
+                        on:change={setCommentStyleFromEvent}
+                    />
+                    <label for={CommentStyle.INLINE}> В тексте </label>
+                </div>
             </div>
         </div>
     </div>
@@ -221,6 +353,10 @@
         margin-left: 0;
     }
 
+    label {
+        margin-left: 0.2em;
+    }
+
     .nav-caption {
         margin-left: 0.3em;
     }
@@ -243,5 +379,24 @@
         margin-left: 1em;
         border-left: 1px black solid;
         font-size: large;
+    }
+
+    a.external-link {
+        color: rgb(52, 52, 66);
+        text-decoration: underline;
+    }
+
+    a.external-link:hover {
+        color: rgb(39, 39, 139);
+    }
+
+    span.text-source-short-name {
+        color: grey;
+    }
+
+    div.input-with-label {
+        display: flex;
+        align-items: flex-start;
+        padding: 0.2em 0;
     }
 </style>
