@@ -27,6 +27,7 @@
         chapterNo: number,
         verseNo: number
     ): VerseCoords | null {
+        // console.log(chapterNo, verseNo);
         const chapterData = parsha.chapters.find(
             (ch) => ch.chapter === chapterNo
         );
@@ -37,7 +38,14 @@
         // support for Python-like negative verse index
         else
             verseData = chapterData.verses.find(
-                (vd) => vd.verse === chapterData.verses.length + verseNo + 1
+                (vd) =>
+                    vd.verse ===
+                    Math.max.apply(
+                        Math,
+                        chapterData.verses.map((v) => v.verse)
+                    ) +
+                        verseNo +
+                        1
             );
         if (verseData === undefined) return null;
         else return { chapter: chapterData.chapter, verse: verseData.verse };
