@@ -3,6 +3,13 @@
     import { CommentFormat } from "../types";
     import { getContext } from "svelte";
     import { TextSource, VerseData } from "../types";
+    import { commentSourceFlagsStore } from "../commentSources";
+    import type { CommentSourceFlags } from "../commentSources";
+
+    let commentSourceFlags: CommentSourceFlags;
+    commentSourceFlagsStore.subscribe((v) => {
+        commentSourceFlags = v;
+    });
 
     export let verseData: VerseData;
     export let chapter: number;
@@ -17,20 +24,22 @@
         {verseData.text[TextSource.FG]}
     </blockquote>
     {#each Object.entries(verseData.comments) as [commenter, comments]}
-        <p class="commenter-name">{commenterNames[commenter]}</p>
-        {#each comments as commentData}
-            <p>
-                {#if commentData.anchor_phrase !== null}
-                    <b>{commentData.anchor_phrase}</b>
-                    <span>—</span>
-                {/if}
-                {#if commentData.format == CommentFormat.HTML}
-                    <span>{@html commentData.comment}</span>
-                {:else}
-                    <span>{commentData.comment}</span>
-                {/if}
-            </p>
-        {/each}
+        {#if commentSourceFlags[commenter]}
+            <p class="commenter-name">{commenterNames[commenter]}</p>
+            {#each comments as commentData}
+                <p>
+                    {#if commentData.anchor_phrase !== null}
+                        <b>{commentData.anchor_phrase}</b>
+                        <span>—</span>
+                    {/if}
+                    {#if commentData.format == CommentFormat.HTML}
+                        <span>{@html commentData.comment}</span>
+                    {:else}
+                        <span>{commentData.comment}</span>
+                    {/if}
+                </p>
+            {/each}
+        {/if}
     {/each}
 </div>
 

@@ -7,9 +7,13 @@
     import Screen from "./shared/Screen.svelte";
     import Modal from "svelte-simple-modal";
     import Menu from "./Menu.svelte";
+    import { initCommentSourceFlags } from "../commentSources";
+    import { isProduction } from "../config";
 
     export let metadata: Metadata;
     setContext("metadata", metadata);
+
+    initCommentSourceFlags(metadata);
 
     const bookIndices = Object.keys(metadata.book_names).map((v) =>
         parseInt(v)
@@ -35,36 +39,42 @@
     <Menu />
     <Router>
         <Route path="/">
-            <ParshaProvider parshaIndex={3} />
-            <!-- <Screen>
-                <div class="container">
-                    <h1>Тора</h1>
-                    {#each bookIndices as bookIndex}
-                        <h2>
-                            {bookIndex}. {metadata.book_names[bookIndex][
-                                TextSource.FG
-                            ]}
-                        </h2>
-                        {#each parshaArrays[bookIndex] as parshaIndex}
-                            {#if metadata.available_parsha.includes(parshaIndex)}
-                                <Link to={`/${parshaIndex}`}>
-                                    <h3>
+            {#if isProduction}
+                <!-- rendering title screen only in prod because
+                    dev environment poorly supports client-side routing -->
+                <Screen>
+                    <div class="container">
+                        <h1>Тора</h1>
+                        {#each bookIndices as bookIndex}
+                            <h2>
+                                {bookIndex}. {metadata.book_names[bookIndex][
+                                    TextSource.FG
+                                ]}
+                            </h2>
+                            {#each parshaArrays[bookIndex] as parshaIndex}
+                                {#if metadata.available_parsha.includes(parshaIndex)}
+                                    <Link to={`/${parshaIndex}`}>
+                                        <h3>
+                                            {parshaIndex}. {metadata
+                                                .parsha_names[parshaIndex][
+                                                TextSource.FG
+                                            ]}
+                                        </h3>
+                                    </Link>
+                                {:else}
+                                    <h3 class="inactive">
                                         {parshaIndex}. {metadata.parsha_names[
                                             parshaIndex
                                         ][TextSource.FG]}
                                     </h3>
-                                </Link>
-                            {:else}
-                                <h3 class="inactive">
-                                    {parshaIndex}. {metadata.parsha_names[
-                                        parshaIndex
-                                    ][TextSource.FG]}
-                                </h3>
-                            {/if}
+                                {/if}
+                            {/each}
                         {/each}
-                    {/each}
-                </div>
-            </Screen> -->
+                    </div>
+                </Screen>
+            {:else}
+                <ParshaProvider parshaIndex={3} />
+            {/if}
         </Route>
         {#each metadata.available_parsha as parshaIndex}
             <Route path={`/${parshaIndex}`}>
