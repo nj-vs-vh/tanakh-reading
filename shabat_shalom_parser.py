@@ -251,6 +251,5 @@ def parse_parsha(parsha: int):
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
     argparser.add_argument("parsha_index", type=int)
-    # args = argparser.parse_args()
-    # parse_parsha(args.parsha_index)
-    parse_parsha(2)
+    args = argparser.parse_args()
+    parse_parsha(args.parsha_index)

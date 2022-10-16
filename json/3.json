@@ -8,7 +8,8 @@
         {
           "verse": 1,
           "text": {
-            "fg": "И сказал Господь Авраму: Иди с земли твоей, и с родины твоей, и из дома отца твоего на землю, которую укажу тебе."
+            "fg": "И сказал Господь Авраму: Иди с земли твоей, и с родины твоей, и из дома отца твоего на землю, которую укажу тебе.",
+            "plaut": "The Eternal One said to Abram, “Go forth from your land, your birthplace, your father’s house, to the land that I will show you."
           },
           "comments": {
             "rashi": [
@@ -55,7 +56,8 @@
         {
           "verse": 2,
           "text": {
-            "fg": "И я сделаю тебя великим народом, и благословлю тебя, и возвеличу имя твое. И быть тебе благословением."
+            "fg": "И я сделаю тебя великим народом, и благословлю тебя, и возвеличу имя твое. И быть тебе благословением.",
+            "plaut": "I will make of you a great nation, and I will bless you; I will make your name great, and it shall be a blessing."
           },
           "comments": {
             "rashi": [
@@ -97,7 +99,8 @@
         {
           "verse": 3,
           "text": {
-            "fg": "И благословлю я тебя благословляющих, а злословящих тебя прокляну. И благословляться будут тобою все семейства земли."
+            "fg": "И благословлю я тебя благословляющих, а злословящих тебя прокляну. И благословляться будут тобою все семейства земли.",
+            "plaut": "I will bless those who bless you, and I will pronounce doom on those who curse you; through you all the families of the earth shall be blessed.”"
           },
           "comments": {
             "rashi": [
@@ -129,7 +132,8 @@
         {
           "verse": 4,
           "text": {
-            "fg": "И пошел Аврам, как говорил ему Господь, и пошел с ним Лот. А Авраму семьдесят лет и пять лет при выходе его из Харана"
+            "fg": "И пошел Аврам, как говорил ему Господь, и пошел с ним Лот. А Авраму семьдесят лет и пять лет при выходе его из Харана",
+            "plaut": "So Abram went forth as the Eternal had told him, and Lot went with him. Abram was 75 years old when he left Haran."
           },
           "comments": {
             "sonchino": [
@@ -149,7 +153,8 @@
         {
           "verse": 5,
           "text": {
-            "fg": "И взял Аврам Сарай, жену свою, и Лота, сына брата своего, и все их имущество, которое поимели, и души, что обрели в Харане. И вышли они, чтобы идти на землю Кeнаана."
+            "fg": "И взял Аврам Сарай, жену свою, и Лота, сына брата своего, и все их имущество, которое поимели, и души, что обрели в Харане. И вышли они, чтобы идти на землю Кeнаана.",
+            "plaut": "Abram took his wife Sarai, his brother’s son Lot, all the possessions they had amassed, and the people they had acquired in Haran. They set forth for the land of Canaan, and they arrived in the land of Canaan."
           },
           "comments": {
             "rashi": [
@@ -181,7 +186,8 @@
         {
           "verse": 6,
           "text": {
-            "fg": "И прошел Аврам по земле до места Шхема, до Элон-Море, а кeнаани (был) тогда на земле"
+            "fg": "И прошел Аврам по земле до места Шхема, до Элон-Море, а кeнаани (был) тогда на земле",
+            "plaut": "Abram then traversed the land as far as the sacred site of Shechem, as far as the Oak of Moreh. (At that time the Canaanites were present in the land.)"
           },
           "comments": {
             "rashi": [
@@ -228,7 +234,8 @@
         {
           "verse": 7,
           "text": {
-            "fg": "И явил Себя Господь Авраму и сказал: Твоему потомству дам эту землю. И построил он там жертвенник Господу, Который явил Себя ему."
+            "fg": "И явил Себя Господь Авраму и сказал: Твоему потомству дам эту землю. И построил он там жертвенник Господу, Который явил Себя ему.",
+            "plaut": "The Eternal now appeared to Abram and said, “I am giving this land to your descendants.” Abram then built an altar there to the Eternal who had appeared to him."
           },
           "comments": {
             "rashi": [
@@ -250,7 +257,8 @@
         {
           "verse": 8,
           "text": {
-            "fg": "И переместил (свой шатер) оттуда к горе, к востоку от Бет-Эля, и раскинул шатер свой, – Бет-Эль на западе, а Ай на востоке. И построил там жертвенник Господу и возгласил Имя Господа."
+            "fg": "И переместил (свой шатер) оттуда к горе, к востоку от Бет-Эля, и раскинул шатер свой, – Бет-Эль на западе, а Ай на востоке. И построил там жертвенник Господу и возгласил Имя Господа.",
+            "plaut": "From there he moved on to the hill country east of Beth El. He pitched his tent between Beth El on the west and Ai on the east. There he built another altar to the Eternal and called upon the Name of the Eternal."
           },
           "comments": {
             "rashi": [
@@ -297,7 +305,8 @@
         {
           "verse": 9,
           "text": {
-            "fg": "И отправился в путь Аврам, продвигаясь на юг."
+            "fg": "И отправился в путь Аврам, продвигаясь на юг.",
+            "plaut": "And then Abram continued his journey—toward the Negev."
           },
           "comments": {
             "rashi": [
@@ -324,7 +333,8 @@
         {
           "verse": 10,
           "text": {
-            "fg": "И был голод на той земле, и спустился Аврам в Мицраим, пожить там, ибо тяжек голод на земле."
+            "fg": "И был голод на той земле, и спустился Аврам в Мицраим, пожить там, ибо тяжек голод на земле.",
+            "plaut": "There was a famine in the land, and because the famine in the land was severe, Abram went down to stay in Egypt."
           },
           "comments": {
             "rashi": [
@@ -351,7 +361,8 @@
         {
           "verse": 11,
           "text": {
-            "fg": "И было: когда подходил к Мицраиму, сказал он Сарай, жене своей: Вот я знаю, что жена прекрасная видом ты."
+            "fg": "И было: когда подходил к Мицраиму, сказал он Сарай, жене своей: Вот я знаю, что жена прекрасная видом ты.",
+            "plaut": "When he had almost reached Egypt, he said to his wife Sarai, “Look, now—I know what a beautiful woman you are!"
           },
           "comments": {
             "rashi": [
@@ -366,7 +377,8 @@
         {
           "verse": 12,
           "text": {
-            "fg": "И будет: когда увидят тебя мицрим, то скажут: Жена его это! – и убьют меня, а тебя оставят в живых"
+            "fg": "И будет: когда увидят тебя мицрим, то скажут: Жена его это! – и убьют меня, а тебя оставят в живых",
+            "plaut": "So when the Egyptians see you, and say: ‘This is his wife,’ they may kill me; but you they shall keep alive."
           },
           "comments": {
             "sonchino": [
@@ -381,7 +393,8 @@
         {
           "verse": 13,
           "text": {
-            "fg": "Скажи, прошу (тебя), что моя сестра ты, чтобы благо мне было ради тебя, и жива будет душа моя благодаря тебе."
+            "fg": "Скажи, прошу (тебя), что моя сестра ты, чтобы благо мне было ради тебя, и жива будет душа моя благодаря тебе.",
+            "plaut": "Please say then that you are my sister, so that on your account it may go well for me, and that my life may be spared because of you.”"
           },
           "comments": {
             "rashi": [
@@ -418,7 +431,8 @@
         {
           "verse": 14,
           "text": {
-            "fg": "И было: когда пришел Аврам в Мицраим, увидели мицрим жену, что прекрасна она очень."
+            "fg": "И было: когда пришел Аврам в Мицраим, увидели мицрим жену, что прекрасна она очень.",
+            "plaut": "And, indeed, when Abram arrived in Egypt the Egyptians saw how exceptionally beautiful the woman was;"
           },
           "comments": {
             "rashi": [
@@ -440,7 +454,8 @@
         {
           "verse": 15,
           "text": {
-            "fg": "И увидели ее вельможи Паро, и восхваляли ее: Для Паро! И взята была женщина в дом Паро."
+            "fg": "И увидели ее вельможи Паро, и восхваляли ее: Для Паро! И взята была женщина в дом Паро.",
+            "plaut": "when Pharaoh’s ministers saw her, they lauded her to Pharaoh, and the woman was taken to Pharaoh’s palace."
           },
           "comments": {
             "rashi": [
@@ -462,7 +477,8 @@
         {
           "verse": 16,
           "text": {
-            "fg": "И Авраму благотворил ради нее: и был у него мелкий и крупный скот и ослы, и рабы и рабыни, и ослицы и верблюды."
+            "fg": "И Авраму благотворил ради нее: и был у него мелкий и крупный скот и ослы, и рабы и рабыни, и ослицы и верблюды.",
+            "plaut": "Through her it did go well for Abram, as he acquired sheep, cattle, and asses, male and female slaves, she-asses and camels."
           },
           "comments": {
             "rashi": [
@@ -484,7 +500,8 @@
         {
           "verse": 17,
           "text": {
-            "fg": "И поразил Господь Паро поражениями великими, и (также) его дом, из-за Сарай, жены Аврама."
+            "fg": "И поразил Господь Паро поражениями великими, и (также) его дом, из-за Сарай, жены Аврама.",
+            "plaut": "The Eternal then struck Pharaoh and his household with severe afflictions because of Sarai, Abram’s wife."
           },
           "comments": {
             "rashi": [
@@ -521,7 +538,8 @@
         {
           "verse": 18,
           "text": {
-            "fg": "И призвал Паро Аврама и сказал: Что это сделал ты мне? Почему не поведал ты мне, что жена твоя она?"
+            "fg": "И призвал Паро Аврама и сказал: Что это сделал ты мне? Почему не поведал ты мне, что жена твоя она?",
+            "plaut": "Pharaoh now summoned Abram and said, “What have you done to me? Why did you not tell me that she was your wife?"
           },
           "comments": {
             "sonchino": [
@@ -536,7 +554,8 @@
         {
           "verse": 19,
           "text": {
-            "fg": "Почему ты сказал: Моя сестра она, – и я взял ее мне в жены! А теперь: вот жена твоя, бери и уходи!"
+            "fg": "Почему ты сказал: Моя сестра она, – и я взял ее мне в жены! А теперь: вот жена твоя, бери и уходи!",
+            "plaut": "Why did you say that she was your sister, so that I took her as a wife for myself? Look, now that it turns out that she is your wife: take [her] and begone!”"
           },
           "comments": {
             "rashi": [
@@ -551,7 +570,8 @@
         {
           "verse": 20,
           "text": {
-            "fg": " И наказ о нем дал Паро людям, и сопроводили его и его жену, и все, что ему (принадлежало)."
+            "fg": " И наказ о нем дал Паро людям, и сопроводили его и его жену, и все, что ему (принадлежало).",
+            "plaut": "Pharaoh then issued orders and they drove him away, with his wife and all that he owned."
           },
           "comments": {
             "rashi": [
@@ -576,7 +596,8 @@
         {
           "verse": 1,
           "text": {
-            "fg": "И взошел Аврам из Мицраима, он и его жена, и все, что ему (принадлежало), и Лот с ним, на юг (земли Кенаана),"
+            "fg": "И взошел Аврам из Мицраима, он и его жена, и все, что ему (принадлежало), и Лот с ним, на юг (земли Кенаана),",
+            "plaut": "Abram went up out of Egypt into the Negev with his wife and all that he owned; and Lot accompanied him."
           },
           "comments": {
             "rashi": [
@@ -598,7 +619,8 @@
         {
           "verse": 2,
           "text": {
-            "fg": "А Аврам грузен очень стадом, серебром и золотом."
+            "fg": "А Аврам грузен очень стадом, серебром и золотом.",
+            "plaut": "Abram was very rich, with livestock, silver, and gold."
           },
           "comments": {
             "rashi": [
@@ -620,7 +642,8 @@
         {
           "verse": 3,
           "text": {
-            "fg": "И шел он (прежними) своими переходами с юга и до Бет-Эля, до места, где был шатер его прежде, между Бет-Элем и Ай;"
+            "fg": "И шел он (прежними) своими переходами с юга и до Бет-Эля, до места, где был шатер его прежде, между Бет-Элем и Ай;",
+            "plaut": "On his [continuing] march, he hiked from the Negev as far as Beth El, up to the place where earlier his tent had been, between Beth El and Ai,"
           },
           "comments": {
             "rashi": [
@@ -647,7 +670,8 @@
         {
           "verse": 4,
           "text": {
-            "fg": "К месту жертвенника, который он сделал там вначале, и возгласил там Аврам Имя Господне."
+            "fg": "К месту жертвенника, который он сделал там вначале, и возгласил там Аврам Имя Господне.",
+            "plaut": "where he had first built an altar. There Abram called upon the Name of the Eternal."
           },
           "comments": {
             "rashi": [
@@ -669,7 +693,8 @@
         {
           "verse": 5,
           "text": {
-            "fg": "И также у Лота. который ходил с Аврамом, был мелкий и крупный скот и шатры."
+            "fg": "И также у Лота. который ходил с Аврамом, был мелкий и крупный скот и шатры.",
+            "plaut": "Now Lot, who had gone with Abram, also had flocks and herds and tents,"
           },
           "comments": {
             "rashi": [
@@ -684,7 +709,8 @@
         {
           "verse": 6,
           "text": {
-            "fg": "И нести не могла их земля, чтобы жить (им) вместе; ибо было их имущество велико, и не могли они обитать вместе."
+            "fg": "И нести не могла их земля, чтобы жить (им) вместе; ибо было их имущество велико, и не могли они обитать вместе.",
+            "plaut": "so that the land could not support them both; they had so much property that they could not remain together."
           },
           "comments": {
             "rashi": [
@@ -706,7 +732,8 @@
         {
           "verse": 7,
           "text": {
-            "fg": "И был спор между пастухами стада Аврама и пастухами стада Лота, а кенаани и перизи тогда населяли землю."
+            "fg": "И был спор между пастухами стада Аврама и пастухами стада Лота, а кенаани и перизи тогда населяли землю.",
+            "plaut": "A quarrel [now] broke out between Abram’s cattle herders and Lot’s cattle herders. (At that time the Canaanites and the Perizzites were inhabiting the land.)"
           },
           "comments": {
             "rashi": [
@@ -728,7 +755,8 @@
         {
           "verse": 8,
           "text": {
-            "fg": "И сказал Аврам Лоту: Пусть же не будет раздора между мною и между тобой и между пастухами моими и пастухами твоими; ибо мужи-братья мы."
+            "fg": "И сказал Аврам Лоту: Пусть же не будет раздора между мною и между тобой и между пастухами моими и пастухами твоими; ибо мужи-братья мы.",
+            "plaut": "Then Abram said to Lot, “There should be no quarrel between you and me, and your herdsmen and mine, for we are close kin."
           },
           "comments": {
             "rashi": [
@@ -755,7 +783,8 @@
         {
           "verse": 9,
           "text": {
-            "fg": "Ведь вся земля пред тобою, отделись же ты от меня: если налево, то я буду справа, а если направо, то я буду слева."
+            "fg": "Ведь вся земля пред тобою, отделись же ты от меня: если налево, то я буду справа, а если направо, то я буду слева.",
+            "plaut": "The whole land lies before you! Pray part from me: if [you] go north, I will turn south; and if [you] go south, I will turn north.”"
           },
           "comments": {
             "rashi": [
@@ -782,7 +811,8 @@
         {
           "verse": 10,
           "text": {
-            "fg": "И поднял Лот свои глаза и увидел всю равнину Йардена, что вся она обводнена, – прежде чем истребил Господь Сдом и Амору, – как сад Господень, как земля Мицраима, до Цоара."
+            "fg": "И поднял Лот свои глаза и увидел всю равнину Йардена, что вся она обводнена, – прежде чем истребил Господь Сдом и Амору, – как сад Господень, как земля Мицраима, до Цоара.",
+            "plaut": "Lot looked around and saw the whole Jordan plain; all of it was well-watered, [this being] before the Eternal’s destruction of Sodom and Gomorrah; [it was] like a divine Garden, like the land of Egypt as you get to Zoar."
           },
           "comments": {
             "rashi": [
@@ -834,7 +864,8 @@
         {
           "verse": 11,
           "text": {
-            "fg": "И избрал себе Лот всю равнину Йардена, и отправился Лот с востока; и отделились они друг от друга."
+            "fg": "И избрал себе Лот всю равнину Йардена, и отправился Лот с востока; и отделились они друг от друга.",
+            "plaut": "So Lot chose the whole Jordan plain for himself and moved away toward the east. They parted, then, each from the other."
           },
           "comments": {
             "rashi": [
@@ -861,7 +892,8 @@
         {
           "verse": 12,
           "text": {
-            "fg": "Аврам обитал на земле Кенаана, а Лот обитал в городах равнины, и раскинул он шатры до Сдома."
+            "fg": "Аврам обитал на земле Кенаана, а Лот обитал в городах равнины, и раскинул он шатры до Сдома.",
+            "plaut": "Abram stayed in the land of Canaan, while Lot settled among the cities of the plain, pitching his tents as far as Sodom—"
           },
           "comments": {
             "rashi": [
@@ -883,7 +915,8 @@
         {
           "verse": 13,
           "text": {
-            "fg": "А люди Сдома злы и грешны пред Господом очень."
+            "fg": "А люди Сдома злы и грешны пред Господом очень.",
+            "plaut": "whose people were wicked, hardened sinners against the Eternal."
           },
           "comments": {
             "rashi": [
@@ -930,7 +963,8 @@
         {
           "verse": 14,
           "text": {
-            "fg": "И Господь сказал Авраму после того, как отделился Лот от него: Подними же глаза твои и посмотри с места, на котором ты, на север и на юг, на восток и на запад;"
+            "fg": "И Господь сказал Авраму после того, как отделился Лот от него: Подними же глаза твои и посмотри с места, на котором ты, на север и на юг, на восток и на запад;",
+            "plaut": "The Eternal One now said to Abram, after Lot had parted from him, “Look around from where you are, to the north and the south, to the east and the west,"
           },
           "comments": {
             "rashi": [
@@ -957,7 +991,8 @@
         {
           "verse": 15,
           "text": {
-            "fg": "Ибо всю землю, которую ты видишь, тебе дам ее, и твоему потомству навеки."
+            "fg": "Ибо всю землю, которую ты видишь, тебе дам ее, и твоему потомству навеки.",
+            "plaut": "for all the land that you see I am giving to you and your descendants, forever."
           },
           "comments": {
             "sonchino": [
@@ -972,7 +1007,8 @@
         {
           "verse": 16,
           "text": {
-            "fg": "И сделаю потомство твое (несметным) как прах земной. Так, если сможет кто-либо счесть прах земной, также твое потомство сочтено будет."
+            "fg": "И сделаю потомство твое (несметным) как прах земной. Так, если сможет кто-либо счесть прах земной, также твое потомство сочтено будет.",
+            "plaut": "I will make your descendants like the dust of the earth. Only if one can count the dust of the earth will it be possible to count your descendants."
           },
           "comments": {
             "rashi": [
@@ -994,7 +1030,8 @@
         {
           "verse": 17,
           "text": {
-            "fg": "Встань, исходи эту землю в длину ее и в ширину, ибо тебе дам ее."
+            "fg": "Встань, исходи эту землю в длину ее и в ширину, ибо тебе дам ее.",
+            "plaut": "Get up and walk about the land—its length and its breadth—for it is to you that I am giving it.”"
           },
           "comments": {
             "sonchino": [
@@ -1009,7 +1046,8 @@
         {
           "verse": 18,
           "text": {
-            "fg": "И раскинул шатры Аврам, и пришел и поселился в Элоне Мамре , что в Хевроне, и построил там жертвенник Господу."
+            "fg": "И раскинул шатры Аврам, и пришел и поселился в Элоне Мамре , что в Хевроне, и построил там жертвенник Господу.",
+            "plaut": "Moving his tent, Abram went to dwell by the oaks of Mamre, in Hebron; there he built an altar to honor the Eternal."
           },
           "comments": {
             "rashi": [
@@ -1036,7 +1074,8 @@
         {
           "verse": 1,
           "text": {
-            "fg": "И было во дни Амрафела, царя Шинара, Арйоха, царя Эласара, Кедорлаомера, царя Элама, и Тидала, царя Гоим;"
+            "fg": "И было во дни Амрафела, царя Шинара, Арйоха, царя Эласара, Кедорлаомера, царя Элама, и Тидала, царя Гоим;",
+            "plaut": "In the time of Amraphel king of Shinar, Arioch king of Ellasar, Chedarlaomer king of Elam, and Tidal king of Goiim,"
           },
           "comments": {
             "rashi": [
@@ -1088,7 +1127,8 @@
         {
           "verse": 2,
           "text": {
-            "fg": "Они воевали с Берой, царем Сдома, и с Биршей, царем Аморы, Шинавом, царем Адмы, и Шемэвером, царем Цевоима, и (с) царем Белы, он же Цоар."
+            "fg": "Они воевали с Берой, царем Сдома, и с Биршей, царем Аморы, Шинавом, царем Адмы, и Шемэвером, царем Цевоима, и (с) царем Белы, он же Цоар.",
+            "plaut": "these [four] waged war against Bera king of Sodom, Birsha king of Gomorrah, Shinab king of Admah, Shemeber king of Zeboim, and the king of Bela (that is, Zoar)."
           },
           "comments": {
             "rashi": [
@@ -1130,7 +1170,8 @@
         {
           "verse": 3,
           "text": {
-            "fg": "Все они сошлись в долине Сидим, это (теперь) Соленое море."
+            "fg": "Все они сошлись в долине Сидим, это (теперь) Соленое море.",
+            "plaut": "These all joined forces at the Valley of Siddim, now the Dead Sea."
           },
           "comments": {
             "rashi": [
@@ -1162,7 +1203,8 @@
         {
           "verse": 4,
           "text": {
-            "fg": "Двенадцать лет служили Кедорлаомеру и тринадцать лет бунтовали;"
+            "fg": "Двенадцать лет служили Кедорлаомеру и тринадцать лет бунтовали;",
+            "plaut": "For twelve years they had been subject to Chedarlaomer, but in the thirteenth year they rebelled."
           },
           "comments": {
             "rashi": [
@@ -1184,7 +1226,8 @@
         {
           "verse": 5,
           "text": {
-            "fg": "А в четырнадцатом году пришел Кедорлаомер и цари, которые с ним, и разбили они рефаим в Аштерот-Карнаим, и зузим в Аме, и эмим в Шаве-Кирятаим,"
+            "fg": "А в четырнадцатом году пришел Кедорлаомер и цари, которые с ним, и разбили они рефаим в Аштерот-Карнаим, и зузим в Аме, и эмим в Шаве-Кирятаим,",
+            "plaut": "In the fourteenth year Chedarlaomer and his allied kings came and subdued the Rephaim in Ashterot-karnaim, the Zuzim in Ham, the Emim in Shaveh-kiriata’im,"
           },
           "comments": {
             "rashi": [
@@ -1226,7 +1269,8 @@
         {
           "verse": 6,
           "text": {
-            "fg": "И хори на их горе Сеир до равнины Паран, которая при пустыне."
+            "fg": "И хори на их горе Сеир до равнины Паран, которая при пустыне.",
+            "plaut": "and the Horites in their hill country of Seir as far as Eil Paran by the edge of the wilderness."
           },
           "comments": {
             "rashi": [
@@ -1268,7 +1312,8 @@
         {
           "verse": 7,
           "text": {
-            "fg": "И возвратились они и пришли к Эн-Мишпат, он же Кадеш, и разбили все поле амалеково и также эмори, обитавшего в Хацацон-Тамар."
+            "fg": "И возвратились они и пришли к Эн-Мишпат, он же Кадеш, и разбили все поле амалеково и также эмори, обитавшего в Хацацон-Тамар.",
+            "plaut": "They then returned, coming to Ein Mishpat (that is, Kadesh), where they subdued the whole country of Amalek and the Amorites who dwell in Hazazon-tamar."
           },
           "comments": {
             "rashi": [
@@ -1325,14 +1370,16 @@
         {
           "verse": 8,
           "text": {
-            "fg": "И вышел царь Сдома, и царь Аморы, и царь Адмы, и царь Цевоима, и царь Белы, он же Цоар, и вступили с ними в бой в долине Сидим;"
+            "fg": "И вышел царь Сдома, и царь Аморы, и царь Адмы, и царь Цевоима, и царь Белы, он же Цоар, и вступили с ними в бой в долине Сидим;",
+            "plaut": "Then the king of Sodom, the king of Gomorrah, the king of Admah, the king of Zeboim, and the king of Bela (that is, Zoar) went out and arrayed themselves in battle formation against the [enemy] in the Valley of Siddim—"
           },
           "comments": {}
         },
         {
           "verse": 9,
           "text": {
-            "fg": "С Кедорлаомером, царем Эламае и Тидалом, царем Гоим) и Амрафелом, царем Шинара, и Арйохом, царем Эласара, – четыре царя с пятью."
+            "fg": "С Кедорлаомером, царем Эламае и Тидалом, царем Гоим) и Амрафелом, царем Шинара, и Арйохом, царем Эласара, – четыре царя с пятью.",
+            "plaut": "against Chedarlaomer king of Elam, Tidal king of Goiim, Amraphel king of Shinar, and Arioch king of Ellasar—four kings against five."
           },
           "comments": {
             "rashi": [
@@ -1347,7 +1394,8 @@
         {
           "verse": 10,
           "text": {
-            "fg": "А (в) долине Сидим множество ям смоляных. И обратились в бегство царь Сдома и (царь) Аморы и упали в них; а остальные в горы бежали."
+            "fg": "А (в) долине Сидим множество ям смоляных. И обратились в бегство царь Сдома и (царь) Аморы и упали в них; а остальные в горы бежали.",
+            "plaut": "Now the Valley of Siddim was studded with tar pits, and when the kings of Sodom and Gomorrah fled, some tumbled into them, and the rest fled to the hills."
           },
           "comments": {
             "rashi": [
@@ -1384,14 +1432,16 @@
         {
           "verse": 11,
           "text": {
-            "fg": "И взяли все имущество Сдома и Аморы и все съестное и ушли."
+            "fg": "И взяли все имущество Сдома и Аморы и все съестное и ушли.",
+            "plaut": "So they took all the possessions of [the kings of] Sodom and Gomorrah and their food, and they went off;"
           },
           "comments": {}
         },
         {
           "verse": 12,
           "text": {
-            "fg": "И взяли Лота и его имущество, сына брата Аврама, и ушли, – а он обитал в Сдоме."
+            "fg": "И взяли Лота и его имущество, сына брата Аврама, и ушли, – а он обитал в Сдоме.",
+            "plaut": "and as they went off they took Lot, Abram’s brother’s son, with his possessions; he was a resident of Sodom."
           },
           "comments": {
             "rashi": [
@@ -1413,7 +1463,8 @@
         {
           "verse": 13,
           "text": {
-            "fg": "И пришел беглец и известил Аврама – иври, – а он обитал на (равнине) Элоне Мамре-эмори, брата Эшкола и брата Анера, а они союзники Аврама."
+            "fg": "И пришел беглец и известил Аврама – иври, – а он обитал на (равнине) Элоне Мамре-эмори, брата Эшкола и брата Анера, а они союзники Аврама.",
+            "plaut": "A fugitive then came and told Abram the Hebrew, who was living by the oak trees of Mamre the Amorite, brother of Eshkol and Aner, who were allied to Abram by treaty."
           },
           "comments": {
             "rashi": [
@@ -1445,7 +1496,8 @@
         {
           "verse": 14,
           "text": {
-            "fg": "И услышал Аврам, что взят в плен его брат, и снарядил он питомцев своих, рожденных в доме его, триста восемнадцать, и преследовал до Дана."
+            "fg": "И услышал Аврам, что взят в плен его брат, и снарядил он питомцев своих, рожденных в доме его, триста восемнадцать, и преследовал до Дана.",
+            "plaut": "Hearing that his kinsman had been taken captive, Abram mustered his retainers, born into his household, 318 of them, going in pursuit as far as Dan."
           },
           "comments": {
             "rashi": [
@@ -1502,7 +1554,8 @@
         {
           "verse": 15,
           "text": {
-            "fg": "И разделился против них ночью, он и слуги его, и бил их и преследовал их до Ховы, что по левую сторону от Дамесека."
+            "fg": "И разделился против них ночью, он и слуги его, и бил их и преследовал их до Ховы, что по левую сторону от Дамесека.",
+            "plaut": "At night he deployed himself and his forces against them and defeated them, pursuing them as far as Hobah, north of Damascus."
           },
           "comments": {
             "rashi": [
@@ -1544,7 +1597,8 @@
         {
           "verse": 16,
           "text": {
-            "fg": "И возвратил он все имущество, и также Лота, брата своего, и его имущество возвратил, также и жен и народ."
+            "fg": "И возвратил он все имущество, и также Лота, брата своего, и его имущество возвратил, также и жен и народ.",
+            "plaut": "He then brought back all the possessions; his nephew Lot, too, and his possessions; [he restored] the women, too, and the [other] people."
           },
           "comments": {
             "sonchino": [
@@ -1559,7 +1613,8 @@
         {
           "verse": 17,
           "text": {
-            "fg": "И вышел царь Сдома навстречу ему, когда он, разбив Кедорлаомера и царей, которые с ним, возвратился в долину Шаве, она же долина Царская."
+            "fg": "И вышел царь Сдома навстречу ему, когда он, разбив Кедорлаомера и царей, которые с ним, возвратился в долину Шаве, она же долина Царская.",
+            "plaut": "The king of Sodom came out to meet him after his return to the Valley of Shaveh (that is, the King’s Valley) from fighting Chedarlaomer and his allied kings."
           },
           "comments": {
             "rashi": [
@@ -1596,7 +1651,8 @@
         {
           "verse": 18,
           "text": {
-            "fg": "И Малки-Цедек, царь Шалема, вынес хлеб и вино; а он служитель Б-гу Всевышнему."
+            "fg": "И Малки-Цедек, царь Шалема, вынес хлеб и вино; а он служитель Б-гу Всевышнему.",
+            "plaut": "Now Melchizedek king of Salem brought out bread and wine—he was a priest of God Most High—"
           },
           "comments": {
             "rashi": [
@@ -1638,7 +1694,8 @@
         {
           "verse": 19,
           "text": {
-            "fg": "И благословил он его и сказал: Благословен Аврам от Б-га Всевышнего, обретшего небо и землю;"
+            "fg": "И благословил он его и сказал: Благословен Аврам от Б-га Всевышнего, обретшего небо и землю;",
+            "plaut": "and blessed him, saying, “Blessed be Abram by God Most High, maker of heaven and earth,"
           },
           "comments": {
             "rashi": [
@@ -1665,7 +1722,8 @@
         {
           "verse": 20,
           "text": {
-            "fg": "И благословен Б-г Всевышний, Который отдал твоих притеснителей в руки тебе. – И дал ему десятину от всего."
+            "fg": "И благословен Б-г Всевышний, Который отдал твоих притеснителей в руки тебе. – И дал ему десятину от всего.",
+            "plaut": "and blessed is God Most High, who has given your foes into your hands.” Then he [Abram] gave him a tenth of everything."
           },
           "comments": {
             "rashi": [
@@ -1692,7 +1750,8 @@
         {
           "verse": 21,
           "text": {
-            "fg": "И сказал царь Сдома Авраму: Дай мне людей, а имущество бери себе."
+            "fg": "И сказал царь Сдома Авраму: Дай мне людей, а имущество бери себе.",
+            "plaut": "The king of Sodom now said to Abram, “Let me have the people and keep the goods for yourself.”"
           },
           "comments": {
             "rashi": [
@@ -1714,7 +1773,8 @@
         {
           "verse": 22,
           "text": {
-            "fg": "И сказал Аврам царю Сдома: Воздеваю руку мою к Господу, Б-гу Всевышнему, обретшему небо и землю:"
+            "fg": "И сказал Аврам царю Сдома: Воздеваю руку мою к Господу, Б-гу Всевышнему, обретшему небо и землю:",
+            "plaut": "But Abram said to the king of Sodom, “I have raised my hand to the Eternal, God Most High, maker of heaven and earth,"
           },
           "comments": {
             "rashi": [
@@ -1736,7 +1796,8 @@
         {
           "verse": 23,
           "text": {
-            "fg": "Если от нитки и до ремня обувного,..! И если возьму из всего, что тебе (принадлежит),..! И тебе не сказать: я обогатил Аврама."
+            "fg": "Если от нитки и до ремня обувного,..! И если возьму из всего, что тебе (принадлежит),..! И тебе не сказать: я обогатил Аврама.",
+            "plaut": "that I would take nothing of yours, not even a thread or a sandal-strap—you shall not say, ‘I enriched Abram’"
           },
           "comments": {
             "rashi": [
@@ -1768,7 +1829,8 @@
         {
           "verse": 24,
           "text": {
-            "fg": "Я не (в счет), лишь то, что съели отроки, и доля мужей (и) ходивших со мною, Анера, Эшкола и Мамре, – они пусть возьмут свою долю."
+            "fg": "Я не (в счет), лишь то, что съели отроки, и доля мужей (и) ходивших со мною, Анера, Эшкола и Мамре, – они пусть возьмут свою долю.",
+            "plaut": "—except what the troops have eaten, and the share due the leaders who went with me: Aner, Eshkol, and Mamre; let them take their share.”"
           },
           "comments": {
             "rashi": [
@@ -1795,7 +1857,8 @@
         {
           "verse": 1,
           "text": {
-            "fg": "После этих событий было слово Господа к Авраму в видении так: Не страшись, Аврам, я щит тебе. Награда твоя велика очень."
+            "fg": "После этих событий было слово Господа к Авраму в видении так: Не страшись, Аврам, я щит тебе. Награда твоя велика очень.",
+            "plaut": "After these things, the word of the Eternal came to Abram in a vision, saying, “Have no fear, Abram; I am giving you an abundant reward as a gift.”"
           },
           "comments": {
             "rashi": [
@@ -1842,7 +1905,8 @@
         {
           "verse": 2,
           "text": {
-            "fg": "И сказал Аврам: Господин мой. Господь! Что дашь мне, я ведь хожу бездетный, а управителем в доме моем Элиэзер из Дамесека."
+            "fg": "И сказал Аврам: Господин мой. Господь! Что дашь мне, я ведь хожу бездетный, а управителем в доме моем Элиэзер из Дамесека.",
+            "plaut": "Abram then replied, “Eternal God, what can You give me, when I am going [to die] childless, and the heir to my household is Damascene Eliezer?”"
           },
           "comments": {
             "rashi": [
@@ -1879,7 +1943,8 @@
         {
           "verse": 3,
           "text": {
-            "fg": "И сказал Аврам: Вот мне Ты не дал потомства, и вот мой домочадец наследует мне."
+            "fg": "И сказал Аврам: Вот мне Ты не дал потомства, и вот мой домочадец наследует мне.",
+            "plaut": "Abram added, “Look—to me You have given no offspring, and one of my slaves is my heir!”"
           },
           "comments": {
             "rashi": [
@@ -1901,14 +1966,16 @@
         {
           "verse": 4,
           "text": {
-            "fg": "И вот слово Господа к нему: Не будет наследовать тебе этот, но тот, кто произойдет из твоих чресл, он тебе наследовать будет."
+            "fg": "И вот слово Господа к нему: Не будет наследовать тебе этот, но тот, кто произойдет из твоих чресл, он тебе наследовать будет.",
+            "plaut": "But the Eternal One’s word to him was, “That one shall not be your heir; rather, one who comes from your own body—he shall be your heir!”"
           },
           "comments": {}
         },
         {
           "verse": 5,
           "text": {
-            "fg": "И Он вывел его наружу и сказал: Взгляни же на небо и сочти звезды. Можешь ли счесть их? И сказал Он ему: Таким будет потомство твое."
+            "fg": "И Он вывел его наружу и сказал: Взгляни же на небо и сочти звезды. Можешь ли счесть их? И сказал Он ему: Таким будет потомство твое.",
+            "plaut": "Taking him outside, [God] said, “Turn your gaze toward the heavens and count the stars, if you can count them!” And [God] promised him: “So shall your seed be!”"
           },
           "comments": {
             "rashi": [
@@ -1930,7 +1997,8 @@
         {
           "verse": 6,
           "text": {
-            "fg": "И уверовал в Господа, и Он вменил ему это в праведность."
+            "fg": "И уверовал в Господа, и Он вменил ему это в праведность.",
+            "plaut": "And he put his trust in the Eternal, who reckoned that as loyalty in him,"
           },
           "comments": {
             "rashi": [
@@ -1962,14 +2030,16 @@
         {
           "verse": 7,
           "text": {
-            "fg": "И сказал Он ему: я Господь, Который вывел тебя из Ур-Касдим, чтобы дать тебе эту землю во владение."
+            "fg": "И сказал Он ему: я Господь, Который вывел тебя из Ур-Касдим, чтобы дать тебе эту землю во владение.",
+            "plaut": "saying to him: “I am the Eternal who brought you out of Ur of the Chaldeans, to give you this land as an inheritance.”"
           },
           "comments": {}
         },
         {
           "verse": 8,
           "text": {
-            "fg": "И сказал он: Господин мой, Господь! По чему мне знать, что буду владеть ею?"
+            "fg": "И сказал он: Господин мой, Господь! По чему мне знать, что буду владеть ею?",
+            "plaut": "He then said, “Eternal God, how can I know that I shall take possession of it?”"
           },
           "comments": {
             "sonchino": [
@@ -1984,7 +2054,8 @@
         {
           "verse": 9,
           "text": {
-            "fg": "И сказал Он ему: Возьми Мне телицу троекратно, и козу троекратно, и овна троекратно, и горлицу и молодого голубя."
+            "fg": "И сказал Он ему: Возьми Мне телицу троекратно, и козу троекратно, и овна троекратно, и горлицу и молодого голубя.",
+            "plaut": "[God] answered, “Bring Me a three-year-old calf, a three-year-old kid, a three-year-old ram, and a young turtledove.”"
           },
           "comments": {
             "rashi": [
@@ -2021,7 +2092,8 @@
         {
           "verse": 10,
           "text": {
-            "fg": "И взял он Ему всех этих, и рассек их посередине, и положил каждую часть против ей соответственной; а птицу не рассек."
+            "fg": "И взял он Ему всех этих, и рассек их посередине, и положил каждую часть против ей соответственной; а птицу не рассек.",
+            "plaut": "So he took all these and split them—all but the bird—in the middle, placing each half opposite the other."
           },
           "comments": {
             "rashi": [
@@ -2058,7 +2130,8 @@
         {
           "verse": 11,
           "text": {
-            "fg": "И спустился хищник на туши, и отогнал от них Аврам."
+            "fg": "И спустился хищник на туши, и отогнал от них Аврам.",
+            "plaut": "Vultures descended upon the carcasses, but Abram chased them away."
           },
           "comments": {
             "rashi": [
@@ -2095,7 +2168,8 @@
         {
           "verse": 12,
           "text": {
-            "fg": "И было солнце к закату, и оцепенение пало на Аврама; и вот ужас, мрак великий падает на него."
+            "fg": "И было солнце к закату, и оцепенение пало на Аврама; и вот ужас, мрак великий падает на него.",
+            "plaut": "Then, as the sun was setting, Abram fell into a deep sleep, and lo! a powerful dark dread was falling upon him!"
           },
           "comments": {
             "rashi": [
@@ -2122,7 +2196,8 @@
         {
           "verse": 13,
           "text": {
-            "fg": "И сказал Он Авраму: Знай же, знай, что чужанином будет потомство твое на земле, не им (принадлежащей), и будут порабощать их и угнетать их, четыреста лет."
+            "fg": "И сказал Он Авраму: Знай же, знай, что чужанином будет потомство твое на земле, не им (принадлежащей), и будут порабощать их и угнетать их, четыреста лет.",
+            "plaut": "[God] said to Abram, “Know now that your descendants shall be strangers in a land not theirs; they shall be enslaved and afflicted for four hundred years."
           },
           "comments": {
             "rashi": [
@@ -2154,7 +2229,8 @@
         {
           "verse": 14,
           "text": {
-            "fg": "И также народ, у которого в порабощении будут, судить буду я, а затем они выйдут с большим имуществом."
+            "fg": "И также народ, у которого в порабощении будут, судить буду я, а затем они выйдут с большим имуществом.",
+            "plaut": "But then I will bring judgment upon the nation they are serving; after that they shall go out with many possessions."
           },
           "comments": {
             "rashi": [
@@ -2186,7 +2262,8 @@
         {
           "verse": 15,
           "text": {
-            "fg": "Ты же придешь к отцам твоим с миром, погребен будешь в старости доброй."
+            "fg": "Ты же придешь к отцам твоим с миром, погребен будешь в старости доброй.",
+            "plaut": "And you—you shall go to your ancestors in peace; you shall be buried in good old age."
           },
           "comments": {
             "rashi": [
@@ -2223,7 +2300,8 @@
         {
           "verse": 16,
           "text": {
-            "fg": "А четвертое поколение возвратится сюда; ибо не полна вина эмори до сих пор."
+            "fg": "А четвертое поколение возвратится сюда; ибо не полна вина эмори до сих пор.",
+            "plaut": "The fourth generation shall return here, for not until then shall the iniquity of the Amorites be repaid.”"
           },
           "comments": {
             "rashi": [
@@ -2255,7 +2333,8 @@
         {
           "verse": 17,
           "text": {
-            "fg": "И было: солнце зашло, и мгла была. И вот горнило дымящееся и факел огненный, это прошло меж тех частей."
+            "fg": "И было: солнце зашло, и мгла была. И вот горнило дымящееся и факел огненный, это прошло меж тех частей.",
+            "plaut": "Now, when the sun had set and it was dark, lo—a smoking oven and a fiery torch were what passed between these pieces!"
           },
           "comments": {
             "rashi": [
@@ -2297,7 +2376,8 @@
         {
           "verse": 18,
           "text": {
-            "fg": "В тот день заключил Господь с Аврамом завет, говоря: Твоему потомству дал я эту землю от реки Мицраима до великой реки, реки Прат:"
+            "fg": "В тот день заключил Господь с Аврамом завет, говоря: Твоему потомству дал я эту землю от реки Мицраима до великой реки, реки Прат:",
+            "plaut": "On that day the Eternal made a covenant with Abram, saying, “To your descendants I have given this land, from the river of Egypt to the great river, the Euphrates,"
           },
           "comments": {
             "rashi": [
@@ -2334,7 +2414,8 @@
         {
           "verse": 19,
           "text": {
-            "fg": "Кени, и кенизи, и кадмони;"
+            "fg": "Кени, и кенизи, и кадмони;",
+            "plaut": "[the land of] the Kenites, the Kenizzites, the Kadmonites,"
           },
           "comments": {
             "rashi": [
@@ -2361,7 +2442,8 @@
         {
           "verse": 20,
           "text": {
-            "fg": "И хити, и перизи, и рефаим;"
+            "fg": "И хити, и перизи, и рефаим;",
+            "plaut": "the Hittites, the Perizzites, the Rephaim,"
           },
           "comments": {
             "rashi": [
@@ -2388,7 +2470,8 @@
         {
           "verse": 21,
           "text": {
-            "fg": "И эмори, и кенаани, и гиргаши, и йевуси."
+            "fg": "И эмори, и кенаани, и гиргаши, и йевуси.",
+            "plaut": "the Amorites, the Canaanites, the Girgashites, and the Jebusites.”"
           },
           "comments": {
             "sonchino": [
@@ -2408,7 +2491,8 @@
         {
           "verse": 1,
           "text": {
-            "fg": "А Сарай, жена Аврама, не рождала ему; и у нее рабыня-мицрит, по имени Агарь."
+            "fg": "А Сарай, жена Аврама, не рождала ему; и у нее рабыня-мицрит, по имени Агарь.",
+            "plaut": "Now Abram’s wife Sarai, who had not borne him a child, had an Egyptian slave named Hagar."
           },
           "comments": {
             "rashi": [
@@ -2435,7 +2519,8 @@
         {
           "verse": 2,
           "text": {
-            "fg": "И сказала Сарай Авраму: Вот (утробу) замкнул мне Господь, что до рождения. Войди же к моей рабыне; быть может, воздвигнусь через нее. – И послушал Аврам голоса Сарай."
+            "fg": "И сказала Сарай Авраму: Вот (утробу) замкнул мне Господь, что до рождения. Войди же к моей рабыне; быть может, воздвигнусь через нее. – И послушал Аврам голоса Сарай.",
+            "plaut": "So Sarai said to Abram: “Seeing as the Eternal has kept me from bearing a child, have intercourse with my slave: maybe I will have a son through her.” Abram heeded Sarai’s voice."
           },
           "comments": {
             "rashi": [
@@ -2477,7 +2562,8 @@
         {
           "verse": 3,
           "text": {
-            "fg": "И взяла Сарай, жена Аврама, Агарь-мицрит, свою рабыню, по прошествии десяти лет пребывания Аврама на земле Кенаана, и дала ее Авраму, мужу своему, ему в жены."
+            "fg": "И взяла Сарай, жена Аврама, Агарь-мицрит, свою рабыню, по прошествии десяти лет пребывания Аврама на земле Кенаана, и дала ее Авраму, мужу своему, ему в жены.",
+            "plaut": "Ten years after Abram had settled in the land of Canaan, Abram’s wife Sarai took her slave Hagar the Egyptian and gave her to her husband Abram as a wife."
           },
           "comments": {
             "rashi": [
@@ -2502,7 +2588,8 @@
         {
           "verse": 4,
           "text": {
-            "fg": "И вошел он к Агарь, и она эачала; и увидела, что зачала, и непочтенною стала ее госпожа в ее глазах."
+            "fg": "И вошел он к Агарь, и она эачала; и увидела, что зачала, и непочтенною стала ее госпожа в ее глазах.",
+            "plaut": "He came to Hagar and she became pregnant; and when she saw that she had become pregnant, her mistress became for her an object of scorn."
           },
           "comments": {
             "rashi": [
@@ -2529,7 +2616,8 @@
         {
           "verse": 5,
           "text": {
-            "fg": "И сказала Сарай Авраму: Обида моя на тебе. Я отдала рабыню мою в лоно тебе, а она увидела, что зачала, и непочтенною стала я в ее глазах. Да рассудит Господь между мною и между тобой!"
+            "fg": "И сказала Сарай Авраму: Обида моя на тебе. Я отдала рабыню мою в лоно тебе, а она увидела, что зачала, и непочтенною стала я в ее глазах. Да рассудит Господь между мною и между тобой!",
+            "plaut": "Sarai then said to Abram, “My wrong is on your head! I put my slave in your arms; no sooner did she see that she was pregnant, I became for her an object of scorn. Let the Eternal judge between us!”"
           },
           "comments": {
             "rashi": [
@@ -2556,7 +2644,8 @@
         {
           "verse": 6,
           "text": {
-            "fg": "И сказал Аврам Сарай: Вот рабыня твоя в твоих руках, поступи с нею, как угодно тебе. – И угнетала ее Сарай, и убежала та от нее."
+            "fg": "И сказал Аврам Сарай: Вот рабыня твоя в твоих руках, поступи с нею, как угодно тебе. – И угнетала ее Сарай, и убежала та от нее.",
+            "plaut": "So Abram said to Sarai, “Look, your slave is in your hands; do to her as you please.” Sarai then so afflicted her that she ran away,"
           },
           "comments": {
             "rashi": [
@@ -2583,7 +2672,8 @@
         {
           "verse": 7,
           "text": {
-            "fg": "И застал ее ангел Господень у источника водного в пустыне, у источника на пути в Шур."
+            "fg": "И застал ее ангел Господень у источника водного в пустыне, у источника на пути в Шур.",
+            "plaut": "and an angel of the Eternal found her at a spring of water in the wilderness, at the spring on the road to Shur."
           },
           "comments": {
             "sonchino": [
@@ -2603,7 +2693,8 @@
         {
           "verse": 8,
           "text": {
-            "fg": "И сказал он: Агарь, рабыня Сарай! Откуда пришла ты и куда идешь? И сказала она: От Сарай, моей госпожи, я бегу."
+            "fg": "И сказал он: Агарь, рабыня Сарай! Откуда пришла ты и куда идешь? И сказала она: От Сарай, моей госпожи, я бегу.",
+            "plaut": "[The angel] said, “Hagar, slave of Sarai: Whence have you come and where are you going?” She answered, “I am running away from my mistress Sarai.”"
           },
           "comments": {
             "rashi": [
@@ -2630,7 +2721,8 @@
         {
           "verse": 9,
           "text": {
-            "fg": "И сказал ей ангел Господень: Возвратись к твоей госпоже и гнет терпи под ее рукой."
+            "fg": "И сказал ей ангел Господень: Возвратись к твоей госпоже и гнет терпи под ее рукой.",
+            "plaut": "The angel of the Eternal said to her, “Return to your mistress and submit to her ill-treatment.”"
           },
           "comments": {
             "rashi": [
@@ -2645,14 +2737,16 @@
         {
           "verse": 10,
           "text": {
-            "fg": "И сказал ей ангел Господень: Премного умножу потомство твое, и несчетным будет оно от множества."
+            "fg": "И сказал ей ангел Господень: Премного умножу потомство твое, и несчетным будет оно от множества.",
+            "plaut": "The angel of the Eternal went on to say to her, “I will greatly multiply your descendants; they shall be too numerous to count.”"
           },
           "comments": {}
         },
         {
           "verse": 11,
           "text": {
-            "fg": "И сказал ей ангел Господень: Вот ты зачнешь и родишь сына. И нареки ему имя Ишмаэль, ибо услышал Господь твой (вопль от) гнета."
+            "fg": "И сказал ей ангел Господень: Вот ты зачнешь и родишь сына. И нареки ему имя Ишмаэль, ибо услышал Господь твой (вопль от) гнета.",
+            "plaut": "And then the angel of the Eternal continued: “Look—you are pregnant and shall bear a son; call him Ishmael, for the Eternal has heard your affliction."
           },
           "comments": {
             "rashi": [
@@ -2684,7 +2778,8 @@
         {
           "verse": 12,
           "text": {
-            "fg": "И он будет диким человеком, его рука против всех, и рука всех против него; и пред лицом всех братьев своих обитать будет."
+            "fg": "И он будет диким человеком, его рука против всех, и рука всех против него; и пред лицом всех братьев своих обитать будет.",
+            "plaut": "He shall be a wild ass of a man; his hand shall be against all and the hand of all shall be against him; he shall dwell in [permanent] opposition to all his kin.”"
           },
           "comments": {
             "rashi": [
@@ -2721,7 +2816,8 @@
         {
           "verse": 13,
           "text": {
-            "fg": "И возгласила она Имя Господа, говорившего ей, (и сказала:) Ты Б-г (все)видения. Ибо сказала она: Ужели и здесь я видела после виденного мною?"
+            "fg": "И возгласила она Имя Господа, говорившего ей, (и сказала:) Ты Б-г (все)видения. Ибо сказала она: Ужели и здесь я видела после виденного мною?",
+            "plaut": "So she called the Eternal who had been speaking to her, “You are El Ro’i”—meaning by this, “Even here I have seen the back of theOne who looks upon me!”"
           },
           "comments": {
             "rashi": [
@@ -2753,7 +2849,8 @@
         {
           "verse": 14,
           "text": {
-            "fg": "Потому назван колодец: колодец живого, мною виденного. Вот он между Кадешем и Баредом."
+            "fg": "Потому назван колодец: колодец живого, мною виденного. Вот он между Кадешем и Баредом.",
+            "plaut": "That is why that well—the one located between Kadesh and Bered—is called Be’er-lachai-ro’i."
           },
           "comments": {
             "rashi": [
@@ -2768,7 +2865,8 @@
         {
           "verse": 15,
           "text": {
-            "fg": "И родила Агарь Авраму сына, и нарек Аврам имя сыну своему, которого родила Агарь, Ишмаэль."
+            "fg": "И родила Агарь Авраму сына, и нарек Аврам имя сыну своему, которого родила Агарь, Ишмаэль.",
+            "plaut": "Hagar bore to Abram a son, and Abram called his son whom Hagar had borne Ishmael."
           },
           "comments": {
             "rashi": [
@@ -2790,7 +2888,8 @@
         {
           "verse": 16,
           "text": {
-            "fg": " А Авраму было восемьдесят лет и шесть лет , когда родила Агарь Ишмаэля Авраму."
+            "fg": " А Авраму было восемьдесят лет и шесть лет , когда родила Агарь Ишмаэля Авраму.",
+            "plaut": "When Hagar bore Ishmael to Abram, Abram was 86 years old."
           },
           "comments": {
             "rashi": [
@@ -2810,7 +2909,8 @@
         {
           "verse": 1,
           "text": {
-            "fg": "И было Авраму девяносто лет и девять лет, и явил Себя Господь Авраму, и сказал Он ему: я Б-г Всемогущий. Ходи предо Мною и будь целен."
+            "fg": "И было Авраму девяносто лет и девять лет, и явил Себя Господь Авраму, и сказал Он ему: я Б-г Всемогущий. Ходи предо Мною и будь целен.",
+            "plaut": "When Abram was 99 years old, the Eternal appeared to Abram and said to him, “I am El Shaddai—walk along before Me and be pure of heart,"
           },
           "comments": {
             "rashi": [
@@ -2847,7 +2947,8 @@
         {
           "verse": 2,
           "text": {
-            "fg": "И я положу Мой завет между Мною и между тобой и умножу тебя чрезвычайно."
+            "fg": "И я положу Мой завет между Мною и между тобой и умножу тебя чрезвычайно.",
+            "plaut": "and I will set a covenant between us, and multiply you exceedingly.”"
           },
           "comments": {
             "rashi": [
@@ -2869,7 +2970,8 @@
         {
           "verse": 3,
           "text": {
-            "fg": "И пал Аврам на лицо свое, и говорил с ним Б-г так:"
+            "fg": "И пал Аврам на лицо свое, и говорил с ним Б-г так:",
+            "plaut": "Abram fell on his face.God spoke with him, saying,"
           },
           "comments": {
             "rashi": [
@@ -2891,7 +2993,8 @@
         {
           "verse": 4,
           "text": {
-            "fg": "Я, вот Мой завет с тобой, и ты будешь отцом множества народов."
+            "fg": "Я, вот Мой завет с тобой, и ты будешь отцом множества народов.",
+            "plaut": "“As for Me, here is My covenant with you: You shall be the father of a multitude of peoples."
           },
           "comments": {
             "sonchino": [
@@ -2911,7 +3014,8 @@
         {
           "verse": 5,
           "text": {
-            "fg": "И не называться тебе впредь Аврамом, но будет имя твое Авраам, ибо отцом множества народов дам стать тебе."
+            "fg": "И не называться тебе впредь Аврамом, но будет имя твое Авраам, ибо отцом множества народов дам стать тебе.",
+            "plaut": "No longer are you to be called Abram: your name is to be Abraham, for I am making you the father of a multitude of nations."
           },
           "comments": {
             "rashi": [
@@ -2933,7 +3037,8 @@
         {
           "verse": 6,
           "text": {
-            "fg": "И сделаю тебя плодовитым чрезвычайно, и дам тебе стать народами, и цари от тебя произойдут."
+            "fg": "И сделаю тебя плодовитым чрезвычайно, и дам тебе стать народами, и цари от тебя произойдут.",
+            "plaut": "I am making you exceedingly fruitful, and turning you into nations; kings shall come forth from you;"
           },
           "comments": {
             "rashi": [
@@ -2948,7 +3053,8 @@
         {
           "verse": 7,
           "text": {
-            "fg": "И я установлю Мой завет между Мною и между тобой и между твоим потомством после тебя в их поколениях заветом вечным: быть для тебя Б-г ом и для твоего потомства после тебя,"
+            "fg": "И я установлю Мой завет между Мною и между тобой и между твоим потомством после тебя в их поколениях заветом вечным: быть для тебя Б-г ом и для твоего потомства после тебя,",
+            "plaut": "I will establish My covenant with you, and with your descendants after you, for all their generations, an everlasting covenant: to be God to you and to your descendants after you."
           },
           "comments": {
             "rashi": [
@@ -2963,7 +3069,8 @@
         {
           "verse": 8,
           "text": {
-            "fg": "И я дам тебе и твоему потомству после тебя землю проживания твоего, всю землю Кенаана во владение вечное, и я буду им Б-г ом."
+            "fg": "И я дам тебе и твоему потомству после тебя землю проживания твоего, всю землю Кенаана во владение вечное, и я буду им Б-г ом.",
+            "plaut": "I will give you and your descendants after you the land where you have sojourned, the whole land of Canaan, as an everlasting possession, and I will be their God.”"
           },
           "comments": {
             "rashi": [
@@ -2985,7 +3092,8 @@
         {
           "verse": 9,
           "text": {
-            "fg": "И сказал Б-г Аврааму: А ты завет Мой соблюдай, ты и потомство твое после тебя в их поколениях."
+            "fg": "И сказал Б-г Аврааму: А ты завет Мой соблюдай, ты и потомство твое после тебя в их поколениях.",
+            "plaut": "God then said to Abraham, “As for you, observe My covenant—you and your descendants after you—in all your generations."
           },
           "comments": {
             "rashi": [
@@ -3000,7 +3108,8 @@
         {
           "verse": 10,
           "text": {
-            "fg": "Вот Мой завет, который вам соблюдать между Мною и между вами и между потомством твоим после тебя: чтобы обрезан был у вас всякий мужского пола."
+            "fg": "Вот Мой завет, который вам соблюдать между Мною и между вами и между потомством твоим после тебя: чтобы обрезан был у вас всякий мужского пола.",
+            "plaut": "This is My covenant that you and your descendants after you are to observe: let every male among you be circumcised."
           },
           "comments": {
             "rashi": [
@@ -3032,7 +3141,8 @@
         {
           "verse": 11,
           "text": {
-            "fg": "И обрезайте вашу крайнюю плоть, и будет (это) знаком завета между Мною и между вами."
+            "fg": "И обрезайте вашу крайнюю плоть, и будет (это) знаком завета между Мною и между вами.",
+            "plaut": "When the flesh of your foreskin has been circumcised, it shall become a sign of the covenant between us."
           },
           "comments": {
             "rashi": [
@@ -3047,7 +3157,8 @@
         {
           "verse": 12,
           "text": {
-            "fg": "И восьмидневным обрезан должен быть у вас всякий мужского пола в поколениях ваших, рожденный в доме и приобретенный за серебро из всех чужеземцев, кто не из потомства твоего."
+            "fg": "И восьмидневным обрезан должен быть у вас всякий мужского пола в поколениях ваших, рожденный в доме и приобретенный за серебро из всех чужеземцев, кто не из потомства твоего.",
+            "plaut": "And in all your generations let every eight-day-old boy among you be circumcised, [whether it be] a homeborn slave or bought from foreigners, not of your own descent."
           },
           "comments": {
             "rashi": [
@@ -3074,7 +3185,8 @@
         {
           "verse": 13,
           "text": {
-            "fg": "Обрезан, обрезан должен быть рожденный в доме твоем и приобретенный за твое серебро, и будет завет Мой на вашем теле заветом вечным."
+            "fg": "Обрезан, обрезан должен быть рожденный в доме твоем и приобретенный за твое серебро, и будет завет Мой на вашем теле заветом вечным.",
+            "plaut": "Let your homeborn slave and the one you buy be circumcised, so that My covenant may be in your flesh as an everlasting covenant."
           },
           "comments": {
             "rashi": [
@@ -3089,7 +3201,8 @@
         {
           "verse": 14,
           "text": {
-            "fg": "А необрезанный мужского пола, кто не обрежет крайней плоти своей, – отсечена будет та душа от народа своего; Мой завет он нарушил."
+            "fg": "А необрезанный мужского пола, кто не обрежет крайней плоти своей, – отсечена будет та душа от народа своего; Мой завет он нарушил.",
+            "plaut": "An uncircumcised male who has not circumcised the flesh of his foreskin—that person shall be cut off from his people; he has broken My covenant.”"
           },
           "comments": {
             "rashi": [
@@ -3121,7 +3234,8 @@
         {
           "verse": 15,
           "text": {
-            "fg": "И сказал Б-г Аврааму: Сарай, твою жену, не называй Сарай, но Сара – имя ее."
+            "fg": "И сказал Б-г Аврааму: Сарай, твою жену, не называй Сарай, но Сара – имя ее.",
+            "plaut": "God then said to Abraham, “Sarai your wife—call her Sarai no more, for her name is [now] Sarah."
           },
           "comments": {
             "rashi": [
@@ -3148,7 +3262,8 @@
         {
           "verse": 16,
           "text": {
-            "fg": "И благословлю я ее, и также дам от нее тебе сына. И благословлю ее и станет она народами, цари наций от нее будут."
+            "fg": "И благословлю я ее, и также дам от нее тебе сына. И благословлю ее и станет она народами, цари наций от нее будут.",
+            "plaut": "I will bless her and, too, I will give you a son through her; I will bless her and she shall become nations; rulers of peoples shall come from her.”"
           },
           "comments": {
             "rashi": [
@@ -3168,7 +3283,8 @@
         {
           "verse": 17,
           "text": {
-            "fg": "И пал Авраам на лицо свое и засмеялся, и сказал он в сердце своем: У столетнего ли (сын) родится, и чтобы Сара, девяностолетняя, родила?"
+            "fg": "И пал Авраам на лицо свое и засмеялся, и сказал он в сердце своем: У столетнего ли (сын) родится, и чтобы Сара, девяностолетняя, родила?",
+            "plaut": "Abraham fell flat on his face and laughed, thinking: “Can a child be born to a man of 100? Can 90-year-old Sarah bear a child?”"
           },
           "comments": {
             "rashi": [
@@ -3200,7 +3316,8 @@
         {
           "verse": 18,
           "text": {
-            "fg": "И сказал Авраам Б-гу: Лишь бы Ишмаэль жил пред Тобою!"
+            "fg": "И сказал Авраам Б-гу: Лишь бы Ишмаэль жил пред Тобою!",
+            "plaut": "Abraham then said to God: If only You would let Ishmael live [happily] before You!"
           },
           "comments": {
             "rashi": [
@@ -3227,7 +3344,8 @@
         {
           "verse": 19,
           "text": {
-            "fg": "И сказал Б-г: Однако, Сара, жена твоя, родит тебе сына, и наречешь ему имя Ицхак, и я установлю Мой завет с ним заветом вечным для потомства его после него."
+            "fg": "И сказал Б-г: Однако, Сара, жена твоя, родит тебе сына, и наречешь ему имя Ицхак, и я установлю Мой завет с ним заветом вечным для потомства его после него.",
+            "plaut": "But God said, “Nonetheless, your wife Sarah shall bear you a son, whom you shall call Isaac, and I will establish My covenant with him and his descendants after him as an everlasting covenant."
           },
           "comments": {
             "rashi": [
@@ -3257,7 +3375,8 @@
         {
           "verse": 20,
           "text": {
-            "fg": "Что же до Ишмаэля, я услышал тебя. Вот я благословил его и плодовитым его сделаю, и умножу его чрезвычайно; двенадцать князей породит он, и я дам ему стать народом великим."
+            "fg": "Что же до Ишмаэля, я услышал тебя. Вот я благословил его и плодовитым его сделаю, и умножу его чрезвычайно; двенадцать князей породит он, и я дам ему стать народом великим.",
+            "plaut": "As for Ishmael, I have heard you. See, I have blessed him and made him fruitful and made him exceedingly numerous—he will father twelve princes; I will make him into a great nation."
           },
           "comments": {
             "rashi": [
@@ -3279,14 +3398,16 @@
         {
           "verse": 21,
           "text": {
-            "fg": "Но Мой завет установлю я с Ицхаком, которого родит тебе Сара к этому сроку в будущем году."
+            "fg": "Но Мой завет установлю я с Ицхаком, которого родит тебе Сара к этому сроку в будущем году.",
+            "plaut": "But it is with Isaac, whom Sarah will bear for you at this time next year, that I will establish My covenant.”"
           },
           "comments": {}
         },
         {
           "verse": 22,
           "text": {
-            "fg": "И кончил Он говорить с ним, и вознесся Б-г над Авраамом."
+            "fg": "И кончил Он говорить с ним, и вознесся Б-г над Авраамом.",
+            "plaut": "Done speaking with him, God ascended, away from Abraham."
           },
           "comments": {
             "rashi": [
@@ -3301,7 +3422,8 @@
         {
           "verse": 23,
           "text": {
-            "fg": "И взял Авраам Ишмаэля, сына своего, и всех рожденных в доме его, и всех приобретенных за его серебро, всех мужского пола из людей дома Авраамова, и обрезал их крайнюю плоть в тот самый день, когда говорил с ним Б-г."
+            "fg": "И взял Авраам Ишмаэля, сына своего, и всех рожденных в доме его, и всех приобретенных за его серебро, всех мужского пола из людей дома Авраамова, и обрезал их крайнюю плоть в тот самый день, когда говорил с ним Б-г.",
+            "plaut": "Abraham then took Ishmael his son and all his homeborn slaves and those who had been bought, every male among Abraham’s slaves, and on that very day Abraham circumcised the flesh of their foreskins as God had instructed him."
           },
           "comments": {
             "rashi": [
@@ -3321,7 +3443,8 @@
         {
           "verse": 24,
           "text": {
-            "fg": "И Аврааму было девяносто девять лет при обрезании крайней плоти его."
+            "fg": "И Аврааму было девяносто девять лет при обрезании крайней плоти его.",
+            "plaut": "Abraham was 99 years old when he was circumcised in the flesh of his foreskin,"
           },
           "comments": {
             "rashi": [
@@ -3336,7 +3459,8 @@
         {
           "verse": 25,
           "text": {
-            "fg": "А Ишмаэлю, сыну его, было тринадцать лет при обрезании крайней плоти его."
+            "fg": "А Ишмаэлю, сыну его, было тринадцать лет при обрезании крайней плоти его.",
+            "plaut": "and Ishmael his son was 13 years old when he was circumcised in the flesh of his foreskin."
           },
           "comments": {
             "rashi": [
@@ -3351,7 +3475,8 @@
         {
           "verse": 26,
           "text": {
-            "fg": "В тот самый день обрезан был Авраам, и Ишмаэль, его сын."
+            "fg": "В тот самый день обрезан был Авраам, и Ишмаэль, его сын.",
+            "plaut": "That very day both Abraham and Ishmael his son were circumcised."
           },
           "comments": {
             "rashi": [
@@ -3366,7 +3491,8 @@
         {
           "verse": 27,
           "text": {
-            "fg": "И все люди его дома, рожденный в доме и приобретенный за серебро из чужеземцев, обрезаны были с ним."
+            "fg": "И все люди его дома, рожденный в доме и приобретенный за серебро из чужеземцев, обрезаны были с ним.",
+            "plaut": "And all the people of his household—the homeborn slaves and those bought from foreigners—were circumcised with him."
           },
           "comments": {}
         }
