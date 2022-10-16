@@ -1,16 +1,15 @@
 import { Writable, writable } from 'svelte/store';
 import type { Metadata } from './types';
 
+export type CommentSourceFlags = Map<string, boolean>
 
 export const commentSourceFlagsStore: Writable<CommentSourceFlags> = writable(new Map())
 
-
-const STORED_ACTIVE_COMMENT_SOURCES = 'activeCommentSources';
-export type CommentSourceFlags = Map<string, boolean>
+const LOCAL_STORAGE_KEY = 'activeCommentSources';
 
 
 function loadCommentSourceFlags(): CommentSourceFlags {
-    const saved = localStorage.getItem(STORED_ACTIVE_COMMENT_SOURCES);
+    const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (saved === null)
         return new Map();
     else
@@ -19,7 +18,7 @@ function loadCommentSourceFlags(): CommentSourceFlags {
 
 
 function saveCommentSourceFlags(current: CommentSourceFlags) {
-    localStorage.setItem(STORED_ACTIVE_COMMENT_SOURCES, JSON.stringify(current));
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(current));
 }
 
 
