@@ -72,7 +72,7 @@ def parse(parsha: int):
         if isinstance(child, Tag):
             continue
 
-        chapter_start_match = re.match(r"(\d+):1\]", text_part)
+        chapter_start_match = re.match(r"(\d+):(\d+)\]", text_part)
         if chapter_start_match is not None:
             if current_chapter_data is not None:
                 if current_verse_data is not None:
@@ -82,12 +82,13 @@ def parse(parsha: int):
                 chapter=int(chapter_start_match.group(1)),
                 verses=[],
             )
+            current_verse = int(chapter_start_match.group(2))
             current_verse_data = VerseData(
-                verse=1,
+                verse=current_verse,
                 text={metadata.Translation.PLAUT: ""},
                 comments={},
             )
-            expected_next_verse = 2
+            expected_next_verse = current_verse + 1
             continue
 
         verse_start_match = re.match(rf"({expected_next_verse})\]", text_part)
