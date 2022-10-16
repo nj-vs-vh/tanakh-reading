@@ -118,6 +118,5 @@ def parse(parsha: int):
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
     argparser.add_argument("parsha_index", type=int)
-    # args = argparser.parse_args()
-    # parse(args.parsha_index)
-    parse(1)
+    args = argparser.parse_args()
+    parse(args.parsha_index)

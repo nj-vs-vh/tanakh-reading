@@ -92,7 +92,7 @@ def parse_parsha(parsha: int):
                     current_verse_data = None
             current_chapter_data = ChapterData(chapter=chapter_from_anchor(child), verses=[])
             parsha_data["chapters"].append(current_chapter_data)
-            expected_next_verse = 1
+            expected_next_verse: Optional[int] = None
             continue
         if current_chapter_data is None:
             continue
@@ -191,15 +191,21 @@ def parse_parsha(parsha: int):
         def verse_prefix(no: int) -> str:
             return f"{no}."
 
-        def split_on_next_verse_start(s: str, next_verse: int) -> tuple[str, Optional[str]]:
+        def split_on_next_verse_start(s: str, next_verse: Optional[int]) -> tuple[str, Optional[str], Optional[int]]:
             try:
-                next_verse_start_match = next(re.finditer(re.escape(verse_prefix(next_verse)), s))
+                regex = re.escape(verse_prefix(next_verse)) if next_verse is not None else r"(\d)+\."
+                next_verse_start_match = next(re.finditer(regex, s))
                 next_verse_start_start = next_verse_start_match.start()
-                return text_part[:next_verse_start_start], text_part[next_verse_start_start:]
+                next_verse = next_verse or int(next_verse_start_match.group(1))
+                return text_part[:next_verse_start_start], text_part[next_verse_start_start:], next_verse
             except StopIteration:
-                return text_part, None
+                return text_part, None, None
 
-        text_part_current_verse, text_part_next_verse = split_on_next_verse_start(text_part, expected_next_verse)
+        text_part_current_verse, text_part_next_verse, parsed_expected_next_verse = split_on_next_verse_start(
+            text_part, expected_next_verse
+        )
+        if expected_next_verse is None:
+            expected_next_verse = parsed_expected_next_verse
 
         if current_verse_data is not None:
             current_verse_data["text"][Translation.FG] += " " + text_part_current_verse
@@ -210,16 +216,18 @@ def parse_parsha(parsha: int):
                     current_verse_data["text"][Translation.FG]
                 )
                 current_chapter_data["verses"].append(current_verse_data)
+            if expected_next_verse is None:
+                raise ValueError("expected_next_verse is still not set and we started to consume the actual text")
             current_verse = expected_next_verse
             text_part = text_part_next_verse.removeprefix(verse_prefix(current_verse)).strip()
             expected_next_verse += 1
-            text_part_current_verse, text_part_next_verse = split_on_next_verse_start(text_part, expected_next_verse)
+            text_part_current_verse, text_part_next_verse, _ = split_on_next_verse_start(text_part, expected_next_verse)
             current_verse_data = VerseData(
                 verse=current_verse,
                 text={Translation.FG: text_part_current_verse},
                 comments=defaultdict(list),
             )
-    
+
     if current_chapter_data is not None:
         if current_verse_data is not None:
             current_chapter_data["verses"].append(current_verse_data)
@@ -243,5 +251,6 @@ def parse_parsha(parsha: int):
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
     argparser.add_argument("parsha_index", type=int)
-    args = argparser.parse_args()
-    parse_parsha(args.parsha_index)
+    # args = argparser.parse_args()
+    # parse_parsha(args.parsha_index)
+    parse_parsha(2)
