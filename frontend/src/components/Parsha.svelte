@@ -57,7 +57,6 @@
                     verseId(chapter.chapter, verse.verse)
                 ];
             inlineVerseDetailsVisible = { ...inlineVerseDetailsVisible };
-            console.log(inlineVerseDetailsVisible);
         }
     };
 </script>
@@ -108,7 +107,7 @@
                     {/if}
                 </span>
                 <div
-                    class="inline-verse-comment"
+                    class="inline-verse-comment-container"
                     style={inlineVerseDetailsVisible[
                         verseId(chapter.chapter, verse.verse)
                     ]
@@ -136,8 +135,8 @@
     }
 
     span.verse {
-        /* display: inline-flex; */
-        /* white-space:nowrap; */
+        /* temp */
+        background-color: white;
     }
 
     span.verse-text {
@@ -150,7 +149,7 @@
     }
 
     span.verse-number {
-        color: grey;
+        color: rgb(105, 105, 105);
         user-select: none;
         margin-right: 0.2em;
     }
@@ -161,9 +160,9 @@
         margin: 0;
     }
 
-    .inline-verse-comment {
+    .inline-verse-comment-container {
         margin-bottom: 0.6em;
-        padding-left: 0.6em;
+        padding: 0 0.6em;
         border-left: 1px black solid;
     }
 </style>
