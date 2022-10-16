@@ -1,7 +1,6 @@
 """Parser for http://www.shabat-shalom.info/books/Tanach-ru/"""
 
 import argparse
-import copy
 import json
 import re
 from collections import defaultdict
@@ -12,7 +11,8 @@ import bs4
 import requests  # type: ignore
 
 import metadata
-from metadata import Commenter, Translation
+from config import parsha_json
+from metadata import Commenter, Translation, get_book_by_parsha
 from model import ChapterData, CommentData, ParshaData, VerseData
 from utils import (
     are_strings_close,
@@ -46,13 +46,7 @@ def download_parsha_html(idx: int):
 
 
 def parse_parsha(parsha: int):
-    book: Optional[int] = None
-    for book_no, parsha_range in metadata.torah_book_parsha_ranges.items():
-        if parsha >= parsha_range[0] and parsha < parsha_range[1]:
-            book = book_no
-            break
-    if book is None:
-        raise ValueError(f"No torah book found for parsha {parsha}")
+    book = get_book_by_parsha(parsha)
 
     parsha_data = ParshaData(
         book=book,
@@ -225,6 +219,10 @@ def parse_parsha(parsha: int):
                 text={Translation.FG: text_part_current_verse},
                 comments=defaultdict(list),
             )
+    
+    if current_chapter_data is not None:
+        if current_verse_data is not None:
+            current_chapter_data["verses"].append(current_verse_data)
 
     print("Validating parsed data")
     parsed_chapters = [c["chapter"] for c in parsha_data["chapters"]]
@@ -239,7 +237,7 @@ def parse_parsha(parsha: int):
         if verses != list(range(min(verses), max(verses) + 1)):
             print(f"WARNING: there are some missing verses in chapter {chapter_data['chapter']}: {verses}")
 
-    Path(f"json/{parsha}.json").write_text(json.dumps(parsha_data, ensure_ascii=False, indent=2))
+    parsha_json(parsha).write_text(json.dumps(parsha_data, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":

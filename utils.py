@@ -16,12 +16,17 @@ def postprocess_patched_text(s: str) -> str:
 
 
 def inner_tag_text(tag: bs4.Tag) -> str:
-    return postprocess_patched_text(tag.get_text(separator=" ", strip=True))
+    if isinstance(tag, str):
+        return collapse_whitespace(tag)
+    elif isinstance(tag, bs4.Tag):
+        return postprocess_patched_text(tag.get_text(separator=" ", strip=True))
+    else:
+        return str(tag).strip()
 
 
 def strip_html_breaks(html_text: str) -> str:
-    html_text = re.sub(r"^(<br\s*/>)+", "", html_text)
-    html_text = re.sub(r"(<br\s*/>)+$", "", html_text)
+    html_text = re.sub(r"^\s*(\s*<br\s*/>\s*)*\s*", "", html_text)
+    html_text = re.sub(r"\s*(\s*<br\s*/>)*\s*$", "", html_text)
     return html_text
 
 
@@ -32,10 +37,12 @@ def has_class(tag: bs4.Tag, class_name: str) -> bool:
 
 
 def are_strings_close(s1: str, s2: str) -> bool:
-    s1 = collapse_whitespace(s1)
-    s2 = collapse_whitespace(s2)
-    if s1.lower() == s2.lower():
+    s1 = collapse_whitespace(s1).lower()
+    s2 = collapse_whitespace(s2).lower()
+    if s1 == s2:
         return True
+    if s1 in s2 or s2 in s1 and abs(len(s1) - len(s2)) < 3:
+        True
     return False
 
 
