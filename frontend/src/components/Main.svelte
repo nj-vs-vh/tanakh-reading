@@ -10,12 +10,14 @@
     import { initCommentSourceFlags } from "../settings/commentSources";
     import { isProduction } from "../config";
     import { initTextDecorationStyle } from "../settings/textDecorationStyle";
+    import { initCommentStyle } from "../settings/commentStyle";
 
     export let metadata: Metadata;
     setContext("metadata", metadata);
 
     initCommentSourceFlags(metadata);
     initTextDecorationStyle();
+    initCommentStyle();
 
     const bookIndices = Object.keys(metadata.book_names).map((v) =>
         parseInt(v)
