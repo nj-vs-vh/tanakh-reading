@@ -1,7 +1,6 @@
 <script lang="ts">
     import { getContext } from "svelte";
-    import type { Metadata, ParshaData } from "../types";
-    import { TextSource } from "../types";
+    import type { Metadata, ParshaData, TextSource } from "../types";
     import type { VerseData, ChapterData } from "../types";
     import VerseDetailsModal from "./VerseDetailsModal.svelte";
     import VerseComments from "./VerseComments.svelte";
@@ -13,6 +12,7 @@
         textDecorationStyleStore,
     } from "../settings/textDecorationStyle";
     import { CommentStyle, commentStyleStore } from "../settings/commentStyle";
+    import { textSourcesConfigStore } from "../settings/textSources";
 
     const metadata: Metadata = getContext("metadata");
     let textDecorationStyle: TextDecorationStyle;
@@ -23,6 +23,10 @@
     commentStyleStore.subscribe((v) => {
         commentStyle = v;
     });
+    let mainTextSource: TextSource;
+    textSourcesConfigStore.subscribe(config => {
+        mainTextSource = config.main;
+    })
 
     export let parsha: ParshaData;
     const chapterNumbers = parsha.chapters.map(
@@ -68,9 +72,9 @@
 <div class="page">
     <div class="container">
         <span class="small-header">
-            Книга <b>{metadata.book_names[parsha.book][TextSource.FG]}</b>,
+            Книга <b>{metadata.book_names[parsha.book][mainTextSource]}</b>,
             недельный раздел
-            <b>{metadata.parsha_names[parsha.parsha][TextSource.FG]}</b>, главы
+            <b>{metadata.parsha_names[parsha.parsha][mainTextSource]}</b>, главы
             с <b>{firstChapterNo}</b> по <b>{lastChapterNo}</b>
         </span>
         {#each parsha.chapters as chapter}
@@ -95,7 +99,7 @@
                                 ? openVerseDetails(verse, chapter)
                                 : null;
                         }}
-                    >{verse.text[TextSource.FG]}</span>
+                    >{verse.text[mainTextSource]}</span>
                     {#if textDecorationStyle === TextDecorationStyle.ASTRERISK}
                         <span
                             class="comment-asterisk"

@@ -16,6 +16,12 @@ export enum TextSource {
     PLAUT = "plaut",
 }
 
+export const textSourceShort = new Map<string, string>([
+    [TextSource.FG, "[ФГ]"],
+    [TextSource.PLAUT, "[Plaut]"],
+])
+
+
 export interface VerseData {
     verse: number;
     text: Map<TextSource, string>
@@ -41,7 +47,7 @@ export interface Metadata {
     parsha_ranges: Map<number, Array<number>>;
     parsha_names: Map<number, Map<string, string>>;
     translation_about_links: Map<string, string>;
-    translation_names: Map<string, string>;
+    translations: Array<TextSource>;
     commenter_about_links: Map<string, string>;
     commenter_names: Map<string, string>;
     available_parsha: Array<number>;

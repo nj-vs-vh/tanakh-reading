@@ -1,9 +1,8 @@
 <script lang="ts">
-    import type { Metadata } from "../types";
+    import type { Metadata, TextSource } from "../types";
     import { setContext } from "svelte";
     import { Router, Link, Route } from "svelte-routing";
     import ParshaProvider from "./ParshaProvider.svelte";
-    import { TextSource } from "../types";
     import Screen from "./shared/Screen.svelte";
     import Modal from "svelte-simple-modal";
     import Menu from "./Menu.svelte";
@@ -11,13 +10,20 @@
     import { isProduction } from "../config";
     import { initTextDecorationStyle } from "../settings/textDecorationStyle";
     import { initCommentStyle } from "../settings/commentStyle";
+    import { initTextSourcesConfig, textSourcesConfigStore } from "../settings/textSources";
 
     export let metadata: Metadata;
     setContext("metadata", metadata);
 
     initCommentSourceFlags(metadata);
+    initTextSourcesConfig(metadata);
     initTextDecorationStyle();
     initCommentStyle();
+
+    let mainTextSource: TextSource;
+    textSourcesConfigStore.subscribe(config => {
+        mainTextSource = config.main;
+    })
 
     const bookIndices = Object.keys(metadata.book_names).map((v) =>
         parseInt(v)
@@ -51,25 +57,21 @@
                         <h1>Тора</h1>
                         {#each bookIndices as bookIndex}
                             <h2>
-                                {bookIndex}. {metadata.book_names[bookIndex][
-                                    TextSource.FG
-                                ]}
+                                {bookIndex}. {metadata.book_names[bookIndex][mainTextSource]}
                             </h2>
                             {#each parshaArrays[bookIndex] as parshaIndex}
                                 {#if metadata.available_parsha.includes(parshaIndex)}
                                     <Link to={`/${parshaIndex}`}>
                                         <h3>
                                             {parshaIndex}. {metadata
-                                                .parsha_names[parshaIndex][
-                                                TextSource.FG
-                                            ]}
+                                                .parsha_names[parshaIndex][mainTextSource]}
                                         </h3>
                                     </Link>
                                 {:else}
                                     <h3 class="inactive">
                                         {parshaIndex}. {metadata.parsha_names[
                                             parshaIndex
-                                        ][TextSource.FG]}
+                                        ][mainTextSource]}
                                     </h3>
                                 {/if}
                             {/each}
