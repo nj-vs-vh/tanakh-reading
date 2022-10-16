@@ -5,6 +5,7 @@
     import VerseDetails from "./VerseDetailsModal.svelte";
     import InlineIcon from "./shared/InlineIcon.svelte";
     import Icon from "./shared/Icon.svelte";
+    import Menu from "./Menu.svelte";
 
     // @ts-ignore
     const { open } = getContext("simple-modal");
@@ -16,6 +17,7 @@
     const metadata: Metadata = getContext("metadata");
 </script>
 
+<Menu homeButton />
 <div class="page">
     <div class="container">
         <span class="small-header">
@@ -55,7 +57,7 @@
     div.container {
         text-align: justify;
         width: max(50vw, 600px);
-        margin: 1em 0 1em 0;
+        margin: 4em 0 1em 0;
     }
 
     span.verse-text {
