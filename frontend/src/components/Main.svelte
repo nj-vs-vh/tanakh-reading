@@ -6,6 +6,7 @@
     import { TextSource } from "../types";
     import Screen from "./shared/Screen.svelte";
     import Modal from "svelte-simple-modal";
+    import Menu from "./Menu.svelte";
 
     export let metadata: Metadata;
     setContext("metadata", metadata);
@@ -31,6 +32,7 @@
 </script>
 
 <Modal styleCloseButton={{ boxShadow: "none" }}>
+    <Menu />
     <Router>
         <Route path="/">
             <ParshaProvider parshaIndex={3} />

@@ -17,3 +17,23 @@ a {
 	color: inherit;
 }
 
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: #cccccc;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #aaaaaa;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #808080;
+}
+
+::-webkit-scrollbar-thumb:active {
+	background: #606060;
+}
+
