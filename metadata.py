@@ -4,6 +4,7 @@ from typing import Any
 class TextSource:
     FG = "fg"
     PLAUT = "plaut"
+    LECHAIM = "lechaim"
 
     @classmethod
     def all(cls) -> list[str]:
@@ -15,12 +16,13 @@ class TextSource:
             raise SystemExit(f"Missing or extra records in per-text source dict {d}")
 
 
-text_source_marks = {TextSource.FG: "[ФГ]", TextSource.PLAUT: "[Plaut]"}
+text_source_marks = {TextSource.FG: "[ФГ]", TextSource.PLAUT: "[Plaut]", TextSource.LECHAIM: "[Лехаим]"}
 
 
 text_source_descriptions = {
     TextSource.FG: "Русский перевод Фримы Гурфинкель",
     TextSource.PLAUT: "Английский перевод «The Torah: A Modern Commentary» под редакцией Гюнтера Плаута",
+    TextSource.LECHAIM: "Русский перевод журнала «Лехаим», авторы не указаны",
 }
 
 
@@ -35,15 +37,38 @@ text_source_links = {
         r"https://www.ccarpress.org/shopping_product_detail.asp?pid=50297",
         r"https://www.ccarpress.org/content.asp?tid=532",
     ],
+    TextSource.LECHAIM: [
+        r"https://lechaim.ru/torah/",
+    ],
 }
 
 
 torah_book_names = {
-    1: {TextSource.FG: "Берейшис", TextSource.PLAUT: "Genesis"},
-    2: {TextSource.FG: "Шемот", TextSource.PLAUT: "Exodus"},
-    3: {TextSource.FG: "Вайикра", TextSource.PLAUT: "Leviticus"},
-    4: {TextSource.FG: "Бемидбар", TextSource.PLAUT: "Numbers"},
-    5: {TextSource.FG: "Деварим", TextSource.PLAUT: "Deuteronomy"},
+    1: {
+        TextSource.FG: "Берейшис",
+        TextSource.PLAUT: "Genesis",
+        TextSource.LECHAIM: "Берешит",
+    },
+    2: {
+        TextSource.FG: "Шемот",
+        TextSource.PLAUT: "Exodus",
+        TextSource.LECHAIM: "Шмот",
+    },
+    3: {
+        TextSource.FG: "Вайикра",
+        TextSource.PLAUT: "Leviticus",
+        TextSource.LECHAIM: "Ваикра",
+    },
+    4: {
+        TextSource.FG: "Бемидбар",
+        TextSource.PLAUT: "Numbers",
+        TextSource.LECHAIM: "Бемидбар",
+    },
+    5: {
+        TextSource.FG: "Деварим",
+        TextSource.PLAUT: "Deuteronomy",
+        TextSource.LECHAIM: "Дварим",
+    },
 }
 
 
@@ -65,60 +90,276 @@ def get_book_by_parsha(parsha: int) -> int:
 
 
 parsha_names = {
-    1: {TextSource.FG: "Берейшис", TextSource.PLAUT: "B’reishit"},
-    2: {TextSource.FG: "Нойах", TextSource.PLAUT: "Noach"},
-    3: {TextSource.FG: "Лех Лехо", TextSource.PLAUT: "Lech L’cha"},
-    4: {TextSource.FG: "Вайейро", TextSource.PLAUT: "Vayeira"},
-    5: {TextSource.FG: "Хайей Соро", TextSource.PLAUT: "Chayei Sarah"},
-    6: {TextSource.FG: "Толдойс", TextSource.PLAUT: "Tol’dot"},
-    7: {TextSource.FG: "Вайейцей", TextSource.PLAUT: "Vayeitze"},
-    8: {TextSource.FG: "Вайишлах", TextSource.PLAUT: "Vayishlach"},
-    9: {TextSource.FG: "Вайейшев", TextSource.PLAUT: "Vayeishev"},
-    10: {TextSource.FG: "Микец", TextSource.PLAUT: "Mikeitz"},
-    11: {TextSource.FG: "Вайигаш", TextSource.PLAUT: "Vayigash"},
-    12: {TextSource.FG: "Вайхи", TextSource.PLAUT: "Va-y’chi"},
-    13: {TextSource.FG: "Шемойс", TextSource.PLAUT: "Sh’mot"},
-    14: {TextSource.FG: "Воэйро", TextSource.PLAUT: "Va-eira"},
-    15: {TextSource.FG: "Бой", TextSource.PLAUT: "Bo"},
-    16: {TextSource.FG: "Бешалах", TextSource.PLAUT: "B’shalach"},
-    17: {TextSource.FG: "Йисрой", TextSource.PLAUT: "Yitro"},
-    18: {TextSource.FG: "Мишпотим", TextSource.PLAUT: "Mishpatim"},
-    19: {TextSource.FG: "Терумо", TextSource.PLAUT: "T’rumah"},
-    20: {TextSource.FG: "Тецаве", TextSource.PLAUT: "T’tzaveh"},
-    21: {TextSource.FG: "Тисо", TextSource.PLAUT: "Ki Tisa"},
-    22: {TextSource.FG: "Вайакгел", TextSource.PLAUT: "Vayak’heil"},
-    23: {TextSource.FG: "Пкудей", TextSource.PLAUT: "P’kudei"},
-    24: {TextSource.FG: "Вайикро", TextSource.PLAUT: "Vayikra"},
-    25: {TextSource.FG: "Цав", TextSource.PLAUT: "Tzav"},
-    26: {TextSource.FG: "Шмини", TextSource.PLAUT: "Sh’mini"},
-    27: {TextSource.FG: "Тазриа", TextSource.PLAUT: "Tazria"},
-    28: {TextSource.FG: "Мецойро", TextSource.PLAUT: "M’tzor"},
-    29: {TextSource.FG: "Ахарей", TextSource.PLAUT: "Acharei Mot"},
-    30: {TextSource.FG: "Кдойшим", TextSource.PLAUT: "K’doshim"},
-    31: {TextSource.FG: "Эмойр", TextSource.PLAUT: "Emor"},
-    32: {TextSource.FG: "Бегар", TextSource.PLAUT: "B’har"},
-    33: {TextSource.FG: "Бехукойсай", TextSource.PLAUT: "B’chukotai"},
-    34: {TextSource.FG: "Бемидбар", TextSource.PLAUT: "B’midbar"},
-    35: {TextSource.FG: "Носой", TextSource.PLAUT: "Naso"},
-    36: {TextSource.FG: "Бегаалойсхо", TextSource.PLAUT: "B’haalot’cha"},
-    37: {TextSource.FG: "Шлах", TextSource.PLAUT: "Sh’lach L’cha"},
-    38: {TextSource.FG: "Койрах", TextSource.PLAUT: "Korach"},
-    39: {TextSource.FG: "Хукас", TextSource.PLAUT: "Chukat"},
-    40: {TextSource.FG: "Болок", TextSource.PLAUT: "Balak"},
-    41: {TextSource.FG: "Пинхас", TextSource.PLAUT: "Pinchas"},
-    42: {TextSource.FG: "Матойс", TextSource.PLAUT: "Matot"},
-    43: {TextSource.FG: "Масэй", TextSource.PLAUT: "Mas-ei"},
-    44: {TextSource.FG: "Деворим", TextSource.PLAUT: "D’varim"},
-    45: {TextSource.FG: "Воэсханан", TextSource.PLAUT: "Va-et’chanan"},
-    46: {TextSource.FG: "Экев", TextSource.PLAUT: "Eikev"},
-    47: {TextSource.FG: "Рээй", TextSource.PLAUT: "R’eih"},
-    48: {TextSource.FG: "Шойфтим", TextSource.PLAUT: "Shof’tim"},
-    49: {TextSource.FG: "Ки Тейцей", TextSource.PLAUT: "Ki’Teitzei"},
-    50: {TextSource.FG: "Ки Совой", TextSource.PLAUT: "Ki Tavo"},
-    51: {TextSource.FG: "Ницовим", TextSource.PLAUT: "Nitzavim"},
-    52: {TextSource.FG: "Вайейлех", TextSource.PLAUT: "Vayeilech"},
-    53: {TextSource.FG: "Гаазину", TextSource.PLAUT: "Haazinu"},
-    54: {TextSource.FG: "Везойс гаБрохо", TextSource.PLAUT: "V’zot Hab’rachah"},
+    1: {
+        TextSource.FG: "Берейшис",
+        TextSource.PLAUT: "B’reishit (In the Beginning)",
+        TextSource.LECHAIM: "Берешит",
+    },
+    2: {
+        TextSource.FG: "Нойах",
+        TextSource.PLAUT: "Noach (Noah)",
+        TextSource.LECHAIM: "Ноах",
+    },
+    3: {
+        TextSource.FG: "Лех Лехо",
+        TextSource.PLAUT: "Lech L’cha (Go Forth)",
+        TextSource.LECHAIM: "Лех-леха",
+    },
+    4: {
+        TextSource.FG: "Вайейро",
+        TextSource.PLAUT: "Vayeira (I (God) Appeared [to Abraham, Isaac, and Jacob])",
+        TextSource.LECHAIM: "Вайера",
+    },
+    5: {
+        TextSource.FG: "Хайей Соро",
+        TextSource.PLAUT: "Chayei Sarah (The Life of Sarah)",
+        TextSource.LECHAIM: "Хайей сара",
+    },
+    6: {
+        TextSource.FG: "Толдойс",
+        TextSource.PLAUT: "Tol’dot (The Generations [of Isaac])",
+        TextSource.LECHAIM: "Тольдот",
+    },
+    7: {
+        TextSource.FG: "Вайейцей",
+        TextSource.PLAUT: "Vayeitze (And [Jacob] Left)",
+        TextSource.LECHAIM: "Вайеце",
+    },
+    8: {
+        TextSource.FG: "Вайишлах",
+        TextSource.PLAUT: "Vayishlach ([Jacob] Sent)",
+        TextSource.LECHAIM: "Ваишлах",
+    },
+    9: {
+        TextSource.FG: "Вайейшев",
+        TextSource.PLAUT: "Vayeishev ([Jacob] Settled)",
+        TextSource.LECHAIM: "Вайешев",
+    },
+    10: {
+        TextSource.FG: "Микец",
+        TextSource.PLAUT: "Mikeitz (After [Two Years])",
+        TextSource.LECHAIM: "Микец",
+    },
+    11: {
+        TextSource.FG: "Вайигаш",
+        TextSource.PLAUT: "Vayigash (And [Judah] Approached [Joseph])",
+        TextSource.LECHAIM: "Ваигаш",
+    },
+    12: {
+        TextSource.FG: "Вайхи",
+        TextSource.PLAUT: "Va-y’chi ([Jacob] Lived)",
+        TextSource.LECHAIM: "Вайехи",
+    },
+    13: {
+        TextSource.FG: "Шемойс",
+        TextSource.PLAUT: "Sh’mot (Names)",
+        TextSource.LECHAIM: "Шмот",
+    },
+    14: {
+        TextSource.FG: "Воэйро",
+        TextSource.PLAUT: "Va-eira (I (God) Appeared [to Abraham, Isaac, and Jacob])",
+        TextSource.LECHAIM: "Ваэра",
+    },
+    15: {
+        TextSource.FG: "Бой",
+        TextSource.PLAUT: "Bo (Go [to Pharaoh])",
+        TextSource.LECHAIM: "Бо",
+    },
+    16: {
+        TextSource.FG: "Бешалах",
+        TextSource.PLAUT: "B’shalach (Now When [Pharaoh] Let [the People] Go)",
+        TextSource.LECHAIM: "Бешалах",
+    },
+    17: {
+        TextSource.FG: "Йисрой",
+        TextSource.PLAUT: "Yitro (Jethro)",
+        TextSource.LECHAIM: "Итро",
+    },
+    18: {
+        TextSource.FG: "Мишпотим",
+        TextSource.PLAUT: "Mishpatim ([These Are the] Rules)",
+        TextSource.LECHAIM: "Мишпатим",
+    },
+    19: {
+        TextSource.FG: "Терумо",
+        TextSource.PLAUT: "T’rumah (Gifts)",
+        TextSource.LECHAIM: "Трума",
+    },
+    20: {
+        TextSource.FG: "Тецаве",
+        TextSource.PLAUT: "T’tzaveh ([You] Shall Further Instruct)",
+        TextSource.LECHAIM: "Тецаве",
+    },
+    21: {
+        TextSource.FG: "Тисо",
+        TextSource.PLAUT: "Ki Tisa (When You Take a Census)",
+        TextSource.LECHAIM: "Ки тиса",
+    },
+    22: {
+        TextSource.FG: "Вайакгел",
+        TextSource.PLAUT: "Vayak’heil ([Moses] Assembled)",
+        TextSource.LECHAIM: "Ваякгель",
+    },
+    23: {
+        TextSource.FG: "Пкудей",
+        TextSource.PLAUT: "P’kudei ([The] Records [of the Tabernacle])",
+        TextSource.LECHAIM: "Пекудей",
+    },
+    24: {
+        TextSource.FG: "Вайикро",
+        TextSource.PLAUT: "Vayikra ([God] Called Out)",
+        TextSource.LECHAIM: "Ваикра",
+    },
+    25: {
+        TextSource.FG: "Цав",
+        TextSource.PLAUT: "Tzav (Command [Aaron and His Sons])",
+        TextSource.LECHAIM: "Цав",
+    },
+    26: {
+        TextSource.FG: "Шмини",
+        TextSource.PLAUT: "Sh’mini (The Eighth [Day])",
+        TextSource.LECHAIM: "Шмини",
+    },
+    27: {
+        TextSource.FG: "Тазриа",
+        TextSource.PLAUT: "Tazria (Bearing Seed)",
+        TextSource.LECHAIM: "Тазриа",
+    },
+    28: {
+        TextSource.FG: "Мецойро",
+        TextSource.PLAUT: "M’tzor (A Leper)",
+        TextSource.LECHAIM: "Мецора",
+    },
+    29: {
+        TextSource.FG: "Ахарей",
+        TextSource.PLAUT: "Acharei Mot (After the Death [of the Two Sons of Aaron])",
+        TextSource.LECHAIM: "Ахарей мот",
+    },
+    30: {
+        TextSource.FG: "Кдойшим",
+        TextSource.PLAUT: "K’doshim ([You Shall Be] Holy)",
+        TextSource.LECHAIM: "Кдошим",
+    },
+    31: {
+        TextSource.FG: "Эмойр",
+        TextSource.PLAUT: "Emor (Speak)",
+        TextSource.LECHAIM: "Эмор",
+    },
+    32: {
+        TextSource.FG: "Бегар",
+        TextSource.PLAUT: "B’har (On Mount [Sinai])",
+        TextSource.LECHAIM: "Бегар",
+    },
+    33: {
+        TextSource.FG: "Бехукойсай",
+        TextSource.PLAUT: "B’chukotai (My Laws)",
+        TextSource.LECHAIM: "Бехукотай",
+    },
+    34: {
+        TextSource.FG: "Бемидбар",
+        TextSource.PLAUT: "B’midbar (In the Wilderness)",
+        TextSource.LECHAIM: "Бемидбар",
+    },
+    35: {
+        TextSource.FG: "Носой",
+        TextSource.PLAUT: "Naso (Take a Census)",
+        TextSource.LECHAIM: "Насо",
+    },
+    36: {
+        TextSource.FG: "Бегаалойсхо",
+        TextSource.PLAUT: "B’haalot’cha (When You Raise [the Lamps])",
+        TextSource.LECHAIM: "Бегаалотха",
+    },
+    37: {
+        TextSource.FG: "Шлах",
+        TextSource.PLAUT: "Sh’lach L’cha (Send [Notables to Scout the Land])",
+        TextSource.LECHAIM: "Шлах",
+    },
+    38: {
+        TextSource.FG: "Койрах",
+        TextSource.PLAUT: "Korach (Korach)",
+        TextSource.LECHAIM: "Корах",
+    },
+    39: {
+        TextSource.FG: "Хукас",
+        TextSource.PLAUT: "Chukat (The Ritual Law)",
+        TextSource.LECHAIM: "Хукат",
+    },
+    40: {
+        TextSource.FG: "Болок",
+        TextSource.PLAUT: "Balak (Balak)",
+        TextSource.LECHAIM: "Балак",
+    },
+    41: {
+        TextSource.FG: "Пинхас",
+        TextSource.PLAUT: "Pinchas (Phinehas)",
+        TextSource.LECHAIM: "Пинхас",
+    },
+    42: {
+        TextSource.FG: "Матойс",
+        TextSource.PLAUT: "Matot (Tribes)",
+        TextSource.LECHAIM: "Матот",
+    },
+    43: {
+        TextSource.FG: "Масэй",
+        TextSource.PLAUT: "Mas-ei (The Marches)",
+        TextSource.LECHAIM: "Масеэй",
+    },
+    44: {
+        TextSource.FG: "Деворим",
+        TextSource.PLAUT: "D’varim (The Words)",
+        TextSource.LECHAIM: "Дварим",
+    },
+    45: {
+        TextSource.FG: "Воэсханан",
+        TextSource.PLAUT: "Va-et’chanan (I [Moses] Pleaded with the Eternal)",
+        TextSource.LECHAIM: "Ваэтханан",
+    },
+    46: {
+        TextSource.FG: "Экев",
+        TextSource.PLAUT: "Eikev ([And if You] Obey [These Rules])",
+        TextSource.LECHAIM: "Экев",
+    },
+    47: {
+        TextSource.FG: "Рээй",
+        TextSource.PLAUT: "R’eih (See [This Day I Set Before You Blessing and Curse])",
+        TextSource.LECHAIM: "Реэ",
+    },
+    48: {
+        TextSource.FG: "Шойфтим",
+        TextSource.PLAUT: "Shof’tim (Judges)",
+        TextSource.LECHAIM: "Шофтим",
+    },
+    49: {
+        TextSource.FG: "Ки Тейцей",
+        TextSource.PLAUT: "Ki’Teitzei (When You Go Out (to Battle))",
+        TextSource.LECHAIM: "Ки теце",
+    },
+    50: {
+        TextSource.FG: "Ки Совой",
+        TextSource.PLAUT: "Ki Tavo (When You Enter [the Land])",
+        TextSource.LECHAIM: "Ки таво",
+    },
+    51: {
+        TextSource.FG: "Ницовим",
+        TextSource.PLAUT: "Nitzavim (You Stand [This Day])",
+        TextSource.LECHAIM: "Ницавим",
+    },
+    52: {
+        TextSource.FG: "Вайейлех",
+        TextSource.PLAUT: "Vayeilech ([Moses] Went)",
+        TextSource.LECHAIM: "Вайелех",
+    },
+    53: {
+        TextSource.FG: "Гаазину",
+        TextSource.PLAUT: "Haazinu (Listen)",
+        TextSource.LECHAIM: "Гаазину",
+    },
+    54: {
+        TextSource.FG: "Везойс гаБрохо",
+        TextSource.PLAUT: "V’zot Hab’rachah (And This is the Blessing)",
+        TextSource.LECHAIM: "Везот га-браха",
+    },
 }
 
 
@@ -134,11 +375,13 @@ for _, names in parsha_names.items():
 class Commenter:
     SONCHINO = "sonchino"
     RASHI = "rashi"
+    IBN_EZRA = "ibn-ezra"
 
 
 commenter_names = {
     Commenter.SONCHINO: "Сончино",
     Commenter.RASHI: "Раши",
+    Commenter.IBN_EZRA: "ибн Эзра"
 }
 
 
@@ -151,4 +394,8 @@ commenter_links = {
         r"https://toldot.com/TorahRashi.html",
         r"https://ru.wikipedia.org/wiki/%D0%A0%D0%B0%D1%88%D0%B8",
     ],
+    Commenter.IBN_EZRA: [
+        r"https://toldot.com/ibnEzra.html",
+        r"https://ru.wikipedia.org/wiki/%D0%90%D0%B2%D1%80%D0%B0%D0%B0%D0%BC_%D0%B8%D0%B1%D0%BD_%D0%AD%D0%B7%D1%80%D0%B0",
+    ]
 }
