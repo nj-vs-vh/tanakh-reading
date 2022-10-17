@@ -51,7 +51,7 @@ async def get_metadata(request: web.Request) -> web.Response:
             "text_source_descriptions": metadata.text_source_descriptions,
             "text_source_links": metadata.text_source_links,
             "commenter_names": metadata.commenter_names,
-            "commenter_about_links": metadata.commenter_about_url,
+            "commenter_links": metadata.commenter_links,
             "available_parsha": available_parsha,
         }
     )

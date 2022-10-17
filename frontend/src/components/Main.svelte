@@ -15,6 +15,8 @@
     export let metadata: Metadata;
     setContext("metadata", metadata);
 
+    console.log(metadata);
+
     initCommentSourceFlags(metadata);
     initTextSourcesConfig(metadata);
     initTextDecorationStyle();

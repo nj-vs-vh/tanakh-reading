@@ -15,15 +15,12 @@ class TextSource:
             raise SystemExit(f"Missing or extra records in per-text source dict {d}")
 
 
-text_source_marks = {
-    TextSource.FG: "[ФГ]",
-    TextSource.PLAUT: "[Plaut]"
-}
+text_source_marks = {TextSource.FG: "[ФГ]", TextSource.PLAUT: "[Plaut]"}
 
 
 text_source_descriptions = {
     TextSource.FG: "Русский перевод Фримы Гурфинкель",
-    TextSource.PLAUT: "Английский перевод «The Torah: A Modern Commentary» под редакцией Гюнтера Плаута"
+    TextSource.PLAUT: "Английский перевод «The Torah: A Modern Commentary» под редакцией Гюнтера Плаута",
 }
 
 
@@ -37,7 +34,7 @@ text_source_links = {
         r"https://reformjudaism.org/learning/torah-study/english-translations-torah-portions",
         r"https://www.ccarpress.org/shopping_product_detail.asp?pid=50297",
         r"https://www.ccarpress.org/content.asp?tid=532",
-    ]
+    ],
 }
 
 
@@ -145,7 +142,13 @@ commenter_names = {
 }
 
 
-commenter_about_url = {
-    Commenter.SONCHINO: r"https://ru.wikipedia.org/wiki/%D0%93%D0%B5%D1%80%D1%86,_%D0%99%D0%BE%D1%81%D0%B5%D1%84_%D0%A6%D0%B2%D0%B8",
-    Commenter.RASHI: r"https://ru.wikipedia.org/wiki/%D0%A0%D0%B0%D1%88%D0%B8",
+commenter_links = {
+    Commenter.SONCHINO: [
+        r"https://toldot.com/Sonchino.html",
+        r"https://ru.wikipedia.org/wiki/%D0%93%D0%B5%D1%80%D1%86,_%D0%99%D0%BE%D1%81%D0%B5%D1%84_%D0%A6%D0%B2%D0%B8",
+    ],
+    Commenter.RASHI: [
+        r"https://toldot.com/TorahRashi.html",
+        r"https://ru.wikipedia.org/wiki/%D0%A0%D0%B0%D1%88%D0%B8",
+    ],
 }
