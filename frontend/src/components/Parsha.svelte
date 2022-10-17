@@ -166,7 +166,7 @@
     }
 
     .inline-verse-comment-container {
-        margin-bottom: 0.6em;
+        margin: 0.6em 0;
         padding: 0 0.6em;
         border-left: 1px black solid;
     }

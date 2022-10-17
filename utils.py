@@ -32,9 +32,13 @@ def strip_html_breaks(html_text: str) -> str:
 
 
 def has_class(tag: bs4.Tag, class_name: str) -> bool:
+    return has_class_that(tag, lambda c: c == class_name)
+
+
+def has_class_that(tag: bs4.Tag, predicate: Callable[[str], bool]) -> bool:
     if not isinstance(tag, bs4.Tag):
         return False
-    return class_name in tag.attrs.get("class", [])
+    return any(predicate(c) for c in tag.attrs.get("class", []))
 
 
 def tag_filter(tag_name: str, required_classes: list[str]) -> Callable[[bs4.Tag], bool]:

@@ -1,16 +1,18 @@
 """Parser for https://lechaim.ru/torah/"""
 
 
+from collections import defaultdict
 import json
 from pathlib import Path
-from typing import cast
+import re
+from typing import Optional, cast
 from bs4 import BeautifulSoup, Tag
 import requests  # type: ignore
 from merge import merge_and_save_parsha_data
-from model import ChapterData, ParshaData, VerseData
+from model import ChapterData, CommentData, ParshaData, VerseData
 
-from metadata import TextSource, get_book_by_parsha
-from utils import inner_tag_text, tag_filter
+from metadata import Commenter, TextSource, get_book_by_parsha
+from utils import has_class, has_class_that, inner_tag_text, postprocess_patched_text, tag_filter
 
 
 HTML_DIR = Path("html/lechaim")
@@ -36,11 +38,7 @@ def get_per_day_htmls(parsha: int, parsha_url_path: str) -> list[BeautifulSoup]:
 
 
 def parse(parsha: int, parsha_url_path: str):
-    parsha_data = ParshaData(
-        book=get_book_by_parsha(parsha),
-        parsha=parsha,
-        chapters=[]
-    )
+    parsha_data = ParshaData(book=get_book_by_parsha(parsha), parsha=parsha, chapters=[])
 
     chapter_data_by_chapter: dict[int, ChapterData] = dict()
 
@@ -70,15 +68,68 @@ def parse(parsha: int, parsha_url_path: str):
                     text={
                         TextSource.LECHAIM: inner_tag_text(verse_text_container),
                     },
-                    comments={},
+                    comments=defaultdict(list),
                 )
 
-                # comment parsing here
+                def parse_comment_paragraph(
+                    p: Tag,
+                ) -> tuple[str, Optional[str], str]:  # class, anchor phrase, comment html
+                    if not isinstance(p, Tag) or not has_class_that(p, lambda css_class: "-comment" in css_class):
+                        raise ValueError("not a comment")
+                    css_class = p.attrs["class"][0]
+                    # rashi, editor or ezra
+                    css_class_prefix = re.sub(r"-comment.*", "", css_class)
+                    anchor_phrase: Optional[str] = None
+                    comment_html = ""
+                    for child in p.children:
+                        if has_class_that(child, lambda c: c.endswith("-translation-fragment")):
+                            anchor_phrase = inner_tag_text(child)
+                        elif has_class(child, "article-part_text-marked"):
+                            comment_html += f"[<i>{inner_tag_text(child)}</i>]"
+                        else:
+                            comment_html += str(child)
+                    return css_class_prefix, anchor_phrase, postprocess_patched_text(comment_html)
+
+                for comments_container in verse_container.find_all(tag_filter("div", ["article-part_tab-content"])):
+                    comments_container = cast(Tag, comments_container)
+
+                    current_comment_data: Optional[CommentData] = None
+                    current_commenter: Optional[str] = None
+                    for child in comments_container.children:
+                        try:
+                            css_class_prefix, anchor_phrase, comment_html = parse_comment_paragraph(child)
+                        except Exception:
+                            continue
+
+                        if css_class_prefix == "rashi" or css_class_prefix == "editor":
+                            new_commenter = Commenter.RASHI_ALT
+                        elif css_class_prefix == "ezra":
+                            new_commenter = Commenter.IBN_EZRA
+                        else:
+                            raise ValueError(f"Unexpected css class prefix for comment paragraph: {css_class_prefix}")
+
+                        if (
+                            anchor_phrase is not None
+                            or current_comment_data is None
+                            or new_commenter != current_commenter
+                        ):  # new comment!
+                            if current_comment_data is not None and current_commenter is not None:
+                                verse_data["comments"][current_commenter].append(current_comment_data)
+
+                            current_comment_data = CommentData(
+                                anchor_phrase=anchor_phrase,
+                                comment=comment_html,
+                                format="html",
+                            )
+                            current_commenter = new_commenter
+                        else:
+                            current_comment_data["comment"] += "<br/>" + comment_html
+                    if current_comment_data is not None and current_commenter is not None:
+                        verse_data["comments"][current_commenter].append(current_comment_data)
+
                 chapter_data["verses"].append(verse_data)
             if add_chapter_to_parsha:
                 parsha_data["chapters"].append(chapter_data)
-
-    Path('ex.json').write_text(json.dumps(parsha_data, ensure_ascii=False, indent=2))
 
     merge_and_save_parsha_data(parsha, parsha_data)
 

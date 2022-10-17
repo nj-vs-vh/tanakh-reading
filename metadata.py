@@ -380,10 +380,10 @@ class Commenter:
 
 
 commenter_names = {
-    Commenter.SONCHINO: "Сончино (перевод ФГ)",
-    Commenter.RASHI: "Раши (перевод ФГ)",
-    Commenter.RASHI_ALT: "Раши (перевод «Лехаим»)",
-    Commenter.IBN_EZRA: "ибн Эзра (перевод «Лехаим»)"
+    Commenter.SONCHINO: "Сончино [ФГ]",
+    Commenter.RASHI: "Раши [ФГ]",
+    Commenter.RASHI_ALT: "Раши [Лехаим]",
+    Commenter.IBN_EZRA: "ибн Эзра [Лехаим]"
 }
 
 
