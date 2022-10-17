@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Metadata, TextSource } from "../types";
+    import type { Metadata } from "../types";
     import { setContext } from "svelte";
     import { Router, Link, Route } from "svelte-routing";
     import ParshaProvider from "./ParshaProvider.svelte";
@@ -20,7 +20,7 @@
     initTextDecorationStyle();
     initCommentStyle();
 
-    let mainTextSource: TextSource;
+    let mainTextSource: string;
     textSourcesConfigStore.subscribe(config => {
         mainTextSource = config.main;
     })

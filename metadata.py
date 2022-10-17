@@ -1,3 +1,6 @@
+from typing import Any
+
+
 class TextSource:
     FG = "fg"
     PLAUT = "plaut"
@@ -6,8 +9,13 @@ class TextSource:
     def all(cls) -> list[str]:
         return [cls.FG, cls.PLAUT]
 
+    @classmethod
+    def validate_per_text_source_dict(cls, d: dict[str, Any]):
+        if set(d.keys()) != set(cls.all()):
+            raise SystemExit(f"Missing or extra records in per-text source dict {d}")
 
-text_source_mark = {
+
+text_source_marks = {
     TextSource.FG: "[ФГ]",
     TextSource.PLAUT: "[Plaut]"
 }
@@ -15,7 +23,7 @@ text_source_mark = {
 
 text_source_descriptions = {
     TextSource.FG: "Русский перевод Фримы Гурфинкель",
-    TextSource.PLAUT: "Английский перевод The Torah: A Modern Commentary под редакцией Гюнтера Плаута"
+    TextSource.PLAUT: "Английский перевод «The Torah: A Modern Commentary» под редакцией Гюнтера Плаута"
 }
 
 
@@ -117,9 +125,24 @@ parsha_names = {
 }
 
 
+TextSource.validate_per_text_source_dict(text_source_marks)
+TextSource.validate_per_text_source_dict(text_source_links)
+TextSource.validate_per_text_source_dict(text_source_descriptions)
+for _, names in torah_book_names.items():
+    TextSource.validate_per_text_source_dict(names)
+for _, names in parsha_names.items():
+    TextSource.validate_per_text_source_dict(names)
+
+
 class Commenter:
     SONCHINO = "sonchino"
     RASHI = "rashi"
+
+
+commenter_names = {
+    Commenter.SONCHINO: "Сончино",
+    Commenter.RASHI: "Раши",
+}
 
 
 commenter_about_url = {
