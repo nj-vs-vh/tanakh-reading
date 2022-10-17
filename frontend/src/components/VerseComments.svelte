@@ -52,7 +52,6 @@
     }
 
     p.commenter-name {
-        font-style: italic;
         color: rgb(80, 80, 80);
     }
 
