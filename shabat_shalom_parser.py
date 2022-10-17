@@ -12,7 +12,7 @@ import requests  # type: ignore
 
 import metadata
 from config import parsha_json
-from metadata import Commenter, Translation, get_book_by_parsha
+from metadata import Commenter, TextSource, get_book_by_parsha
 from model import ChapterData, CommentData, ParshaData, VerseData
 from utils import (
     are_strings_close,
@@ -55,8 +55,8 @@ def parse_parsha(parsha: int):
     )
 
     print(
-        f"Parsing shabat-shalom.info for book {metadata.torah_book_names[book][Translation.FG]!r}, "
-        + f"parsha {metadata.parsha_names[parsha][Translation.FG]!r}"
+        f"Parsing shabat-shalom.info for book {metadata.torah_book_names[book][TextSource.FG]!r}, "
+        + f"parsha {metadata.parsha_names[parsha][TextSource.FG]!r}"
     )
 
     html = parsha_html(parsha)
@@ -208,12 +208,12 @@ def parse_parsha(parsha: int):
             expected_next_verse = parsed_expected_next_verse
 
         if current_verse_data is not None:
-            current_verse_data["text"][Translation.FG] += " " + text_part_current_verse
+            current_verse_data["text"][TextSource.FG] += " " + text_part_current_verse
 
         while text_part_next_verse is not None:
             if current_verse_data is not None:
-                current_verse_data["text"][Translation.FG] = postprocess_patched_text(
-                    current_verse_data["text"][Translation.FG]
+                current_verse_data["text"][TextSource.FG] = postprocess_patched_text(
+                    current_verse_data["text"][TextSource.FG]
                 )
                 current_chapter_data["verses"].append(current_verse_data)
             if expected_next_verse is None:
@@ -224,7 +224,7 @@ def parse_parsha(parsha: int):
             text_part_current_verse, text_part_next_verse, _ = split_on_next_verse_start(text_part, expected_next_verse)
             current_verse_data = VerseData(
                 verse=current_verse,
-                text={Translation.FG: text_part_current_verse},
+                text={TextSource.FG: text_part_current_verse},
                 comments=defaultdict(list),
             )
 

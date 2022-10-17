@@ -1,4 +1,4 @@
-class Translation:
+class TextSource:
     FG = "fg"
     PLAUT = "plaut"
 
@@ -7,12 +7,38 @@ class Translation:
         return [cls.FG, cls.PLAUT]
 
 
+text_source_mark = {
+    TextSource.FG: "[ФГ]",
+    TextSource.PLAUT: "[Plaut]"
+}
+
+
+text_source_descriptions = {
+    TextSource.FG: "Русский перевод Фримы Гурфинкель",
+    TextSource.PLAUT: "Английский перевод The Torah: A Modern Commentary под редакцией Гюнтера Плаута"
+}
+
+
+text_source_links = {
+    TextSource.FG: [
+        r"http://www.shabat-shalom.info/books/Tanach-ru/Chumash_Rashi/index.htm",
+        r"http://www.ejwiki.org/wiki/%D0%93%D1%83%D1%80%D1%84%D0%B8%D0%BD%D0%BA%D0%B5%D0%BB%D1%8C,_%D0%A4%D1%80%D0%B8%D0%BC%D0%B0",
+        r"https://esxatos.com/gurfinel-tora-tanah-28-knig-1-fayl",
+    ],
+    TextSource.PLAUT: [
+        r"https://reformjudaism.org/learning/torah-study/english-translations-torah-portions",
+        r"https://www.ccarpress.org/shopping_product_detail.asp?pid=50297",
+        r"https://www.ccarpress.org/content.asp?tid=532",
+    ]
+}
+
+
 torah_book_names = {
-    1: {Translation.FG: "Берейшис", Translation.PLAUT: "Genesis"},
-    2: {Translation.FG: "Шемот", Translation.PLAUT: "Exodus"},
-    3: {Translation.FG: "Вайикра", Translation.PLAUT: "Leviticus"},
-    4: {Translation.FG: "Бемидбар", Translation.PLAUT: "Numbers"},
-    5: {Translation.FG: "Деварим", Translation.PLAUT: "Deuteronomy"},
+    1: {TextSource.FG: "Берейшис", TextSource.PLAUT: "Genesis"},
+    2: {TextSource.FG: "Шемот", TextSource.PLAUT: "Exodus"},
+    3: {TextSource.FG: "Вайикра", TextSource.PLAUT: "Leviticus"},
+    4: {TextSource.FG: "Бемидбар", TextSource.PLAUT: "Numbers"},
+    5: {TextSource.FG: "Деварим", TextSource.PLAUT: "Deuteronomy"},
 }
 
 
@@ -34,66 +60,60 @@ def get_book_by_parsha(parsha: int) -> int:
 
 
 parsha_names = {
-    1: {Translation.FG: "Берейшис", Translation.PLAUT: "B’reishit"},
-    2: {Translation.FG: "Нойах", Translation.PLAUT: "Noach"},
-    3: {Translation.FG: "Лех Лехо", Translation.PLAUT: "Lech L’cha"},
-    4: {Translation.FG: "Вайейро", Translation.PLAUT: "Vayeira"},
-    5: {Translation.FG: "Хайей Соро", Translation.PLAUT: "Chayei Sarah"},
-    6: {Translation.FG: "Толдойс", Translation.PLAUT: "Tol’dot"},
-    7: {Translation.FG: "Вайейцей", Translation.PLAUT: "Vayeitze"},
-    8: {Translation.FG: "Вайишлах", Translation.PLAUT: "Vayishlach"},
-    9: {Translation.FG: "Вайейшев", Translation.PLAUT: "Vayeishev"},
-    10: {Translation.FG: "Микец", Translation.PLAUT: "Mikeitz"},
-    11: {Translation.FG: "Вайигаш", Translation.PLAUT: "Vayigash"},
-    12: {Translation.FG: "Вайхи", Translation.PLAUT: "Va-y’chi"},
-    13: {Translation.FG: "Шемойс", Translation.PLAUT: "Sh’mot"},
-    14: {Translation.FG: "Воэйро", Translation.PLAUT: "Va-eira"},
-    15: {Translation.FG: "Бой", Translation.PLAUT: "Bo"},
-    16: {Translation.FG: "Бешалах", Translation.PLAUT: "B’shalach"},
-    17: {Translation.FG: "Йисрой", Translation.PLAUT: "Yitro"},
-    18: {Translation.FG: "Мишпотим", Translation.PLAUT: "Mishpatim"},
-    19: {Translation.FG: "Терумо", Translation.PLAUT: "T’rumah"},
-    20: {Translation.FG: "Тецаве", Translation.PLAUT: "T’tzaveh"},
-    21: {Translation.FG: "Тисо", Translation.PLAUT: "Ki Tisa"},
-    22: {Translation.FG: "Вайакгел", Translation.PLAUT: "Vayak’heil"},
-    23: {Translation.FG: "Пкудей", Translation.PLAUT: "P’kudei"},
-    24: {Translation.FG: "Вайикро", Translation.PLAUT: "Vayikra"},
-    25: {Translation.FG: "Цав", Translation.PLAUT: "Tzav"},
-    26: {Translation.FG: "Шмини", Translation.PLAUT: "Sh’mini"},
-    27: {Translation.FG: "Тазриа", Translation.PLAUT: "Tazria"},
-    28: {Translation.FG: "Мецойро", Translation.PLAUT: "M’tzor"},
-    29: {Translation.FG: "Ахарей", Translation.PLAUT: "Acharei Mot"},
-    30: {Translation.FG: "Кдойшим", Translation.PLAUT: "K’doshim"},
-    31: {Translation.FG: "Эмойр", Translation.PLAUT: "Emor"},
-    32: {Translation.FG: "Бегар", Translation.PLAUT: "B’har"},
-    33: {Translation.FG: "Бехукойсай", Translation.PLAUT: "B’chukotai"},
-    34: {Translation.FG: "Бемидбар", Translation.PLAUT: "B’midbar"},
-    35: {Translation.FG: "Носой", Translation.PLAUT: "Naso"},
-    36: {Translation.FG: "Бегаалойсхо", Translation.PLAUT: "B’haalot’cha"},
-    37: {Translation.FG: "Шлах", Translation.PLAUT: "Sh’lach L’cha"},
-    38: {Translation.FG: "Койрах", Translation.PLAUT: "Korach"},
-    39: {Translation.FG: "Хукас", Translation.PLAUT: "Chukat"},
-    40: {Translation.FG: "Болок", Translation.PLAUT: "Balak"},
-    41: {Translation.FG: "Пинхас", Translation.PLAUT: "Pinchas"},
-    42: {Translation.FG: "Матойс", Translation.PLAUT: "Matot"},
-    43: {Translation.FG: "Масэй", Translation.PLAUT: "Mas-ei"},
-    44: {Translation.FG: "Деворим", Translation.PLAUT: "D’varim"},
-    45: {Translation.FG: "Воэсханан", Translation.PLAUT: "Va-et’chanan"},
-    46: {Translation.FG: "Экев", Translation.PLAUT: "Eikev"},
-    47: {Translation.FG: "Рээй", Translation.PLAUT: "R’eih"},
-    48: {Translation.FG: "Шойфтим", Translation.PLAUT: "Shof’tim"},
-    49: {Translation.FG: "Ки Тейцей", Translation.PLAUT: "Ki’Teitzei"},
-    50: {Translation.FG: "Ки Совой", Translation.PLAUT: "Ki Tavo"},
-    51: {Translation.FG: "Ницовим", Translation.PLAUT: "Nitzavim"},
-    52: {Translation.FG: "Вайейлех", Translation.PLAUT: "Vayeilech"},
-    53: {Translation.FG: "Гаазину", Translation.PLAUT: "Haazinu"},
-    54: {Translation.FG: "Везойс гаБрохо", Translation.PLAUT: "V’zot Hab’rachah"},
-}
-
-
-translation_about_url = {
-    Translation.FG: r"http://www.ejwiki.org/wiki/%D0%93%D1%83%D1%80%D1%84%D0%B8%D0%BD%D0%BA%D0%B5%D0%BB%D1%8C,_%D0%A4%D1%80%D0%B8%D0%BC%D0%B0",
-    Translation.PLAUT: r"https://www.ccarpress.org/content.asp?tid=532",
+    1: {TextSource.FG: "Берейшис", TextSource.PLAUT: "B’reishit"},
+    2: {TextSource.FG: "Нойах", TextSource.PLAUT: "Noach"},
+    3: {TextSource.FG: "Лех Лехо", TextSource.PLAUT: "Lech L’cha"},
+    4: {TextSource.FG: "Вайейро", TextSource.PLAUT: "Vayeira"},
+    5: {TextSource.FG: "Хайей Соро", TextSource.PLAUT: "Chayei Sarah"},
+    6: {TextSource.FG: "Толдойс", TextSource.PLAUT: "Tol’dot"},
+    7: {TextSource.FG: "Вайейцей", TextSource.PLAUT: "Vayeitze"},
+    8: {TextSource.FG: "Вайишлах", TextSource.PLAUT: "Vayishlach"},
+    9: {TextSource.FG: "Вайейшев", TextSource.PLAUT: "Vayeishev"},
+    10: {TextSource.FG: "Микец", TextSource.PLAUT: "Mikeitz"},
+    11: {TextSource.FG: "Вайигаш", TextSource.PLAUT: "Vayigash"},
+    12: {TextSource.FG: "Вайхи", TextSource.PLAUT: "Va-y’chi"},
+    13: {TextSource.FG: "Шемойс", TextSource.PLAUT: "Sh’mot"},
+    14: {TextSource.FG: "Воэйро", TextSource.PLAUT: "Va-eira"},
+    15: {TextSource.FG: "Бой", TextSource.PLAUT: "Bo"},
+    16: {TextSource.FG: "Бешалах", TextSource.PLAUT: "B’shalach"},
+    17: {TextSource.FG: "Йисрой", TextSource.PLAUT: "Yitro"},
+    18: {TextSource.FG: "Мишпотим", TextSource.PLAUT: "Mishpatim"},
+    19: {TextSource.FG: "Терумо", TextSource.PLAUT: "T’rumah"},
+    20: {TextSource.FG: "Тецаве", TextSource.PLAUT: "T’tzaveh"},
+    21: {TextSource.FG: "Тисо", TextSource.PLAUT: "Ki Tisa"},
+    22: {TextSource.FG: "Вайакгел", TextSource.PLAUT: "Vayak’heil"},
+    23: {TextSource.FG: "Пкудей", TextSource.PLAUT: "P’kudei"},
+    24: {TextSource.FG: "Вайикро", TextSource.PLAUT: "Vayikra"},
+    25: {TextSource.FG: "Цав", TextSource.PLAUT: "Tzav"},
+    26: {TextSource.FG: "Шмини", TextSource.PLAUT: "Sh’mini"},
+    27: {TextSource.FG: "Тазриа", TextSource.PLAUT: "Tazria"},
+    28: {TextSource.FG: "Мецойро", TextSource.PLAUT: "M’tzor"},
+    29: {TextSource.FG: "Ахарей", TextSource.PLAUT: "Acharei Mot"},
+    30: {TextSource.FG: "Кдойшим", TextSource.PLAUT: "K’doshim"},
+    31: {TextSource.FG: "Эмойр", TextSource.PLAUT: "Emor"},
+    32: {TextSource.FG: "Бегар", TextSource.PLAUT: "B’har"},
+    33: {TextSource.FG: "Бехукойсай", TextSource.PLAUT: "B’chukotai"},
+    34: {TextSource.FG: "Бемидбар", TextSource.PLAUT: "B’midbar"},
+    35: {TextSource.FG: "Носой", TextSource.PLAUT: "Naso"},
+    36: {TextSource.FG: "Бегаалойсхо", TextSource.PLAUT: "B’haalot’cha"},
+    37: {TextSource.FG: "Шлах", TextSource.PLAUT: "Sh’lach L’cha"},
+    38: {TextSource.FG: "Койрах", TextSource.PLAUT: "Korach"},
+    39: {TextSource.FG: "Хукас", TextSource.PLAUT: "Chukat"},
+    40: {TextSource.FG: "Болок", TextSource.PLAUT: "Balak"},
+    41: {TextSource.FG: "Пинхас", TextSource.PLAUT: "Pinchas"},
+    42: {TextSource.FG: "Матойс", TextSource.PLAUT: "Matot"},
+    43: {TextSource.FG: "Масэй", TextSource.PLAUT: "Mas-ei"},
+    44: {TextSource.FG: "Деворим", TextSource.PLAUT: "D’varim"},
+    45: {TextSource.FG: "Воэсханан", TextSource.PLAUT: "Va-et’chanan"},
+    46: {TextSource.FG: "Экев", TextSource.PLAUT: "Eikev"},
+    47: {TextSource.FG: "Рээй", TextSource.PLAUT: "R’eih"},
+    48: {TextSource.FG: "Шойфтим", TextSource.PLAUT: "Shof’tim"},
+    49: {TextSource.FG: "Ки Тейцей", TextSource.PLAUT: "Ki’Teitzei"},
+    50: {TextSource.FG: "Ки Совой", TextSource.PLAUT: "Ki Tavo"},
+    51: {TextSource.FG: "Ницовим", TextSource.PLAUT: "Nitzavim"},
+    52: {TextSource.FG: "Вайейлех", TextSource.PLAUT: "Vayeilech"},
+    53: {TextSource.FG: "Гаазину", TextSource.PLAUT: "Haazinu"},
+    54: {TextSource.FG: "Везойс гаБрохо", TextSource.PLAUT: "V’zot Hab’rachah"},
 }
 
 
