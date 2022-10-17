@@ -133,14 +133,16 @@
                                     ]}
                                 </span>
                                 {#each Array.from(metadata.text_source_links[textSource].entries()) as [index, link]}
-                                    <a
-                                        href={link}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        class="external-link"
-                                    >
-                                        <sup>{index + 1}</sup>
-                                    </a>
+                                    <sup>
+                                        <a
+                                            href={link}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            class="external-link"
+                                        >
+                                            {index + 1}
+                                        </a>
+                                    </sup>
                                 {/each}
                             </span>
                         </label>
@@ -200,9 +202,25 @@
                                 toggleCommentSourceFlag(commenter);
                             }}
                         />
-                        <label for={commenter}
-                            >{metadata.commenter_names[commenter]}</label
-                        >
+                        <label for={commenter}>
+                            <span>
+                                <span>
+                                    {metadata.commenter_names[commenter]}
+                                </span>
+                                {#each Array.from(metadata.commenter_links[commenter].entries()) as [index, link]}
+                                    <sup>
+                                        <a
+                                            href={link}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            class="external-link"
+                                        >
+                                            {index + 1}
+                                        </a>
+                                    </sup>
+                                {/each}
+                            </span>
+                        </label>
                     </div>
                 {/each}
                 <div class="input-with-label">
@@ -274,7 +292,7 @@
                         on:change={setTextDecorationStyleFromEvent}
                     />
                     <label for={TextDecorationStyle.NONE}>
-                        <span> Нет </span>
+                        <span>Нет</span>
                     </label>
                 </div>
             </div>
@@ -289,7 +307,7 @@
                         checked={commentStyle == CommentStyle.MODAL}
                         on:change={setCommentStyleFromEvent}
                     />
-                    <label for={CommentStyle.MODAL}>Окно</label>
+                    <label for={CommentStyle.MODAL}> Окно </label>
                 </div>
                 <div class="input-with-label">
                     <input
@@ -363,6 +381,8 @@
 
     a.external-link {
         color: rgb(52, 52, 66);
+        padding: 0 0.2em;
+        text-decoration: underline;
     }
 
     a.external-link:hover {
@@ -375,7 +395,7 @@
 
     div.input-with-label {
         display: flex;
-        align-items: flex-start;
+        align-items: baseline;
         padding: 0.2em 0;
     }
 </style>

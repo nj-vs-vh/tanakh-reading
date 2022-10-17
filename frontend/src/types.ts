@@ -39,7 +39,7 @@ export interface Metadata {
     text_source_marks: Record<string, string>;
     text_source_descriptions: Record<string, string>;
     text_source_links: Record<string, Array<string>>;
-    commenter_about_links: Record<string, string>;
+    commenter_links: Record<string, Array<string>>;
     commenter_names: Record<string, string>;
     available_parsha: Array<number>;
 }
