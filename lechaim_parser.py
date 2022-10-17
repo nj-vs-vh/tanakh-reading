@@ -1,6 +1,7 @@
 """Parser for https://lechaim.ru/torah/"""
 
 
+import argparse
 from collections import defaultdict
 import json
 from pathlib import Path
@@ -135,4 +136,8 @@ def parse(parsha: int, parsha_url_path: str):
 
 
 if __name__ == "__main__":
-    parse(2, "noach")
+    argparser = argparse.ArgumentParser()
+    argparser.add_argument("parsha_index", type=int)
+    argparser.add_argument("parsha_url_path", type=str)
+    args = argparser.parse_args()
+    parse(args.parsha_index, args.parsha_url_path)
