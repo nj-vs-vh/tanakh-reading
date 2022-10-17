@@ -383,7 +383,7 @@ commenter_names = {
     Commenter.SONCHINO: "Сончино [ФГ]",
     Commenter.RASHI: "Раши [ФГ]",
     Commenter.RASHI_ALT: "Раши [Лехаим]",
-    Commenter.IBN_EZRA: "ибн Эзра [Лехаим]"
+    Commenter.IBN_EZRA: "ибн Эзра [Лехаим]",
 }
 
 
@@ -400,5 +400,5 @@ commenter_links = {
     Commenter.IBN_EZRA: [
         r"https://toldot.com/ibnEzra.html",
         r"https://ru.wikipedia.org/wiki/%D0%90%D0%B2%D1%80%D0%B0%D0%B0%D0%BC_%D0%B8%D0%B1%D0%BD_%D0%AD%D0%B7%D1%80%D0%B0",
-    ]
+    ],
 }

@@ -2,19 +2,26 @@
 
 
 import argparse
-from collections import defaultdict
 import json
-from pathlib import Path
 import re
+from collections import defaultdict
+from pathlib import Path
 from typing import Optional, cast
-from bs4 import BeautifulSoup, Tag
+
 import requests  # type: ignore
+from bs4 import BeautifulSoup, Tag
+
 from merge import merge_and_save_parsha_data
-from model import ChapterData, CommentData, ParshaData, VerseData
-
 from metadata import Commenter, TextSource, get_book_by_parsha
-from utils import has_class, has_class_that, inner_tag_text, postprocess_patched_text, tag_filter
-
+from model import ChapterData, CommentData, ParshaData, VerseData
+from utils import (
+    dump_parsha,
+    has_class,
+    has_class_that,
+    inner_tag_text,
+    postprocess_patched_text,
+    tag_filter,
+)
 
 HTML_DIR = Path("html/lechaim")
 HTML_DIR.mkdir(exist_ok=True)
@@ -132,7 +139,11 @@ def parse(parsha: int, parsha_url_path: str):
             if add_chapter_to_parsha:
                 parsha_data["chapters"].append(chapter_data)
 
-    merge_and_save_parsha_data(parsha, parsha_data)
+    try:
+        merge_and_save_parsha_data(parsha, parsha_data)
+    except Exception:
+        Path(f"temp-lechaim-{parsha}.json").write_text(dump_parsha(parsha_data))
+        raise
 
 
 if __name__ == "__main__":

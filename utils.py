@@ -1,7 +1,10 @@
+import json
 import re
 from typing import Callable
 
 import bs4
+
+from model import ParshaData
 
 
 def collapse_whitespace(s: str) -> str:
@@ -63,3 +66,7 @@ def are_strings_close(s1: str, s2: str) -> bool:
 
 def strip_leading_dot(s: str) -> str:
     return collapse_whitespace(s.removeprefix("."))
+
+
+def dump_parsha(parsha_data: ParshaData) -> str:
+    return json.dumps(parsha_data, ensure_ascii=False, indent=2)
