@@ -9,7 +9,8 @@
           "verse": 9,
           "text": {
             "fg": "Вот порожденные Ноахом: Hoax мужем праведным, цельным был в своих поколениях; с Б-гом ходил Hoax.",
-            "plaut": "This is Noah’s chronicle. Noah was a righteous man; in his generation, he was above reproach; Noah walked with God."
+            "plaut": "This is Noah’s chronicle. Noah was a righteous man; in his generation, he was above reproach; Noah walked with God.",
+            "lechaim": "Вот потомство Ноаха. Праведник Ноах был беспорочен в своем поколении; Ноах ходил пред Богом."
           },
           "comments": {
             "rashi": [
@@ -67,7 +68,8 @@
           "verse": 10,
           "text": {
             "fg": "И породил Hoax троих сыновей: Шема, Хама и Йефета.",
-            "plaut": "Noah begot three sons: Shem, Ham, and Japheth."
+            "plaut": "Noah begot three sons: Shem, Ham, and Japheth.",
+            "lechaim": "И родились у Ноаха три сына: Шем, Хам и Йефет."
           },
           "comments": {
             "sonchino": [
@@ -83,7 +85,8 @@
           "verse": 11,
           "text": {
             "fg": "И извратилась земля перед Б-г ом, и наполнилась земля кривдой.",
-            "plaut": "The earth became corrupt before God; the earth was filled with violence,"
+            "plaut": "The earth became corrupt before God; the earth was filled with violence,",
+            "lechaim": "Земля растлилась пред Богом — разбоем наполнилась земля."
           },
           "comments": {
             "rashi": [
@@ -121,7 +124,8 @@
           "verse": 12,
           "text": {
             "fg": "И видел Б-г землю: и вот извратилась она, ибо извратила всякая плоть свой путь на земле.",
-            "plaut": "and when God saw how corrupted the earth was, how all flesh was acting in a corrupt way upon the earth,"
+            "plaut": "and when God saw how corrupted the earth was, how all flesh was acting in a corrupt way upon the earth,",
+            "lechaim": "Увидел Бог, что растлилась земля, ибо все живое на ней извратило свой путь."
           },
           "comments": {
             "rashi": [
@@ -144,7 +148,8 @@
           "verse": 13,
           "text": {
             "fg": "И сказал Б-г Ноаху: Конец всякой плоти настал предо Мною, ибо наполнилась земля кривдой из-за них, и вот я истребляю их с земли.",
-            "plaut": "God said to Noah, “The end of all flesh has come [to mind] before Me, because the earth is full of violence on their account; look, now—I am going to wipe them off the earth."
+            "plaut": "God said to Noah, “The end of all flesh has come [to mind] before Me, because the earth is full of violence on their account; look, now—I am going to wipe them off the earth.",
+            "lechaim": "Сказал Бог Ноаху: “Пришел предо Мной конец всему живому, ибо они наполнили землю разбоем. Я уничтожу их вместе с землей!"
           },
           "comments": {
             "rashi": [
@@ -177,7 +182,8 @@
           "verse": 14,
           "text": {
             "fg": "Сделай себе ковчег из дерева гофер; (с) ячеями сделай ковчег, и осмоли его изнутри и снаружи смолой.",
-            "plaut": "Make yourself an ark of gopher wood; make the ark with rooms, and cover it with tar inside and out."
+            "plaut": "Make yourself an ark of gopher wood; make the ark with rooms, and cover it with tar inside and out.",
+            "lechaim": "Сделай себе ковчег из дерева гофер. Сделай этот ковчег с клетями и обмажь его смолой изнутри и снаружи."
           },
           "comments": {
             "rashi": [
@@ -225,7 +231,8 @@
           "verse": 15,
           "text": {
             "fg": "И вот каким сделай его: триста локтей – длина ковчега, пятьдесят локтей – его ширина, и тридцать локтей – его высота.",
-            "plaut": "This is how to make it: 300 cubits long, 50 cubits wide, and 30 cubits high."
+            "plaut": "This is how to make it: 300 cubits long, 50 cubits wide, and 30 cubits high.",
+            "lechaim": "Сделай его так, чтобы длина ковчега была триста локтей, ширина — пятьдесят локтей, а высота — тридцать локтей."
           },
           "comments": {
             "sonchino": [
@@ -246,7 +253,8 @@
           "verse": 16,
           "text": {
             "fg": "Просвет сделай в ковчеге, и в локоть сведи его сверху; и дверной проем ковчега сбоку помести; (с) нижним, вторым и третьим ярусом сделай его.",
-            "plaut": "Make a roof for the ark, making it overhang from above by a cubit. Put the ark’s door in its side, and make a bottom, a second, and a third deck."
+            "plaut": "Make a roof for the ark, making it overhang from above by a cubit. Put the ark’s door in its side, and make a bottom, a second, and a third deck.",
+            "lechaim": "Сделай в ковчеге [крышу] с просветом, сведи его [стены] вверху [с точностью] до одного локтя, а сбоку расположи вход в ковчег. Сделай в нем первый, второй и третий ярусы."
           },
           "comments": {
             "rashi": [
@@ -289,7 +297,8 @@
           "verse": 17,
           "text": {
             "fg": "А я, вот я навожу потоп, воды на землю, чтоб погубить всякую плоть, в которой дух жизни, под небесами; все, что на земле, погибнет.",
-            "plaut": "“As for Me, I am going to bring the floodwaters upon the earth to destroy all that lives under the heavens, [all] that has the breath of life in it. Everything on earth shall expire."
+            "plaut": "“As for Me, I am going to bring the floodwaters upon the earth to destroy all that lives under the heavens, [all] that has the breath of life in it. Everything on earth shall expire.",
+            "lechaim": "Я наведу потоп, [послав] воды на землю, чтобы истребить под небесами всякую плоть, в которой есть дыхание жизни. Все, что есть на земле, погибнет!"
           },
           "comments": {
             "rashi": [
@@ -317,7 +326,8 @@
           "verse": 18,
           "text": {
             "fg": "И я установлю Мой завет с тобою; и войдешь ты в ковчег, ты и твои сыновья, и твоя жена и жены твоих сыновей с тобою.",
-            "plaut": "With you, though, I will establish My covenant: go then into the ark—you, your wife, your sons, and their wives with you."
+            "plaut": "With you, though, I will establish My covenant: go then into the ark—you, your wife, your sons, and their wives with you.",
+            "lechaim": "Но с тобой Я заключу союз, и ты войдешь в ковчег, а с тобой — твои сыновья, жена и жены сыновей."
           },
           "comments": {
             "rashi": [
@@ -345,7 +355,8 @@
           "verse": 19,
           "text": {
             "fg": "И от всего живого, от всякой плоти, по два от всякого введи в ковчег, чтобы оставить в живых с тобою; пола мужского и женского будут они.",
-            "plaut": "And take two each of every living creature—of all flesh—into the ark, male and female, to keep them alive along with you:"
+            "plaut": "And take two each of every living creature—of all flesh—into the ark, male and female, to keep them alive along with you:",
+            "lechaim": "Из всех живых [существ], от всякой плоти, ты возьмешь в ковчег по паре, самца и самку, чтобы и они остались в живых."
           },
           "comments": {
             "rashi": [
@@ -366,7 +377,8 @@
           "verse": 20,
           "text": {
             "fg": "Oт птицы по виду ее, и от скота по виду его, от всего ползучего земного по виду его, (по) два от всякого придут к тебе, чтобы их оставить в живых.",
-            "plaut": "every type of bird, every type of beast, every type of creeping thing—let two of each come to you to keep them alive,"
+            "plaut": "every type of bird, every type of beast, every type of creeping thing—let two of each come to you to keep them alive,",
+            "lechaim": "По паре от всех [существ] — птицы по их родам, животные по их родам, все [существа], ползающие по земле, по их родам, — они придут к тебе, чтобы остаться в живых."
           },
           "comments": {
             "rashi": [
@@ -382,7 +394,8 @@
           "verse": 21,
           "text": {
             "fg": "Ты же возьми себе от всякой пищи, какую едят, и собери у себя, и будет тебе и им в пищу.",
-            "plaut": "and take along edible foodstuffs of every kind; gather them up so that there is food for yourself and for them.”"
+            "plaut": "and take along edible foodstuffs of every kind; gather them up so that there is food for yourself and for them.”",
+            "lechaim": "Ты же возьми всякой пищи, какой можно питаться, и сделай запасы — это будет тебе и им для еды”."
           },
           "comments": {}
         },
@@ -390,7 +403,8 @@
           "verse": 22,
           "text": {
             "fg": " И сделал Hoax ; по всему, как повелел ему Б-г , так сделал он.",
-            "plaut": "And Noah did just as God had commanded him: that is what he did."
+            "plaut": "And Noah did just as God had commanded him: that is what he did.",
+            "lechaim": "Ноах сделал [все это]. Он сделал все так, как повелел ему Бог."
           },
           "comments": {
             "rashi": [
@@ -418,7 +432,8 @@
           "verse": 1,
           "text": {
             "fg": "И сказал Господь Ноаху: Войди ты и весь твой дом в ковчег; ибо тебя увидел я праведным предо Мною в поколении этом.",
-            "plaut": "The Eternal One then said to Noah, “Go into the ark with all your household, for I see that you [alone] in this age are righteous before Me."
+            "plaut": "The Eternal One then said to Noah, “Go into the ark with all your household, for I see that you [alone] in this age are righteous before Me.",
+            "lechaim": "Сказал Господь Ноаху: “Войди в ковчег со всей твоей семьей, ибо Я вижу, что в этом поколении [лишь] ты праведен предо Мною."
           },
           "comments": {
             "rashi": [
@@ -441,7 +456,8 @@
           "verse": 2,
           "text": {
             "fg": "От всякого скота чистого возьми себе по семи, самца и его самку; а от скота, который не чист, двоих, самца и его самку.",
-            "plaut": "Take seven pairs of every pure beast, a male and its mate, and two of every impure beast, a male and its mate."
+            "plaut": "Take seven pairs of every pure beast, a male and its mate, and two of every impure beast, a male and its mate.",
+            "lechaim": "От всех чистых животных возьми с собой по семь [пар], самцов и самок, а от нечистых животных — по два, самца и самку."
           },
           "comments": {
             "rashi": [
@@ -479,7 +495,8 @@
           "verse": 3,
           "text": {
             "fg": "Также от птицы небесной по семи, самца и самку; чтобы животворить потомство на поверхности всей земли.",
-            "plaut": "Of the birds of the sky, too, take seven pairs, male and female, to give life to offspring on the face of the earth."
+            "plaut": "Of the birds of the sky, too, take seven pairs, male and female, to give life to offspring on the face of the earth.",
+            "lechaim": "От птиц небесных также [возьми] по семь [пар], самцов и самок, чтобы осталось в живых [их] потомство на всей земле."
           },
           "comments": {
             "rashi": [
@@ -495,7 +512,8 @@
           "verse": 4,
           "text": {
             "fg": "Ибо спустя еще семь дней я дождь дам на землю сорок дней и сорок ночей, и сотру я все сущее, Мною созданное, с лица земли.",
-            "plaut": "For in another seven days I will pour rain upon the earth for forty days and nights and wipe all that exists—all that I have made—off the face of the earth.”"
+            "plaut": "For in another seven days I will pour rain upon the earth for forty days and nights and wipe all that exists—all that I have made—off the face of the earth.”",
+            "lechaim": "Ибо через семь дней Я начну лить дождь на землю, [и будет он литься] сорок дней и сорок ночей, и Я сотру с лица земли все сущее, созданное Мною”."
           },
           "comments": {
             "rashi": [
@@ -523,7 +541,8 @@
           "verse": 5,
           "text": {
             "fg": "И сделал Hoax, по всему, как повелел ему Господь.",
-            "plaut": "Noah then did just as the Eternal had commanded him."
+            "plaut": "Noah then did just as the Eternal had commanded him.",
+            "lechaim": "Ноах сделал все так, как повелел ему Господь."
           },
           "comments": {
             "rashi": [
@@ -546,7 +565,8 @@
           "verse": 6,
           "text": {
             "fg": "А Ноаху шестьсот лет. И потоп был водами на земле.",
-            "plaut": "Noah was 600 years old when the flood came—waters upon the earth."
+            "plaut": "Noah was 600 years old when the flood came—waters upon the earth.",
+            "lechaim": "Когда начался потоп и воды затопили землю, Ноаху было шестьсот лет."
           },
           "comments": {}
         },
@@ -554,7 +574,8 @@
           "verse": 7,
           "text": {
             "fg": "И вошел Hoax и его сыны, и его жена и жены его сынов с ним в ковчег, от вод потопа.",
-            "plaut": "Noah, with his sons, his wife, and his sons’ wives came into the ark on account of the deluge."
+            "plaut": "Noah, with his sons, his wife, and his sons’ wives came into the ark on account of the deluge.",
+            "lechaim": "Ноах, его сыновья, жена и жены сыновей вошли в ковчег, [спасаясь] от вод потопа."
           },
           "comments": {
             "rashi": [
@@ -575,7 +596,8 @@
           "verse": 8,
           "text": {
             "fg": "От скота чистого и от скота, который не чист, в от птицы и всего, что ползает по земле,",
-            "plaut": "Of the pure beasts and the beasts that were not pure, of the birds and all that creep on the earth,"
+            "plaut": "Of the pure beasts and the beasts that were not pure, of the birds and all that creep on the earth,",
+            "lechaim": "Чистые животные, нечистые животные, птицы и все [существа], ползающие по земле,"
           },
           "comments": {}
         },
@@ -583,7 +605,8 @@
           "verse": 9,
           "text": {
             "fg": "По два пришли они к Ноаху в ковчег, мужского и женского пола, как повелел Б-г Ноаху.",
-            "plaut": "two by two they came to Noah to the ark, male and female, as God had commanded Noah."
+            "plaut": "two by two they came to Noah to the ark, male and female, as God had commanded Noah.",
+            "lechaim": "вошли к Ноаху в ковчег — попарно, самцы и самки, как и повелел Бог Ноаху."
           },
           "comments": {
             "rashi": [
@@ -611,7 +634,8 @@
           "verse": 10,
           "text": {
             "fg": "И было спустя семь дней: воды потопа были на земле.",
-            "plaut": "After seven days, the floodwaters covered the earth."
+            "plaut": "After seven days, the floodwaters covered the earth.",
+            "lechaim": "Через семь дней на землю пришли воды потопа."
           },
           "comments": {}
         },
@@ -619,7 +643,8 @@
           "verse": 11,
           "text": {
             "fg": "В шестисотом году жизни Ноаха, во втором месяце, в семнадцатый день месяца, в сей день вскрылись все источники бездны великой, и проемы небесные открылись.",
-            "plaut": "In the six hundredth year of Noah’s life, in the second month, on the seventeenth day of the month, on that day, all the springs of the great deep broke out, and the sky’s floodgates opened."
+            "plaut": "In the six hundredth year of Noah’s life, in the second month, on the seventeenth day of the month, on that day, all the springs of the great deep broke out, and the sky’s floodgates opened.",
+            "lechaim": "На шестисотом году жизни Ноаха, в семнадцатый день второго месяца, в этот самый день, разверзлись все источники великой пучины и открылись небесные створы."
           },
           "comments": {
             "rashi": [
@@ -662,7 +687,8 @@
           "verse": 12,
           "text": {
             "fg": "И был дождь на земле сорок дней и сорок ночей.",
-            "plaut": "Rain fell upon the earth for forty days and nights."
+            "plaut": "Rain fell upon the earth for forty days and nights.",
+            "lechaim": "Дождь лил на землю сорок дней и сорок ночей."
           },
           "comments": {
             "rashi": [
@@ -690,7 +716,8 @@
           "verse": 13,
           "text": {
             "fg": "В этот самый день вошел Hoax, и Шем, и Хам, и Йефет сыны Ноаха, и жена Ноаха, и три жены его сынов сними в ковчег.",
-            "plaut": "That very day Noah and Shem and Ham and Japheth, Noah’s sons, came to the ark, with Noah’s wife and with his sons’ three wives."
+            "plaut": "That very day Noah and Shem and Ham and Japheth, Noah’s sons, came to the ark, with Noah’s wife and with his sons’ three wives.",
+            "lechaim": "В тот самый день Ноах вошел в ковчег, вместе со своими сыновьями Шемом, Хамом и Йефетом, вместе с женой и женами сыновей."
           },
           "comments": {
             "rashi": [
@@ -713,7 +740,8 @@
           "verse": 14,
           "text": {
             "fg": "Они и всякое животное по виду его, и всякий скот по виду его, и все ползучее, что ползает по земле, по виду его, и всякий летун по виду его, всякая птица всякого (вида) крыла.",
-            "plaut": "They, and every type of animal, every type of beast, every type of creature that creeps on the earth, every type of fowl, every bird, every winged creature—"
+            "plaut": "They, and every type of animal, every type of beast, every type of creature that creeps on the earth, every type of fowl, every bird, every winged creature—",
+            "lechaim": "Они, а также все звери по их родам, все животные по их родам, все существа, снующие по земле, по их родам, все летучие [существа] по их родам, все птицы, [все] крылатые [существа],"
           },
           "comments": {
             "rashi": [
@@ -736,7 +764,8 @@
           "verse": 15,
           "text": {
             "fg": "И пришли они к Ноаху в ковчег, по два от всякой плоти, в которой дух жизни.",
-            "plaut": "they came to Noah, to the ark, two by two, all flesh that had in it the breath of life."
+            "plaut": "they came to Noah, to the ark, two by two, all flesh that had in it the breath of life.",
+            "lechaim": "вошли к Ноаху в ковчег — по паре от всякой плоти, в которой есть дыхание жизни."
           },
           "comments": {}
         },
@@ -744,7 +773,8 @@
           "verse": 16,
           "text": {
             "fg": "И пришедшие, мужского и женского пола от всякой плоти пришли они, как повелел ему Б-г; и затворил Господь за ним.",
-            "plaut": "Those who came were male and female; some of every species entered, just as God had ordered him; then the Eternal shut [the door] after him."
+            "plaut": "Those who came were male and female; some of every species entered, just as God had ordered him; then the Eternal shut [the door] after him.",
+            "lechaim": "[Все] они, по самцу и самке от всякой плоти, вошли [в ковчег], как и повелел [Ноаху] Бог. И Господь затворил за ним [дверь ковчега]."
           },
           "comments": {
             "rashi": [
@@ -767,7 +797,8 @@
           "verse": 17,
           "text": {
             "fg": "И был потоп сорок дней на земле; и умножились воды и понесли ковчег, и поднялся он над землей.",
-            "plaut": "Forty days the flood was upon the earth; the waters increased and lifted the ark, and so it rose over the ground."
+            "plaut": "Forty days the flood was upon the earth; the waters increased and lifted the ark, and so it rose over the ground.",
+            "lechaim": "Потоп на земле длился сорок дней; воды прибыли, подняли ковчег, и он оторвался от земли."
           },
           "comments": {
             "rashi": [
@@ -790,7 +821,8 @@
           "verse": 18,
           "text": {
             "fg": "И крепли воды и умножились очень на земле, и плыл ковчег по поверхности вод.",
-            "plaut": "The waters gained in strength, increasing upon the earth, as the ark coursed on the waters’ surface."
+            "plaut": "The waters gained in strength, increasing upon the earth, as the ark coursed on the waters’ surface.",
+            "lechaim": "Воды набирали мощь, они всё прибывали на земле, а ковчег плыл по поверхности вод."
           },
           "comments": {
             "rashi": [
@@ -813,7 +845,8 @@
           "verse": 19,
           "text": {
             "fg": "И воды крепли все больше и больше на земле, и были покрыты (ими) все высокие горы, которые под всем небом.",
-            "plaut": "High, high above the earth towered the waters, so that the tallest mountains that stand beneath the heavens were submerged."
+            "plaut": "High, high above the earth towered the waters, so that the tallest mountains that stand beneath the heavens were submerged.",
+            "lechaim": "Все сильнее и сильнее бушевали воды на земле, и покрыли они все [самые] высокие горы, какие есть под небесами."
           },
           "comments": {}
         },
@@ -821,7 +854,8 @@
           "verse": 20,
           "text": {
             "fg": "На пятнадцать локтей сверху крепли воды; и были покрыты горы.",
-            "plaut": "Fifteen cubits higher the waters towered, as the mountains were submerged."
+            "plaut": "Fifteen cubits higher the waters towered, as the mountains were submerged.",
+            "lechaim": "Воды поднялись на пятнадцать локтей выше [горных вершин], и горы скрылись."
           },
           "comments": {
             "rashi": [
@@ -844,7 +878,8 @@
           "verse": 21,
           "text": {
             "fg": "И погибла всякая плоть, что ползает по земле, из летающего, из скота, и из животного, и из всего кишащего, что кишит на земле; и все человеческое.",
-            "plaut": "Then all flesh that swarmed upon the earth perished—whether bird, cattle, or wild animal, or that which teemed over the earth, or human being."
+            "plaut": "Then all flesh that swarmed upon the earth perished—whether bird, cattle, or wild animal, or that which teemed over the earth, or human being.",
+            "lechaim": "Погибла всякая плоть, движущаяся по земле, — птицы, [домашние] животные, [дикие] звери, все твари, снующие по земле, и все люди."
           },
           "comments": {
             "sonchino": [
@@ -865,7 +900,8 @@
           "verse": 22,
           "text": {
             "fg": "Все, что (имело) дыхание духа жизни в ноздрях своих, из всего, что на суше, вымерло.",
-            "plaut": "Whatever on dry land had the breath of life in its nostrils, died."
+            "plaut": "Whatever on dry land had the breath of life in its nostrils, died.",
+            "lechaim": "Погибло все, в чем было дыхание жизни, все обитатели суши."
           },
           "comments": {
             "rashi": [
@@ -886,7 +922,8 @@
           "verse": 23,
           "text": {
             "fg": "И стер Он все сущее, что на поверхности земли, от человека до скота, до ползучего и до птицы небесной: и были стерты они с земли. И остался лишь Hoax и то, что с ним в ковчеге.",
-            "plaut": "[God] wiped out all that existed on the face of the earth—human, beast, reptile, birds of the sky—they were wiped off the earth; there remained only Noah and those with him in the ark."
+            "plaut": "[God] wiped out all that existed on the face of the earth—human, beast, reptile, birds of the sky—they were wiped off the earth; there remained only Noah and those with him in the ark.",
+            "lechaim": "[Бог] стер с лица земли всякое существо — и человека, и животных, и пресмыкающихся, и небесных птиц. Они исчезли с земли, и остались лишь Ноах и те, кто был с ним в ковчеге."
           },
           "comments": {
             "rashi": [
@@ -907,7 +944,8 @@
           "verse": 24,
           "text": {
             "fg": "И крепли воды на земле сто пятьдесят дней.",
-            "plaut": "And the waters towered over the earth a hundred and fifty days."
+            "plaut": "And the waters towered over the earth a hundred and fifty days.",
+            "lechaim": "Воды бушевали на земле сто пятьдесят дней."
           },
           "comments": {
             "sonchino": [
@@ -928,7 +966,8 @@
           "verse": 1,
           "text": {
             "fg": "И вспомнил Б-г Ноаха, и всякое животное и всякий скот, который с ним в ковчеге, и провел Б-г дух (утешения) по земле, и утишились воды.",
-            "plaut": "God then remembered Noah and all the animals and all the beasts that were with him in the ark, so God caused a wind to sweep over the earth, and the waters subsided."
+            "plaut": "God then remembered Noah and all the animals and all the beasts that were with him in the ark, so God caused a wind to sweep over the earth, and the waters subsided.",
+            "lechaim": "И Бог вспомнил про Ноаха и про всех зверей и животных, что были с ним в ковчеге. Бог послал на землю ветер, и воды утихли."
           },
           "comments": {
             "rashi": [
@@ -976,7 +1015,8 @@
           "verse": 2,
           "text": {
             "fg": "И затворились источники бездны и проемы небесные, и прекратился дождь с небес.",
-            "plaut": "The springs of the deep and the sky’s floodgates closed up, and the rain was stopped up from the sky."
+            "plaut": "The springs of the deep and the sky’s floodgates closed up, and the rain was stopped up from the sky.",
+            "lechaim": "Закрылись источники пучины и небесные створы, и дождь перестал [лить] с небес."
           },
           "comments": {
             "rashi": [
@@ -997,7 +1037,8 @@
           "verse": 3,
           "text": {
             "fg": "И отступали воды с земли все дальше и дальше; и убывать стали воды по прошествии ста пятидесяти дней.",
-            "plaut": "The waters diminished apace, ebbing and flowing, [draining] from the earth, and at the end of a hundred and fifty days the waters had receded."
+            "plaut": "The waters diminished apace, ebbing and flowing, [draining] from the earth, and at the end of a hundred and fifty days the waters had receded.",
+            "lechaim": "Воды отступали с земли постепенно; они начали убывать по истечении ста пятидесяти дней."
           },
           "comments": {
             "rashi": [
@@ -1025,7 +1066,8 @@
           "verse": 4,
           "text": {
             "fg": "И стал ковчег в седьмом месяце, в семнадцатый день месяца, на горах Арарата.",
-            "plaut": "In the seventh month, on the seventeenth day of the month, the ark came to rest atop one of the mountains of Ararat."
+            "plaut": "In the seventh month, on the seventeenth day of the month, the ark came to rest atop one of the mountains of Ararat.",
+            "lechaim": "В семнадцатый день седьмого месяца ковчег остановился на Араратских горах."
           },
           "comments": {
             "rashi": [
@@ -1053,7 +1095,8 @@
           "verse": 5,
           "text": {
             "fg": "И воды все убывали до десятого месяца. В десятом (месяце), в первый (день) месяца показались вершины гор.",
-            "plaut": "The waters kept on ebbing away until the tenth month; on the first day of the tenth [month], the mountain peaks could be seen."
+            "plaut": "The waters kept on ebbing away until the tenth month; on the first day of the tenth [month], the mountain peaks could be seen.",
+            "lechaim": "Воды понемногу убывали до десятого месяца, и в первый день десятого месяца показались вершины гор."
           },
           "comments": {
             "rashi": [
@@ -1076,7 +1119,8 @@
           "verse": 6,
           "text": {
             "fg": "И было по прошествии сорока дней, и открыл Hoax окно ковчега, которое сделал,",
-            "plaut": "Forty days later, Noah opened the ark’s window that he had made"
+            "plaut": "Forty days later, Noah opened the ark’s window that he had made",
+            "lechaim": "Сорок дней спустя Ноах отворил сделанное им окно ковчега"
           },
           "comments": {
             "rashi": [
@@ -1109,7 +1153,8 @@
           "verse": 7,
           "text": {
             "fg": "И выпустил он ворона, и вылетел тот, отлетая и возвращаясь, пока не высохли воды на земле.",
-            "plaut": "and sent out the raven, who went winging to and fro waiting for the water to dry up from upon the earth."
+            "plaut": "and sent out the raven, who went winging to and fro waiting for the water to dry up from upon the earth.",
+            "lechaim": "и выпустил ворона. Ворон улетал и возвращался, пока вода на земле не высохла."
           },
           "comments": {
             "rashi": [
@@ -1137,7 +1182,8 @@
           "verse": 8,
           "text": {
             "fg": "И выпустил он голубя от себя, посмотреть, убыла ли вода с поверхности земли.",
-            "plaut": "Then he sent out the dove, to see whether the water had eased from off the surface of the soil,"
+            "plaut": "Then he sent out the dove, to see whether the water had eased from off the surface of the soil,",
+            "lechaim": "[Тогда Ноах] выпустил голубя, чтобы посмотреть, не сошла ли вода с поверхности земли."
           },
           "comments": {
             "rashi": [
@@ -1165,7 +1211,8 @@
           "verse": 9,
           "text": {
             "fg": "Но не нашел голубь покоя для ноги своей и возвратился к нему в ковчег, ибо вода на поверхности всей земли. И протянул он руку свою и взял его, и внес к себе в ковчег.",
-            "plaut": "but the dove could not find a resting-place for her foot, so she returned to the ark, for [still] there was water on the face of the earth: he reached out his hand and took her, bringing her back to him into the ark."
+            "plaut": "but the dove could not find a resting-place for her foot, so she returned to the ark, for [still] there was water on the face of the earth: he reached out his hand and took her, bringing her back to him into the ark.",
+            "lechaim": "Но голубь не нашел места, где бы опуститься, и вернулся в ковчег, ибо земля была все еще под водой. [Ноах] протянул руку, взял голубя и забрал его к себе в ковчег."
           },
           "comments": {}
         },
@@ -1173,7 +1220,8 @@
           "verse": 10,
           "text": {
             "fg": "И ждал он еще семь других дней; и вновь он выпустил голубя из ковчега.",
-            "plaut": "He waited yet another seven days, and again sent the dove out of the ark."
+            "plaut": "He waited yet another seven days, and again sent the dove out of the ark.",
+            "lechaim": "Подождав еще семь дней, он вновь выпустил голубя из ковчега."
           },
           "comments": {
             "rashi": [
@@ -1189,7 +1237,8 @@
           "verse": 11,
           "text": {
             "fg": "И прилетел к нему голубь под вечер, и вот оливковый лист сорвал он клювом своим. И узнал Hoax, что убыли воды с земли.",
-            "plaut": "Toward evening, the dove came to him, and look—a freshly-plucked olive branch in her beak! So Noah knew that the water had eased from off the earth."
+            "plaut": "Toward evening, the dove came to him, and look—a freshly-plucked olive branch in her beak! So Noah knew that the water had eased from off the earth.",
+            "lechaim": "Голубь вернулся к нему вечером, [держа] в клюве свежесорванный масличный лист, и Ноах понял, что воды отступили с земли."
           },
           "comments": {
             "rashi": [
@@ -1222,7 +1271,8 @@
           "verse": 12,
           "text": {
             "fg": "И ждал он еще семь других дней, и выпустил он голубя, и тот больше не возвратился к нему.",
-            "plaut": "He waited yet another seven days and sent the dove out; this time she no longer came back to him."
+            "plaut": "He waited yet another seven days and sent the dove out; this time she no longer came back to him.",
+            "lechaim": "Подождав еще семь дней, он [снова] выпустил голубя, и тот к нему уже не вернулся."
           },
           "comments": {
             "rashi": [
@@ -1238,7 +1288,8 @@
           "verse": 13,
           "text": {
             "fg": "И было в шестьсот первом году, в первом (месяце), в первый (день) месяца, сошли воды с земли. И снял Hoax покрытие ковчега и увидел, что вот подсохла поверхность земли.",
-            "plaut": "In [Noah’s] six hundred and first year, on the first day of the first month, the water had receded from over the earth. When Noah removed the covering of the ark, he saw that the earth’s surface was beginning to dry,"
+            "plaut": "In [Noah’s] six hundred and first year, on the first day of the first month, the water had receded from over the earth. When Noah removed the covering of the ark, he saw that the earth’s surface was beginning to dry,",
+            "lechaim": "Итак, в шестьсот первый год, в первый день первого месяца, земля высохла. Ноах снял крышку ковчега и увидел, что поверхность земли начала высыхать."
           },
           "comments": {
             "rashi": [
@@ -1276,7 +1327,8 @@
           "verse": 14,
           "text": {
             "fg": "А во втором месяце, в двадцать седьмой день месяца, сухою стала земля.",
-            "plaut": "and by the twenty-seventh day of the second month, the earth had dried up."
+            "plaut": "and by the twenty-seventh day of the second month, the earth had dried up.",
+            "lechaim": "А в двадцать седьмой день второго месяца земля стала [совсем] сухой."
           },
           "comments": {
             "rashi": [
@@ -1304,7 +1356,8 @@
           "verse": 15,
           "text": {
             "fg": "И говорил Б-г Ноаху так:",
-            "plaut": "God then spoke to Noah, saying,"
+            "plaut": "God then spoke to Noah, saying,",
+            "lechaim": "Бог сказал Ноаху:"
           },
           "comments": {}
         },
@@ -1312,7 +1365,8 @@
           "verse": 16,
           "text": {
             "fg": "Выйди из ковчега, ты и твоя жена, и твои сыновья и жены твоих сыновей с тобою.",
-            "plaut": "“Go out of the ark with your wife, your sons, and their wives."
+            "plaut": "“Go out of the ark with your wife, your sons, and their wives.",
+            "lechaim": "“Выйди из ковчега, вместе с женой, сыновьями и женами сыновей."
           },
           "comments": {
             "rashi": [
@@ -1328,7 +1382,8 @@
           "verse": 17,
           "text": {
             "fg": "Всякое животное, которое с тобой от всякой плоти, из птицы и из скота, и из всего ползучего, что ползает по земле, выведи с собой, и пусть кишат на земле, и пусть плодятся и умножаются на земле.",
-            "plaut": "Take every animal that is in your care—bird and beast, and all that creep over the earth; let them swarm on the earth; let them be fruitful and multiply on the earth.”"
+            "plaut": "Take every animal that is in your care—bird and beast, and all that creep over the earth; let them swarm on the earth; let them be fruitful and multiply on the earth.”",
+            "lechaim": "Выведи за собой всех зверей, всякую плоть — птиц, животных и всех пресмыкающихся, снующих по земле. Пусть земля будет полна ими, пусть они плодятся и размножаются на земле”."
           },
           "comments": {
             "rashi": [
@@ -1356,7 +1411,8 @@
           "verse": 18,
           "text": {
             "fg": "И вышел Hoax и его сыны, и его жена и жены его сынов с ним.",
-            "plaut": "So Noah went out, together with his wife, his sons, and their wives."
+            "plaut": "So Noah went out, together with his wife, his sons, and their wives.",
+            "lechaim": "Ноах вышел [из ковчега] с сыновьями, женой и женами сыновей."
           },
           "comments": {}
         },
@@ -1364,7 +1420,8 @@
           "verse": 19,
           "text": {
             "fg": "Всякое животное, все ползучее и все летающее, все ползающее по земле, по семействам своим вышли они из ковчега.",
-            "plaut": "The animals, the reptiles, the birds, everything that teems upon the earth—all departed from the ark in family groups."
+            "plaut": "The animals, the reptiles, the birds, everything that teems upon the earth—all departed from the ark in family groups.",
+            "lechaim": "Все животные, все пресмыкающиеся и птицы, все, что движется по земле, вышли из ковчега, по видам своим."
           },
           "comments": {
             "rashi": [
@@ -1387,7 +1444,8 @@
           "verse": 20,
           "text": {
             "fg": "И построил Hoax жертвенник Господу, и взял он от всякого чистого скота и от всякой чистой птицы и вознес всесожжения на жертвеннике.",
-            "plaut": "Noah then built an altar in honor of the Eternal; taking some pure beasts and some pure birds, he offered up whole burnt-offerings on the altar."
+            "plaut": "Noah then built an altar in honor of the Eternal; taking some pure beasts and some pure birds, he offered up whole burnt-offerings on the altar.",
+            "lechaim": "Ноах воздвиг жертвенник Господу, взял от каждого [вида] чистых животных и от каждого [вида] чистых птиц и принес жертвы всесожжения на жертвеннике."
           },
           "comments": {
             "rashi": [
@@ -1415,7 +1473,8 @@
           "verse": 21,
           "text": {
             "fg": "И воспринял Господь благоухание, и сказал Господь в сердце Своем: Не буду более проклинать вновь землю из-за человека, ведь побуждение сердца человеческого худо с юности его, и не буду более вновь поражать все живое, как я сделал.",
-            "plaut": "The Eternal, inhaling the soothing fragrance, thought: “Never again will I bring doom upon the world on account of what people do, though the human mind inclines to evil from youth onward; never again will I destroy all living beings, as I have [just] done."
+            "plaut": "The Eternal, inhaling the soothing fragrance, thought: “Never again will I bring doom upon the world on account of what people do, though the human mind inclines to evil from youth onward; never again will I destroy all living beings, as I have [just] done.",
+            "lechaim": "Господь ощутил запах [жертв, пробуждающий] благоволение, и сказал Себе Господь: “Не буду более проклинать землю из‑за человека, ведь с юности побуждения человеческого сердца — зло. Впредь не стану истреблять все живое, как Я сделал [это сейчас]!"
           },
           "comments": {
             "rashi": [
@@ -1478,7 +1537,8 @@
           "verse": 22,
           "text": {
             "fg": "Впредь, (во) все дни земли , сев и жатва , и холод и зной , и лето и зима , и день и ночь не престанут .",
-            "plaut": "As long as the world exists, / planting and harvesting, / cold and heat, / summer and winter, / day and night / will never end.”"
+            "plaut": "As long as the world exists, / planting and harvesting, / cold and heat, / summer and winter, / day and night / will never end.”",
+            "lechaim": "Пока существует земля, не прекратятся [на ней] сев и жатва, холод и тепло, лето и зима, день и ночь”."
           },
           "comments": {
             "rashi": [
@@ -1541,7 +1601,8 @@
           "verse": 1,
           "text": {
             "fg": "И благословил Б-г Ноаха и его сынов, и сказал Он им: Плодитесь и умножайтесь и наполняйте землю,",
-            "plaut": "God then blessed Noah and his sons, saying to them, “Be fruitful and multiply, and fill the earth,"
+            "plaut": "God then blessed Noah and his sons, saying to them, “Be fruitful and multiply, and fill the earth,",
+            "lechaim": "Бог благословил Ноаха и его сыновей, сказав им: “Плодитесь, размножайтесь и заполняйте землю!"
           },
           "comments": {
             "sonchino": [
@@ -1557,7 +1618,8 @@
           "verse": 2,
           "text": {
             "fg": "И страх пред вами и трепет пред вами будет на всяком животном земном и на всякой птице небесной, от всего ползающего по земле и до всех рыб морских, – в ваши руки они отданы.",
-            "plaut": "and let the awe and dread of you be upon all the land animals, and all the birds of the sky, and all that creep on the ground, and all the fish of the sea: they are given into your hands."
+            "plaut": "and let the awe and dread of you be upon all the land animals, and all the birds of the sky, and all that creep on the ground, and all the fish of the sea: they are given into your hands.",
+            "lechaim": "Пусть страшатся и трепещут пред вами все звери на земле и [все] птицы небесные, все [существа], снующие по земле, и все рыбы в морях — [все] они отданы в вашу власть."
           },
           "comments": {
             "rashi": [
@@ -1573,7 +1635,8 @@
           "verse": 3,
           "text": {
             "fg": "Все ползающее, что живо, вам будет в пищу; как зелень травную даю вам все.",
-            "plaut": "Any small animal that is alive shall be food for you, like green grasses—I give you [them] all."
+            "plaut": "Any small animal that is alive shall be food for you, like green grasses—I give you [them] all.",
+            "lechaim": "Все живые существа будут вам в пищу. Отдаю вам все [это], как и растительную зелень."
           },
           "comments": {
             "rashi": [
@@ -1601,7 +1664,8 @@
           "verse": 4,
           "text": {
             "fg": "Только плоти при ее душе, ее крови не ешьте.",
-            "plaut": "But flesh whose lifeblood is [still] in it you may not eat."
+            "plaut": "But flesh whose lifeblood is [still] in it you may not eat.",
+            "lechaim": "Только живое мясо с кровью не ешьте!"
           },
           "comments": {
             "rashi": [
@@ -1634,7 +1698,8 @@
           "verse": 5,
           "text": {
             "fg": "Но только за вашу кровь; за души ваши взыщу; со всякого животного взыщу за этo. И от руки человека, от руки того, кто брат ему, взыщу за душу человека.",
-            "plaut": "Moreover, for your own bloodguilt I will require your lives; I will require it by means of beasts or by means of human beings—by means of a fellow human being will I require a [guilty] person’s life."
+            "plaut": "Moreover, for your own bloodguilt I will require your lives; I will require it by means of beasts or by means of human beings—by means of a fellow human being will I require a [guilty] person’s life.",
+            "lechaim": "Ведь за вашу кровь — за вашу жизнь — Я взыщу [с пролившего эту кровь]. Будь то зверь, будь то человек, отнявший жизнь у брата своего, — Я взыщу за нее!"
           },
           "comments": {
             "rashi": [
@@ -1692,7 +1757,8 @@
           "verse": 6,
           "text": {
             "fg": "Кто прольет кровь человеческую, человеком кровь его пролита будет, ибо в образе Б-жьем создал Он человека.",
-            "plaut": "The shedder of human blood, / that person’s blood shall be shed by [another] human; / for human beings were made / in the image of God."
+            "plaut": "The shedder of human blood, / that person’s blood shall be shed by [another] human; / for human beings were made / in the image of God.",
+            "lechaim": "Если кто‑то прольет человеческую кровь, то его [собственная] кровь будет пролита [другим] человеком, ибо человек создан как образ Божий."
           },
           "comments": {
             "rashi": [
@@ -1725,7 +1791,8 @@
           "verse": 7,
           "text": {
             "fg": "А вы плодитесь и умножайтесь, воскишите на земле и умножайтесь на ней.",
-            "plaut": "As for you, be fruitful and multiply; populate the earth and increase in it.”"
+            "plaut": "As for you, be fruitful and multiply; populate the earth and increase in it.”",
+            "lechaim": "А вы плодитесь и размножайтесь, расселяйтесь по земле и размножайтесь на ней”."
           },
           "comments": {
             "rashi": [
@@ -1748,7 +1815,8 @@
           "verse": 8,
           "text": {
             "fg": "И сказал Б-г Ноаху и его сынам с ним так:",
-            "plaut": "God then said to Noah and his sons who were with him,"
+            "plaut": "God then said to Noah and his sons who were with him,",
+            "lechaim": "Бог сказал Ноаху и его сыновьям:"
           },
           "comments": {}
         },
@@ -1756,7 +1824,8 @@
           "verse": 9,
           "text": {
             "fg": "А я, вот я устанавливаю завет Мой с вами и с потомством вашим после вас,",
-            "plaut": "“As for Me, I am going to establish My covenant with you and with your descendants after you,"
+            "plaut": "“As for Me, I am going to establish My covenant with you and with your descendants after you,",
+            "lechaim": "“Я заключаю союз с вами, и с вашими потомками,"
           },
           "comments": {
             "rashi": [
@@ -1784,7 +1853,8 @@
           "verse": 10,
           "text": {
             "fg": "И со всяким живым существом, которое с вами, от птицы, от скота и до всякого земного животного с вами, от всех вышедших из ковчега от всех животных земли.",
-            "plaut": "and with every living being in your care—the birds, the beasts, and all the land animals in your care—all who have gone out of the ark, all earth’s animals."
+            "plaut": "and with every living being in your care—the birds, the beasts, and all the land animals in your care—all who have gone out of the ark, all earth’s animals.",
+            "lechaim": "и со всеми живыми созданиями — с птицами, [домашними] животными и всеми существами земными — со всеми земными существами, вышедшими из ковчега."
           },
           "comments": {
             "rashi": [
@@ -1810,7 +1880,8 @@
           "verse": 11,
           "text": {
             "fg": "И установлю я завет Мой с вами. и не будет истреблена вновь всякая плоть водами потопа, и не будет вновь потопа, чтобы погубить землю.",
-            "plaut": "I am establishing My covenant with you; never again shall all flesh be cut off by the waters of the flood; never again shall there be a flood to destroy the earth.”"
+            "plaut": "I am establishing My covenant with you; never again shall all flesh be cut off by the waters of the flood; never again shall there be a flood to destroy the earth.”",
+            "lechaim": "Я заключу с вами союз, и никакая плоть впредь не будет погублена водами потопа — потоп больше не опустошит землю”."
           },
           "comments": {
             "rashi": [
@@ -1826,7 +1897,8 @@
           "verse": 12,
           "text": {
             "fg": "И сказал Б-г: Вот знак завета, который я даю между Мною и между вами, и между всяким живым существом, которое с вами, для поколений вовеки.",
-            "plaut": "And God said, “Here is the sign I am giving you of the covenant between Me and you, and every living being with you, down to the last generation:"
+            "plaut": "And God said, “Here is the sign I am giving you of the covenant between Me and you, and every living being with you, down to the last generation:",
+            "lechaim": "Сказал Бог: “Вот знак союза, который Я заключаю с вами и со всеми живыми существами навеки, [на все] поколения."
           },
           "comments": {
             "rashi": [
@@ -1849,7 +1921,8 @@
           "verse": 13,
           "text": {
             "fg": "Радугу Мою дал я в облаке, и будет она знаком завета между Мною и между землей.",
-            "plaut": "I have placed My bow in the cloud—it will be a sign of the covenant between Me and the earth."
+            "plaut": "I have placed My bow in the cloud—it will be a sign of the covenant between Me and the earth.",
+            "lechaim": "Мою радугу Я помещаю в туче, и она будет знаком союза между Мной и землею."
           },
           "comments": {
             "sonchino": [
@@ -1865,7 +1938,8 @@
           "verse": 14,
           "text": {
             "fg": "И будет: когда наводить буду облако на землю, покажется радуга в облаке;",
-            "plaut": "And when I cause clouds to form over the earth, and the bow appears in the cloud,"
+            "plaut": "And when I cause clouds to form over the earth, and the bow appears in the cloud,",
+            "lechaim": "И когда Я соберу тучи над землею, то в туче появится радуга,"
           },
           "comments": {
             "rashi": [
@@ -1881,7 +1955,8 @@
           "verse": 15,
           "text": {
             "fg": "И вспомню я Мой завет, который между Мною и между вами, и между всяким живым существом от всякой плоти, и не станут вновь воды потопом, чтобы погубить всякую плоть.",
-            "plaut": "I will remember My covenant between Me and you and all living beings, all flesh, and never again shall the waters become a flood, to destroy all flesh."
+            "plaut": "I will remember My covenant between Me and you and all living beings, all flesh, and never again shall the waters become a flood, to destroy all flesh.",
+            "lechaim": "и Я вспомню Мой союз с вами и всеми живыми душами во всякой плоти — и не будут более воды обращаться в потоп, чтобы губить всякую плоть."
           },
           "comments": {}
         },
@@ -1889,7 +1964,8 @@
           "verse": 16,
           "text": {
             "fg": "И будет радуга в облаке, и я увижу ее, чтобы помнить вечный завет между Б-г ом и между всяким живым существом от всякой плоти, которая на земле.",
-            "plaut": "When the bow is in the cloud, and I see it, I will remember the everlasting covenant between God and all living beings, all that live upon the earth.”"
+            "plaut": "When the bow is in the cloud, and I see it, I will remember the everlasting covenant between God and all living beings, all that live upon the earth.”",
+            "lechaim": "Появится радуга в туче, Я увижу ее и вспомню вечный союз между Богом и всеми живыми душами во всякой плоти на земле”."
           },
           "comments": {
             "rashi": [
@@ -1912,7 +1988,8 @@
           "verse": 17,
           "text": {
             "fg": "И сказал Б-г Ноаху: Это есть знак завета, который я установил между Мною и между всякой плотью, которая на земле.",
-            "plaut": "And God said to Noah, “This is the sign of the covenant that I have established between Me and all that live upon the earth.”"
+            "plaut": "And God said to Noah, “This is the sign of the covenant that I have established between Me and all that live upon the earth.”",
+            "lechaim": "Сказал Бог Ноаху: “Это знак союза, который Я заключил со всякой плотью на земле”."
           },
           "comments": {
             "rashi": [
@@ -1935,7 +2012,8 @@
           "verse": 18,
           "text": {
             "fg": "И были сыны Ноаха, выходящие из ковчега: Шем, и Хам, и Йефет; а Хам – отец Кенаана.",
-            "plaut": "Noah’s sons who went out of the ark were Shem, Ham, and Japheth. And Ham—he was the father of Canaan."
+            "plaut": "Noah’s sons who went out of the ark were Shem, Ham, and Japheth. And Ham—he was the father of Canaan.",
+            "lechaim": "Сыновья Ноаха, вышедшие из ковчега, — это Шем, Хам и Йефет. А Хам — это отец Кнаана."
           },
           "comments": {
             "rashi": [
@@ -1963,7 +2041,8 @@
           "verse": 19,
           "text": {
             "fg": "Эти трое – сыны Ноаха, и от них расселилась вся земля.",
-            "plaut": "These three were Noah’s sons; from these the whole earth was populated."
+            "plaut": "These three were Noah’s sons; from these the whole earth was populated.",
+            "lechaim": "Эти трое — сыновья Ноаха, и от них произошли все [народы] земли."
           },
           "comments": {
             "sonchino": [
@@ -1979,7 +2058,8 @@
           "verse": 20,
           "text": {
             "fg": "И начал Hoax, господин земли, и насадил виноградник.",
-            "plaut": "Noah, a man of the soil, was the first to plant a vineyard."
+            "plaut": "Noah, a man of the soil, was the first to plant a vineyard.",
+            "lechaim": "Ноах был земледельцем; он первым насадил виноградник."
           },
           "comments": {
             "rashi": [
@@ -2012,7 +2092,8 @@
           "verse": 21,
           "text": {
             "fg": "И выпил он от вина и опьянел, и обнажился он посреди своего шатра.",
-            "plaut": "He drank of the wine and grew drunk; and exposed himself under his tent."
+            "plaut": "He drank of the wine and grew drunk; and exposed himself under his tent.",
+            "lechaim": "Выпив вина, он опьянел и [лежал] голым в своем шатре."
           },
           "comments": {
             "rashi": [
@@ -2040,7 +2121,8 @@
           "verse": 22,
           "text": {
             "fg": "И увидел Хам, отец Кенаана, наготу отца своего, и поведал он двум своим братьям снаружи.",
-            "plaut": "Ham—Canaan’s father—saw his father’s nakedness, and, outside, told his two brothers."
+            "plaut": "Ham—Canaan’s father—saw his father’s nakedness, and, outside, told his two brothers.",
+            "lechaim": "Хам, отец Кнаана, увидел наготу своего отца и рассказал [об этом] двум своим братьям, [которые оставались] снаружи."
           },
           "comments": {
             "rashi": [
@@ -2073,7 +2155,8 @@
           "verse": 23,
           "text": {
             "fg": "И взял Шем и Йефет платье, и положили на плечо оба, и пошли они задом и покрыли наготу своего отца; а лица их назад (обращены), и наготы отца своего не видели.",
-            "plaut": "Shem and Japheth took a cloak and put it on both their shoulders. They walked backward and covered their father’s nakedness. Facing backward, they did not see their father’s nakedness."
+            "plaut": "Shem and Japheth took a cloak and put it on both their shoulders. They walked backward and covered their father’s nakedness. Facing backward, they did not see their father’s nakedness.",
+            "lechaim": "Шем и Йефет взяли одежду, накинули ее себе на плечи и, пятясь, вошли [в шатер], чтобы прикрыть наготу отца. [При этом] они отвернулись, чтобы не видеть наготы отца."
           },
           "comments": {
             "rashi": [
@@ -2101,7 +2184,8 @@
           "verse": 24,
           "text": {
             "fg": "И пробудился Hoax от вина своего и узнал, что сделал с ним его меньший сын.",
-            "plaut": "Noah awakened from his wine and understood what his youngest son had done to him,"
+            "plaut": "Noah awakened from his wine and understood what his youngest son had done to him,",
+            "lechaim": "Когда Ноах проспался от опьянения, то он узнал, как поступил с ним его младший сын,"
           },
           "comments": {
             "rashi": [
@@ -2124,7 +2208,8 @@
           "verse": 25,
           "text": {
             "fg": "И сказал он: Проклят Кенаан! Рабом рабов будет он братьям своим.",
-            "plaut": "so he said, “Damned be Canaan! To his brothers he shall be the basest of slaves!”"
+            "plaut": "so he said, “Damned be Canaan! To his brothers he shall be the basest of slaves!”",
+            "lechaim": "и сказал: “Проклят Кнаан! Да будет он рабом у рабов своих братьев!”"
           },
           "comments": {
             "rashi": [
@@ -2152,7 +2237,8 @@
           "verse": 26,
           "text": {
             "fg": "И сказал: Благословен Господь, Б-г Шема! И будет Кенаан рабом ему.",
-            "plaut": "And he said, “Praised be the Eternal, God of Shem; and Canaan shall be a slave to him."
+            "plaut": "And he said, “Praised be the Eternal, God of Shem; and Canaan shall be a slave to him.",
+            "lechaim": "И добавил: “Благословен Господь, Бог Шема! Пусть Кнаан будет рабом [Шема]!"
           },
           "comments": {
             "rashi": [
@@ -2180,7 +2266,8 @@
           "verse": 27,
           "text": {
             "fg": "И даст же Б-г простор Йефету, и да пребывает Он в шатрах Шема! И будет Кенаан рабом ему.",
-            "plaut": "For Japheth, God will make ample room; he shall dwell in the tents of Shem; and Canaan shall be a slave to him.”"
+            "plaut": "For Japheth, God will make ample room; he shall dwell in the tents of Shem; and Canaan shall be a slave to him.”",
+            "lechaim": "Пусть Бог расширит [владения] Йефета, пусть обитает он в шатрах Шема. Кнаан же будет ему рабом!”"
           },
           "comments": {
             "rashi": [
@@ -2213,7 +2300,8 @@
           "verse": 28,
           "text": {
             "fg": "И жил Hoax после потопа триста пятьдесят лет.",
-            "plaut": "After the flood Noah lived 350 years;"
+            "plaut": "After the flood Noah lived 350 years;",
+            "lechaim": "После потопа Ноах жил [еще] триста пятьдесят лет."
           },
           "comments": {}
         },
@@ -2221,7 +2309,8 @@
           "verse": 29,
           "text": {
             "fg": "И было всех дней Ноаха девятьсот лет в пятьдесят лет, и умер он.",
-            "plaut": "the years of Noah’s life came to 950; then he died."
+            "plaut": "the years of Noah’s life came to 950; then he died.",
+            "lechaim": "Всего Ноах прожил девятьсот пятьдесят лет — и умер."
           },
           "comments": {}
         }
@@ -2234,7 +2323,8 @@
           "verse": 1,
           "text": {
             "fg": "И вот порожденные сынами Ноаха, Шемом, Хамом и Йефетом. И родились у них сыновья после потопа.",
-            "plaut": "This is the line of Noah’s sons Shem, Ham, and Japheth: sons were born to them after the flood."
+            "plaut": "This is the line of Noah’s sons Shem, Ham, and Japheth: sons were born to them after the flood.",
+            "lechaim": "Вот потомство сыновей Ноаха — Шема, Хама и Йефета: после потопа у них родились дети."
           },
           "comments": {}
         },
@@ -2242,7 +2332,8 @@
           "verse": 2,
           "text": {
             "fg": "Сыны Йефета: Гомер и Магог, и Мадай, и Йаван и Тувал, и Мешех и Тирас.",
-            "plaut": "Japheth’s sons were Gomer, Magog, Madai, Javan, Tubal, Meshech, and Tiras."
+            "plaut": "Japheth’s sons were Gomer, Magog, Madai, Javan, Tubal, Meshech, and Tiras.",
+            "lechaim": "Сыны Йефета: Гóмер, Магóг, Мадáй, Явáн, Тувáль, Мéшех и Тирáс."
           },
           "comments": {
             "rashi": [
@@ -2285,7 +2376,8 @@
           "verse": 3,
           "text": {
             "fg": "А сыны Гомера: Ашкеназ, и Рифат, и Тогарма.",
-            "plaut": "Gomer’s sons were Ashkenaz, Riphat, and Togarmah."
+            "plaut": "Gomer’s sons were Ashkenaz, Riphat, and Togarmah.",
+            "lechaim": "Сыны Гомера: Ашкенáз, Рифáт и Тогармá."
           },
           "comments": {
             "sonchino": [
@@ -2306,7 +2398,8 @@
           "verse": 4,
           "text": {
             "fg": "А сыны Йавана: Элиша и Таршиш, Китим и Доданим.",
-            "plaut": "Javan’s sons were Elishah, Tarshish, Kittim, and Dodanim."
+            "plaut": "Javan’s sons were Elishah, Tarshish, Kittim, and Dodanim.",
+            "lechaim": "Сыны Явана: Элишá, Таршиш, Китим и Доданим."
           },
           "comments": {
             "sonchino": [
@@ -2337,7 +2430,8 @@
           "verse": 5,
           "text": {
             "fg": "От этих отделились острова народов на землях своих, всякий по своему языку, по своим семействам в народностях своих.",
-            "plaut": "From them the nations of the coastal islands spread out, each with its own tongue, in their clan and their peoples."
+            "plaut": "From them the nations of the coastal islands spread out, each with its own tongue, in their clan and their peoples.",
+            "lechaim": "От них заселились острова народов — [эти люди расселились] в своих странах, каждый согласно своему языку, по своему семейству, в своих народах."
           },
           "comments": {
             "sonchino": [
@@ -2363,7 +2457,8 @@
           "verse": 6,
           "text": {
             "fg": "И сыны Хама: Куш и Мицраим, и Пут и Кенаан.",
-            "plaut": "Ham’s sons were Cush, Mitzraim, Put, and Canaan."
+            "plaut": "Ham’s sons were Cush, Mitzraim, Put, and Canaan.",
+            "lechaim": "Сыны Хама: Куш, Мицраим, Пут и Кнаан."
           },
           "comments": {
             "sonchino": [
@@ -2399,7 +2494,8 @@
           "verse": 7,
           "text": {
             "fg": "А сыны Куша: Сева и Хавила, и Савта и Раема, и Савтеха. А сыны Раемы: Шеваa и Дедан.",
-            "plaut": "Cush’s sons were Seba, Havilah, Sabtah, Raamah, and Sabteca; and Raamah’s sons were Sheba and Dedan."
+            "plaut": "Cush’s sons were Seba, Havilah, Sabtah, Raamah, and Sabteca; and Raamah’s sons were Sheba and Dedan.",
+            "lechaim": "Сыны Куша: Сева, Хавилá, Савтá, Раамá и Савтехá. Сыны Раамы: Шева и Дедáн."
           },
           "comments": {
             "sonchino": [
@@ -2425,7 +2521,8 @@
           "verse": 8,
           "text": {
             "fg": "И Куш породил Нимрода: тот стал богатырем на земле.",
-            "plaut": "And Cush begot Nimrod; he was first among the earth’s heroes."
+            "plaut": "And Cush begot Nimrod; he was first among the earth’s heroes.",
+            "lechaim": "У Куша родился также Нимрод — он стал первым богатырем на земле."
           },
           "comments": {
             "rashi": [
@@ -2441,7 +2538,8 @@
           "verse": 9,
           "text": {
             "fg": "Он был богатырем в ловле пред Господом. Потому говорится: Как Нимрод богатырь в лoвле пред Господом.",
-            "plaut": "He was a mighty hunter before the Eternal, for which reason it is said, “Like Nimrod, a mighty hunter before the Eternal.”"
+            "plaut": "He was a mighty hunter before the Eternal, for which reason it is said, “Like Nimrod, a mighty hunter before the Eternal.”",
+            "lechaim": "Он был могучим охотником пред Господом. Поэтому говорится: “Как Нимрод, могучий охотник пред Господом”."
           },
           "comments": {
             "rashi": [
@@ -2484,7 +2582,8 @@
           "verse": 10,
           "text": {
             "fg": "И был началом царства его Бавел, и Эрех, и Акад и Калне, на земле Шинар.",
-            "plaut": "His choice domains were Babylon, Erech, and Akkad, all of them in the land of Shinar."
+            "plaut": "His choice domains were Babylon, Erech, and Akkad, all of them in the land of Shinar.",
+            "lechaim": "Вначале его царством были Вавилон, Эрех, Аккáд и Кальнэ в стране Шинáр."
           },
           "comments": {
             "sonchino": [
@@ -2520,7 +2619,8 @@
           "verse": 11,
           "text": {
             "fg": "Из той земли вышел Ашур; и построил он Нинве, и Реховот-Ир, и Калах;",
-            "plaut": "From that land came Ashur, who founded Nineveh, Rechovot-ir, and Calah,"
+            "plaut": "From that land came Ashur, who founded Nineveh, Rechovot-ir, and Calah,",
+            "lechaim": "Из этой страны вышел Ашур и построил Ниневию, Реховóт‑Ир и Кéлах,"
           },
           "comments": {
             "rashi": [
@@ -2548,7 +2648,8 @@
           "verse": 12,
           "text": {
             "fg": "И Ресен, между Нинве и между Калах; то город великий.",
-            "plaut": "and Resen, between Nineveh and Calah—the largest city."
+            "plaut": "and Resen, between Nineveh and Calah—the largest city.",
+            "lechaim": "а также Рéсен, что между Ниневией и Келахом, — это великий город."
           },
           "comments": {
             "rashi": [
@@ -2571,7 +2672,8 @@
           "verse": 13,
           "text": {
             "fg": "А Мицраим породил Лудим, и Анамим и Леhавим, в Нафтухим;",
-            "plaut": "Mitzraim begot Ludim, Anamim, Lehabim, Naphtuhim,"
+            "plaut": "Mitzraim begot Ludim, Anamim, Lehabim, Naphtuhim,",
+            "lechaim": "От Мицраима произошли лудеи, анамеи, лаѓавеи и нафтухеи,"
           },
           "comments": {
             "rashi": [
@@ -2599,7 +2701,8 @@
           "verse": 14,
           "text": {
             "fg": "И Патрусим и Каслухим, откуда произошли пелиштим, и Кафторим.",
-            "plaut": "Pathrusim, and Casluhim, from whom descended [the] Philistines and Cretans."
+            "plaut": "Pathrusim, and Casluhim, from whom descended [the] Philistines and Cretans.",
+            "lechaim": "а также патрусеи и каслухеи, от которых происходят филистимляне, а также кафтореи."
           },
           "comments": {
             "rashi": [
@@ -2632,7 +2735,8 @@
           "verse": 15,
           "text": {
             "fg": "А Кенаан породил Цидона, первенца своего, и Хета;",
-            "plaut": "Canaan begot Sidon his first-born and Heth,"
+            "plaut": "Canaan begot Sidon his first-born and Heth,",
+            "lechaim": "У Кнаана родились Сидóн (его первенец) и Хет,"
           },
           "comments": {
             "sonchino": [
@@ -2653,7 +2757,8 @@
           "verse": 16,
           "text": {
             "fg": "И Йевуси, и Эмори, и Гиргаши.",
-            "plaut": "and the Jebusites, the Amorites, and the Girgashites,"
+            "plaut": "and the Jebusites, the Amorites, and the Girgashites,",
+            "lechaim": "а также евусеи, эмореи, гиргашеи,"
           },
           "comments": {
             "sonchino": [
@@ -2679,7 +2784,8 @@
           "verse": 17,
           "text": {
             "fg": "И Хиви, и Арки, и Сини;",
-            "plaut": "and the Hivites, the Arkites, and the Sinites,"
+            "plaut": "and the Hivites, the Arkites, and the Sinites,",
+            "lechaim": "хивеи, аркеи, синеи,"
           },
           "comments": {
             "sonchino": [
@@ -2695,7 +2801,8 @@
           "verse": 18,
           "text": {
             "fg": "И Арвади, и Цемари, и Хамати; а затем расселились семейства Кенаановы.",
-            "plaut": "and the Arvadites, the Zemarites, and the Hamathites; afterwards the Canaanite clans spread out."
+            "plaut": "and the Arvadites, the Zemarites, and the Hamathites; afterwards the Canaanite clans spread out.",
+            "lechaim": "арвадеи, цемареи и хаматеи. После этого расселились ханаанские роды:"
           },
           "comments": {
             "rashi": [
@@ -2723,7 +2830,8 @@
           "verse": 19,
           "text": {
             "fg": "И был рубеж Кенаанов от Цидона, по пути к Геpapy, до Азы; по пути к Сдому и Аморе, и Адме и Цевоиму, до Лаши.",
-            "plaut": "The Canaanite border reached from Sidon, as far as Gerar, up to Gaza, as far as Sodom, and Gomorrah, and Admah, and Zeboim up to Lasha."
+            "plaut": "The Canaanite border reached from Sidon, as far as Gerar, up to Gaza, as far as Sodom, and Gomorrah, and Admah, and Zeboim up to Lasha.",
+            "lechaim": "пределы Кнаана были от Сидона через Грар до Газы, а через Сдом, Амору, Адму и Цевоим — до Лаши."
           },
           "comments": {
             "rashi": [
@@ -2751,7 +2859,8 @@
           "verse": 20,
           "text": {
             "fg": "Это сыны Хама по их семействам, по их языкам, на их землях, в их народностях.",
-            "plaut": "These are Ham’s sons by their clans, their tongues, in their lands and their nations."
+            "plaut": "These are Ham’s sons by their clans, their tongues, in their lands and their nations.",
+            "lechaim": "Это потомки Хама, по их семействам, по их языкам, по их странам и народам."
           },
           "comments": {
             "rashi": [
@@ -2767,7 +2876,8 @@
           "verse": 21,
           "text": {
             "fg": "И у Шема родились также (сыны, у) отца всех сынов прибережья, брата Йефета, старшего.",
-            "plaut": "And Shem too had progeny; [he was] the ancestor of all the sons of Eber, brother of Japheth the Great."
+            "plaut": "And Shem too had progeny; [he was] the ancestor of all the sons of Eber, brother of Japheth the Great.",
+            "lechaim": "У Шема также родились дети: он прародитель всех потомков Эвера, старший брат Йефета."
           },
           "comments": {
             "rashi": [
@@ -2793,7 +2903,8 @@
           "verse": 22,
           "text": {
             "fg": "Сыны Шема: Элам и Ашур, и Арпахшад, и Луд и Арам.",
-            "plaut": "Shem’s sons were Elam, Ashur, Arpachshad, Lud, and Aram."
+            "plaut": "Shem’s sons were Elam, Ashur, Arpachshad, Lud, and Aram.",
+            "lechaim": "Сыны Шема: Элáм, Ашур, Арпахшáд, Луд и Арáм."
           },
           "comments": {
             "sonchino": [
@@ -2829,7 +2940,8 @@
           "verse": 23,
           "text": {
             "fg": "А сыны Арама: Уц и Хул, и Гетер и Маш.",
-            "plaut": "Aram’s sons were Utz, Hul, Gether, and Mash."
+            "plaut": "Aram’s sons were Utz, Hul, Gether, and Mash.",
+            "lechaim": "Сыны Арама: Уц, Хуль, Гéтер и Маш."
           },
           "comments": {
             "sonchino": [
@@ -2850,7 +2962,8 @@
           "verse": 24,
           "text": {
             "fg": "И Арпахшад породил Шелаха, и Шелах породил Эвера.",
-            "plaut": "Arpachshad begot Shelah, and Shelah begot Eber."
+            "plaut": "Arpachshad begot Shelah, and Shelah begot Eber.",
+            "lechaim": "У Арпахшада родился Шéлах, а у Шелаха родился Эвер."
           },
           "comments": {}
         },
@@ -2858,7 +2971,8 @@
           "verse": 25,
           "text": {
             "fg": "А у Эвера родились два сына; имя одного – Пелег, ибо в его дни разобщилась земля; а имя брата его – Йоктан.",
-            "plaut": "And to Eber were born two sons; the first was named Peleg [“Division”], for in his time the earth was divided; his brother’s name was Joktan,"
+            "plaut": "And to Eber were born two sons; the first was named Peleg [“Division”], for in his time the earth was divided; his brother’s name was Joktan,",
+            "lechaim": "У Эвера родились два сына. Имя одного — Пéлег [“Раздор”], ибо в его дни разобщилась земля, а имя его брата — Йоктáн."
           },
           "comments": {
             "rashi": [
@@ -2881,7 +2995,8 @@
           "verse": 26,
           "text": {
             "fg": "И Йоктан породил Алмодада и Шелефа, и Хацармавет а, и Йераха;",
-            "plaut": "And Joktan begot Almodad, Sheleph, Hazarmavet, Jerah,"
+            "plaut": "And Joktan begot Almodad, Sheleph, Hazarmavet, Jerah,",
+            "lechaim": "У Йоктана родились Альмодáд, Шéлеф, Хацармáвет, Йéрах,"
           },
           "comments": {
             "rashi": [
@@ -2914,7 +3029,8 @@
           "verse": 27,
           "text": {
             "fg": "И Адорама и Узала, и Диклу;",
-            "plaut": "Hadoram, Uzal, Diklah,"
+            "plaut": "Hadoram, Uzal, Diklah,",
+            "lechaim": "Ѓадорáм, Узáль, Диклá,"
           },
           "comments": {}
         },
@@ -2922,7 +3038,8 @@
           "verse": 28,
           "text": {
             "fg": "И Овала и Авимаэла, и Шева;",
-            "plaut": "Obal, Abimael, Sheba,"
+            "plaut": "Obal, Abimael, Sheba,",
+            "lechaim": "Овáль, Авимаэль, Шева,"
           },
           "comments": {}
         },
@@ -2930,7 +3047,8 @@
           "verse": 29,
           "text": {
             "fg": "И Офира и Хавилу, и Йовава, – все они сыны Йоктана.",
-            "plaut": "Ophir, Havilah, and Jobab—all these were Joktan’s sons."
+            "plaut": "Ophir, Havilah, and Jobab—all these were Joktan’s sons.",
+            "lechaim": "Офир, Хавилá и Йовáв. Все это — сыновья Йоктана."
           },
           "comments": {
             "sonchino": [
@@ -2946,7 +3064,8 @@
           "verse": 30,
           "text": {
             "fg": "И было их поселение от Меши, по пути к Сефару, до горы Восточной.",
-            "plaut": "Their dwelling was near Masha, as you come to S’phara, the eastern mountain."
+            "plaut": "Their dwelling was near Masha, as you come to S’phara, the eastern mountain.",
+            "lechaim": "Их поселения шли от Меши по направлению к Сефару, восточной горе."
           },
           "comments": {
             "sonchino": [
@@ -2962,7 +3081,8 @@
           "verse": 31,
           "text": {
             "fg": "Это сыны Шема по их семействам, по их языкам, на их землях, в их народностях.",
-            "plaut": "These are Shem’s sons by their clans, their tongues, in their lands and their nations."
+            "plaut": "These are Shem’s sons by their clans, their tongues, in their lands and their nations.",
+            "lechaim": "Это потомки Шема, по их семействам, по их языкам, по их странам и народам."
           },
           "comments": {}
         },
@@ -2970,7 +3090,8 @@
           "verse": 32,
           "text": {
             "fg": "Это семейства сынов Ноаха по ими рожденным, в их народностях; и от них разошлись народы по земле после потопа.",
-            "plaut": "These are the clans of Noah’s sons by their generations, by their peoples; from these the peoples of the earth spread out after the flood."
+            "plaut": "These are the clans of Noah’s sons by their generations, by their peoples; from these the peoples of the earth spread out after the flood.",
+            "lechaim": "Это семейства потомков Ноаха, по их родословию, по народам. От них расселились по земле народы после потопа."
           },
           "comments": {}
         }
@@ -2983,7 +3104,8 @@
           "verse": 1,
           "text": {
             "fg": "И был (на) всей земле один язык и речи единые.",
-            "plaut": "All the earth had the same language and the same words."
+            "plaut": "All the earth had the same language and the same words.",
+            "lechaim": "На всей земле был один язык, одно наречие."
           },
           "comments": {
             "rashi": [
@@ -3011,7 +3133,8 @@
           "verse": 2,
           "text": {
             "fg": "И было: продвигаясь с востока, они нашли долину на земле Шинар и поселились там.",
-            "plaut": "As they wandered from the east, they came upon a valley in the land of Shinar and settled there."
+            "plaut": "As they wandered from the east, they came upon a valley in the land of Shinar and settled there.",
+            "lechaim": "Когда [люди] двигались с востока, они нашли в земле Шинар долину и поселились там."
           },
           "comments": {
             "rashi": [
@@ -3039,7 +3162,8 @@
           "verse": 3,
           "text": {
             "fg": "И сказали они друг другу: Давайте делать кирпичи и обжигать их (в) печи обжиговой! И был у них кирпич вместо камня, а земляная смола была у них вместо известки.",
-            "plaut": "Then people said to one another: “Come, let us make bricks and fire them hard.” So they had bricks to build with, and tar served them as mortar."
+            "plaut": "Then people said to one another: “Come, let us make bricks and fire them hard.” So they had bricks to build with, and tar served them as mortar.",
+            "lechaim": "“Давайте сделаем кирпичи и обожжем их в огне”, — сказали они друг другу. Кирпичи у них были вместо камня, а асфальт — вместо глины."
           },
           "comments": {
             "rashi": [
@@ -3092,7 +3216,8 @@
           "verse": 4,
           "text": {
             "fg": "И сказали они: Давайте построим себе город и башню, а вершина ее в небесах, и создадим себе имя; чтобы нам не быть рассеянными по всей земле!",
-            "plaut": "Then they said, “Come, let us build a city with a tower that reaches the sky, so that we can make a name for ourselves and not be scattered over all the earth!”"
+            "plaut": "Then they said, “Come, let us build a city with a tower that reaches the sky, so that we can make a name for ourselves and not be scattered over all the earth!”",
+            "lechaim": "“Давайте выстроим себе город с башней до небес, — сказали они. — Так мы прославим себя, чтобы не рассеяться нам по всей земле”."
           },
           "comments": {
             "rashi": [
@@ -3120,7 +3245,8 @@
           "verse": 5,
           "text": {
             "fg": "И нисшел Господь увидеть город и башню, которые строили сыны человеческие.",
-            "plaut": "Then the Eternal came down to look at the city and tower the people had built,"
+            "plaut": "Then the Eternal came down to look at the city and tower the people had built,",
+            "lechaim": "Господь сошел посмотреть на город с башней, который построили люди."
           },
           "comments": {
             "rashi": [
@@ -3148,7 +3274,8 @@
           "verse": 6,
           "text": {
             "fg": "И сказал Господь: Вот народ один, и язык один у всех их, и такое стали делать. И теперь не воспрепятствуется им все, что замыслили, делать?",
-            "plaut": "and the Eternal One said, “Look—these are all one people with one language, and this is just the beginning of their doings; now no scheme of theirs will be beyond their reach!"
+            "plaut": "and the Eternal One said, “Look—these are all one people with one language, and this is just the beginning of their doings; now no scheme of theirs will be beyond their reach!",
+            "lechaim": "И сказал Господь: “Один народ, и один язык у всех, а это только начало их деяний! Теперь не будет им преград ни в чем, что бы они ни задумали совершить!"
           },
           "comments": {
             "rashi": [
@@ -3181,7 +3308,8 @@
           "verse": 7,
           "text": {
             "fg": "Давайте низойдем и смешаем там их язык, так что они не поймут (более) один речь другого.",
-            "plaut": "Let us go down there and confuse their speech, so that no one understands what the other is saying.”"
+            "plaut": "Let us go down there and confuse their speech, so that no one understands what the other is saying.”",
+            "lechaim": "Давайте же сойдем и смешаем их речь, чтобы они перестали понимать речь друг друга”."
           },
           "comments": {
             "rashi": [
@@ -3219,7 +3347,8 @@
           "verse": 8,
           "text": {
             "fg": "И рассеял Господь их оттуда по всей земле, и перестали они строить город.",
-            "plaut": "So it came about that the Eternal scattered them over all the earth, and they stopped building the city."
+            "plaut": "So it came about that the Eternal scattered them over all the earth, and they stopped building the city.",
+            "lechaim": "Господь рассеял их оттуда по всей земле, и они перестали строить город."
           },
           "comments": {
             "rashi": [
@@ -3235,7 +3364,8 @@
           "verse": 9,
           "text": {
             "fg": "Потому нарек ему имя Бавел, ибо там смешал Господь язык всей земли, и оттуда рассеял их Господь по всей земле.",
-            "plaut": "That is why it was called Babel, because there the Eternal confused the speech of all the earth; and from there the Eternal scattered them over the face of the earth."
+            "plaut": "That is why it was called Babel, because there the Eternal confused the speech of all the earth; and from there the Eternal scattered them over the face of the earth.",
+            "lechaim": "Поэтому назвали его Вавилон, ибо там Господь смешал речь всех [жителей] земли — и оттуда рассеял их Господь по всей земле."
           },
           "comments": {
             "rashi": [
@@ -3258,7 +3388,8 @@
           "verse": 10,
           "text": {
             "fg": "Вот порожденные Шемом: Шему (было) сто лет, и он породил Арпахшада, два года после потопа.",
-            "plaut": "This is the line of Shem: Shem was 100 years when he begot Arpachshad, 2 years after the flood."
+            "plaut": "This is the line of Shem: Shem was 100 years when he begot Arpachshad, 2 years after the flood.",
+            "lechaim": "Вот потомки Шема. Шем был ста лет от роду, и у него родился [сын] Арпахшад — через два года после потопа."
           },
           "comments": {
             "rashi": [
@@ -3281,7 +3412,8 @@
           "verse": 11,
           "text": {
             "fg": "И жил Шем после рождения им Арпахшада пятьсот лет, и породил он сынов и дочерей.",
-            "plaut": "After begetting Arpachshad, Shem lived 500 years; and he begot sons and daughters."
+            "plaut": "After begetting Arpachshad, Shem lived 500 years; and he begot sons and daughters.",
+            "lechaim": "После рождения Арпахшада Шем жил [еще] пятьсот лет, и у него рождались сыновья и дочери."
           },
           "comments": {}
         },
@@ -3289,7 +3421,8 @@
           "verse": 12,
           "text": {
             "fg": "А Арпахшад жил тридцать пять лет, и породил он Шелаха.",
-            "plaut": "Arpachshad had lived 35 years when he begot Shelah."
+            "plaut": "Arpachshad had lived 35 years when he begot Shelah.",
+            "lechaim": "Когда Арпахшаду было тридцать пять лет, у него родился [сын] Шелах."
           },
           "comments": {}
         },
@@ -3297,7 +3430,8 @@
           "verse": 13,
           "text": {
             "fg": "И жил Арпахшад после рождения им Шелаха четыреста лет и три года, и породил он сынов и дочерей.",
-            "plaut": "After begetting Shelah, Arpachshad lived 403 years; and he begot sons and daughters."
+            "plaut": "After begetting Shelah, Arpachshad lived 403 years; and he begot sons and daughters.",
+            "lechaim": "После рождения Шелаха Арпахшад жил [еще] четыреста три года, и у него рождались сыновья и дочери."
           },
           "comments": {}
         },
@@ -3305,7 +3439,8 @@
           "verse": 14,
           "text": {
             "fg": "А Шелах прожил тридцать лет, и породил он Эвера.",
-            "plaut": "Shelah had lived 30 years when he begot Eber."
+            "plaut": "Shelah had lived 30 years when he begot Eber.",
+            "lechaim": "Когда Шелаху было тридцать лет, у него родился [сын] Эвер."
           },
           "comments": {}
         },
@@ -3313,7 +3448,8 @@
           "verse": 15,
           "text": {
             "fg": "И жил Шелах после рождения им Эвера четыреста лет и три года, и породил он сынов и дочерей.",
-            "plaut": "After begetting Eber, Shelah lived 403 years; and he begot sons and daughters."
+            "plaut": "After begetting Eber, Shelah lived 403 years; and he begot sons and daughters.",
+            "lechaim": "После рождения Эвера Шелах жил [еще] четыреста три года, и у него рождались сыновья и дочери."
           },
           "comments": {}
         },
@@ -3321,7 +3457,8 @@
           "verse": 16,
           "text": {
             "fg": "И прожил Эвер тридцать четыре года, в породил он Пелега.",
-            "plaut": "Eber had lived 34 years when he begot Peleg."
+            "plaut": "Eber had lived 34 years when he begot Peleg.",
+            "lechaim": "Когда Эверу было тридцать четыре года, у него родился [сын] Пелег."
           },
           "comments": {
             "sonchino": [
@@ -3337,7 +3474,8 @@
           "verse": 17,
           "text": {
             "fg": "И жил Эвер после рождения им Пелега четыреста лет и тридцать лет, и породил он сынов и дочерей.",
-            "plaut": "After begetting Peleg, Eber lived 430 years; and he begot sons and daughters."
+            "plaut": "After begetting Peleg, Eber lived 430 years; and he begot sons and daughters.",
+            "lechaim": "После рождения Пелега Эвер жил [еще] четыреста тридцать лет, и у него рождались сыновья и дочери."
           },
           "comments": {}
         },
@@ -3345,7 +3483,8 @@
           "verse": 18,
           "text": {
             "fg": "И прожил Пелег тридцать лет, и породил он Реу.",
-            "plaut": "Peleg had lived 30 years when he begot Reu."
+            "plaut": "Peleg had lived 30 years when he begot Reu.",
+            "lechaim": "Когда Пелегу было тридцать лет, у него родился [сын] Реу."
           },
           "comments": {}
         },
@@ -3353,7 +3492,8 @@
           "verse": 19,
           "text": {
             "fg": "И жил Пелег после рождения им Реу двести лет и девять лет, и породил он сынов и дочерей.",
-            "plaut": "After begetting Reu, Peleg lived 209 years; and he begot sons and daughters."
+            "plaut": "After begetting Reu, Peleg lived 209 years; and he begot sons and daughters.",
+            "lechaim": "После рождения Реу Пелег жил [еще] двести девять лет, и у него рождались сыновья и дочери."
           },
           "comments": {}
         },
@@ -3361,7 +3501,8 @@
           "verse": 20,
           "text": {
             "fg": "И прожил Реу тридцать два года, и породил он Серуга.",
-            "plaut": "Reu had lived 32 years when he begot Serug."
+            "plaut": "Reu had lived 32 years when he begot Serug.",
+            "lechaim": "Когда Реу было тридцать два года, у него родился [сын] Серуг."
           },
           "comments": {}
         },
@@ -3369,7 +3510,8 @@
           "verse": 21,
           "text": {
             "fg": "И жил Реу после рождения им Серуга двести лет и семь лет, и породил он сынов и дочерей.",
-            "plaut": "After begetting Serug, Reu lived 207 years; and he begot sons and daughters."
+            "plaut": "After begetting Serug, Reu lived 207 years; and he begot sons and daughters.",
+            "lechaim": "После рождения Серуга Реу жил [еще] двести семь лет, и у него рождались сыновья и дочери."
           },
           "comments": {}
         },
@@ -3377,7 +3519,8 @@
           "verse": 22,
           "text": {
             "fg": "И прожил Серуг тридцать лет, и породил он Нахора.",
-            "plaut": "Serug had lived 30 years when he begot Nahor."
+            "plaut": "Serug had lived 30 years when he begot Nahor.",
+            "lechaim": "Когда Серугу было тридцать лет, у него родился [сын] Нахор."
           },
           "comments": {}
         },
@@ -3385,7 +3528,8 @@
           "verse": 23,
           "text": {
             "fg": "И жил Серуг после рождения им Нахора двести лет, и породил он сынов и дочерей.",
-            "plaut": "After begetting Nahor, Serug lived 200 years; and he begot sons and daughters."
+            "plaut": "After begetting Nahor, Serug lived 200 years; and he begot sons and daughters.",
+            "lechaim": "После рождения Нахора Серуг жил [еще] двести лет, и у него рождались сыновья и дочери."
           },
           "comments": {}
         },
@@ -3393,7 +3537,8 @@
           "verse": 24,
           "text": {
             "fg": "И прожил Нахор двадцать девять лет, и породил он Тераха.",
-            "plaut": "Nahor had lived 29 years when he begot Terah."
+            "plaut": "Nahor had lived 29 years when he begot Terah.",
+            "lechaim": "Когда Нахору было двадцать девять лет, у него родился [сын] Терах."
           },
           "comments": {}
         },
@@ -3401,7 +3546,8 @@
           "verse": 25,
           "text": {
             "fg": "И жил Нахор после рождения им Тераха сто лет и девятнадцать лет, и породил он сынов и дочерей.",
-            "plaut": "After begetting Terah, Nahor lived 119; and he begot sons and daughters."
+            "plaut": "After begetting Terah, Nahor lived 119; and he begot sons and daughters.",
+            "lechaim": "После рождения Тераха Нахор жил [еще] сто девятнадцать лет, и у него рождались сыновья и дочери."
           },
           "comments": {}
         },
@@ -3409,7 +3555,8 @@
           "verse": 26,
           "text": {
             "fg": "И прожил Терах семьдесят лет, и породил он Аврама, Нахора и Арана.",
-            "plaut": "Terah had lived 70 years when he begot Abram, Nahor, and Haran."
+            "plaut": "Terah had lived 70 years when he begot Abram, Nahor, and Haran.",
+            "lechaim": "Когда Тераху было семьдесят лет, у него родились [сыновья] Аврáм, Нахóр и Ѓарáн."
           },
           "comments": {
             "sonchino": [
@@ -3425,7 +3572,8 @@
           "verse": 27,
           "text": {
             "fg": "И вот порожденные Терахом: Терах породил Аврама, Нахора и Арана: а Аран породил Лота.",
-            "plaut": "This is the chronicle of Terah: Terah begot Abram, Nahor, and Haran; and Haran begot Lot."
+            "plaut": "This is the chronicle of Terah: Terah begot Abram, Nahor, and Haran; and Haran begot Lot.",
+            "lechaim": "Вот потомки Тераха. У Тераха родились Аврам, Нахор и Ѓаран, а у Ѓарана родился Лот."
           },
           "comments": {}
         },
@@ -3433,7 +3581,8 @@
           "verse": 28,
           "text": {
             "fg": "И умер Аран пред Терахом, отцом своим, на земле рождения своего, в Ур-Касдим.",
-            "plaut": "Then Haran died in the presence of Terah his father, in the land of his birth, in Ur of the Chaldeans."
+            "plaut": "Then Haran died in the presence of Terah his father, in the land of his birth, in Ur of the Chaldeans.",
+            "lechaim": "Ѓаран умер при [жизни] своего отца Тераха, у себя на родине, в Ур‑Касдиме."
           },
           "comments": {
             "rashi": [
@@ -3461,7 +3610,8 @@
           "verse": 29,
           "text": {
             "fg": "И взял Аврам и Нахор себе жен. Имя жены Аврама – Сарай, а имя жены Нахора – Милка, дочь Арана, отца Милки и отца Иски.",
-            "plaut": "Then Abram and Nahor took wives: Abram’s wife was named Sarai, and Nahor’s wife was named Milcah daughter of Haran father of Milcah and of Yiscah."
+            "plaut": "Then Abram and Nahor took wives: Abram’s wife was named Sarai, and Nahor’s wife was named Milcah daughter of Haran father of Milcah and of Yiscah.",
+            "lechaim": "Аврам и Нахор взяли себе жен. Жену Аврама звали Сарай, а жену Нахора — Милька. [Милька] — дочь Ѓарана. [Ѓаран] — отец Мильки и Иски."
           },
           "comments": {
             "rashi": [
@@ -3489,7 +3639,8 @@
           "verse": 30,
           "text": {
             "fg": "И была Сарай бесплодна, нет у нее детей.",
-            "plaut": "And Sarai was barren; she had no offspring."
+            "plaut": "And Sarai was barren; she had no offspring.",
+            "lechaim": "Сарай была бесплодна, не было у нее детей."
           },
           "comments": {}
         },
@@ -3497,7 +3648,8 @@
           "verse": 31,
           "text": {
             "fg": "И взял Терах Аврама, сына своего, и Лота, сына Арана, внука своего, и Сарай, невестку свою, жену Аврама, сына своего, и вышли они с ними из Ур-Касдим. чтобы идти на землю Кенаана, и дошли они до Харана и поселились там.",
-            "plaut": "Then Terah took his son Abram and his grandson Lot son of Haran and his daughter-in-law Sarai, and they all left Ur of the Chaldeans to go to the land of Canaan; but they got as far as Haran and settled there."
+            "plaut": "Then Terah took his son Abram and his grandson Lot son of Haran and his daughter-in-law Sarai, and they all left Ur of the Chaldeans to go to the land of Canaan; but they got as far as Haran and settled there.",
+            "lechaim": "Терах взял своего сына Аврама, своего внука Лота (сына Ѓарана), свою невестку Сарай (жену его сына Аврама), и они вышли из Ур‑Касдима, направляясь в землю ханаанскую. Дойдя до Харана, они поселились там."
           },
           "comments": {
             "rashi": [
@@ -3520,7 +3672,8 @@
           "verse": 32,
           "text": {
             "fg": "И было дней Тераха двести лет и пять лет, и умер Терах в Харане .",
-            "plaut": "The years of Terah’s life came to 205; then Terah died in Haran."
+            "plaut": "The years of Terah’s life came to 205; then Terah died in Haran.",
+            "lechaim": "Всего Терах прожил двести пять лет — и умер Терах в Харане."
           },
           "comments": {
             "rashi": [
