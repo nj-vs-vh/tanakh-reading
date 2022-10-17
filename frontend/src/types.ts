@@ -11,21 +11,10 @@ interface CommentData {
 }
 
 
-export enum TextSource {
-    FG = "fg",
-    PLAUT = "plaut",
-}
-
-export const textSourceShort = new Map<string, string>([
-    [TextSource.FG, "[ФГ]"],
-    [TextSource.PLAUT, "[Plaut]"],
-])
-
-
 export interface VerseData {
     verse: number;
-    text: Map<TextSource, string>
-    comments: Map<string, Array<CommentData>>
+    text: Record<string, string>
+    comments: Record<string, Array<CommentData>>
 }
 
 
@@ -43,12 +32,14 @@ export interface ParshaData {
 
 
 export interface Metadata {
-    book_names: Map<number, Map<string, string>>;
-    parsha_ranges: Map<number, Array<number>>;
-    parsha_names: Map<number, Map<string, string>>;
-    translation_about_links: Map<string, string>;
-    translations: Array<TextSource>;
-    commenter_about_links: Map<string, string>;
-    commenter_names: Map<string, string>;
+    book_names: Record<number, Record<string, string>>;
+    parsha_ranges: Record<number, Array<number>>;
+    parsha_names: Record<number, Record<string, string>>;
+    text_sources: Array<string>;
+    text_source_marks: Record<string, string>;
+    text_source_descriptions: Record<string, string>;
+    text_source_links: Record<string, Array<string>>;
+    commenter_about_links: Record<string, string>;
+    commenter_names: Record<string, string>;
     available_parsha: Array<number>;
 }

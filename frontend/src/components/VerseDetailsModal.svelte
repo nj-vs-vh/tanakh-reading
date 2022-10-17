@@ -1,24 +1,21 @@
 <script lang="ts">
     import Keydown from "svelte-keydown";
-    import {
-        TextSource,
-        ParshaData,
-        VerseData,
-        textSourceShort,
-    } from "../types";
+    import type { Metadata, ParshaData, VerseData } from "../types";
     import { commentSourceFlagsStore } from "../settings/commentSources";
     import type { CommentSourceFlags } from "../settings/commentSources";
     import VerseComments from "./VerseComments.svelte";
     import InlineIcon from "./shared/InlineIcon.svelte";
     import Icon from "./shared/Icon.svelte";
     import { textSourcesConfigStore } from "../settings/textSources";
+    import { getContext } from "svelte";
 
+    const metadata: Metadata = getContext("metadata");
     let commentSourceFlags: CommentSourceFlags;
     commentSourceFlagsStore.subscribe((v) => {
         commentSourceFlags = v;
     });
 
-    let textSources: Array<TextSource>;
+    let textSources: Array<string>;
 
     textSourcesConfigStore.subscribe((config) => {
         textSources = [];
@@ -144,7 +141,7 @@
                 {currentVerseData.text[textSource]}
             </blockquote>
             <span>
-                {textSourceShort.get(textSource)}
+                {metadata.text_source_marks[textSource]}
             </span>
         </div>
     {/each}

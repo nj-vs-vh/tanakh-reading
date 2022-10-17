@@ -1,13 +1,16 @@
 import { Writable, writable } from 'svelte/store';
-import { Metadata, TextSource } from "../types";
+import type { Metadata } from "../types";
 
 
 interface TextSourcesConfig {
-    main: TextSource;
-    enabledInDetails: Partial<Record<TextSource, boolean>>;
+    main: string;
+    enabledInDetails: Record<string, boolean>;
 }
 
-export const textSourcesConfigStore: Writable<TextSourcesConfig> = writable({ main: TextSource.FG, enabledInDetails: { } })
+
+const DEFAULT_MAIN_TEXT_SOURCE = "fg"
+
+export const textSourcesConfigStore: Writable<TextSourcesConfig> = writable({ main: DEFAULT_MAIN_TEXT_SOURCE, enabledInDetails: { } })
 
 const LOCAL_STORAGE_KEY = 'textSourcesConfig';
 
@@ -22,7 +25,7 @@ export function initTextSourcesConfig(metadata: Metadata) {
     let config: TextSourcesConfig;
     if (configDump === null)
         config = {
-            main: TextSource.FG,
+            main: DEFAULT_MAIN_TEXT_SOURCE,
             enabledInDetails: {},
         }
     else {
@@ -30,7 +33,7 @@ export function initTextSourcesConfig(metadata: Metadata) {
         console.log(config);
     }
 
-    for (const textSource of metadata.translations) {
+    for (const textSource of metadata.text_sources) {
         console.log(config.enabledInDetails);
         if (config.enabledInDetails[textSource] === undefined) {
             config.enabledInDetails[textSource] = true;
@@ -42,7 +45,7 @@ export function initTextSourcesConfig(metadata: Metadata) {
 }
 
 
-export function setMainTextSource(newMainSource: TextSource) {
+export function setMainTextSource(newMainSource: string) {
     textSourcesConfigStore.update(config => {
         config.main = newMainSource;
         saveConfig(config);
@@ -51,7 +54,7 @@ export function setMainTextSource(newMainSource: TextSource) {
 }
 
 
-export function toggleTextSourceEnabled(source: TextSource) {
+export function toggleTextSourceEnabled(source: string) {
     textSourcesConfigStore.update(config => {
         config.enabledInDetails[source] = !config.enabledInDetails[source];
         saveConfig(config);
@@ -60,7 +63,7 @@ export function toggleTextSourceEnabled(source: TextSource) {
 }
 
 
-export function enableTextSource(source: TextSource) {
+export function enableTextSource(source: string) {
     textSourcesConfigStore.update(config => {
         config.enabledInDetails[source] = true;
         saveConfig(config);

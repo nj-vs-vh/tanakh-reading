@@ -9,8 +9,7 @@
     } from "../settings/commentSources";
     import type { CommentSourceFlags } from "../settings/commentSources";
     import { getContext } from "svelte";
-    import { Metadata, textSourceShort } from "../types";
-    import { TextSource } from "../types";
+    import type { Metadata } from "../types";
     import {
         TextDecorationStyle,
         textDecorationStyleStore,
@@ -22,7 +21,7 @@
         setCommentStyle,
     } from "../settings/commentStyle";
     import {
-    enableTextSource,
+        enableTextSource,
         setMainTextSource,
         textSourcesConfigStore,
         toggleTextSourceEnabled,
@@ -48,8 +47,8 @@
         setCommentStyle(e.target.value);
     }
 
-    let mainTextSource: TextSource;
-    let enabledTextSources: Partial<Record<TextSource, boolean>>;
+    let mainTextSource: string;
+    let enabledTextSources: Record<string, boolean>;
     textSourcesConfigStore.subscribe((config) => {
         mainTextSource = config.main;
         enabledTextSources = config.enabledInDetails;
@@ -114,60 +113,39 @@
         <div class={textSettingsFolded ? "folded" : ""}>
             <div class="settings-block">
                 <h4>Основной</h4>
-                <div class="input-with-label">
-                    <input
-                        type="radio"
-                        name="mainTextSource"
-                        value={TextSource.FG}
-                        checked={mainTextSource == TextSource.FG}
-                        on:change={setMainTextSourceFromEvent}
-                    />
-                    <label for={TextSource.FG}>
-                        <span>
-                            <span class="text-source-short-name"
-                                >{textSourceShort.get(TextSource.FG)}</span
-                            >
-                            Русский перевод
-                            <a
-                                href={metadata.translation_about_links[
-                                    TextSource.FG
-                                ]}
-                                target="_blank"
-                                rel="noreferrer"
-                                class="external-link"
-                            >
-                                Фримы Гурфинкель
-                            </a>
-                        </span>
-                    </label>
-                </div>
-                <div class="input-with-label">
-                    <input
-                        type="radio"
-                        name="mainTextSource"
-                        value={TextSource.PLAUT}
-                        checked={mainTextSource == TextSource.PLAUT}
-                        on:change={setMainTextSourceFromEvent}
-                    />
-                    <label for={TextSource.PLAUT}>
-                        <span>
-                            <span class="text-source-short-name"
-                                >{textSourceShort.get(TextSource.PLAUT)}</span
-                            >
-                            Английский перевод
-                            <a
-                                href={metadata.translation_about_links[
-                                    TextSource.PLAUT
-                                ]}
-                                target="_blank"
-                                rel="noreferrer"
-                                class="external-link"
-                            >
-                                Гюнтера Плаута
-                            </a>
-                        </span>
-                    </label>
-                </div>
+                {#each metadata.text_sources as textSource}
+                    <div class="input-with-label">
+                        <input
+                            type="radio"
+                            name="mainTextSource"
+                            value={textSource}
+                            checked={mainTextSource == textSource}
+                            on:change={setMainTextSourceFromEvent}
+                        />
+                        <label for={textSource}>
+                            <span>
+                                <span class="text-source-short-name">
+                                    {metadata.text_source_marks[textSource]}
+                                </span>
+                                <span>
+                                    {metadata.text_source_descriptions[
+                                        textSource
+                                    ]}
+                                </span>
+                                {#each Array.from(metadata.text_source_links[textSource].entries()) as [index, link]}
+                                    <a
+                                        href={link}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        class="external-link"
+                                    >
+                                        <sup>{index + 1}</sup>
+                                    </a>
+                                {/each}
+                            </span>
+                        </label>
+                    </div>
+                {/each}
             </div>
             <div class="settings-block">
                 <h4>В окне с комментариями</h4>
@@ -189,7 +167,9 @@
                                 }
                             }}
                         />
-                        <label for={`${source}-in-comments`}>{textSourceShort.get(source)}</label>
+                        <label for={`${source}-in-comments`}>
+                            {metadata.text_source_marks[source]}
+                        </label>
                     </div>
                 {/each}
             </div>
@@ -383,7 +363,6 @@
 
     a.external-link {
         color: rgb(52, 52, 66);
-        text-decoration: underline;
     }
 
     a.external-link:hover {

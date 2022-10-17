@@ -47,12 +47,10 @@ async def get_metadata(request: web.Request) -> web.Response:
             "parsha_ranges": metadata.torah_book_parsha_ranges,
             "parsha_names": metadata.parsha_names,
             "text_sources": metadata.TextSource.all(),
+            "text_source_marks": metadata.text_source_marks,
             "text_source_descriptions": metadata.text_source_descriptions,
             "text_source_links": metadata.text_source_links,
-            "commenter_names": {
-                metadata.Commenter.SONCHINO: "Сончино",
-                metadata.Commenter.RASHI: "Раши",
-            },
+            "commenter_names": metadata.commenter_names,
             "commenter_about_links": metadata.commenter_about_url,
             "available_parsha": available_parsha,
         }

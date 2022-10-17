@@ -1,7 +1,6 @@
 <script lang="ts">
     import { getContext } from "svelte";
-    import type { Metadata, ParshaData, TextSource } from "../types";
-    import type { VerseData, ChapterData } from "../types";
+    import type { Metadata, ParshaData, VerseData, ChapterData } from "../types";
     import VerseDetailsModal from "./VerseDetailsModal.svelte";
     import VerseComments from "./VerseComments.svelte";
     import InlineIcon from "./shared/InlineIcon.svelte";
@@ -23,7 +22,7 @@
     commentStyleStore.subscribe((v) => {
         commentStyle = v;
     });
-    let mainTextSource: TextSource;
+    let mainTextSource: string;
     textSourcesConfigStore.subscribe(config => {
         mainTextSource = config.main;
     })
