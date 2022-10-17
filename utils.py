@@ -1,4 +1,5 @@
 import re
+from typing import Callable
 
 import bs4
 
@@ -34,6 +35,16 @@ def has_class(tag: bs4.Tag, class_name: str) -> bool:
     if not isinstance(tag, bs4.Tag):
         return False
     return class_name in tag.attrs.get("class", [])
+
+
+def tag_filter(tag_name: str, required_classes: list[str]) -> Callable[[bs4.Tag], bool]:
+    def predicate(tag: bs4.Tag) -> bool:
+        if not isinstance(tag, bs4.Tag):
+            return False
+        else:
+            return tag.name == tag_name and all(has_class(tag, c) for c in required_classes)
+
+    return predicate
 
 
 def are_strings_close(s1: str, s2: str) -> bool:

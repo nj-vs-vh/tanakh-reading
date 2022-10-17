@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup, Tag
 
 import metadata
 from config import parsha_json
-from merge import merge_parsha_data
+from merge import merge_and_save_parsha_data, merge_parsha_data
 from model import ChapterData, ParshaData, VerseData
 from utils import collapse_whitespace, inner_tag_text
 
@@ -111,9 +111,7 @@ def parse(parsha: int):
             current_chapter_data["verses"].append(current_verse_data)
         parsha_data["chapters"].append(current_chapter_data)
 
-    existing_parsha_data = json.loads(parsha_json(parsha).read_text())
-    resulting_parsha_data = merge_parsha_data(existing_parsha_data, parsha_data)
-    parsha_json(parsha).write_text(json.dumps(resulting_parsha_data, ensure_ascii=False, indent=2))
+    merge_and_save_parsha_data(parsha, parsha_data)
 
 
 if __name__ == "__main__":

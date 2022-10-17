@@ -8,7 +8,7 @@ class TextSource:
 
     @classmethod
     def all(cls) -> list[str]:
-        return [cls.FG, cls.PLAUT]
+        return [cls.FG, cls.PLAUT, cls.LECHAIM]
 
     @classmethod
     def validate_per_text_source_dict(cls, d: dict[str, Any]):
@@ -375,13 +375,15 @@ for _, names in parsha_names.items():
 class Commenter:
     SONCHINO = "sonchino"
     RASHI = "rashi"
+    RASHI_ALT = "rashi_alt"
     IBN_EZRA = "ibn-ezra"
 
 
 commenter_names = {
-    Commenter.SONCHINO: "Сончино",
-    Commenter.RASHI: "Раши",
-    Commenter.IBN_EZRA: "ибн Эзра"
+    Commenter.SONCHINO: "Сончино (перевод ФГ)",
+    Commenter.RASHI: "Раши (перевод ФГ)",
+    Commenter.RASHI_ALT: "Раши (перевод «Лехаим»)",
+    Commenter.IBN_EZRA: "ибн Эзра (перевод «Лехаим»)"
 }
 
 
@@ -394,6 +396,7 @@ commenter_links = {
         r"https://toldot.com/TorahRashi.html",
         r"https://ru.wikipedia.org/wiki/%D0%A0%D0%B0%D1%88%D0%B8",
     ],
+    Commenter.RASHI_ALT: [],
     Commenter.IBN_EZRA: [
         r"https://toldot.com/ibnEzra.html",
         r"https://ru.wikipedia.org/wiki/%D0%90%D0%B2%D1%80%D0%B0%D0%B0%D0%BC_%D0%B8%D0%B1%D0%BD_%D0%AD%D0%B7%D1%80%D0%B0",
