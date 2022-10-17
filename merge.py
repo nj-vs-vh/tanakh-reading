@@ -1,7 +1,7 @@
 import copy
 import json
-from config import parsha_json
 
+from config import parsha_json
 from model import ParshaData
 
 
