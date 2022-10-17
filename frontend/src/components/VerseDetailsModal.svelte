@@ -140,7 +140,7 @@
             <blockquote>
                 {currentVerseData.text[textSource]}
             </blockquote>
-            <span>
+            <span class="verse-text-source-mark">
                 {metadata.text_source_marks[textSource]}
             </span>
         </div>
@@ -151,7 +151,7 @@
 <style>
     .container {
         max-width: 60vw;
-        margin: 0.3em 1em 0.3em 0.3em;
+        margin: 0.3em;
     }
 
     p {
@@ -188,6 +188,10 @@
         border-left: solid rgb(179, 179, 179) 2px;
         color: rgb(68, 68, 68);
         max-width: 90%;
+    }
+
+    span.verse-text-source-mark {
+        padding-left: 0.2em;
     }
 
     .verse-text-container {
