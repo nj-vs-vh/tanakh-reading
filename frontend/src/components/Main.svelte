@@ -13,6 +13,7 @@
         initTextSourcesConfig,
         textSourcesConfigStore,
     } from "../settings/textSources";
+    import { getUrlHashVerseCoords, setUrlHash } from "../utils";
 
     export let metadata: Metadata;
     setContext("metadata", metadata);
@@ -49,7 +50,7 @@
     }
 </script>
 
-<Modal styleCloseButton={{ boxShadow: "none" }}>
+<Modal styleCloseButton={{ boxShadow: "none" }} on:close={() => {getUrlHashVerseCoords() === null ? null : setUrlHash("")}}>
     <Router>
         <Route path="/">
             <Menu />

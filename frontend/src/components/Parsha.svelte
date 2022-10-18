@@ -1,6 +1,11 @@
 <script lang="ts">
     import { getContext } from "svelte";
-    import type { Metadata, ParshaData, VerseData, ChapterData } from "../types";
+    import type {
+        Metadata,
+        ParshaData,
+        VerseData,
+        ChapterData,
+    } from "../types";
     import VerseDetailsModal from "./VerseDetailsModal.svelte";
     import VerseComments from "./VerseComments.svelte";
     import InlineIcon from "./shared/InlineIcon.svelte";
@@ -12,6 +17,14 @@
     } from "../settings/textDecorationStyle";
     import { CommentStyle, commentStyleStore } from "../settings/commentStyle";
     import { textSourcesConfigStore } from "../settings/textSources";
+    import {
+    areInsideVerseCoordsList,
+        cmpVerseCoords,
+        getUrlHashVerseCoords,
+        getVerseCoords,
+        setUrlHash,
+        verseCoords2string,
+    } from "../utils";
 
     const metadata: Metadata = getContext("metadata");
     let textDecorationStyle: TextDecorationStyle;
@@ -23,17 +36,16 @@
         commentStyle = v;
     });
     let mainTextSource: string;
-    textSourcesConfigStore.subscribe(config => {
+    textSourcesConfigStore.subscribe((config) => {
         mainTextSource = config.main;
-    })
+    });
 
     export let parsha: ParshaData;
-    const chapterNumbers = parsha.chapters.map(
-        (chapterData) => chapterData.chapter
-    );
-    chapterNumbers.sort((a, b) => a - b);
-    const firstChapterNo = chapterNumbers[0];
-    const lastChapterNo = chapterNumbers[chapterNumbers.length - 1];
+    parsha.chapters.sort((ch1, ch2) => ch1.chapter - ch2.chapter);
+    const parshaVerseCoords = getVerseCoords(parsha);
+    const firstParshaVerseCoords = parshaVerseCoords[0];
+    const lastParshaVerseCoords =
+        parshaVerseCoords[parshaVerseCoords.length - 1];
 
     const verseId = (chapterNo: number, verseNo: number): number =>
         chapterNo * 100000 + verseNo;
@@ -41,8 +53,18 @@
     // @ts-ignore
     const { open } = getContext("simple-modal");
 
-
-    console.log(window.location.href);
+    let urlHashVerseCoords = getUrlHashVerseCoords();
+    if (urlHashVerseCoords !== null) {
+        if (areInsideVerseCoordsList(urlHashVerseCoords, parshaVerseCoords)) {
+            open(VerseDetailsModal, {
+                parsha: parsha,
+                verse: urlHashVerseCoords.verse,
+                chapter: urlHashVerseCoords.chapter,
+            });
+        } else {
+            setUrlHash("");
+        }
+    }
 
     let inlineVerseDetailsVisible: Map<number, boolean> = new Map();
     for (const chapterData of parsha.chapters) {
@@ -74,10 +96,21 @@
 <div class="page">
     <div class="container">
         <span class="small-header">
-            Книга <b>{metadata.book_names[parsha.book][mainTextSource]}</b>,
-            недельный раздел
-            <b>{metadata.parsha_names[parsha.parsha][mainTextSource]}</b>, главы
-            с <b>{firstChapterNo}</b> по <b>{lastChapterNo}</b>
+            Книга
+            <b
+                >{parsha.book}
+                {metadata.book_names[parsha.book][mainTextSource]}</b
+            >, недельный раздел
+            <b
+                >{parsha.parsha}
+                {metadata.parsha_names[parsha.parsha][mainTextSource]}</b
+            >,
+            <span style="white-space: nowrap;">
+                стихи
+                <b>{verseCoords2string(firstParshaVerseCoords)}</b>
+                &ndash;
+                <b>{verseCoords2string(lastParshaVerseCoords)}</b>
+            </span>
         </span>
         {#each parsha.chapters as chapter}
             <h2>Глава {chapter.chapter}</h2>
@@ -100,8 +133,8 @@
                             TextDecorationStyle.CLICKABLE_TEXT
                                 ? openVerseDetails(verse, chapter)
                                 : null;
-                        }}
-                    >{verse.text[mainTextSource]}</span>
+                        }}>{verse.text[mainTextSource]}</span
+                    >
                     {#if textDecorationStyle === TextDecorationStyle.ASTRERISK}
                         <span
                             class="comment-asterisk"

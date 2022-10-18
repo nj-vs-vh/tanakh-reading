@@ -8,6 +8,8 @@
     import Icon from "./shared/Icon.svelte";
     import { textSourcesConfigStore } from "../settings/textSources";
     import { getContext } from "svelte";
+    import { areInsideVerseCoordsList, getVerseCoords, setUrlHash, VerseCoords } from "../utils";
+    import { verseCoords2string } from "../utils";
 
     const metadata: Metadata = getContext("metadata");
     let commentSourceFlags: CommentSourceFlags;
@@ -28,15 +30,19 @@
     });
 
     export let parsha: ParshaData;
+    const parshaVerseCoords = getVerseCoords(parsha);
+
     export let verse: number;
     export let chapter: number;
 
-    interface VerseCoords {
-        chapter: number;
-        verse: number;
-    }
-
     let currentVerseCoords: VerseCoords = { chapter: chapter, verse: verse };
+
+    // @ts-ignore
+    const { close } = getContext("simple-modal");
+    if (!areInsideVerseCoordsList(currentVerseCoords, parshaVerseCoords)) {
+        alert(`Something went wrong: ${chapter}:${verse} is not inside parsha ${parsha.parsha}`);
+        close()
+    }
 
     function findVerseCoords(
         chapterNo: number,
@@ -71,6 +77,8 @@
     let currentVerseData: VerseData;
 
     $: {
+        setUrlHash(verseCoords2string(currentVerseCoords));
+
         currentVerseData = parsha.chapters
             .find((ch) => ch.chapter === currentVerseCoords.chapter)
             .verses.find((v) => v.verse === currentVerseCoords.verse);
@@ -120,7 +128,7 @@
             </InlineIcon>
         </span>
         <span class="verse-number">
-            {currentVerseCoords.chapter}:{currentVerseData.verse}
+            {verseCoords2string(currentVerseCoords)}
         </span>
         <span
             class="arrow-container"
