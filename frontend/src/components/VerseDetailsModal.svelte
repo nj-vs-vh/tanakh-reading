@@ -8,7 +8,12 @@
     import Icon from "./shared/Icon.svelte";
     import { textSourcesConfigStore } from "../settings/textSources";
     import { getContext } from "svelte";
-    import { areInsideVerseCoordsList, getVerseCoords, setUrlHash, VerseCoords } from "../utils";
+    import {
+        areInsideVerseCoordsList,
+        getVerseCoords,
+        setUrlHash,
+        VerseCoords,
+    } from "../utils";
     import { verseCoords2string } from "../utils";
 
     const metadata: Metadata = getContext("metadata");
@@ -35,13 +40,17 @@
     export let verse: number;
     export let chapter: number;
 
+    let isCurrentVerseLinkCopied = false;
+
     let currentVerseCoords: VerseCoords = { chapter: chapter, verse: verse };
 
     // @ts-ignore
     const { close } = getContext("simple-modal");
     if (!areInsideVerseCoordsList(currentVerseCoords, parshaVerseCoords)) {
-        alert(`Something went wrong: ${chapter}:${verse} is not inside parsha ${parsha.parsha}`);
-        close()
+        alert(
+            `Something went wrong: ${chapter}:${verse} is not inside parsha ${parsha.parsha}`
+        );
+        close();
     }
 
     function findVerseCoords(
@@ -104,10 +113,12 @@
     }
 
     function prevVerse() {
+        isCurrentVerseLinkCopied = false;
         if (prevVerseCoords !== null) currentVerseCoords = prevVerseCoords;
     }
 
     function nextVerse() {
+        isCurrentVerseLinkCopied = false;
         if (nextVerseCoords !== null) currentVerseCoords = nextVerseCoords;
     }
 </script>
@@ -116,7 +127,7 @@
 <div class="container">
     <p class="verse-nav">
         <span
-            class="arrow-container"
+            class="arrow-container verse-nav-element"
             on:click={(e) => prevVerse()}
             on:keyup={(e) => {}}
         >
@@ -127,11 +138,11 @@
                 />
             </InlineIcon>
         </span>
-        <span class="verse-number">
+        <span class="verse-number verse-nav-element">
             {verseCoords2string(currentVerseCoords)}
         </span>
         <span
-            class="arrow-container"
+            class="arrow-container verse-nav-element"
             on:click={(e) => nextVerse()}
             on:keyup={(e) => {}}
         >
@@ -139,6 +150,21 @@
                 <Icon
                     icon="chevron-right"
                     color={nextVerseCoords !== null ? "grey" : "white"}
+                />
+            </InlineIcon>
+        </span>
+        <span
+            class="arrow-container verse-nav-element"
+            on:click={(e) => {
+                navigator.clipboard.writeText(window.location.href);
+                isCurrentVerseLinkCopied = true;
+            }}
+            on:keyup={(e) => {}}
+        >
+            <InlineIcon heightEm={0.8}>
+                <Icon
+                    icon={isCurrentVerseLinkCopied ? "check" : "copy"}
+                    color="grey"
                 />
             </InlineIcon>
         </span>
@@ -171,6 +197,10 @@
         align-items: center;
     }
 
+    span.verse-nav-element {
+        margin-right: 0.5em;
+    }
+
     span.arrow-container {
         display: flex;
         align-items: baseline;
@@ -187,7 +217,6 @@
 
     span.verse-number {
         color: grey;
-        margin: 0 0.5em;
     }
 
     blockquote {

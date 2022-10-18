@@ -6,7 +6,9 @@
         | "comment"
         | "chevron-left"
         | "chevron-right"
-        | "torah-scroll";
+        | "torah-scroll"
+        | "copy"
+        | "check";
 </script>
 
 {#if icon == "asterisk"}
@@ -67,6 +69,26 @@
         fill={color}
         ><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path
             d="M96 480V32C96 14.3 74.5 0 48 0S0 14.3 0 32V480c0 17.7 21.5 32 48 32s48-14.3 48-32zM512 32H128V480H512V32zM592 0c-26.5 0-48 14.3-48 32V480c0 17.7 21.5 32 48 32s48-14.3 48-32V32c0-17.7-21.5-32-48-32zM196 313.7c0-3.2 .9-6.4 2.5-9.2L226.7 256l-28.3-48.5c-1.6-2.8-2.5-6-2.5-9.2c0-10.1 8.2-18.3 18.3-18.3H271l31.4-53.9c3.6-6.3 10.3-10.1 17.6-10.1s13.9 3.8 17.6 10.1L369 180h56.7c10.1 0 18.3 8.2 18.3 18.3c0 3.2-.9 6.4-2.5 9.2L413.3 256l28.3 48.5c1.6 2.8 2.5 6 2.5 9.2c0 10.1-8.2 18.3-18.3 18.3H369l-31.4 53.9c-3.6 6.3-10.3 10.1-17.6 10.1s-13.9-3.8-17.6-10.1L271 332H214.3c-10.1 0-18.3-8.2-18.3-18.3zm124 54.7L341.2 332H298.8L320 368.4zM254.5 256l30.3 52h70.4l30.3-52-30.3-52H284.8l-30.3 52zm144.9 23.8L383 308h32.8l-16.4-28.2zM415.8 204H383l16.4 28.2L415.8 204zM320 143.6L298.8 180h42.4L320 143.6zM224.2 204l16.4 28.2L257 204H224.2zM257 308l-16.4-28.2L224.2 308H257z"
+        /></svg
+    >
+{:else if icon == "copy"}
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 512 512"
+        stroke={color}
+        fill={color}
+        ><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path
+            d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"
+        /></svg
+    >
+{:else if icon == "check"}
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 512 512"
+        stroke={color}
+        fill={color}
+        ><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path
+            d="M470.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 425.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"
         /></svg
     >
 {/if}
