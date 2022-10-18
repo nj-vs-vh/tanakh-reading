@@ -41,6 +41,9 @@
     // @ts-ignore
     const { open } = getContext("simple-modal");
 
+
+    console.log(window.location.href);
+
     let inlineVerseDetailsVisible: Map<number, boolean> = new Map();
     for (const chapterData of parsha.chapters) {
         for (const verseData of chapterData.verses) {

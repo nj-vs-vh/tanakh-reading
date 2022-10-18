@@ -48,7 +48,7 @@
         left: 0px;
         top: 0px;
 
-        margin: 5px;
+        margin: 7px;
 
         z-index: 10;
 
