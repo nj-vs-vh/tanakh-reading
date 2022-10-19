@@ -73,3 +73,19 @@ export function cmpVerseCoords(a: VerseCoords, b: VerseCoords): number {
         else return 0;
     }
 }
+
+
+export const range = (start: number, end: number): number[] => {
+    const length = end - start;
+    return Array.from({ length }, (_, i) => start + i);
+};
+
+
+export function parshaPath(parsha: number): string {
+    return `/parsha${parsha}`
+}
+
+
+export function versePath(parsha: number, verseCoords: VerseCoords): string {
+    return `${parshaPath(parsha)}#${verseCoords2string(verseCoords)}`
+}

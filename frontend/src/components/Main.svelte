@@ -13,7 +13,7 @@
         initTextSourcesConfig,
         textSourcesConfigStore,
     } from "../settings/textSources";
-    import { getUrlHashVerseCoords, setUrlHash } from "../utils";
+    import { getUrlHashVerseCoords, parshaPath, range, setUrlHash } from "../utils";
 
     export let metadata: Metadata;
     setContext("metadata", metadata);
@@ -38,11 +38,6 @@
 
     const parshaArrays = {};
 
-    const range = (start, end) => {
-        const length = end - start;
-        return Array.from({ length }, (_, i) => start + i);
-    };
-
     for (const [bookIndex, parshaMinMax] of Object.entries(
         metadata.parsha_ranges
     )) {
@@ -65,7 +60,7 @@
                         </h2>
                         {#each parshaArrays[bookIndex] as parshaIndex}
                             {#if metadata.available_parsha.includes(parshaIndex)}
-                                <Link to={`/parsha${parshaIndex}`}>
+                                <Link to={parshaPath(parshaIndex)}>
                                     <h3>
                                         {parshaIndex}. {metadata.parsha_names[
                                             parshaIndex
@@ -85,7 +80,7 @@
             </Screen>
         </Route>
         {#each metadata.available_parsha as parshaIndex}
-            <Route path={`/parsha${parshaIndex}`}>
+            <Route path={parshaPath(parshaIndex)}>
                 <ParshaProvider {parshaIndex} />
             </Route>
         {/each}
