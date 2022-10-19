@@ -1,7 +1,6 @@
 <script lang="ts">
     import { Link } from "svelte-routing";
     import Icon from "./shared/Icon.svelte";
-    import InlineIcon from "./shared/InlineIcon.svelte";
     import BurgerMenu from "./shared/BurgerMenu/BurgerMenu.svelte";
     import {
         commentSourceFlagsStore,
@@ -90,9 +89,7 @@
             <Link to="/">
                 <h2>
                     <div class="nav-icon">
-                        <InlineIcon heightEm={0.8}>
-                            <Icon icon="synagogue" color="black" />
-                        </InlineIcon>
+                        <Icon heightEm={0.8} icon="synagogue" color="black" />
                     </div>
                     <span class="nav-caption">Оглавление</span>
                 </h2>
@@ -104,9 +101,7 @@
             on:keydown={toggleTextSettingsFolded}
         >
             <div class="nav-icon">
-                <InlineIcon heightEm={0.8}>
-                    <Icon icon="torah-scroll" color="black" />
-                </InlineIcon>
+                <Icon heightEm={0.8} icon="torah-scroll" color="black" />
             </div>
             <span class="nav-caption">Текст</span>
         </h2>
@@ -182,9 +177,7 @@
             on:keydown={toggleCommentSettingsFolded}
         >
             <div class="nav-icon">
-                <InlineIcon heightEm={0.8}>
-                    <Icon icon="comment" color="black" />
-                </InlineIcon>
+                <Icon heightEm={0.8} icon="comment" color="black" />
             </div>
             <span class="nav-caption">Комментарии</span>
         </h2>
@@ -260,9 +253,11 @@
                     />
                     <label for={TextDecorationStyle.ASTRERISK}>
                         <span>Звёздочки</span>
-                        <InlineIcon heightEm={0.7}>
-                            <Icon icon={"asterisk"} color={"#606060"} />
-                        </InlineIcon>
+                        <Icon
+                            heightEm={0.7}
+                            icon={"asterisk"}
+                            color={"#606060"}
+                        />
                     </label>
                 </div>
                 <div class="input-with-label">

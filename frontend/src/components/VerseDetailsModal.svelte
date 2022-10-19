@@ -4,7 +4,6 @@
     import { commentSourceFlagsStore } from "../settings/commentSources";
     import type { CommentSourceFlags } from "../settings/commentSources";
     import VerseComments from "./VerseComments.svelte";
-    import InlineIcon from "./shared/InlineIcon.svelte";
     import Icon from "./shared/Icon.svelte";
     import { textSourcesConfigStore } from "../settings/textSources";
     import { getContext } from "svelte";
@@ -131,12 +130,11 @@
             on:click={(e) => prevVerse()}
             on:keyup={(e) => {}}
         >
-            <InlineIcon heightEm={0.8}>
-                <Icon
-                    icon="chevron-left"
-                    color={prevVerseCoords !== null ? "grey" : "white"}
-                />
-            </InlineIcon>
+            <Icon
+                heightEm={0.8}
+                icon="chevron-left"
+                color={prevVerseCoords !== null ? "grey" : "white"}
+            />
         </span>
         <span class="verse-number verse-nav-element">
             {verseCoords2string(currentVerseCoords)}
@@ -146,12 +144,11 @@
             on:click={(e) => nextVerse()}
             on:keyup={(e) => {}}
         >
-            <InlineIcon heightEm={0.8}>
-                <Icon
-                    icon="chevron-right"
-                    color={nextVerseCoords !== null ? "grey" : "white"}
-                />
-            </InlineIcon>
+            <Icon
+                heightEm={0.8}
+                icon="chevron-right"
+                color={nextVerseCoords !== null ? "grey" : "white"}
+            />
         </span>
         <span
             class="arrow-container verse-nav-element"
@@ -161,12 +158,11 @@
             }}
             on:keyup={(e) => {}}
         >
-            <InlineIcon heightEm={0.8}>
-                <Icon
-                    icon={isCurrentVerseLinkCopied ? "check" : "copy"}
-                    color="grey"
-                />
-            </InlineIcon>
+            <Icon
+                heightEm={0.8}
+                icon={isCurrentVerseLinkCopied ? "check" : "copy"}
+                color="grey"
+            />
         </span>
     </p>
     {#each textSources as textSource}
