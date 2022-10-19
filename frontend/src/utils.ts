@@ -8,7 +8,7 @@ export function getUrlHash(): string {
 
 export function setUrlHash(hash: string) {
     const url = new URL(window.location.href);
-    const urlHash = hash === "" || hash.startsWith("#") ? hash : `#${hash}`;
+    const urlHash = hash.startsWith("#") ? hash : `#${hash}`;
     url.hash = urlHash;
     window.location.href = url.href;
 }

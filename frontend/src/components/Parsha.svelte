@@ -8,7 +8,6 @@
     } from "../types";
     import VerseDetailsModal from "./VerseDetailsModal.svelte";
     import VerseComments from "./VerseComments.svelte";
-    import InlineIcon from "./shared/InlineIcon.svelte";
     import Icon from "./shared/Icon.svelte";
     import Menu from "./Menu.svelte";
     import {
@@ -18,7 +17,7 @@
     import { CommentStyle, commentStyleStore } from "../settings/commentStyle";
     import { textSourcesConfigStore } from "../settings/textSources";
     import {
-    areInsideVerseCoordsList,
+        areInsideVerseCoordsList,
         cmpVerseCoords,
         getUrlHashVerseCoords,
         getVerseCoords,
@@ -141,9 +140,11 @@
                             on:click={() => openVerseDetails(verse, chapter)}
                             on:keydown={() => openVerseDetails(verse, chapter)}
                         >
-                            <InlineIcon heightEm={0.7}>
-                                <Icon icon={"asterisk"} color={"#606060"} />
-                            </InlineIcon>
+                            <Icon
+                                heightEm={0.7}
+                                icon={"asterisk"}
+                                color={"#606060"}
+                            />
                         </span>
                     {/if}
                 </span>
