@@ -327,7 +327,7 @@
     }
 
     h2 {
-        margin: 0.4em 0 0.4em 0;
+        margin: 0.4em 0;
         display: flex;
         flex-direction: row;
         align-items: center;

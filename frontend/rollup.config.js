@@ -14,6 +14,13 @@ fs.copyFile('public/index.html', 'public/200.html', (err) => {
 	console.log('index.html copied to 200.html for Surge SPA compatibility');
 });
 
+let version = process.env.GIT_TAG;
+if (!version) {
+	console.warn("No GIT_TAG environment variable found, using 'development'");
+	version = "development";
+}
+console.log(`Building with version ${version}`);
+
 const production = !process.env.ROLLUP_WATCH;
 
 function serve() {
@@ -47,6 +54,7 @@ export default {
 	},
 	plugins: [
 		replace({
+			buildTimeReplacedVersion: version,
 			buildTimeReplacedIsProduction: production,
 			preventAssignment: true,
 		}),
