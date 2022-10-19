@@ -45,6 +45,7 @@ async def get_metadata(request: web.Request) -> web.Response:
         {
             "book_names": metadata.torah_book_names,
             "parsha_ranges": metadata.torah_book_parsha_ranges,
+            "chapter_verse_ranges": metadata.chapter_verse_ranges,
             "parsha_names": metadata.parsha_names,
             "text_sources": metadata.TextSource.all(),
             "text_source_marks": metadata.text_source_marks,
