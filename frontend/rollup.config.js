@@ -14,9 +14,9 @@ fs.copyFile('public/index.html', 'public/200.html', (err) => {
 	console.log('index.html copied to 200.html for Surge SPA compatibility');
 });
 
-let version = process.env.GIT_TAG;
+let version = process.env.GIT_COMMIT_ID;
 if (!version) {
-	console.warn("No GIT_TAG environment variable found, using 'development'");
+	console.warn("No GIT_COMMIT_ID environment variable found, using 'development'");
 	version = "development";
 }
 console.log(`Building with version ${version}`);
