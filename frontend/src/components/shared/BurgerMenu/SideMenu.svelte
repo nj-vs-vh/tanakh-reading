@@ -18,6 +18,15 @@
     <div id="menu" style="padding: {padding}; padding-top: {paddingTop}">
         <slot />
     </div>
+    <footer>
+        <span>С Б-жьей помощью</span>
+        <a
+            href="https://github.com/nj-vs-vh/torah-reading/tree/buildTimeReplacedVersion"
+            target="_blank"
+            rel="noreferrer"
+            style="text-decoration: dashed">buildTimeReplacedVersion</a
+        >
+    </footer>
 </div>
 
 <style>
@@ -25,11 +34,21 @@
         position: fixed;
         height: 100vh;
         top: 0px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
 
         overflow-y: auto;
     }
 
     #menu {
         text-align: left;
+    }
+
+    footer {
+        color: rgb(94, 94, 94);
+        padding: 1em;
+        display: flex;
+        justify-content: space-around;
     }
 </style>
