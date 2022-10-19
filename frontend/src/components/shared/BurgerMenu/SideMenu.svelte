@@ -21,7 +21,7 @@
     <footer>
         <span>С Б-жьей помощью</span>
         <a
-            href="https://github.com/nj-vs-vh/torah-reading/tree/buildTimeReplacedVersion"
+            href="https://github.com/nj-vs-vh/torah-reading/commmit/buildTimeReplacedVersion"
             target="_blank"
             rel="noreferrer"
             style="text-decoration: dashed">buildTimeReplacedVersion</a
