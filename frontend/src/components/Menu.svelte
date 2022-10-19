@@ -2,10 +2,9 @@
     import { Link } from "svelte-routing";
     import BurgerMenu from "./shared/BurgerMenu/BurgerMenu.svelte";
     import MenuFolder from "./MenuItems/MenuFolder.svelte";
-    import MenuFolderBlock from "./MenuItems/MenuFolderBlock.svelte";
     import TextSettings from "./MenuItems/TextSettings.svelte";
     import CommentsSettings from "./MenuItems/CommentsSettings.svelte";
-
+    import Search from "./MenuItems/Search.svelte";
 
     export let homeButton: boolean = false;
 
@@ -29,11 +28,7 @@
         {/if}
         <TextSettings />
         <CommentsSettings />
-        <MenuFolder icon="search" title="Поиск">
-            <MenuFolderBlock title="Привет">
-                <span>Ну привет</span>
-            </MenuFolderBlock>
-        </MenuFolder>
+        <Search />
     </div>
 </BurgerMenu>
 

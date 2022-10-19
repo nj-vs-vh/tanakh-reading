@@ -33,7 +33,10 @@ export interface ParshaData {
 
 export interface Metadata {
     book_names: Record<number, Record<string, string>>;
+    // book idx -> [parshas included]
     parsha_ranges: Record<number, Array<number>>;
+    // parsha idx -> [[start chapter, verse], [end chapter, verse]]
+    chapter_verse_ranges: Record<number, Array<Array<number>>>;
     parsha_names: Record<number, Record<string, string>>;
     text_sources: Array<string>;
     text_source_marks: Record<string, string>;
