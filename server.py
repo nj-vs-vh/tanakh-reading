@@ -1,4 +1,5 @@
 import hashlib
+import logging
 from pathlib import Path
 
 from aiohttp import hdrs, web
@@ -75,6 +76,7 @@ async def index(request: web.Request):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(name)s: %(message)s")
     app = web.Application(client_max_size=1024)
     app.middlewares.append(cors_middleware)
     app.add_routes(routes)

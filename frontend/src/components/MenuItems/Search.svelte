@@ -13,6 +13,7 @@
         VerseCoords,
         versePath,
     } from "../../utils";
+    import { navigateTo } from "svelte-router-spa";
 
     let mainTextSource: string;
     textSourcesConfigStore.subscribe((config) => {
@@ -56,8 +57,9 @@
                 ) {
                     parshaFound = true;
                     if (metadata.available_parsha.includes(parsha)) {
-                        window.location.href = window.location.origin + versePath(parsha, vc);
-                        window.location.reload(); // HACK
+                        navigateTo(versePath(parsha, vc));
+                        // window.location.href = window.location.origin + versePath(parsha, vc);
+                        // window.location.reload(); // HACK
                     } else {
                         searchResultsNote = "Недельный раздел со стихом ещё не доступен";
                     }

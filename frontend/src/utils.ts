@@ -81,11 +81,11 @@ export const range = (start: number, end: number): number[] => {
 };
 
 
-export function parshaPath(parsha: number): string {
-    return `/parsha${parsha}`
+export function parshaPath(parsha: number | string): string {
+    return `/parsha/${parsha}`
 }
 
 
-export function versePath(parsha: number, verseCoords: VerseCoords): string {
+export function versePath(parsha: number | string, verseCoords: VerseCoords): string {
     return `${parshaPath(parsha)}#${verseCoords2string(verseCoords)}`
 }
