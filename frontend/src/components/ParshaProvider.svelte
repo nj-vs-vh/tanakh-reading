@@ -1,14 +1,27 @@
 <script lang="ts">
-    import {getParsha} from "../api"
+    import type { CurrentRoute } from "svelte-router-spa/types/components/route";
+
+    import Parsha from "./Parsha.svelte";
     import Screen from "./shared/Screen.svelte";
     import Error from "./shared/Error.svelte";
-    import Parsha from "./Parsha.svelte";
     import Spinner from "./shared/Spinner.svelte";
 
-    export let parshaIndex: number;
+    import type { ParshaData } from "../types";
+    import { getParsha } from "../api";
 
-    let parshaPromise = getParsha(parshaIndex);
+    export let currentRoute: CurrentRoute;
 
+    let parshaPromise = new Promise<string | ParshaData>((resolve, reject) => {});
+    let lastLoadedParshaIndex: number | null = null;
+    $: {
+        let parshaIndex = parseInt(currentRoute.namedParams.parshaIndex);
+        if (parshaIndex != lastLoadedParshaIndex) {
+            console.log(`Rendering parsha from route`);
+            console.log(currentRoute);
+            parshaPromise = getParsha(parshaIndex);
+            lastLoadedParshaIndex = parshaIndex;
+        }
+    }
 </script>
 
 {#await parshaPromise}
@@ -21,7 +34,7 @@
             <Error errorMessage={parsha} />
         </Screen>
     {:else}
-        <Parsha parsha={parsha}/>
+        <Parsha {parsha} />
     {/if}
 {:catch error}
     <Error errorMessage={error.message} />

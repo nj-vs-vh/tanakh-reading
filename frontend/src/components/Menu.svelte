@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Link } from "svelte-routing";
+    import { Navigate } from 'svelte-router-spa'
     import BurgerMenu from "./shared/BurgerMenu/BurgerMenu.svelte";
     import MenuFolder from "./MenuItems/MenuFolder.svelte";
     import TextSettings from "./MenuItems/TextSettings.svelte";
@@ -22,9 +22,9 @@
 >
     <div class="inner-container">
         {#if homeButton}
-            <Link to="/">
+            <Navigate to="/">
                 <MenuFolder icon="synagogue" title="Оглавление" />
-            </Link>
+            </Navigate>
         {/if}
         <TextSettings />
         <CommentsSettings />
