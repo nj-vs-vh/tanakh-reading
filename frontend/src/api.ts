@@ -8,7 +8,7 @@ const NETWORKING_ERRMSG = "Ошибка подключения, попробуй
 
 
 export async function getParsha(index: number): Promise<ParshaData | string> {
-    console.log(`Fetching parsha index ${index}`)
+    console.log(`Fetching parsha index ${index}`);
     try {
         const resp = await fetch(
             `${BASE_API_URL}/parsha/${index}`,
@@ -29,7 +29,7 @@ export async function getParsha(index: number): Promise<ParshaData | string> {
 
 
 export async function getMetadata(): Promise<Metadata | string> {
-    console.log(`Fetching metadata`)
+    console.log(`Fetching metadata`);
     try {
         const resp = await fetch(
             `${BASE_API_URL}/metadata`,

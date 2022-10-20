@@ -51,15 +51,20 @@
 
     // @ts-ignore
     const { open } = getContext("simple-modal");
+    const openVerseDetailsModal = (chapter: number, verse: number) =>
+        open(VerseDetailsModal, {
+            parsha: parsha,
+            chapter: chapter,
+            verse: verse,
+        });
 
     let urlHashVerseCoords = getUrlHashVerseCoords();
     if (urlHashVerseCoords !== null) {
         if (areInsideVerseCoordsList(urlHashVerseCoords, parshaVerseCoords)) {
-            open(VerseDetailsModal, {
-                parsha: parsha,
-                verse: urlHashVerseCoords.verse,
-                chapter: urlHashVerseCoords.chapter,
-            });
+            openVerseDetailsModal(
+                urlHashVerseCoords.chapter,
+                urlHashVerseCoords.verse
+            );
         } else {
             setUrlHash("");
         }
@@ -76,11 +81,7 @@
 
     const openVerseDetails = (verse: VerseData, chapter: ChapterData) => {
         if (commentStyle == CommentStyle.MODAL) {
-            open(VerseDetailsModal, {
-                parsha: parsha,
-                verse: verse.verse,
-                chapter: chapter.chapter,
-            });
+            openVerseDetailsModal(chapter.chapter, verse.verse);
         } else if (commentStyle == CommentStyle.INLINE) {
             inlineVerseDetailsVisible[verseId(chapter.chapter, verse.verse)] =
                 !inlineVerseDetailsVisible[
@@ -91,7 +92,13 @@
     };
 </script>
 
-<Menu homeButton />
+<Menu on:verseSearchResult={
+    (event) => {
+        if (event.detail.parsha === parsha.parsha) {
+            openVerseDetailsModal(event.detail.chapter, event.detail.verse);
+        }
+    }
+} homeButton />
 <div class="page">
     <div class="container">
         <span class="small-header">

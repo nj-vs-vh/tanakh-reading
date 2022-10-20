@@ -28,7 +28,7 @@
         {/if}
         <TextSettings />
         <CommentsSettings />
-        <Search />
+        <Search on:verseSearchResult />
     </div>
 </BurgerMenu>
 
