@@ -34,7 +34,6 @@
         parseInt(v)
     );
     bookIndices.sort();
-    console.log(bookIndices);
 
     const parshaArrays = {};
 
