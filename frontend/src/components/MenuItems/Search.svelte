@@ -1,11 +1,11 @@
 <script lang="ts">
     import MenuFolder from "./MenuFolder.svelte";
     import MenuFolderBlock from "./MenuFolderBlock.svelte";
-    import { getContext } from "svelte";
+    import { createEventDispatcher, getContext } from "svelte";
     import type { Metadata } from "../../types";
     import { textSourcesConfigStore } from "../../settings/textSources";
     import Keydown from "svelte-keydown";
-    
+
     import {
         cmpVerseCoords,
         range,
@@ -27,9 +27,12 @@
         (book) => metadata.parsha_ranges[book][0] <= latestParsha
     );
 
+    const dispatch = createEventDispatcher<{
+        verseSearchResult: { parsha: number, chapter: number; verse: number };
+    }>();
+
     let currentVerseCoordsInput: string = "";
     let currentBook: string = availableBooks[availableBooks.length - 1];
-
     let searchResultsNote = "";
 
     function findVerse() {
@@ -57,11 +60,14 @@
                 ) {
                     parshaFound = true;
                     if (metadata.available_parsha.includes(parsha)) {
+                        dispatch(
+                            "verseSearchResult",
+                            {parsha: parsha, chapter: vc.chapter, verse: vc.verse},
+                        );
                         navigateTo(versePath(parsha, vc));
-                        // window.location.href = window.location.origin + versePath(parsha, vc);
-                        // window.location.reload(); // HACK
                     } else {
-                        searchResultsNote = "Недельный раздел со стихом ещё не доступен";
+                        searchResultsNote =
+                            "Недельный раздел со стихом ещё не доступен";
                     }
                 }
             }

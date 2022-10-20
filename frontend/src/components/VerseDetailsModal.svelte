@@ -46,9 +46,6 @@
     // @ts-ignore
     const { close } = getContext("simple-modal");
     if (!areInsideVerseCoordsList(currentVerseCoords, parshaVerseCoords)) {
-        alert(
-            `Something went wrong: ${chapter}:${verse} is not inside parsha ${parsha.parsha}`
-        );
         close();
     }
 
