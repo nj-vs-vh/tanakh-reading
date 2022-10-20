@@ -16,8 +16,7 @@
     $: {
         let parshaIndex = parseInt(currentRoute.namedParams.parshaIndex);
         if (parshaIndex != lastLoadedParshaIndex) {
-            console.log(`Rendering parsha from route`);
-            console.log(currentRoute);
+            console.log(`Rendering parsha from path ${currentRoute.path}`);
             parshaPromise = getParsha(parshaIndex);
             lastLoadedParshaIndex = parshaIndex;
         }

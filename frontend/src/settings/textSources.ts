@@ -30,17 +30,14 @@ export function initTextSourcesConfig(metadata: Metadata) {
         }
     else {
         config = JSON.parse(configDump);
-        console.log(config);
     }
 
     for (const textSource of metadata.text_sources) {
-        console.log(config.enabledInDetails);
         if (config.enabledInDetails[textSource] === undefined) {
             config.enabledInDetails[textSource] = true;
         }
     }
     textSourcesConfigStore.set(config);
-    console.log(config);
     saveConfig(config);
 }
 

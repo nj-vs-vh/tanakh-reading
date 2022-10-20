@@ -11,8 +11,7 @@
     import { parshaPath, range } from "../utils";
     import type { Metadata } from "../types";
 
-    export let currentRoute: CurrentRoute;
-    console.log(currentRoute);
+    // export let currentRoute: CurrentRoute;
 
     let metadata: Metadata = getContext("metadata");
 
@@ -25,7 +24,6 @@
         parseInt(v)
     );
     bookIndices.sort();
-    console.log(bookIndices);
 
     const parshaArrays = {};
 

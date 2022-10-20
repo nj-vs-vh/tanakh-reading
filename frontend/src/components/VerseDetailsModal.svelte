@@ -56,7 +56,6 @@
         chapterNo: number,
         verseNo: number
     ): VerseCoords | null {
-        // console.log(chapterNo, verseNo);
         const chapterData = parsha.chapters.find(
             (ch) => ch.chapter === chapterNo
         );
