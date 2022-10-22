@@ -8,7 +8,7 @@ export function getUrlHash(): string {
 
 export function setUrlHash(hash: string) {
     const url = new URL(window.location.href);
-    const urlHash = hash.startsWith("#") ? hash : `#${hash}`;
+    const urlHash = !hash || hash.startsWith("#") ? hash : `#${hash}`;
     url.hash = urlHash;
     window.location.href = url.href;
 }
@@ -48,7 +48,7 @@ export function getVerseCoords(parshaData: ParshaData): VerseCoords[] {
     const res: VerseCoords[] = [];
     for (const chapterData of parshaData.chapters) {
         for (const verseData of chapterData.verses) {
-            res.push({chapter: chapterData.chapter, verse: verseData.verse})
+            res.push({ chapter: chapterData.chapter, verse: verseData.verse })
         }
     }
     res.sort(cmpVerseCoords)
@@ -88,4 +88,9 @@ export function parshaPath(parsha: number | string): string {
 
 export function versePath(parsha: number | string, verseCoords: VerseCoords): string {
     return `${parshaPath(parsha)}#${verseCoords2string(verseCoords)}`
+}
+
+
+export const sleep = (delaySec: number) => {
+    return new Promise(resolve => setTimeout(resolve, delaySec * 1000))
 }
