@@ -1,4 +1,4 @@
-"""Parser for https://lechaim.ru/torah/"""
+"""Parser for https://lechaim.ru/torah/ """
 
 
 import argparse
