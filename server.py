@@ -29,19 +29,20 @@ async def auth_middleware(request: web.Request, handler: Handler) -> web.StreamR
 @web.middleware
 async def cors_middleware(request: web.Request, handler: Handler) -> web.StreamResponse:
     resp = await handler(request)
-    allowed_origin = "https://torah-reading.surge.sh" if config.IS_PROD else "http://localhost:8080"
-    resp.headers[hdrs.ACCESS_CONTROL_ALLOW_ORIGIN] = allowed_origin
-    resp.headers[hdrs.ACCESS_CONTROL_ALLOW_HEADERS] = (
-        "Content-Type, Origin, Referer, User-Agent, Accept, x-requested-with, Range, Accept-Language"
-    )
-    resp.headers[hdrs.ACCESS_CONTROL_ALLOW_METHODS] = "POST, GET, OPTIONS"
-    resp.headers[hdrs.ACCESS_CONTROL_MAX_AGE] = "300"
+    allowed_origins = ["https://torah-reading.surge.sh", "http://torah-reading.surge.sh", "http://localhost:8080"]
+    request_origin = request.headers.get(hdrs.ORIGIN)
+    if request_origin is not None:
+        origin = request_origin if request_origin in allowed_origins else allowed_origins[0]
+        resp.headers[hdrs.ACCESS_CONTROL_ALLOW_ORIGIN] = origin
+        resp.headers[hdrs.ACCESS_CONTROL_ALLOW_HEADERS] = str(hdrs.CONTENT_TYPE)
+        resp.headers[hdrs.ACCESS_CONTROL_ALLOW_METHODS] = "POST, GET, OPTIONS"
+        resp.headers[hdrs.ACCESS_CONTROL_MAX_AGE] = "300"
     return resp
 
 
 @routes.options("/{wildcard:.*}")
 async def preflight(request: web.Request) -> web.Response:
-    logger.info(f"Request headers: {request.headers}")
+    # logger.info(f"Request headers: {request.headers}")
     return web.Response()
 
 
