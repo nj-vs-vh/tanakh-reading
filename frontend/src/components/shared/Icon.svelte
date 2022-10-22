@@ -110,7 +110,7 @@
 
 <style>
     .container {
-        width: auto;
+        width: 1em;
         display: inline-flex;
         justify-content: center;
     }
