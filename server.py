@@ -10,6 +10,8 @@ import metadata
 
 routes = web.RouteTableDef()
 
+logger = logging.getLogger(__name__)
+
 
 PASSWORD = "torah-reading"
 PASSWORD_HASH = hashlib.sha256(PASSWORD.encode()).hexdigest()[:32]
@@ -39,6 +41,7 @@ async def cors_middleware(request: web.Request, handler: Handler) -> web.StreamR
 
 @routes.options("/{wildcard:.*}")
 async def preflight(request: web.Request) -> web.Response:
+    logger.info(f"Request headers: {request.headers}")
     return web.Response()
 
 
