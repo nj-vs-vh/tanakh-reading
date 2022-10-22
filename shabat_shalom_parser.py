@@ -1,4 +1,4 @@
-"""Parser for http://www.shabat-shalom.info/books/Tanach-ru/"""
+"""Parser for http://www.shabat-shalom.info/books/Tanach-ru/ """
 
 import argparse
 import json

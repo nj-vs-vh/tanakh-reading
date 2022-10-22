@@ -1,4 +1,4 @@
-"""Parser for https://reformjudaism.org/learning/torah-study/english-translations-torah-portions"""
+"""Parser for https://reformjudaism.org/learning/torah-study/english-translations-torah-portions """
 
 
 import argparse
@@ -33,13 +33,16 @@ def get_listing_html() -> BeautifulSoup:
 
 def get_url(parsha_no: int):
     parsha_name = metadata.parsha_names[parsha_no][metadata.TextSource.PLAUT]
-    print(f"Parsha name: {parsha_name!r}")
+    print(f"Full parsha name: {parsha_name!r}")
+    parsha_name = parsha_name.split("(")[0].strip()
+    print(f"Parsha name on link: {parsha_name!r}")
     listing = get_listing_html()
     for el in listing.descendants:
         if inner_tag_text(el) == parsha_name and isinstance(el, Tag) and el.name == "a":
             parsha_path = el.attrs["href"]
             print(f"Found path for parsha: {parsha_path}")
             return BASE_URL + parsha_path
+    raise ValueError(f"Parsha not found by name: {parsha_name}")
 
 
 def parse(parsha: int):
