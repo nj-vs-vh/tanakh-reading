@@ -212,7 +212,7 @@
 
     p.verse-nav {
         display: inline-flex;
-        align-items: center;
+        align-items: baseline;
     }
 
     span.verse-nav-element {

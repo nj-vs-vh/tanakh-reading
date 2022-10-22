@@ -18,7 +18,6 @@
     import { textSourcesConfigStore } from "../settings/textSources";
     import {
         areInsideVerseCoordsList,
-        cmpVerseCoords,
         getUrlHashVerseCoords,
         getVerseCoords,
         setUrlHash,
