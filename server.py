@@ -33,6 +33,7 @@ async def cors_middleware(request: web.Request, handler: Handler) -> web.StreamR
         "Content-Type, Origin, Referer, User-Agent, Accept, x-requested-with, Range, Accept-Language"
     )
     resp.headers[hdrs.ACCESS_CONTROL_ALLOW_METHODS] = "POST, GET, OPTIONS"
+    resp.headers[hdrs.ACCESS_CONTROL_MAX_AGE] = "300"
     return resp
 
 
