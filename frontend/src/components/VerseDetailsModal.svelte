@@ -10,8 +10,8 @@
     import {
         areInsideVerseCoordsList,
         getVerseCoords,
-        setUrlHash,
         VerseCoords,
+        versePath,
     } from "../utils";
     import { verseCoords2string } from "../utils";
 
@@ -81,8 +81,6 @@
     let currentVerseData: VerseData;
 
     $: {
-        setUrlHash(verseCoords2string(currentVerseCoords));
-
         currentVerseData = parsha.chapters
             .find((ch) => ch.chapter === currentVerseCoords.chapter)
             .verses.find((v) => v.verse === currentVerseCoords.verse);
@@ -107,22 +105,30 @@
             );
     }
 
+    let modalContentContainerEl: HTMLElement;
+
     function prevVerse() {
-        isCurrentVerseLinkCopied = false;
-        if (prevVerseCoords !== null) currentVerseCoords = prevVerseCoords;
+        if (prevVerseCoords !== null) {
+            currentVerseCoords = prevVerseCoords;
+            isCurrentVerseLinkCopied = false;
+            modalContentContainerEl.scrollIntoView();
+        }
     }
 
     function nextVerse() {
-        isCurrentVerseLinkCopied = false;
-        if (nextVerseCoords !== null) currentVerseCoords = nextVerseCoords;
+        if (nextVerseCoords !== null) {
+            currentVerseCoords = nextVerseCoords;
+            isCurrentVerseLinkCopied = false;
+            modalContentContainerEl.scrollIntoView();
+        }
     }
 </script>
 
 <Keydown on:ArrowRight={nextVerse} on:ArrowLeft={prevVerse} />
-<div class="container">
+<div class="container" bind:this={modalContentContainerEl}>
     <p class="verse-nav">
         <span
-            class="arrow-container verse-nav-element"
+            class="icon-button verse-nav-element"
             on:click={(e) => prevVerse()}
             on:keyup={(e) => {}}
         >
@@ -136,7 +142,7 @@
             {verseCoords2string(currentVerseCoords)}
         </span>
         <span
-            class="arrow-container verse-nav-element"
+            class="icon-button verse-nav-element"
             on:click={(e) => nextVerse()}
             on:keyup={(e) => {}}
         >
@@ -147,16 +153,17 @@
             />
         </span>
         <span
-            class="arrow-container verse-nav-element"
+            class="icon-button verse-nav-element"
             on:click={(e) => {
-                navigator.clipboard.writeText(window.location.href);
+                const url = `${window.location.origin}${versePath(parsha.parsha, currentVerseCoords)}`
+                navigator.clipboard.writeText(url);
                 isCurrentVerseLinkCopied = true;
             }}
             on:keyup={(e) => {}}
         >
             <Icon
                 heightEm={0.8}
-                icon={isCurrentVerseLinkCopied ? "check" : "copy"}
+                icon={isCurrentVerseLinkCopied ? "check" : "link"}
                 color="grey"
             />
         </span>
@@ -178,6 +185,8 @@
     .container {
         max-width: 60vw;
         margin: 0.3em;
+        margin-top: 0;
+        padding: 0.8rem;
     }
 
     p {
@@ -193,13 +202,13 @@
         margin-right: 0.5em;
     }
 
-    span.arrow-container {
+    span.icon-button {
         display: flex;
         align-items: baseline;
         cursor: pointer;
     }
 
-    span.arrow-container:hover {
+    span.icon-button:hover {
         background-image: radial-gradient(
             closest-side,
             rgb(221, 221, 221),
