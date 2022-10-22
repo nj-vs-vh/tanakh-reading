@@ -44,6 +44,14 @@
     }
 </script>
 
-<Modal styleCloseButton={{ boxShadow: "none" }} on:close={() => {getUrlHashVerseCoords() === null ? null : setUrlHash("")}}>
+<Modal
+    styleCloseButton={{ boxShadow: "none", top: "0.5rem", right: "0.8rem"}}
+    styleContent={{ padding: "0", overflowX: "hidden" }}
+    styleBg={{ justifyContent: "flex-start" }}
+    styleWindow={{ margin: "auto auto" }}
+    on:close={() => {
+        getUrlHashVerseCoords() === null ? null : setUrlHash("");
+    }}
+>
     <Router {routes} />
 </Modal>

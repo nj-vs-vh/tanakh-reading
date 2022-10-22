@@ -1,19 +1,20 @@
 <script lang="ts">
+    import { getContext } from "svelte";
     import Keydown from "svelte-keydown";
+    import { swipe } from "svelte-gestures";
     import type { Metadata, ParshaData, VerseData } from "../types";
     import { commentSourceFlagsStore } from "../settings/commentSources";
     import type { CommentSourceFlags } from "../settings/commentSources";
+    import { textSourcesConfigStore } from "../settings/textSources";
     import VerseComments from "./VerseComments.svelte";
     import Icon from "./shared/Icon.svelte";
-    import { textSourcesConfigStore } from "../settings/textSources";
-    import { getContext } from "svelte";
     import {
         areInsideVerseCoordsList,
         getVerseCoords,
-        setUrlHash,
         VerseCoords,
+        versePath,
+        verseCoords2string,
     } from "../utils";
-    import { verseCoords2string } from "../utils";
 
     const metadata: Metadata = getContext("metadata");
     let commentSourceFlags: CommentSourceFlags;
@@ -81,8 +82,6 @@
     let currentVerseData: VerseData;
 
     $: {
-        setUrlHash(verseCoords2string(currentVerseCoords));
-
         currentVerseData = parsha.chapters
             .find((ch) => ch.chapter === currentVerseCoords.chapter)
             .verses.find((v) => v.verse === currentVerseCoords.verse);
@@ -107,22 +106,46 @@
             );
     }
 
+    let containerEl: HTMLElement;
+
     function prevVerse() {
-        isCurrentVerseLinkCopied = false;
-        if (prevVerseCoords !== null) currentVerseCoords = prevVerseCoords;
+        if (prevVerseCoords !== null) {
+            currentVerseCoords = prevVerseCoords;
+            isCurrentVerseLinkCopied = false;
+            containerEl.scrollIntoView();
+        }
     }
 
     function nextVerse() {
-        isCurrentVerseLinkCopied = false;
-        if (nextVerseCoords !== null) currentVerseCoords = nextVerseCoords;
+        if (nextVerseCoords !== null) {
+            currentVerseCoords = nextVerseCoords;
+            isCurrentVerseLinkCopied = false;
+            containerEl.scrollIntoView();
+        }
+    }
+
+    async function handleSwipe(e: CustomEvent) {
+        const swipeDirection: string = e.detail.direction;
+        if (swipeDirection !== "left" && swipeDirection !== "right") return;
+
+        if (swipeDirection === "left" && nextVerseCoords === null) return;
+        if (swipeDirection === "right" && prevVerseCoords === null) return;
+
+        if (swipeDirection == "left") nextVerse();
+        else prevVerse();
     }
 </script>
 
 <Keydown on:ArrowRight={nextVerse} on:ArrowLeft={prevVerse} />
-<div class="container">
+<div
+    class="container"
+    bind:this={containerEl}
+    use:swipe={{ timeframe: 300, minSwipeDistance: 60, touchAction: "pan-y" }}
+    on:swipe={handleSwipe}
+>
     <p class="verse-nav">
         <span
-            class="arrow-container verse-nav-element"
+            class="icon-button verse-nav-element"
             on:click={(e) => prevVerse()}
             on:keyup={(e) => {}}
         >
@@ -136,7 +159,7 @@
             {verseCoords2string(currentVerseCoords)}
         </span>
         <span
-            class="arrow-container verse-nav-element"
+            class="icon-button verse-nav-element"
             on:click={(e) => nextVerse()}
             on:keyup={(e) => {}}
         >
@@ -147,16 +170,20 @@
             />
         </span>
         <span
-            class="arrow-container verse-nav-element"
+            class="icon-button verse-nav-element"
             on:click={(e) => {
-                navigator.clipboard.writeText(window.location.href);
+                const url = `${window.location.origin}${versePath(
+                    parsha.parsha,
+                    currentVerseCoords
+                )}`;
+                navigator.clipboard.writeText(url);
                 isCurrentVerseLinkCopied = true;
             }}
             on:keyup={(e) => {}}
         >
             <Icon
                 heightEm={0.8}
-                icon={isCurrentVerseLinkCopied ? "check" : "copy"}
+                icon={isCurrentVerseLinkCopied ? "check" : "link"}
                 color="grey"
             />
         </span>
@@ -176,8 +203,7 @@
 
 <style>
     .container {
-        max-width: 60vw;
-        margin: 0.3em;
+        padding: 1rem;
     }
 
     p {
@@ -193,13 +219,13 @@
         margin-right: 0.5em;
     }
 
-    span.arrow-container {
+    span.icon-button {
         display: flex;
         align-items: baseline;
         cursor: pointer;
     }
 
-    span.arrow-container:hover {
+    span.icon-button:hover {
         background-image: radial-gradient(
             closest-side,
             rgb(221, 221, 221),
