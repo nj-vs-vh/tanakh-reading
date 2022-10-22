@@ -1,19 +1,20 @@
 <script lang="ts">
+    import { getContext } from "svelte";
     import Keydown from "svelte-keydown";
+    import { swipe } from "svelte-gestures";
     import type { Metadata, ParshaData, VerseData } from "../types";
     import { commentSourceFlagsStore } from "../settings/commentSources";
     import type { CommentSourceFlags } from "../settings/commentSources";
+    import { textSourcesConfigStore } from "../settings/textSources";
     import VerseComments from "./VerseComments.svelte";
     import Icon from "./shared/Icon.svelte";
-    import { textSourcesConfigStore } from "../settings/textSources";
-    import { getContext } from "svelte";
     import {
         areInsideVerseCoordsList,
         getVerseCoords,
         VerseCoords,
         versePath,
+        verseCoords2string,
     } from "../utils";
-    import { verseCoords2string } from "../utils";
 
     const metadata: Metadata = getContext("metadata");
     let commentSourceFlags: CommentSourceFlags;
@@ -105,13 +106,13 @@
             );
     }
 
-    let modalContentContainerEl: HTMLElement;
+    let containerEl: HTMLElement;
 
     function prevVerse() {
         if (prevVerseCoords !== null) {
             currentVerseCoords = prevVerseCoords;
             isCurrentVerseLinkCopied = false;
-            modalContentContainerEl.scrollIntoView();
+            containerEl.scrollIntoView();
         }
     }
 
@@ -119,13 +120,29 @@
         if (nextVerseCoords !== null) {
             currentVerseCoords = nextVerseCoords;
             isCurrentVerseLinkCopied = false;
-            modalContentContainerEl.scrollIntoView();
+            containerEl.scrollIntoView();
         }
+    }
+
+    async function handleSwipe(e: CustomEvent) {
+        const swipeDirection: string = e.detail.direction;
+        if (swipeDirection !== "left" && swipeDirection !== "right") return;
+
+        if (swipeDirection === "left" && nextVerseCoords === null) return;
+        if (swipeDirection === "right" && prevVerseCoords === null) return;
+
+        if (swipeDirection == "left") nextVerse();
+        else prevVerse();
     }
 </script>
 
 <Keydown on:ArrowRight={nextVerse} on:ArrowLeft={prevVerse} />
-<div class="container" bind:this={modalContentContainerEl}>
+<div
+    class="container"
+    bind:this={containerEl}
+    use:swipe={{ timeframe: 300, minSwipeDistance: 60, touchAction: "pan-y" }}
+    on:swipe={handleSwipe}
+>
     <p class="verse-nav">
         <span
             class="icon-button verse-nav-element"
@@ -155,7 +172,10 @@
         <span
             class="icon-button verse-nav-element"
             on:click={(e) => {
-                const url = `${window.location.origin}${versePath(parsha.parsha, currentVerseCoords)}`
+                const url = `${window.location.origin}${versePath(
+                    parsha.parsha,
+                    currentVerseCoords
+                )}`;
                 navigator.clipboard.writeText(url);
                 isCurrentVerseLinkCopied = true;
             }}
@@ -183,10 +203,7 @@
 
 <style>
     .container {
-        max-width: 60vw;
-        margin: 0.3em;
-        margin-top: 0;
-        padding: 0.8rem;
+        padding: 1rem;
     }
 
     p {
