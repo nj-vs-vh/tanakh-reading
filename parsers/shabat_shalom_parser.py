@@ -7,13 +7,13 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Optional
 
-import bs4
+import bs4  # type: ignore
 import requests  # type: ignore
 
 from backend import metadata
-from backend.config import parsha_json
 from backend.metadata import Commenter, TextSource, get_book_by_parsha
 from backend.model import ChapterData, CommentData, ParshaData, VerseData
+from backend.static import parsha_json
 from parsers.utils import (
     HTML_DIR,
     are_strings_close,
