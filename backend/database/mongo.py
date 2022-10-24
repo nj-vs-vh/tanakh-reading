@@ -1,13 +1,13 @@
 import asyncio
+import logging
 from concurrent.futures import ThreadPoolExecutor
 from typing import Optional
+
 from pymongo import MongoClient
 
 from backend import config
 from backend.database.interface import DatabaseInterface
 from backend.model import StoredUser
-
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +26,9 @@ class MongoDatabase(DatabaseInterface):
         return MongoDatabase(mongo_client=MongoClient(config.MONGO_URL), db_name=config.MONGO_DB)
 
     async def lookup_user(self, username: str) -> Optional[StoredUser]:
-        doc = await asyncio.get_running_loop().run_in_executor(self.threads, self.users_coll.find_one, {"username": username})
+        doc = await asyncio.get_running_loop().run_in_executor(
+            self.threads, self.users_coll.find_one, {"username": username}
+        )
         if doc is None:
             logger.info(f"No user found with {username = }")
             return None

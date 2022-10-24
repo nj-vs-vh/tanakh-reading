@@ -47,7 +47,7 @@ class PydanticModel(BaseModel):
 
 
 class DbSchemaModel(PydanticModel):
-    id: str = 'n/a'
+    id: str = "n/a"
 
     def dict_for_mongo(self) -> dict[str, Any]:
         dump = self.dict()
@@ -59,7 +59,7 @@ class DbSchemaModel(PydanticModel):
         try:
             raw["id"] = str(raw["_id"])  # id field returned by MongoDB
             return cls.parse_obj(raw)
-        except ValidationError as e:
+        except ValidationError:
             logger
             raise web.HTTPInternalServerError(reason="damn")
 
@@ -79,4 +79,4 @@ class StoredUser(DbSchemaModel):
     salt: str
 
     def dict_public(self) -> dict[str, str]:
-        return self.dict(exclude={'password_hash', 'salt'})
+        return self.dict(exclude={"password_hash", "salt"})
