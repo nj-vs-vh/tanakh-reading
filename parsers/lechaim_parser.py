@@ -12,9 +12,9 @@ import requests  # type: ignore
 from bs4 import BeautifulSoup, Tag
 
 from merge import merge_and_save_parsha_data
-from metadata import Commenter, TextSource, get_book_by_parsha
-from model import ChapterData, CommentData, ParshaData, VerseData
-from utils import (
+from backend.metadata import Commenter, TextSource, get_book_by_parsha
+from backend.model import ChapterData, CommentData, ParshaData, VerseData
+from parsers.utils import (
     dump_parsha,
     has_class,
     has_class_that,

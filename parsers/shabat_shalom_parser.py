@@ -10,11 +10,11 @@ from typing import Optional
 import bs4
 import requests  # type: ignore
 
-import metadata
-from config import parsha_json
-from metadata import Commenter, TextSource, get_book_by_parsha
-from model import ChapterData, CommentData, ParshaData, VerseData
-from utils import (
+from backend import metadata
+from backend.config import parsha_json
+from backend.metadata import Commenter, TextSource, get_book_by_parsha
+from backend.model import ChapterData, CommentData, ParshaData, VerseData
+from parsers.utils import (
     are_strings_close,
     collapse_whitespace,
     has_class,

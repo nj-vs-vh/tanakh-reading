@@ -10,11 +10,10 @@ from typing import Optional
 import requests  # type: ignore
 from bs4 import BeautifulSoup, Tag
 
-import metadata
-from config import parsha_json
-from merge import merge_and_save_parsha_data, merge_parsha_data
-from model import ChapterData, ParshaData, VerseData
-from utils import collapse_whitespace, inner_tag_text
+from backend import metadata
+from merge import merge_and_save_parsha_data
+from backend.model import ChapterData, ParshaData, VerseData
+from parsers.utils import collapse_whitespace, inner_tag_text
 
 HTML_DIR = Path("html/reformjudaism")
 HTML_DIR.mkdir(exist_ok=True)

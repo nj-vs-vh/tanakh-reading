@@ -5,8 +5,7 @@ from pathlib import Path
 from aiohttp import hdrs, web
 from aiohttp.typedefs import Handler
 
-import config
-import metadata
+from backend import config, metadata
 
 routes = web.RouteTableDef()
 
@@ -82,7 +81,7 @@ async def index(request: web.Request):
     return web.Response(text="שְׁמַע יִשְׂרָאֵל יְהוָה אֱלֹהֵינוּ יְהוָה אֶחָֽד׃")
 
 
-if __name__ == "__main__":
+def run_app():
     logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(name)s: %(message)s")
     app = web.Application(client_max_size=1024)
     app.middlewares.append(cors_middleware)
