@@ -10,8 +10,8 @@ from typing import Optional, cast
 
 import requests  # type: ignore
 from bs4 import BeautifulSoup, Tag
-
 from merge import merge_and_save_parsha_data
+
 from backend.metadata import Commenter, TextSource, get_book_by_parsha
 from backend.model import ChapterData, CommentData, ParshaData, VerseData
 from parsers.utils import (
