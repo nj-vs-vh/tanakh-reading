@@ -5,7 +5,7 @@ from backend import config
 
 def hash_password(password: str, salt: str) -> str:
     h = sha256()
-    h.update(password.encode('utf-8'))
-    h.update(salt.encode('utf-8'))
+    h.update(password.encode("utf-8"))
+    h.update(salt.encode("utf-8"))
     h.update(config.PEPPER)
     return h.hexdigest()

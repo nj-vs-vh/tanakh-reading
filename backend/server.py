@@ -1,8 +1,7 @@
 import logging
-from hashlib import sha256
 import secrets
+from hashlib import sha256
 from typing import Awaitable, Callable
-from uuid import uuid4
 
 from aiohttp import hdrs, web
 from aiohttp.typedefs import Handler
@@ -11,7 +10,7 @@ from backend import config, metadata
 from backend.auth import hash_password
 from backend.constants import AppExtensions
 from backend.database.interface import DatabaseInterface
-from backend.model import UserCredentials, StoredUser
+from backend.model import StoredUser, UserCredentials
 from backend.static import available_parsha, parsha_json
 from backend.utils import safe_request_json
 
@@ -40,7 +39,9 @@ def has_pre_auth_header(request: web.Request) -> bool:
     )
 
 
-def requires_pre_auth(handler: Callable[[web.Request], Awaitable[web.Response]]) -> Callable[[web.Request], Awaitable[web.Response]]:
+def requires_pre_auth(
+    handler: Callable[[web.Request], Awaitable[web.Response]]
+) -> Callable[[web.Request], Awaitable[web.Response]]:
     async def wrapper(request: web.Request) -> web.Response:
         if not has_pre_auth_header(request):
             raise web.HTTPUnauthorized(reason="No pre-auth found in request")
