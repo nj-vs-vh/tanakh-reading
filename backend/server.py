@@ -32,7 +32,7 @@ async def cors_middleware(request: web.Request, handler: Handler) -> web.StreamR
     return resp
 
 
-def has_pre_auth_header(request: web.Request) -> bool:
+def has_pre_auth(request: web.Request) -> bool:
     return (
         sha256(request.headers.get("X-Pre-Auth", "").encode()).hexdigest()
         == "36c053e131f38f1917821ff1cc0a6666aa55896873fc3ee3e91849a79a16ab35"
@@ -43,7 +43,7 @@ def requires_pre_auth(
     handler: Callable[[web.Request], Awaitable[web.Response]]
 ) -> Callable[[web.Request], Awaitable[web.Response]]:
     async def wrapper(request: web.Request) -> web.Response:
-        if not has_pre_auth_header(request):
+        if not has_pre_auth(request):
             raise web.HTTPUnauthorized(reason="No pre-auth found in request")
         return await handler(request)
 
@@ -121,7 +121,6 @@ async def create_new_user(request: web.Request) -> web.Response:
 
 
 @routes.post("/auth")
-@requires_pre_auth
 async def authorize(request: web.Request) -> web.Response:
     credentials = UserCredentials.from_user_data(await safe_request_json(request))
     db = get_db(request)
