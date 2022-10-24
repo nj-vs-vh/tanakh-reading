@@ -22,11 +22,12 @@ from parsers.utils import (
     postprocess_patched_text,
     strip_html_breaks,
     strip_leading_dot,
+    HTML_DIR
 )
 
 
 def parsha_html(idx: int) -> Path:
-    return Path(f"html/shabat_shalom_info/{idx}.html")
+    return HTML_DIR / f"shabat_shalom_info/{idx}.html"
 
 
 def download_parsha_html(idx: int):

@@ -1,10 +1,14 @@
 import json
+from pathlib import Path
 import re
 from typing import Callable
 
 import bs4
 
 from backend.model import ParshaData
+
+
+HTML_DIR = Path(__file__).parent / "../html"
 
 
 def collapse_whitespace(s: str) -> str:
