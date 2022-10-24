@@ -29,7 +29,7 @@ text_source_descriptions = {
 text_source_links = {
     TextSource.FG: [
         r"http://www.shabat-shalom.info/books/Tanach-ru/Chumash_Rashi/index.htm",
-        r"http://www.ejwiki.org/wiki/%D0%93%D1%83%D1%80%D1%84%D0%B8%D0%BD%D0%BA%D0%B5%D0%BB%D1%8C,_%D0%A4%D1%80%D0%B8%D0%BC%D0%B0",
+        r"http://www.ejwiki.org/wiki/%D0%93%D1%83%D1%80%D1%84%D0%B8%D0%BD%D0%BA%D0%B5%D0%BB%D1%8C,_%D0%A4%D1%80%D0%B8%D0%BC%D0%B0",  # noqa
         r"https://esxatos.com/gurfinel-tora-tanah-28-knig-1-fayl",
     ],
     TextSource.PLAUT: [
@@ -463,6 +463,6 @@ commenter_links = {
     Commenter.RASHI_ALT: [],
     Commenter.IBN_EZRA: [
         r"https://toldot.com/ibnEzra.html",
-        r"https://ru.wikipedia.org/wiki/%D0%90%D0%B2%D1%80%D0%B0%D0%B0%D0%BC_%D0%B8%D0%B1%D0%BD_%D0%AD%D0%B7%D1%80%D0%B0",
+        r"https://ru.wikipedia.org/wiki/%D0%90%D0%B2%D1%80%D0%B0%D0%B0%D0%BC_%D0%B8%D0%B1%D0%BD_%D0%AD%D0%B7%D1%80%D0%B0",  # noqa
     ],
 }
