@@ -3,7 +3,7 @@ import re
 from pathlib import Path
 from typing import Callable
 
-import bs4
+import bs4  # type: ignore
 
 from backend.model import ParshaData
 

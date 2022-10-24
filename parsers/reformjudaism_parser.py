@@ -3,15 +3,14 @@
 
 import argparse
 import re
-from pathlib import Path
 from typing import Optional
 
 import requests  # type: ignore
-from bs4 import BeautifulSoup, Tag
-from merge import merge_and_save_parsha_data
+from bs4 import BeautifulSoup, Tag  # type: ignore
 
 from backend import metadata
 from backend.model import ChapterData, ParshaData, VerseData
+from parsers.merge import merge_and_save_parsha_data
 from parsers.utils import HTML_DIR as COMMON_HTML_DIR
 from parsers.utils import collapse_whitespace, inner_tag_text
 

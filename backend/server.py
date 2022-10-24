@@ -1,6 +1,4 @@
-import hashlib
 import logging
-from pathlib import Path
 
 from aiohttp import hdrs, web
 from aiohttp.typedefs import Handler
@@ -8,22 +6,10 @@ from aiohttp.typedefs import Handler
 from backend import config, metadata
 from backend.constants import AppExtensions
 from backend.database.interface import DatabaseInterface
+from backend.static import available_parsha, parsha_json
 
 logger = logging.getLogger(__name__)
 routes = web.RouteTableDef()
-
-
-PASSWORD = "torah-reading"
-PASSWORD_HASH = hashlib.sha256(PASSWORD.encode()).hexdigest()[:32]
-
-JSON_DIR = Path("json")
-
-
-@web.middleware
-async def auth_middleware(request: web.Request, handler: Handler) -> web.StreamResponse:
-    if request.headers.get("X-Password-Hash", "") != PASSWORD_HASH:
-        raise web.HTTPUnauthorized()
-    return await handler(request)
 
 
 @web.middleware
@@ -48,7 +34,6 @@ async def preflight(request: web.Request) -> web.Response:
 
 @routes.get("/metadata")
 async def get_metadata(request: web.Request) -> web.Response:
-    available_parsha = sorted(int(json_file.stem) for json_file in JSON_DIR.iterdir())
     return web.json_response(
         {
             "book_names": metadata.torah_book_names,
@@ -61,17 +46,23 @@ async def get_metadata(request: web.Request) -> web.Response:
             "text_source_links": metadata.text_source_links,
             "commenter_names": metadata.commenter_names,
             "commenter_links": metadata.commenter_links,
-            "available_parsha": available_parsha,
+            "available_parsha": available_parsha(),
         }
     )
 
 
 @routes.get("/parsha/{index}")
 async def get_parsha(request: web.Request):
-    parsha_index = request.match_info.get("index")
-    if parsha_index is None:
+    parsha_index_str = request.match_info.get("index")
+    if parsha_index_str is None:
         raise web.HTTPNotFound(reason="No parsha index in request")
-    parsha_file = JSON_DIR / f"{parsha_index}.json"
+
+    try:
+        parsha_index = int(parsha_index_str)
+    except Exception:
+        raise web.HTTPBadRequest(reason="Parsha index must be a number")
+
+    parsha_file = parsha_json(parsha_index)
     if not parsha_file.exists():
         raise web.HTTPNotFound(reason="No parsha available with such index")
     return web.json_response(text=parsha_file.read_text())
