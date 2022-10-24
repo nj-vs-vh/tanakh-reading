@@ -6,10 +6,11 @@ from aiohttp import hdrs, web
 from aiohttp.typedefs import Handler
 
 from backend import config, metadata
-
-routes = web.RouteTableDef()
+from backend.constants import AppExtensions
+from backend.database.interface import DatabaseInterface
 
 logger = logging.getLogger(__name__)
+routes = web.RouteTableDef()
 
 
 PASSWORD = "torah-reading"
@@ -81,9 +82,13 @@ async def index(request: web.Request):
     return web.Response(text="שְׁמַע יִשְׂרָאֵל יְהוָה אֱלֹהֵינוּ יְהוָה אֶחָֽד׃")
 
 
-def run_app():
-    logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(name)s: %(message)s")
-    app = web.Application(client_max_size=1024)
-    app.middlewares.append(cors_middleware)
-    app.add_routes(routes)
-    web.run_app(app, port=config.PORT)
+class BackendApp:
+    def __init__(self, db: DatabaseInterface) -> None:
+        self.db = db
+        self.app = web.Application(client_max_size=1024)
+        self.app.middlewares.append(cors_middleware)
+        self.app.add_routes(routes)
+        self.app[AppExtensions.DB] = db
+
+    def run(self) -> None:
+        web.run_app(self.app, port=config.PORT)

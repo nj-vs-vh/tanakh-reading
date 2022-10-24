@@ -15,6 +15,7 @@ from backend.config import parsha_json
 from backend.metadata import Commenter, TextSource, get_book_by_parsha
 from backend.model import ChapterData, CommentData, ParshaData, VerseData
 from parsers.utils import (
+    HTML_DIR,
     are_strings_close,
     collapse_whitespace,
     has_class,
@@ -22,7 +23,6 @@ from parsers.utils import (
     postprocess_patched_text,
     strip_html_breaks,
     strip_leading_dot,
-    HTML_DIR
 )
 
 

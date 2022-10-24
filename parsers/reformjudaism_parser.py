@@ -8,11 +8,12 @@ from typing import Optional
 
 import requests  # type: ignore
 from bs4 import BeautifulSoup, Tag
+from merge import merge_and_save_parsha_data
 
 from backend import metadata
-from merge import merge_and_save_parsha_data
 from backend.model import ChapterData, ParshaData, VerseData
-from parsers.utils import collapse_whitespace, inner_tag_text, HTML_DIR as COMMON_HTML_DIR
+from parsers.utils import HTML_DIR as COMMON_HTML_DIR
+from parsers.utils import collapse_whitespace, inner_tag_text
 
 HTML_DIR = COMMON_HTML_DIR / "reformjudaism"
 HTML_DIR.mkdir(exist_ok=True)
