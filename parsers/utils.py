@@ -4,7 +4,7 @@ from typing import Callable
 
 import bs4
 
-from model import ParshaData
+from backend.model import ParshaData
 
 
 def collapse_whitespace(s: str) -> str:

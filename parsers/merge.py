@@ -1,8 +1,8 @@
 import copy
 import json
 
-from config import parsha_json
-from model import ParshaData
+from backend.config import parsha_json
+from backend.model import ParshaData
 
 
 def merge_parsha_data(p1: ParshaData, p2: ParshaData) -> ParshaData:
