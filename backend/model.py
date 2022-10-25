@@ -51,6 +51,9 @@ class PydanticModel(BaseModel):
 class DbSchemaModel(PydanticModel):
     id: str = "n/a"
 
+    def is_stored(self) -> bool:
+        return self.id != "n/a"
+
     def to_mongo_db(self) -> dict[str, Any]:
         dump = self.dict()
         dump.pop("id", None)
