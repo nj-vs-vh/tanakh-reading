@@ -6,7 +6,6 @@ from typing import Callable, Optional, TypeVar
 from pymongo import MongoClient
 
 from backend import config
-from backend.auth import generate_signup_token
 from backend.database.interface import DatabaseInterface
 from backend.model import SignupToken, StoredUser
 

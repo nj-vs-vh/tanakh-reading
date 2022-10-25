@@ -6,14 +6,9 @@ from aiohttp.typedefs import Handler
 
 from backend import config, metadata
 from backend.auth import generate_signup_token, hash_password
-from backend.constants import AppExtensions
+from backend.constants import ACCESS_TOKEN_HEADER, SIGNUP_TOKEN_HEADER, AppExtensions
 from backend.database.interface import DatabaseInterface
-from backend.model import (
-    NewUser,
-    SignupToken,
-    StoredUser,
-    UserCredentials,
-)
+from backend.model import NewUser, SignupToken, StoredUser, UserCredentials
 from backend.static import available_parsha, parsha_json
 from backend.utils import safe_request_json
 
@@ -23,16 +18,28 @@ routes = web.RouteTableDef()
 
 @web.middleware
 async def cors_middleware(request: web.Request, handler: Handler) -> web.StreamResponse:
-    resp = await handler(request)
+    try:
+        resp = await handler(request)
+    except web.HTTPException as e:
+        resp = e
+
     allowed_origins = ["https://torah-reading.surge.sh", "http://torah-reading.surge.sh", "http://localhost:8080"]
     request_origin = request.headers.get(hdrs.ORIGIN)
+    logger.debug(f"CORS: request origin = {request_origin}")
     if request_origin is not None:
         origin = request_origin if request_origin in allowed_origins else allowed_origins[0]
         resp.headers[hdrs.ACCESS_CONTROL_ALLOW_ORIGIN] = origin
-        resp.headers[hdrs.ACCESS_CONTROL_ALLOW_HEADERS] = str(hdrs.CONTENT_TYPE)
-        resp.headers[hdrs.ACCESS_CONTROL_ALLOW_METHODS] = "POST, GET, OPTIONS"
+        logger.debug(f"CORS: response Access-Control-Allow-Origin set to {origin}")
+        resp.headers[
+            hdrs.ACCESS_CONTROL_ALLOW_HEADERS
+        ] = f"{hdrs.CONTENT_TYPE},{SIGNUP_TOKEN_HEADER},{ACCESS_TOKEN_HEADER}"
+        resp.headers[hdrs.ACCESS_CONTROL_ALLOW_METHODS] = "GET,POST,PUT,OPTIONS"
         resp.headers[hdrs.ACCESS_CONTROL_MAX_AGE] = "300"
-    return resp
+
+    if isinstance(resp, web.HTTPException):
+        raise resp
+    else:
+        return resp
 
 
 @routes.options("/{wildcard:.*}")
@@ -86,18 +93,28 @@ def get_db(request: web.Request) -> DatabaseInterface:
     return request.app[AppExtensions.DB]
 
 
-@routes.post("/signup")
-async def sign_up(request: web.Request) -> web.Response:
+async def get_signup_token(request: web.Request) -> SignupToken:
     db = get_db(request)
-
-    signup_token_value = request.headers.get("X-Signup-Token")
+    signup_token_value = request.headers.get(SIGNUP_TOKEN_HEADER)
     if signup_token_value is None:
-        raise web.HTTPUnauthorized(reason="No X-Signup-Token header found")
-
+        raise web.HTTPUnauthorized(reason=f"No {SIGNUP_TOKEN_HEADER} header found")
     signup_token = await db.lookup_signup_token(signup_token_value)
     if signup_token is None:
         raise web.HTTPUnauthorized(reason="Invalid signup token")
+    return signup_token
 
+
+@routes.get("/check-signup-token")
+async def check_signup_token(request: web.Request) -> web.Response:
+    await get_signup_token(request)
+    return web.Response()
+
+
+@routes.post("/signup")
+async def sign_up(request: web.Request) -> web.Response:
+    signup_token = await get_signup_token(request)
+
+    db = get_db(request)
     new_user = NewUser.from_request_json(await safe_request_json(request))
     salt = secrets.token_hex(32)
     new_stored_user = StoredUser(
@@ -130,9 +147,9 @@ async def login(request: web.Request) -> web.Response:
 
 
 async def get_authorized_user(request: web.Request) -> tuple[StoredUser, str]:
-    access_token = request.headers.get("X-Token")
+    access_token = request.headers.get(ACCESS_TOKEN_HEADER)
     if access_token is None:
-        raise web.HTTPUnauthorized(reason="No X-Token header found")
+        raise web.HTTPUnauthorized(reason=f"No {ACCESS_TOKEN_HEADER} header found")
     db = get_db(request)
     user = await db.authenticate_user(access_token)
     if user is None:

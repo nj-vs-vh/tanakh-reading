@@ -14,9 +14,7 @@
     </Screen>
 {:then metadata}
     {#if typeof metadata === "string"}
-        <Screen>
-            <Error errorMessage={metadata} />
-        </Screen>
+        <Error errorMessage={metadata} />
     {:else}
         <Main metadata={metadata} />
     {/if}

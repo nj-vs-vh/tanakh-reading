@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Screen from "./shared/Screen.svelte";
+    import Screen from "../components/shared/Screen.svelte";
 </script>
 
 

@@ -1,5 +1,5 @@
 import { isProduction } from "./config";
-import type { ParshaData, Metadata } from "./types";
+import type { ParshaData, Metadata, SignupData } from "./types";
 
 
 // @ts-ignore
@@ -42,6 +42,36 @@ export async function getMetadata(): Promise<Metadata | string> {
         } else {
             return respText;
         }
+    } catch (error) {
+        console.warn(`Error fetching metadata: ${error}`)
+        return NETWORKING_ERRMSG;
+    }
+}
+
+
+export async function checkSignupToken(token: string): Promise<boolean | string> {
+    console.log(`Checking signup token`);
+    const resp = await fetch(
+        `${BASE_API_URL}/check-signup-token`,
+        { headers: { 'Content-Type': 'application/json', 'X-Signup-Token': token } }
+    )
+    return resp.ok;
+}
+
+
+export async function signup(token: string, data: SignupData): Promise<string | null> {
+    console.log(`Signing up`);
+    try {
+        const resp = await fetch(
+        `${BASE_API_URL}/signup`,
+        {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json', 'X-Signup-Token': token },
+            body: JSON.stringify(data),
+        }
+    )
+    if (resp.ok) return null;
+    else return await resp.text()
     } catch (error) {
         console.warn(`Error fetching metadata: ${error}`)
         return NETWORKING_ERRMSG;
