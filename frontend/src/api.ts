@@ -1,3 +1,4 @@
+import { withAccessTokenHeader } from "./auth";
 import { isProduction } from "./config";
 import type { ParshaData, Metadata, SignupData, UserCredentials } from "./types";
 
@@ -33,7 +34,7 @@ export async function getMetadata(): Promise<Metadata | string> {
     try {
         const resp = await fetch(
             `${BASE_API_URL}/metadata`,
-            { headers: { 'Content-Type': 'application/json' } }
+            { headers: withAccessTokenHeader({ 'Content-Type': 'application/json' }) }
         )
         const respText = await resp.text();
 
@@ -97,6 +98,8 @@ export async function login(credentials: UserCredentials): Promise<string | Acce
         )
         const respText = await resp.text();
         if (resp.ok) return JSON.parse(respText);
+        else if (resp.status === 404) return "Юзернейм не найден";
+        else if (resp.status === 403) return "Неправильный пароль";
         else return respText;
     } catch (error) {
         console.warn(`Error fetching metadata: ${error}`)
