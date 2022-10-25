@@ -1,0 +1,56 @@
+<script lang="ts">
+    import Keydown from "svelte-keydown";
+    import { navigateTo } from "svelte-router-spa";
+    import { login } from "../api";
+    import { saveAccessToken } from "../auth";
+
+    import Hero from "../components/shared/Hero.svelte";
+
+    let username = "";
+    let password = "";
+
+    let loginError: string | null = null;
+
+    async function onLogin() {
+        if (username.length < 5 || password.length < 6) return;
+
+        const loginResult = await login({ username, password });
+
+        if (typeof loginResult === "string") loginError = loginResult;
+        else {
+            saveAccessToken(loginResult.token);
+            navigateTo("/");
+        }
+    }
+</script>
+
+<Hero>
+    <input
+        type="text"
+        name="username"
+        placeholder="Юзернейм"
+        bind:value={username}
+    />
+    <input
+        type="password"
+        name="password"
+        placeholder="Пароль"
+        bind:value={password}
+    />
+    <button on:click={onLogin}>Войти</button>
+    <Keydown on:Enter={onLogin} />
+    <div hidden={loginError === null} class="error-badge">
+        {loginError}
+    </div>
+</Hero>
+
+<style>
+    button {
+        margin: 1em 0;
+        padding: 0.5em;
+    }
+
+    input {
+        margin: 0.5em 0;
+    }
+</style>

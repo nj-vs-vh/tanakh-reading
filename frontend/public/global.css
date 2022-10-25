@@ -67,3 +67,11 @@ div.error-badge {
 	border: 1.5px solid #ff6c89;
 	border-radius: 5px;
 }
+
+input,
+button,
+select {
+	padding: 0.3em;
+	border-radius: 3px;
+	border: 1px black solid;
+}
