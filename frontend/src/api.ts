@@ -23,7 +23,7 @@ export async function getParsha(index: number): Promise<ParshaData | string> {
             return respText;
         }
     } catch (error) {
-        console.warn(`Error fetching parsha data: ${error}`)
+        console.warn(`Error making request: ${error}`);
         return NETWORKING_ERRMSG;
     }
 }
@@ -44,7 +44,7 @@ export async function getMetadata(): Promise<Metadata | string> {
             return respText;
         }
     } catch (error) {
-        console.warn(`Error fetching metadata: ${error}`)
+        console.warn(`Error making request: ${error}`);
         return NETWORKING_ERRMSG;
     }
 }
@@ -74,7 +74,7 @@ export async function signup(token: string, data: SignupData): Promise<string | 
         if (resp.ok) return null;
         else return await resp.text()
     } catch (error) {
-        console.warn(`Error fetching metadata: ${error}`)
+        console.warn(`Error making request: ${error}`);
         return NETWORKING_ERRMSG;
     }
 }
@@ -102,7 +102,25 @@ export async function login(credentials: UserCredentials): Promise<string | Acce
         else if (resp.status === 403) return "Неправильный пароль";
         else return respText;
     } catch (error) {
-        console.warn(`Error fetching metadata: ${error}`)
+        console.warn(`Error making request: ${error}`);
+        return NETWORKING_ERRMSG;
+    }
+}
+
+
+export async function logout(): Promise<string | null> {
+    console.log(`Logging out`);
+    try {
+        const resp = await fetch(
+            `${BASE_API_URL}/logout`,
+            {
+                headers: withAccessTokenHeader({}),
+            }
+        )
+        if (resp.ok) return null;
+        else return await resp.text();
+    } catch (error) {
+        console.warn(`Error making request: ${error}`);
         return NETWORKING_ERRMSG;
     }
 }
