@@ -1,5 +1,5 @@
 import { isProduction } from "./config";
-import type { ParshaData, Metadata, SignupData } from "./types";
+import type { ParshaData, Metadata, SignupData, UserCredentials } from "./types";
 
 
 // @ts-ignore
@@ -63,15 +63,41 @@ export async function signup(token: string, data: SignupData): Promise<string | 
     console.log(`Signing up`);
     try {
         const resp = await fetch(
-        `${BASE_API_URL}/signup`,
-        {
-            method: "POST",
-            headers: { 'Content-Type': 'application/json', 'X-Signup-Token': token },
-            body: JSON.stringify(data),
-        }
-    )
-    if (resp.ok) return null;
-    else return await resp.text()
+            `${BASE_API_URL}/signup`,
+            {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json', 'X-Signup-Token': token },
+                body: JSON.stringify(data),
+            }
+        )
+        if (resp.ok) return null;
+        else return await resp.text()
+    } catch (error) {
+        console.warn(`Error fetching metadata: ${error}`)
+        return NETWORKING_ERRMSG;
+    }
+}
+
+
+export interface AccessToken {
+    token: string;
+}
+
+
+export async function login(credentials: UserCredentials): Promise<string | AccessToken> {
+    console.log(`Logging in`);
+    try {
+        const resp = await fetch(
+            `${BASE_API_URL}/login`,
+            {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(credentials),
+            }
+        )
+        const respText = await resp.text();
+        if (resp.ok) return JSON.parse(respText);
+        else return respText;
     } catch (error) {
         console.warn(`Error fetching metadata: ${error}`)
         return NETWORKING_ERRMSG;
