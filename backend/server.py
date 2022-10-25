@@ -120,7 +120,35 @@ async def login(request: web.Request) -> web.Response:
         raise web.HTTPNotFound(reason="User with this username not found")
     if hash_password(credentials.password, user.salt) != user.password_hash:
         raise web.HTTPForbidden(reason="Wrong password")
-    return web.json_response(user.dict_public())
+    token = secrets.token_hex(32)
+    await db.save_access_token(access_token=token, user=user)
+    return web.json_response({"token": token})
+
+
+async def get_authorized_user(request: web.Request) -> tuple[StoredUser, str]:
+    access_token = request.headers.get('X-Token')
+    if access_token is None:
+        raise web.HTTPUnauthorized(reason="No X-Token header found in the request")
+    db = get_db(request)
+    user = await db.authenticate_user(access_token)
+    if user is None:
+        raise web.HTTPUnauthorized(reason="Access token is invalid, please sign up / log in")
+    logger.info(f"Authorized user {user.dict_public()}")
+    return user, access_token
+
+
+@routes.get("/logout")
+async def logout(request: web.Request) -> web.Response:
+    _, access_token = await get_authorized_user(request)
+    db = get_db(request)
+    await db.delete_access_token(access_token)
+    return web.Response()
+
+
+@routes.get("/secret")
+async def auth_test(request: web.Request) -> web.Response:
+    user = await get_authorized_user(request)
+    return web.Response()
 
 
 class BackendApp:

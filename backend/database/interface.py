@@ -11,6 +11,8 @@ class DatabaseInterface(abc.ABC):
     async def setup(self) -> None:
         logger.info(f"Root signup token: {await self.get_root_signup_token()}")
 
+    # user management
+
     @abc.abstractmethod
     async def lookup_user(self, username: str) -> Optional[StoredUser]:
         ...
@@ -18,6 +20,8 @@ class DatabaseInterface(abc.ABC):
     @abc.abstractmethod
     async def save_user(self, user: StoredUser) -> StoredUser:
         ...
+
+    # signup token management
 
     @abc.abstractmethod
     async def get_root_signup_token(self) -> SignupToken:
@@ -29,4 +33,18 @@ class DatabaseInterface(abc.ABC):
 
     @abc.abstractmethod
     async def save_signup_token(self, signup_token: SignupToken) -> SignupToken:
+        ...
+
+    # access token management
+
+    @abc.abstractmethod
+    async def save_access_token(self, access_token: str, user: StoredUser) -> None:
+        ...
+
+    @abc.abstractmethod
+    async def delete_access_token(self, access_token: str) -> None:
+        ...
+
+    @abc.abstractmethod
+    async def authenticate_user(self, access_token: str) -> Optional[StoredUser]:
         ...
