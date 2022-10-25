@@ -2,6 +2,7 @@ import abc
 import logging
 from typing import Optional
 
+from backend.auth import generate_signup_token
 from backend.model import SignupToken, StoredUser
 
 logger = logging.getLogger(__name__)
@@ -9,6 +10,11 @@ logger = logging.getLogger(__name__)
 
 class DatabaseInterface(abc.ABC):
     async def setup(self) -> None:
+        root_signup_token = await self.get_root_signup_token()
+        if root_signup_token is None:
+            root_signup_token = await self.save_signup_token(
+                SignupToken(creator_username=None, token=generate_signup_token())
+            )
         logger.info(f"Root signup token: {await self.get_root_signup_token()}")
 
     # user management
@@ -23,12 +29,15 @@ class DatabaseInterface(abc.ABC):
 
     # signup token management
 
-    @abc.abstractmethod
-    async def get_root_signup_token(self) -> SignupToken:
-        ...
+    async def get_root_signup_token(self) -> Optional[SignupToken]:
+        return await self.get_signup_token(creator_username=None)
 
     @abc.abstractmethod
     async def lookup_signup_token(self, token: str) -> Optional[SignupToken]:
+        ...
+
+    @abc.abstractmethod
+    async def get_signup_token(self, creator_username: Optional[str]) -> Optional[SignupToken]:
         ...
 
     @abc.abstractmethod

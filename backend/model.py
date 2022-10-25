@@ -2,7 +2,7 @@ import logging
 from typing import Any, Literal, Optional, Type, TypedDict, TypeVar
 
 from aiohttp import web
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, Field, ValidationError
 from pydantic.error_wrappers import display_errors
 from pymongo.results import InsertOneResult
 
@@ -36,39 +36,37 @@ T = TypeVar("T", bound=BaseModel)
 
 
 class PydanticModel(BaseModel):
-    class Config:
-        extra = "ignore"
-
     @classmethod
-    def from_user_data(cls: Type[T], raw: Any) -> T:
+    def from_request_json(cls: Type[T], raw: Any) -> T:
         try:
             return cls.parse_obj(raw)
         except ValidationError as e:
             raise web.HTTPBadRequest(reason=display_errors(e.errors()))
 
+    def to_public_json(self) -> dict[str, Any]:
+        return self.dict()  # Config/Field-level excludes are respected
+
 
 class DbSchemaModel(PydanticModel):
-    id: str = "n/a"
+    db_id: str = Field("n/a", exclude=True)
 
     def is_stored(self) -> bool:
-        return self.id != "n/a"
+        return self.db_id != "n/a"
 
     def to_mongo_db(self) -> dict[str, Any]:
-        dump = self.dict()
-        dump.pop("id", None)
-        return dump
+        return self.dict()  # Config/Field-level excludes are respected
 
     @classmethod
     def from_mongo_db(cls: Type[T], raw: Any) -> T:
         try:
-            raw["id"] = str(raw["_id"])  # id field returned by MongoDB
+            raw["db_id"] = str(raw.pop("_id"))  # id field returned by MongoDB
             return cls.parse_obj(raw)
-        except ValidationError:
-            logger
-            raise web.HTTPInternalServerError(reason="damn")
+        except (KeyError, ValidationError):
+            logger.exception("Error parsing data from db")
+            raise web.HTTPInternalServerError(reason="Internal server error")
 
     def inserted_as(self: T, insert_one_result: InsertOneResult) -> T:
-        return self.copy(update={"id": str(insert_one_result.inserted_id)})
+        return self.copy(update={"db_id": str(insert_one_result.inserted_id)})
 
 
 class SubmittedUserCredentials(PydanticModel):
@@ -80,14 +78,24 @@ class SubmittedUserCredentials(PydanticModel):
     password: str
 
 
+class SubmittedUserData(SubmittedUserCredentials):
+    full_name: str
+
+
 class StoredUser(DbSchemaModel):
     username: str
+    full_name: str
+
     invited_by_username: Optional[str]
+
     password_hash: str
     salt: str
 
-    def dict_public(self) -> dict[str, str]:
-        return self.dict(exclude={"password_hash", "salt"})
+    def to_public_json(self) -> dict[str, Any]:
+        dump = super().to_public_json()
+        dump.pop("password_hash")
+        dump.pop("salt")
+        return dump
 
 
 class SignupToken(DbSchemaModel):
