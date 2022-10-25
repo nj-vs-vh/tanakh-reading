@@ -87,10 +87,10 @@ def get_db(request: web.Request) -> DatabaseInterface:
 async def sign_up(request: web.Request) -> web.Response:
     db = get_db(request)
 
-    signup_token_value = request.headers.get('X-Signup-Token')
+    signup_token_value = request.headers.get("X-Signup-Token")
     if signup_token_value is None:
         raise web.HTTPUnauthorized(reason="No signup token found in X-Signup-Token header")
-    
+
     signup_token = await db.lookup_signup_token(signup_token_value)
     if signup_token is None:
         raise web.HTTPUnauthorized(reason="Signup token is invalid")
@@ -126,7 +126,7 @@ async def login(request: web.Request) -> web.Response:
 
 
 async def get_authorized_user(request: web.Request) -> tuple[StoredUser, str]:
-    access_token = request.headers.get('X-Token')
+    access_token = request.headers.get("X-Token")
     if access_token is None:
         raise web.HTTPUnauthorized(reason="No X-Token header found in the request")
     db = get_db(request)
