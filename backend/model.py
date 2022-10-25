@@ -4,6 +4,8 @@ from typing import Any, Literal, Optional, Type, TypedDict, TypeVar
 from aiohttp import web
 from pydantic import BaseModel, ValidationError
 from pydantic.error_wrappers import display_errors
+from pymongo.results import InsertOneResult
+
 
 logger = logging.getLogger(__name__)
 
@@ -49,9 +51,9 @@ class PydanticModel(BaseModel):
 class DbSchemaModel(PydanticModel):
     id: str = "n/a"
 
-    def dict_for_mongo(self) -> dict[str, Any]:
+    def to_mongo_db(self) -> dict[str, Any]:
         dump = self.dict()
-        dump.pop("_id", None)
+        dump.pop("id", None)
         return dump
 
     @classmethod
@@ -63,8 +65,11 @@ class DbSchemaModel(PydanticModel):
             logger
             raise web.HTTPInternalServerError(reason="damn")
 
+    def inserted_as(self: T, insert_one_result: InsertOneResult) -> T:
+        return self.copy(update={"id": str(insert_one_result.inserted_id)})
 
-class UserCredentials(PydanticModel):
+
+class SubmittedUserCredentials(PydanticModel):
     class Config:
         min_anystr_length = 3
         max_anystr_length = 128
@@ -75,8 +80,14 @@ class UserCredentials(PydanticModel):
 
 class StoredUser(DbSchemaModel):
     username: str
+    invited_by_username: Optional[str]
     password_hash: str
     salt: str
 
     def dict_public(self) -> dict[str, str]:
         return self.dict(exclude={"password_hash", "salt"})
+
+
+class SignupToken(DbSchemaModel):
+    creator_username: Optional[str]
+    token: str
