@@ -1,17 +1,14 @@
 <script lang="ts">
     import { getContext } from "svelte";
     import { Navigate } from 'svelte-router-spa'
-    import type { CurrentRoute } from "svelte-router-spa/types/components/route";
     
-    import Screen from "./shared/Screen.svelte";
+    import Screen from "../components/shared/Screen.svelte";
     
-    import Menu from "./Menu.svelte";
+    import Menu from "../components/Menu.svelte";
     
     import { textSourcesConfigStore } from "../settings/textSources";
     import { parshaPath, range } from "../utils";
     import type { Metadata } from "../types";
-
-    // export let currentRoute: CurrentRoute;
 
     let metadata: Metadata = getContext("metadata");
 

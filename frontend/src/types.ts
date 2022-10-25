@@ -46,3 +46,20 @@ export interface Metadata {
     commenter_names: Record<string, string>;
     available_parsha: Array<number>;
 }
+
+
+export interface UserCredentials {
+    username: string;
+    password: string;
+}
+
+
+export interface UserData {
+    full_name: string;
+}
+
+
+export interface SignupData {
+    credentials: UserCredentials;
+    data: UserData;
+}

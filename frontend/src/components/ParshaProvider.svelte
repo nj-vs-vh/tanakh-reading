@@ -29,9 +29,7 @@
     </Screen>
 {:then parsha}
     {#if typeof parsha === "string"}
-        <Screen>
-            <Error errorMessage={parsha} />
-        </Screen>
+        <Error errorMessage={parsha} />
     {:else}
         <Parsha {parsha} />
     {/if}
