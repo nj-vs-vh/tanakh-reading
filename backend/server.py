@@ -1,7 +1,5 @@
 import logging
 import secrets
-from hashlib import sha256
-from typing import Awaitable, Callable
 
 from aiohttp import hdrs, web
 from aiohttp.typedefs import Handler
@@ -147,7 +145,7 @@ async def logout(request: web.Request) -> web.Response:
 
 @routes.get("/secret")
 async def auth_test(request: web.Request) -> web.Response:
-    user = await get_authorized_user(request)
+    await get_authorized_user(request)
     return web.Response()
 
 
