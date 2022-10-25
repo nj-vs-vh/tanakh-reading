@@ -1,5 +1,5 @@
-from hashlib import sha256
 import secrets
+from hashlib import sha256
 
 from backend import config
 

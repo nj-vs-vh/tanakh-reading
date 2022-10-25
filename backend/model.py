@@ -6,7 +6,6 @@ from pydantic import BaseModel, ValidationError
 from pydantic.error_wrappers import display_errors
 from pymongo.results import InsertOneResult
 
-
 logger = logging.getLogger(__name__)
 
 
