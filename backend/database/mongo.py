@@ -36,6 +36,8 @@ class MongoDatabase(DatabaseInterface):
     async def _awrap(self, func: Callable[..., T], *args) -> T:
         return await asyncio.get_running_loop().run_in_executor(self.threads, func, *args)
 
+    # users
+
     async def lookup_user(self, username: str) -> Optional[StoredUser]:
         doc = await self._awrap(self.users_coll.find_one, {"username": username})
         if doc is None:
@@ -50,14 +52,7 @@ class MongoDatabase(DatabaseInterface):
         res = await self._awrap(self.users_coll.insert_one, user.to_mongo_db())
         return user.inserted_as(res)
 
-    async def get_root_signup_token(self) -> SignupToken:
-        root_token_doc = await self._awrap(self.signup_tokens_coll.find_one, {"creator_username": None})
-        if root_token_doc is None:
-            logger.info("Creating root signup token")
-            new_root_token = SignupToken(creator_username=None, token=generate_signup_token())
-            return await self.save_signup_token(new_root_token)
-        else:
-            return SignupToken.from_mongo_db(root_token_doc)
+    # signup tokens
 
     async def lookup_signup_token(self, token: str) -> Optional[SignupToken]:
         doc = await self._awrap(self.signup_tokens_coll.find_one, {"token": token})
@@ -70,12 +65,21 @@ class MongoDatabase(DatabaseInterface):
         res = await self._awrap(self.signup_tokens_coll.insert_one, signup_token.to_mongo_db())
         return signup_token.inserted_as(res)
 
+    async def get_signup_token(self, creator_username: Optional[str]) -> Optional[SignupToken]:
+        res = await self._awrap(self.signup_tokens_coll.find_one, {"creator_username": creator_username})
+        if res is None:
+            return None
+        else:
+            return SignupToken.from_mongo_db(res)
+
+    # access tokens
+
     async def save_access_token(self, access_token: str, user: StoredUser) -> None:
         if not user.is_stored():
             raise RuntimeError("user must be stored first to be assigned access token")
         await self._awrap(
             self.access_tokens_coll.insert_one,
-            {"token": access_token, "user_id": user.id},
+            {"token": access_token, "user_id": user.db_id},
         )
 
     async def delete_access_token(self, access_token: str) -> None:
