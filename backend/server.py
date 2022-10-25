@@ -10,7 +10,7 @@ from backend import config, metadata
 from backend.auth import hash_password
 from backend.constants import AppExtensions
 from backend.database.interface import DatabaseInterface
-from backend.model import StoredUser, UserCredentials
+from backend.model import StoredUser, SubmittedUserCredentials
 from backend.static import available_parsha, parsha_json
 from backend.utils import safe_request_json
 
@@ -30,24 +30,6 @@ async def cors_middleware(request: web.Request, handler: Handler) -> web.StreamR
         resp.headers[hdrs.ACCESS_CONTROL_ALLOW_METHODS] = "POST, GET, OPTIONS"
         resp.headers[hdrs.ACCESS_CONTROL_MAX_AGE] = "300"
     return resp
-
-
-def has_pre_auth(request: web.Request) -> bool:
-    return (
-        sha256(request.headers.get("X-Pre-Auth", "").encode()).hexdigest()
-        == "36c053e131f38f1917821ff1cc0a6666aa55896873fc3ee3e91849a79a16ab35"
-    )
-
-
-def requires_pre_auth(
-    handler: Callable[[web.Request], Awaitable[web.Response]]
-) -> Callable[[web.Request], Awaitable[web.Response]]:
-    async def wrapper(request: web.Request) -> web.Response:
-        if not has_pre_auth(request):
-            raise web.HTTPUnauthorized(reason="No pre-auth found in request")
-        return await handler(request)
-
-    return wrapper
 
 
 @routes.options("/{wildcard:.*}")
@@ -101,28 +83,37 @@ def get_db(request: web.Request) -> DatabaseInterface:
     return request.app[AppExtensions.DB]
 
 
-@routes.post("/user")
-@requires_pre_auth
-async def create_new_user(request: web.Request) -> web.Response:
-    new_user_credentials = UserCredentials.from_user_data(await safe_request_json(request))
+@routes.post("/signup")
+async def sign_up(request: web.Request) -> web.Response:
+    db = get_db(request)
+
+    signup_token_value = request.headers.get('X-Signup-Token')
+    if signup_token_value is None:
+        raise web.HTTPUnauthorized(reason="No signup token found in X-Signup-Token header")
+    
+    signup_token = await db.lookup_signup_token(signup_token_value)
+    if signup_token is None:
+        raise web.HTTPUnauthorized(reason="Signup token is invalid")
+
+    new_user_credentials = SubmittedUserCredentials.from_user_data(await safe_request_json(request))
     salt = secrets.token_hex(32)
     potential_new_user = StoredUser(
         username=new_user_credentials.username,
+        invited_by_username=signup_token.creator_username,
         password_hash=hash_password(new_user_credentials.password, salt),
         salt=salt,
     )
-    db = get_db(request)
     existing_user = await db.lookup_user(potential_new_user.username)
     if existing_user is not None:
         raise web.HTTPConflict(reason="User with this username already exists")
 
-    await db.create_user(potential_new_user)
-    return web.json_response(potential_new_user.dict_public())
+    created_user = await db.save_user(potential_new_user)
+    return web.json_response(created_user.dict_public())
 
 
-@routes.post("/auth")
-async def authorize(request: web.Request) -> web.Response:
-    credentials = UserCredentials.from_user_data(await safe_request_json(request))
+@routes.post("/login")
+async def login(request: web.Request) -> web.Response:
+    credentials = SubmittedUserCredentials.from_user_data(await safe_request_json(request))
     db = get_db(request)
     user = await db.lookup_user(credentials.username)
     if user is None:
@@ -139,6 +130,11 @@ class BackendApp:
         self.app.middlewares.append(cors_middleware)
         self.app.add_routes(routes)
         self.app[AppExtensions.DB] = db
+
+        async def db_setup(app: web.Application):
+            await db.setup()
+
+        self.app.on_startup.append(db_setup)
 
     def run(self) -> None:
         web.run_app(self.app, port=config.PORT)
