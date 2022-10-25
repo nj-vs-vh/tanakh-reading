@@ -9,10 +9,10 @@ from backend.auth import generate_signup_token, hash_password
 from backend.constants import AppExtensions
 from backend.database.interface import DatabaseInterface
 from backend.model import (
+    NewUser,
     SignupToken,
     StoredUser,
-    SubmittedUserCredentials,
-    SubmittedUserData,
+    UserCredentials,
 )
 from backend.static import available_parsha, parsha_json
 from backend.utils import safe_request_json
@@ -98,26 +98,26 @@ async def sign_up(request: web.Request) -> web.Response:
     if signup_token is None:
         raise web.HTTPUnauthorized(reason="Invalid signup token")
 
-    submitted_user_data = SubmittedUserData.from_request_json(await safe_request_json(request))
+    new_user = NewUser.from_request_json(await safe_request_json(request))
     salt = secrets.token_hex(32)
-    new_user = StoredUser(
-        username=submitted_user_data.username,
-        full_name=submitted_user_data.full_name,
+    new_stored_user = StoredUser(
+        data=new_user.data,
+        username=new_user.credentials.username,
         invited_by_username=signup_token.creator_username,
-        password_hash=hash_password(submitted_user_data.password, salt),
+        password_hash=hash_password(new_user.credentials.password, salt),
         salt=salt,
     )
-    existing_user = await db.lookup_user(new_user.username)
-    if existing_user is not None:
+    existing_stored_user = await db.lookup_user(new_stored_user.username)
+    if existing_stored_user is not None:
         raise web.HTTPConflict(reason="Username already taken")
 
-    created_user = await db.save_user(new_user)
+    created_user = await db.save_user(new_stored_user)
     return web.json_response(created_user.to_public_json())
 
 
 @routes.post("/login")
 async def login(request: web.Request) -> web.Response:
-    credentials = SubmittedUserCredentials.from_request_json(await safe_request_json(request))
+    credentials = UserCredentials.from_request_json(await safe_request_json(request))
     db = get_db(request)
     user = await db.lookup_user(credentials.username)
     if user is None:
