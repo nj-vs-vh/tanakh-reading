@@ -48,8 +48,26 @@ async def preflight(request: web.Request) -> web.Response:
     return web.Response()
 
 
+async def get_authorized_user(request: web.Request) -> tuple[StoredUser, str]:
+    access_token = request.headers.get(ACCESS_TOKEN_HEADER)
+    if access_token is None:
+        raise web.HTTPUnauthorized(reason=f"No {ACCESS_TOKEN_HEADER} header found")
+    db = get_db(request)
+    user = await db.authenticate_user(access_token)
+    if user is None:
+        raise web.HTTPUnauthorized(reason="Invalid access token, please log in again")
+    logger.info(f"Authorized user {user.to_public_json()}")
+    return user, access_token
+
+
 @routes.get("/metadata")
 async def get_metadata(request: web.Request) -> web.Response:
+    try:
+        user, _ = await get_authorized_user(request)
+        user_dump = user.to_public_json()
+    except Exception:
+        user_dump = None
+
     return web.json_response(
         {
             "book_names": metadata.torah_book_names,
@@ -63,6 +81,7 @@ async def get_metadata(request: web.Request) -> web.Response:
             "commenter_names": metadata.commenter_names,
             "commenter_links": metadata.commenter_links,
             "available_parsha": available_parsha(),
+            "logged_in_user": user_dump,
         }
     )
 
@@ -144,18 +163,6 @@ async def login(request: web.Request) -> web.Response:
     token = secrets.token_hex(32)
     await db.save_access_token(access_token=token, user=user)
     return web.json_response({"token": token})
-
-
-async def get_authorized_user(request: web.Request) -> tuple[StoredUser, str]:
-    access_token = request.headers.get(ACCESS_TOKEN_HEADER)
-    if access_token is None:
-        raise web.HTTPUnauthorized(reason=f"No {ACCESS_TOKEN_HEADER} header found")
-    db = get_db(request)
-    user = await db.authenticate_user(access_token)
-    if user is None:
-        raise web.HTTPUnauthorized(reason="Invalid access token, please log in again")
-    logger.info(f"Authorized user {user.to_public_json()}")
-    return user, access_token
 
 
 @routes.get("/logout")
