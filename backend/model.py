@@ -69,22 +69,23 @@ class DbSchemaModel(PydanticModel):
         return self.copy(update={"db_id": str(insert_one_result.inserted_id)})
 
 
-class SubmittedUserCredentials(PydanticModel):
-    class Config:
-        min_anystr_length = 3
-        max_anystr_length = 128
-
-    username: str
-    password: str
+class UserCredentials(PydanticModel):
+    username: str = Field(min_length=5, max_length=64)
+    password: str = Field(min_length=6, max_length=64)
 
 
-class SubmittedUserData(SubmittedUserCredentials):
+class UserData(PydanticModel):
     full_name: str
+
+
+class NewUser(PydanticModel):
+    credentials: UserCredentials
+    data: UserData
 
 
 class StoredUser(DbSchemaModel):
     username: str
-    full_name: str
+    data: UserData
 
     invited_by_username: Optional[str]
 
