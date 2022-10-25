@@ -20,6 +20,7 @@
         else {
             saveAccessToken(loginResult.token);
             navigateTo("/");
+            window.location.reload();
         }
     }
 </script>

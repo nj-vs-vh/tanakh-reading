@@ -45,6 +45,7 @@ export interface Metadata {
     commenter_links: Record<string, Array<string>>;
     commenter_names: Record<string, string>;
     available_parsha: Array<number>;
+    logged_in_user: LoggedInUser | null;
 }
 
 
@@ -62,4 +63,11 @@ export interface UserData {
 export interface SignupData {
     credentials: UserCredentials;
     data: UserData;
+}
+
+
+export interface LoggedInUser {
+    username: string;
+    data: UserData;
+    invited_by_username: string;
 }
