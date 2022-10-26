@@ -14,6 +14,7 @@
     import { getUrlHashVerseCoords, range, setUrlHash } from "../utils";
 
     import { routes } from "../routes";
+    import { deleteAccessToken } from "../auth";
 
     export let metadata: Metadata;
     setContext("metadata", metadata);
@@ -24,6 +25,9 @@
     initTextSourcesConfig(metadata);
     initTextDecorationStyle();
     initCommentStyle();
+    if (metadata.logged_in_user === null) {
+        deleteAccessToken();  // removing possible residual access token
+    }
 
     let mainTextSource: string;
     textSourcesConfigStore.subscribe((config) => {

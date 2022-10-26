@@ -28,7 +28,7 @@
     <div class="inner-container">
         {#if homeButton}
             <Navigate to="/">
-                <MenuFolder icon="synagogue" title="Оглавление" />
+                <MenuFolder icon="synagogue" title="Главная" />
             </Navigate>
         {/if}
         <TextSettings />

@@ -1,12 +1,14 @@
 <script lang="ts">
     import type { CurrentRoute } from "svelte-router-spa/types/components/route";
-    import { checkSignupToken, signup } from "../api";
+    import { checkSignupToken, login, signup } from "../api";
     import Screen from "../components/shared/Screen.svelte";
     import Error from "../components/shared/Error.svelte";
     import Spinner from "../components/shared/Spinner.svelte";
     import { navigateTo } from "svelte-router-spa";
     import Keydown from "svelte-keydown";
     import Hero from "../components/shared/Hero.svelte";
+    import type { UserCredentials } from "../types";
+    import { saveAccessToken } from "../auth";
 
     export let currentRoute: CurrentRoute;
     const signupToken: string = currentRoute.namedParams.token;
@@ -39,12 +41,23 @@
             return;
         }
 
+        const credentials: UserCredentials = { username, password }
+
         const res = await signup(signupToken, {
-            credentials: { username, password },
+            credentials: credentials,
             data: { full_name: fullName },
         });
         signupError = res;
-        if (res === null) navigateTo("/"); // TODO: login and navigate to user management
+        if (res === null) {
+            try {
+                const accessToken = await login(credentials);
+                saveAccessToken(accessToken.token);
+                navigateTo("/account");
+                window.location.reload();
+            } catch (e) {
+                signupError = e;
+            }
+        }
     }
 </script>
 
@@ -73,7 +86,7 @@
                 placeholder="Имя"
                 bind:value={fullName}
             />
-            <button on:click={onSignup}>Зарегистрироваться</button>
+            <button on:click={onSignup}>Создать учётную запись</button>
             <Keydown on:Enter={onSignup} />
             <div hidden={signupError === null} class="error-badge">
                 {signupError}

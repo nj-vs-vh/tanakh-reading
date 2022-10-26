@@ -17,7 +17,7 @@
         try {
             const accessToken = await login({ username, password });
             saveAccessToken(accessToken.token);
-            navigateTo("/");
+            navigateTo("/account");
             window.location.reload();
         } catch (e) {
             loginError = e;
