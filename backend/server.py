@@ -9,7 +9,7 @@ from backend.auth import generate_signup_token, hash_password
 from backend.constants import ACCESS_TOKEN_HEADER, SIGNUP_TOKEN_HEADER, AppExtensions
 from backend.database.interface import DatabaseInterface
 from backend.model import NewUser, SignupToken, StoredUser, UserCredentials
-from backend.static import available_parsha, parsha_json
+from backend.static import available_parsha, parsha_data
 from backend.utils import safe_request_json
 
 logger = logging.getLogger(__name__)
@@ -97,10 +97,10 @@ async def get_parsha(request: web.Request) -> web.Response:
     except Exception:
         raise web.HTTPBadRequest(reason="Parsha index must be a number")
 
-    parsha_file = parsha_json(parsha_index)
-    if not parsha_file.exists():
+    parsha_data_ = parsha_data(parsha_index)
+    if parsha_data_ is None:
         raise web.HTTPNotFound(reason="Parsha is not available")
-    return web.json_response(text=parsha_file.read_text())
+    return web.json_response(parsha_data_)
 
 
 @routes.get("/")

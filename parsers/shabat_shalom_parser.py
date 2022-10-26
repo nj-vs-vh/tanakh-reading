@@ -13,7 +13,7 @@ import requests  # type: ignore
 from backend import metadata
 from backend.metadata import Commenter, TextSource, get_book_by_parsha
 from backend.model import ChapterData, CommentData, ParshaData, VerseData
-from backend.static import parsha_json
+from backend.static import parsha_path
 from parsers.identification import ensure_comment_ids
 from parsers.utils import (
     HTML_DIR,
@@ -248,7 +248,7 @@ def parse_parsha(parsha: int):
             print(f"WARNING: there are some missing verses in chapter {chapter_data['chapter']}: {verses}")
 
     ensure_comment_ids(parsha_data)
-    parsha_json(parsha).write_text(json.dumps(parsha_data, ensure_ascii=False, indent=2))
+    parsha_path(parsha).write_text(json.dumps(parsha_data, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":
