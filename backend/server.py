@@ -222,6 +222,25 @@ async def star_comment(request: web.Request) -> web.Response:
     return web.json_response(starred_comment.to_public_json())
 
 
+@routes.delete("/starred-comments")
+async def unstar_comment(request: web.Request) -> web.Response:
+    user, _ = await get_authorized_user(request)
+    comment_coords = CommentCoords.from_request_json(await safe_request_json(request))
+    validate_comment_coords(comment_coords)
+    db = get_db(request)
+    await db.delete_starred_comment(
+        StarredComment(
+            starrer_username=user.username,
+            comment_id=comment_coords.comment_id,
+            book=comment_coords.book,
+            parsha=comment_coords.parsha,
+            chapter=comment_coords.chapter,
+            verse=comment_coords.verse,
+        )
+    )
+    return web.Response()
+
+
 @routes.get("/starred-comments")
 async def get_starred_comments(request: web.Request) -> web.Response:
     user, _ = await get_authorized_user(request)

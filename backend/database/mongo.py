@@ -116,13 +116,20 @@ class MongoDatabase(DatabaseInterface):
 
     async def save_starred_comment(self, starred_comment: StarredComment) -> StarredComment:
         existing_comment_doc = await self._awrap(
-            self.starred_comments_coll.find_one, {"comment_id": starred_comment.comment_id}
+            self.starred_comments_coll.find_one,
+            {"comment_id": starred_comment.comment_id, "starrer_username": starred_comment.starrer_username},
         )
         if existing_comment_doc is None:
             res = await self._awrap(self.starred_comments_coll.insert_one, starred_comment.to_mongo_db())
             return starred_comment.inserted_as(res)
         else:
             return StarredComment.from_mongo_db(existing_comment_doc)
+
+    async def delete_starred_comment(self, starred_comment: StarredComment) -> None:
+        await self._awrap(
+            self.starred_comments_coll.delete_one,
+            {"comment_id": starred_comment.comment_id, "starrer_username": starred_comment.starrer_username},
+        )
 
     def _blocking_lookup_starred_comments(
         self, starrer_usernames: set[str], text_coords_query: TextCoordsQuery
