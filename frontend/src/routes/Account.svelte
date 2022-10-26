@@ -10,6 +10,7 @@
     import type { Metadata } from "../types";
     import Spinner from "../components/shared/Spinner.svelte";
     import { signupPath } from "../utils";
+    import { deleteAccessToken } from "../auth";
 
     const metadata: Metadata = getContext("metadata");
 
@@ -27,40 +28,53 @@
 
     async function onLogout() {
         await logout();
+        deleteAccessToken();
         navigateTo("/");
         window.location.reload();
     }
 </script>
 
-<ToMainMenu />
-<Hero>
-    <h2>
-        <span>{metadata.logged_in_user.data.full_name}</span>
-        <span class="username">@{metadata.logged_in_user.username}</span>
-    </h2>
-    <div class="account-settings-block">
-        <p>
-            <strong>Ссылка-приглашение</strong>
-            <span>для регистрации новых пользователь:ниц</span>
-        </p>
-        <p style="width: 100%; justify-content: center; display: flex;">
-            {#await mySignupTokenPromise}
-                <Spinner sizeEm={2} marginTopPx={0} />
-            {:then signupToken}
-                {#if signupToken === null}
-                    <button on:click={onGenerateSignupToken}>Сгенерировать</button>
-                {:else}
-                    <Copyable content={window.location.origin + signupPath(signupToken.token)}/>
-                {/if}
-            {/await}
-        </p>
-    </div>
-    <div class="account-settings-block">
-        <p>
-            <button style="padding: 0.5em 3em; font-weight: 600;" on:click={onLogout}>Выйти</button>
-        </p>
-    </div>
-</Hero>
+{#if metadata.logged_in_user !== null}
+    <ToMainMenu />
+    <Hero>
+        <h2>
+            <span>{metadata.logged_in_user.data.full_name}</span>
+            <span class="username">@{metadata.logged_in_user.username}</span>
+        </h2>
+        <div class="account-settings-block">
+            <p>
+                <strong>Ссылка-приглашение</strong>
+                <span>для регистрации новых пользователь:ниц</span>
+            </p>
+            <p
+                style="width: 100%; justify-content: center; display: flex; margin-top: 0.8em;"
+            >
+                {#await mySignupTokenPromise}
+                    <Spinner sizeEm={2} marginTopPx={0} />
+                {:then signupToken}
+                    {#if signupToken === null}
+                        <button on:click={onGenerateSignupToken}
+                            >Сгенерировать</button
+                        >
+                    {:else}
+                        <Copyable
+                            content={window.location.origin +
+                                signupPath(signupToken.token)}
+                        />
+                    {/if}
+                {/await}
+            </p>
+        </div>
+        <div class="account-settings-block">
+            <p>
+                <button
+                    style="padding: 0.5em 3em; font-weight: 600;"
+                    on:click={onLogout}>Выйти</button
+                >
+            </p>
+        </div>
+    </Hero>
+{/if}
 
 <style>
     span.username {
