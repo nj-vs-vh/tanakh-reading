@@ -7,7 +7,7 @@ from pymongo import MongoClient
 
 from backend import config
 from backend.database.interface import DatabaseInterface
-from backend.model import SignupToken, StoredUser
+from backend.model import SignupToken, StarredComment, StoredUser, TextCoordsQuery
 
 logger = logging.getLogger(__name__)
 
@@ -19,6 +19,7 @@ class MongoDatabase(DatabaseInterface):
     USERS_COLLECTION_NAME = "users"
     SIGNUP_TOKENS_COLLECTION_NAME = "signup-tokens"
     ACCESS_TOKENS_COLLECTION_NAME = "access-tokens"
+    STARRED_COMMENTS_COLLECTION_NAME = "starred-comments"
 
     def __init__(self, mongo_client: MongoClient[dict], db_name: str):
         self.client = mongo_client
@@ -26,6 +27,7 @@ class MongoDatabase(DatabaseInterface):
         self.users_coll = self.db[self.USERS_COLLECTION_NAME]
         self.signup_tokens_coll = self.db[self.SIGNUP_TOKENS_COLLECTION_NAME]
         self.access_tokens_coll = self.db[self.ACCESS_TOKENS_COLLECTION_NAME]
+        self.starred_comments_coll = self.db[self.STARRED_COMMENTS_COLLECTION_NAME]
         self.threads = ThreadPoolExecutor(max_workers=8)
 
     def __str__(self) -> str:
@@ -109,3 +111,31 @@ class MongoDatabase(DatabaseInterface):
             return None
         user = looked_up_users[0]
         return StoredUser.from_mongo_db(user)
+
+    # starred comments
+
+    async def save_starred_comment(self, starred_comment: StarredComment) -> StarredComment:
+        existing_comment_doc = await self._awrap(
+            self.starred_comments_coll.find_one, {"comment_id": starred_comment.comment_id}
+        )
+        if existing_comment_doc is None:
+            res = await self._awrap(self.starred_comments_coll.insert_one, starred_comment.to_mongo_db())
+            return starred_comment.inserted_as(res)
+        else:
+            return StarredComment.from_mongo_db(existing_comment_doc)
+
+    def _blocking_lookup_starred_comments(
+        self, starrer_usernames: set[str], text_coords_query: TextCoordsQuery
+    ) -> list[StarredComment]:
+        cursor = self.starred_comments_coll.find(
+            {
+                "starrer_username": {"$in": list(starrer_usernames)},
+                **text_coords_query.to_mongo_query(),
+            }
+        )
+        return [StarredComment.from_mongo_db(doc) for doc in cursor]
+
+    async def lookup_starred_comments(
+        self, starrer_usernames: set[str], text_coords_query: TextCoordsQuery
+    ) -> list[StarredComment]:
+        return await self._awrap(self._blocking_lookup_starred_comments, starrer_usernames, text_coords_query)

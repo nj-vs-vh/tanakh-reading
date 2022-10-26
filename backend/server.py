@@ -8,9 +8,18 @@ from backend import config, metadata
 from backend.auth import generate_signup_token, hash_password
 from backend.constants import ACCESS_TOKEN_HEADER, SIGNUP_TOKEN_HEADER, AppExtensions
 from backend.database.interface import DatabaseInterface
-from backend.model import NewUser, SignupToken, StoredUser, UserCredentials
-from backend.static import available_parsha, parsha_data
+from backend.model import (
+    CommentCoords,
+    NewUser,
+    SignupToken,
+    StarredComment,
+    StoredUser,
+    TextCoordsQuery,
+    UserCredentials,
+)
+from backend.static import get_available_parsha, get_parsha_data
 from backend.utils import safe_request_json
+from backend.validation import validate_comment_coords
 
 logger = logging.getLogger(__name__)
 routes = web.RouteTableDef()
@@ -80,7 +89,7 @@ async def get_metadata(request: web.Request) -> web.Response:
             "text_source_links": metadata.text_source_links,
             "commenter_names": metadata.commenter_names,
             "commenter_links": metadata.commenter_links,
-            "available_parsha": available_parsha(),
+            "available_parsha": get_available_parsha(),
             "logged_in_user": user_dump,
         }
     )
@@ -97,10 +106,10 @@ async def get_parsha(request: web.Request) -> web.Response:
     except Exception:
         raise web.HTTPBadRequest(reason="Parsha index must be a number")
 
-    parsha_data_ = parsha_data(parsha_index)
-    if parsha_data_ is None:
+    parsha_data = get_parsha_data(parsha_index)
+    if parsha_data is None:
         raise web.HTTPNotFound(reason="Parsha is not available")
-    return web.json_response(parsha_data_)
+    return web.json_response(parsha_data)
 
 
 @routes.get("/")
@@ -192,6 +201,36 @@ async def get_my_signup_token(request: web.Request) -> web.Response:
     if token is None:
         raise web.HTTPNotFound(reason="You have not yet created a signup token")
     return web.json_response(token.to_public_json())
+
+
+@routes.post("/starred-comments")
+async def star_comment(request: web.Request) -> web.Response:
+    user, _ = await get_authorized_user(request)
+    comment_coords = CommentCoords.from_request_json(await safe_request_json(request))
+    validate_comment_coords(comment_coords)
+    db = get_db(request)
+    starred_comment = await db.save_starred_comment(
+        StarredComment(
+            starrer_username=user.username,
+            comment_id=comment_coords.comment_id,
+            book=comment_coords.book,
+            parsha=comment_coords.parsha,
+            chapter=comment_coords.chapter,
+            verse=comment_coords.verse,
+        )
+    )
+    return web.json_response(starred_comment.to_public_json())
+
+
+@routes.get("/starred-comments")
+async def get_starred_comments(request: web.Request) -> web.Response:
+    user, _ = await get_authorized_user(request)
+    text_coords_query = TextCoordsQuery.from_request_json(await safe_request_json(request))
+    db = get_db(request)
+    starred_comments = await db.lookup_starred_comments(
+        starrer_usernames={user.username}, text_coords_query=text_coords_query
+    )
+    return web.json_response([sc.to_public_json() for sc in starred_comments])
 
 
 class BackendApp:

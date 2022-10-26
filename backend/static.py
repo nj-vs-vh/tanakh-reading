@@ -17,7 +17,7 @@ def parsha_path(parsha: int) -> Path:
 
 
 @lru_cache(maxsize=None)
-def parsha_data(parsha: int) -> Optional[ParshaData]:
+def get_parsha_data(parsha: int) -> Optional[ParshaData]:
     path = parsha_path(parsha)
     if not path.exists():
         return None
@@ -26,7 +26,7 @@ def parsha_data(parsha: int) -> Optional[ParshaData]:
 
 
 @lru_cache(maxsize=None)
-def available_parsha() -> list[int]:
+def get_available_parsha() -> list[int]:
     result = sorted(int(json_file.stem) for json_file in JSON_DIR.iterdir())
     logger.info(f"List of available parshas: {result}")
     return result
