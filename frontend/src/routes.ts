@@ -6,7 +6,7 @@ import Login from "./routes/Login.svelte";
 import Account from "./routes/Account.svelte";
 
 import type { Route } from "svelte-router-spa/types/components/router";
-import { parshaPath } from "./utils";
+import { parshaPath, signupPath } from "./utils";
 
 
 export const routes: Route[] = [
@@ -19,7 +19,7 @@ export const routes: Route[] = [
         component: ParshaProvider,
     },
     {
-        name: "/signup/:token",
+        name: signupPath(":token"),
         component: Signup,
     },
     {
