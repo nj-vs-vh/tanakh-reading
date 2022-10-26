@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 class DatabaseInterface(abc.ABC):
     async def setup(self) -> None:
-        logger.info(f"Reading root signup token")
+        logger.info("Reading root signup token")
         root_signup_token = await self.get_root_signup_token()
         if root_signup_token is None:
             root_signup_token = await self.save_signup_token(

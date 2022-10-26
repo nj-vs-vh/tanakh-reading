@@ -1,11 +1,11 @@
 import logging
 from typing import Any, Literal, Optional, Type, TypedDict, TypeVar
-from typing_extensions import NotRequired
 
 from aiohttp import web
 from pydantic import BaseModel, Field, ValidationError
 from pydantic.error_wrappers import display_errors
 from pymongo.results import InsertOneResult
+from typing_extensions import NotRequired
 
 logger = logging.getLogger(__name__)
 
@@ -104,3 +104,12 @@ class StoredUser(DbSchemaModel):
 class SignupToken(DbSchemaModel):
     creator_username: Optional[str]
     token: str
+
+
+class StarredComment(DbSchemaModel):
+    starrer_username: str
+    comment_id: str  # comment id in static json file
+    book: int
+    parsha: int
+    chapter: int
+    verse: int
