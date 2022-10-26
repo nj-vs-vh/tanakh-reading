@@ -3,7 +3,7 @@ import logging
 from typing import Optional
 
 from backend.auth import generate_signup_token
-from backend.model import SignupToken, StoredUser
+from backend.model import SignupToken, StarredComment, StoredUser, TextCoordsQuery
 
 logger = logging.getLogger(__name__)
 
@@ -57,4 +57,15 @@ class DatabaseInterface(abc.ABC):
 
     @abc.abstractmethod
     async def authenticate_user(self, access_token: str) -> Optional[StoredUser]:
+        ...
+
+    # starred comments
+    @abc.abstractmethod
+    async def save_starred_comment(self, starred_comment: StarredComment) -> StarredComment:
+        ...
+
+    @abc.abstractmethod
+    async def lookup_starred_comments(
+        self, starrer_usernames: set[str], text_coords_query: TextCoordsQuery
+    ) -> list[StarredComment]:
         ...

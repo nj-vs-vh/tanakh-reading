@@ -106,10 +106,27 @@ class SignupToken(DbSchemaModel):
     token: str
 
 
-class StarredComment(DbSchemaModel):
-    starrer_username: str
+class CommentCoords(DbSchemaModel):
+    """Generic comment coordinates; book/parsha/chapter/verse values are used for faster validation"""
+
     comment_id: str  # comment id in static json file
     book: int
     parsha: int
     chapter: int
     verse: int
+
+
+class StarredComment(CommentCoords):
+    starrer_username: str
+
+
+class TextCoordsQuery(PydanticModel):
+    """Generic text coords query for getting info about more or less specific parts of the text"""
+
+    book: Optional[int] = None
+    parsha: Optional[int] = None
+    chapter: Optional[int] = None
+    verse: Optional[int] = None
+
+    def to_mongo_query(self) -> dict[str, int]:
+        return self.dict(exclude_defaults=True)
