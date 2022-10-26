@@ -1,12 +1,10 @@
 from uuid import uuid4
 
 from backend.model import ParshaData
+from backend.utils import iter_parsha_comments
 
 
-def ensure_comment_ids(parsha_data: ParshaData):
-    for chapter in parsha_data["chapters"]:
-        for verse in chapter["verses"]:
-            for _, comments in verse["comments"].items():
-                for comment in comments:
-                    if "id" not in comment:
-                        comment["id"] = str(uuid4())
+def ensure_comment_ids(parsha_data: ParshaData) -> None:
+    for comment_data in iter_parsha_comments(parsha_data):
+        if "id" not in comment_data:
+            comment_data["id"] = str(uuid4())

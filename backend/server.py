@@ -18,7 +18,7 @@ from backend.model import (
     UserCredentials,
 )
 from backend.static import get_available_parsha, get_parsha_data
-from backend.utils import safe_request_json
+from backend.utils import iter_parsha_comments, safe_request_json
 from backend.validation import validate_comment_coords
 
 logger = logging.getLogger(__name__)
@@ -55,6 +55,10 @@ async def cors_middleware(request: web.Request, handler: Handler) -> web.StreamR
 async def preflight(request: web.Request) -> web.Response:
     # logger.info(f"Request headers: {request.headers}")
     return web.Response()
+
+
+def get_db(request: web.Request) -> DatabaseInterface:
+    return request.app[AppExtensions.DB]
 
 
 async def get_authorized_user(request: web.Request) -> tuple[StoredUser, str]:
@@ -100,25 +104,42 @@ async def get_parsha(request: web.Request) -> web.Response:
     parsha_index_str = request.match_info.get("index")
     if parsha_index_str is None:
         raise web.HTTPNotFound(reason="No parsha index in request path")
-
     try:
         parsha_index = int(parsha_index_str)
     except Exception:
         raise web.HTTPBadRequest(reason="Parsha index must be a number")
-
     parsha_data = get_parsha_data(parsha_index)
     if parsha_data is None:
         raise web.HTTPNotFound(reason="Parsha is not available")
+
+    # optional query param things
+    add_my_starred_comments_info = request.query.get("my_starred_comments") == "true"
+    if add_my_starred_comments_info:
+        logger.info(f"Enriching parsha with some user-specific data: {add_my_starred_comments_info = }")
+        try:
+            user, _ = await get_authorized_user(request)
+            db = get_db(request)
+
+            if add_my_starred_comments_info:
+                my_starred_comments = await db.lookup_starred_comments(
+                    starrer_usernames={user.username}, text_coords_query=TextCoordsQuery(parsha=parsha_index)
+                )
+                my_starred_comment_ids = {c.comment_id for c in my_starred_comments}
+                logger.info(f"Marking comments as starred: {my_starred_comment_ids}")
+                for comment in iter_parsha_comments(parsha_data):
+                    if comment["id"] in my_starred_comment_ids:
+                        comment["is_starred_by_me"] = True
+
+        except Exception:
+            logger.info("Failed to enrich parsha data", exc_info=True)
+            pass
+
     return web.json_response(parsha_data)
 
 
 @routes.get("/")
 async def index(request: web.Request) -> web.Response:
     return web.Response(text="שְׁמַע יִשְׂרָאֵל יְהוָה אֱלֹהֵינוּ יְהוָה אֶחָֽד׃")
-
-
-def get_db(request: web.Request) -> DatabaseInterface:
-    return request.app[AppExtensions.DB]
 
 
 async def get_signup_token(request: web.Request) -> SignupToken:
