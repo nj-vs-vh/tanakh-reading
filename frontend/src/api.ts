@@ -8,7 +8,6 @@ const BASE_API_URL = isProduction ? "https://torah-reading-backend.herokuapp.com
 
 
 export async function getParsha(index: number): Promise<ParshaData> {
-    console.log(`Fetching parsha index ${index}`);
     const resp = await fetch(
         `${BASE_API_URL}/parsha/${index}`,
         { headers: { 'Content-Type': 'application/json' } }
@@ -22,7 +21,6 @@ export async function getParsha(index: number): Promise<ParshaData> {
 
 
 export async function getMetadata(): Promise<Metadata> {
-    console.log(`Fetching metadata`);
     const resp = await fetch(
         `${BASE_API_URL}/metadata`,
         { headers: withAccessTokenHeader({ 'Content-Type': 'application/json' }) }
@@ -38,7 +36,6 @@ export async function getMetadata(): Promise<Metadata> {
 
 
 export async function checkSignupToken(token: string): Promise<boolean> {
-    console.log(`Checking signup token`);
     const resp = await fetch(
         `${BASE_API_URL}/check-signup-token`,
         { headers: { 'Content-Type': 'application/json', 'X-Signup-Token': token } }
@@ -48,7 +45,6 @@ export async function checkSignupToken(token: string): Promise<boolean> {
 
 
 export async function signup(token: string, data: SignupData): Promise<null> {
-    console.log(`Signing up`);
     const resp = await fetch(
         `${BASE_API_URL}/signup`,
         {
@@ -62,8 +58,12 @@ export async function signup(token: string, data: SignupData): Promise<null> {
 }
 
 
-export async function login(credentials: UserCredentials): Promise<string> {
-    console.log(`Logging in`);
+interface AccessToken {
+    token: string;
+}
+
+
+export async function login(credentials: UserCredentials): Promise<AccessToken> {
     const resp = await fetch(
         `${BASE_API_URL}/login`,
         {
@@ -81,7 +81,6 @@ export async function login(credentials: UserCredentials): Promise<string> {
 
 
 export async function logout(): Promise<null> {
-    console.log(`Logging out`);
     const resp = await fetch(
         `${BASE_API_URL}/logout`,
         {
@@ -93,6 +92,34 @@ export async function logout(): Promise<null> {
 }
 
 
-// export async function getMySignupToken(): Promise<string> {
+interface SignupToken {
+    creator_username: string | null;
+    token: string;
+}
 
-// }
+
+export async function getMySignupToken(): Promise<SignupToken | null> {
+    const resp = await fetch(
+        `${BASE_API_URL}/signup-token`,
+        {
+            headers: withAccessTokenHeader({}),
+        }
+    )
+    const respText = await resp.text();
+    if (resp.ok) return JSON.parse(respText);
+    else return null;
+}
+
+
+export async function generateSignupToken(): Promise<SignupToken> {
+    const resp = await fetch(
+        `${BASE_API_URL}/signup-token`,
+        {
+            method: "POST",
+            headers: withAccessTokenHeader({}),
+        }
+    )
+    const respText = await resp.text();
+    if (resp.ok) return JSON.parse(respText);
+    else throw (respText);
+}

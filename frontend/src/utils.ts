@@ -86,6 +86,11 @@ export function parshaPath(parsha: number | string): string {
 }
 
 
+export function signupPath(signupToken: string) : string {
+    return `/signup/${signupToken}`
+}
+
+
 export function versePath(parsha: number | string, verseCoords: VerseCoords): string {
     return `${parshaPath(parsha)}#${verseCoords2string(verseCoords)}`
 }

@@ -194,12 +194,6 @@ async def get_my_signup_token(request: web.Request) -> web.Response:
     return web.json_response(token.to_public_json())
 
 
-@routes.get("/secret")
-async def auth_test(request: web.Request) -> web.Response:
-    await get_authorized_user(request)
-    return web.Response()
-
-
 class BackendApp:
     def __init__(self, db: DatabaseInterface) -> None:
         self.db = db
