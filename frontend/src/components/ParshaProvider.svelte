@@ -11,12 +11,14 @@
 
     export let currentRoute: CurrentRoute;
 
-    let parshaPromise = new Promise<string | ParshaData>((resolve, reject) => {});
+    let parshaPromise = new Promise<ParshaData>((resolve, reject) => {});
     let lastLoadedParshaIndex: number | null = null;
     $: {
         let parshaIndex = parseInt(currentRoute.namedParams.parshaIndex);
         if (parshaIndex != lastLoadedParshaIndex) {
-            console.log(`Parsha provider: path change detected ${currentRoute.path}`);
+            console.log(
+                `Parsha provider: path change detected ${currentRoute.path}`
+            );
             parshaPromise = getParsha(parshaIndex);
             lastLoadedParshaIndex = parshaIndex;
         }
@@ -28,11 +30,7 @@
         <Spinner sizeEm={5} />
     </Screen>
 {:then parsha}
-    {#if typeof parsha === "string"}
-        <Error errorMessage={parsha} />
-    {:else}
-        <Parsha {parsha} />
-    {/if}
+    <Parsha {parsha} />
 {:catch error}
-    <Error errorMessage={error.message} />
+    <Error {error} />
 {/await}

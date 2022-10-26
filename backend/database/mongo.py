@@ -28,6 +28,9 @@ class MongoDatabase(DatabaseInterface):
         self.access_tokens_coll = self.db[self.ACCESS_TOKENS_COLLECTION_NAME]
         self.threads = ThreadPoolExecutor(max_workers=8)
 
+    def __str__(self) -> str:
+        return f"{self.__class__.__name__}({self.client})"
+
     @classmethod
     def from_config(cls) -> "MongoDatabase":
         return MongoDatabase(mongo_client=MongoClient(config.MONGO_URL), db_name=config.MONGO_DB)

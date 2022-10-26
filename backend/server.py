@@ -209,6 +209,7 @@ class BackendApp:
         self.app[AppExtensions.DB] = db
 
         async def db_setup(app: web.Application):
+            logger.info(f"Setting up db: {db}")
             await db.setup()
 
         self.app.on_startup.append(db_setup)

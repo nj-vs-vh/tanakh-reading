@@ -5,52 +5,39 @@ import type { ParshaData, Metadata, SignupData, UserCredentials } from "./types"
 
 // @ts-ignore
 const BASE_API_URL = isProduction ? "https://torah-reading-backend.herokuapp.com" : "http://localhost:8081";
-const NETWORKING_ERRMSG = "Ошибка подключения, попробуйте обновить страницу!";
 
 
-export async function getParsha(index: number): Promise<ParshaData | string> {
+export async function getParsha(index: number): Promise<ParshaData> {
     console.log(`Fetching parsha index ${index}`);
-    try {
-        const resp = await fetch(
-            `${BASE_API_URL}/parsha/${index}`,
-            { headers: { 'Content-Type': 'application/json' } }
-        )
-        const respText = await resp.text();
-
-        if (resp.ok) {
-            return JSON.parse(respText);
-        } else {
-            return respText;
-        }
-    } catch (error) {
-        console.warn(`Error making request: ${error}`);
-        return NETWORKING_ERRMSG;
-    }
+    const resp = await fetch(
+        `${BASE_API_URL}/parsha/${index}`,
+        { headers: { 'Content-Type': 'application/json' } }
+    )
+    const respText = await resp.text();
+    if (resp.ok)
+        return JSON.parse(respText);
+    else
+        throw (respText);
 }
 
 
-export async function getMetadata(): Promise<Metadata | string> {
+export async function getMetadata(): Promise<Metadata> {
     console.log(`Fetching metadata`);
-    try {
-        const resp = await fetch(
-            `${BASE_API_URL}/metadata`,
-            { headers: withAccessTokenHeader({ 'Content-Type': 'application/json' }) }
-        )
-        const respText = await resp.text();
+    const resp = await fetch(
+        `${BASE_API_URL}/metadata`,
+        { headers: withAccessTokenHeader({ 'Content-Type': 'application/json' }) }
+    )
+    const respText = await resp.text();
 
-        if (resp.ok) {
-            return JSON.parse(respText);
-        } else {
-            return respText;
-        }
-    } catch (error) {
-        console.warn(`Error making request: ${error}`);
-        return NETWORKING_ERRMSG;
+    if (resp.ok) {
+        return JSON.parse(respText);
+    } else {
+        throw respText;
     }
 }
 
 
-export async function checkSignupToken(token: string): Promise<boolean | string> {
+export async function checkSignupToken(token: string): Promise<boolean> {
     console.log(`Checking signup token`);
     const resp = await fetch(
         `${BASE_API_URL}/check-signup-token`,
@@ -60,67 +47,52 @@ export async function checkSignupToken(token: string): Promise<boolean | string>
 }
 
 
-export async function signup(token: string, data: SignupData): Promise<string | null> {
+export async function signup(token: string, data: SignupData): Promise<null> {
     console.log(`Signing up`);
-    try {
-        const resp = await fetch(
-            `${BASE_API_URL}/signup`,
-            {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json', 'X-Signup-Token': token },
-                body: JSON.stringify(data),
-            }
-        )
-        if (resp.ok) return null;
-        else return await resp.text()
-    } catch (error) {
-        console.warn(`Error making request: ${error}`);
-        return NETWORKING_ERRMSG;
-    }
+    const resp = await fetch(
+        `${BASE_API_URL}/signup`,
+        {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json', 'X-Signup-Token': token },
+            body: JSON.stringify(data),
+        }
+    )
+    if (resp.ok) return null;
+    else throw (await resp.text());
 }
 
 
-export interface AccessToken {
-    token: string;
-}
-
-
-export async function login(credentials: UserCredentials): Promise<string | AccessToken> {
+export async function login(credentials: UserCredentials): Promise<string> {
     console.log(`Logging in`);
-    try {
-        const resp = await fetch(
-            `${BASE_API_URL}/login`,
-            {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(credentials),
-            }
-        )
-        const respText = await resp.text();
-        if (resp.ok) return JSON.parse(respText);
-        else if (resp.status === 404) return "Юзернейм не найден";
-        else if (resp.status === 403) return "Неправильный пароль";
-        else return respText;
-    } catch (error) {
-        console.warn(`Error making request: ${error}`);
-        return NETWORKING_ERRMSG;
-    }
+    const resp = await fetch(
+        `${BASE_API_URL}/login`,
+        {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(credentials),
+        }
+    )
+    const respText = await resp.text();
+    if (resp.ok) return JSON.parse(respText);
+    else if (resp.status === 404) throw "Юзернейм не найден";
+    else if (resp.status === 403) throw "Неправильный пароль";
+    else throw respText;
 }
 
 
-export async function logout(): Promise<string | null> {
+export async function logout(): Promise<null> {
     console.log(`Logging out`);
-    try {
-        const resp = await fetch(
-            `${BASE_API_URL}/logout`,
-            {
-                headers: withAccessTokenHeader({}),
-            }
-        )
-        if (resp.ok) return null;
-        else return await resp.text();
-    } catch (error) {
-        console.warn(`Error making request: ${error}`);
-        return NETWORKING_ERRMSG;
-    }
+    const resp = await fetch(
+        `${BASE_API_URL}/logout`,
+        {
+            headers: withAccessTokenHeader({}),
+        }
+    )
+    if (resp.ok) return null;
+    else throw (await resp.text());
 }
+
+
+// export async function getMySignupToken(): Promise<string> {
+
+// }
