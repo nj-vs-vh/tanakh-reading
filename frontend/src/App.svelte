@@ -13,11 +13,7 @@
         <Spinner sizeEm={5} />
     </Screen>
 {:then metadata}
-    {#if typeof metadata === "string"}
-        <Error errorMessage={metadata} />
-    {:else}
-        <Main metadata={metadata} />
-    {/if}
+    <Main {metadata} />
 {:catch error}
-    <Error errorMessage={error.message} />
+    <Error {error} />
 {/await}

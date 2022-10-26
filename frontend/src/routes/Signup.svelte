@@ -85,7 +85,7 @@
         </Screen>
     {/if}
 {:catch error}
-    <Error errorMessage={error.message} />
+    <Error {error} />
 {/await}
 
 <style>

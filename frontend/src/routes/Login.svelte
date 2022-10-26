@@ -14,13 +14,13 @@
     async function onLogin() {
         if (username.length < 5 || password.length < 6) return;
 
-        const loginResult = await login({ username, password });
-
-        if (typeof loginResult === "string") loginError = loginResult;
-        else {
-            saveAccessToken(loginResult.token);
+        try {
+            const accessToken = await login({ username, password });
+            saveAccessToken(accessToken);
             navigateTo("/");
             window.location.reload();
+        } catch (e) {
+            loginError = e;
         }
     }
 </script>

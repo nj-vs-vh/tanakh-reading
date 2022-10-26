@@ -1,7 +1,16 @@
 <script lang="ts">
     import Screen from "./Screen.svelte";
 
-    export let errorMessage: string;
+    export let error: string | Error;
+
+    let errorMessage: string;
+
+    if (typeof error === "object"){
+        console.log(error);
+        errorMessage = error.message;
+    } else {
+        errorMessage = error;
+    }
 </script>
 
 <Screen>

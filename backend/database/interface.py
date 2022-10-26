@@ -10,12 +10,13 @@ logger = logging.getLogger(__name__)
 
 class DatabaseInterface(abc.ABC):
     async def setup(self) -> None:
+        logger.info(f"Reading root signup token")
         root_signup_token = await self.get_root_signup_token()
         if root_signup_token is None:
             root_signup_token = await self.save_signup_token(
                 SignupToken(creator_username=None, token=generate_signup_token())
             )
-        logger.info(f"Root signup token: {await self.get_root_signup_token()}")
+        logger.info(f"Root signup token: {root_signup_token}")
 
     # user management
 
