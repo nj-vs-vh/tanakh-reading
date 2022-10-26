@@ -1,5 +1,6 @@
 import logging
 from typing import Any, Literal, Optional, Type, TypedDict, TypeVar
+from typing_extensions import NotRequired
 
 from aiohttp import web
 from pydantic import BaseModel, Field, ValidationError
@@ -10,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class CommentData(TypedDict):
+    id: NotRequired[str]
     anchor_phrase: Optional[str]
     comment: str
     format: Literal["plain", "markdown", "html"]
