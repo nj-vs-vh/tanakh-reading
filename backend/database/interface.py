@@ -65,6 +65,10 @@ class DatabaseInterface(abc.ABC):
         ...
 
     @abc.abstractmethod
+    async def delete_starred_comment(self, starred_comment: StarredComment) -> None:
+        ...
+
+    @abc.abstractmethod
     async def lookup_starred_comments(
         self, starrer_usernames: set[str], text_coords_query: TextCoordsQuery
     ) -> list[StarredComment]:
