@@ -15,6 +15,7 @@ class CommentData(TypedDict):
     anchor_phrase: Optional[str]
     comment: str
     format: Literal["plain", "markdown", "html"]
+    is_starred_by_me: NotRequired[bool]
 
 
 class VerseData(TypedDict):
