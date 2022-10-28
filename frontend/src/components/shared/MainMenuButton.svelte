@@ -1,4 +1,13 @@
-<button style="color: grey;" on:click={() => window.history.go(-1)}>
+<script lang="ts">
+    import { navigateTo } from "svelte-router-spa";
+
+
+    function goBack() {
+        navigateTo("/");
+    }
+</script>
+
+<button style="color: grey;" on:click={goBack}>
     <svg width="32" height="32" viewBox="-4 -4 40 40">
         <line id="top" x1="0" y1="18.5" x2="14" y2="4" />
         <line id="mid" x1="0" y1="18.5" x2="32" y2="18.5" />
