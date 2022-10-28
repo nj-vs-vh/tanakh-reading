@@ -12,7 +12,7 @@
 
 <h2 on:click={toggleFolded} on:keydown={toggleFolded}>
     <div class="nav-icon">
-        <Icon heightEm={0.8} {icon} color="black" />
+        <Icon heightEm={0.9} {icon} color="black" />
     </div>
     <span class="nav-caption">{title}</span>
 </h2>

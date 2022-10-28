@@ -37,7 +37,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-
+        z-index: 10;
         overflow-y: auto;
     }
 
