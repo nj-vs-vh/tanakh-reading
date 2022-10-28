@@ -55,8 +55,7 @@
 <style>
     .container {
         min-width: 50vw;
-        margin-top: 3em;
-        margin-bottom: 3em;
+        margin: 3em 1em;
     }
 
     h1 {
