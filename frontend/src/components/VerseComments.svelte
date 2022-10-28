@@ -12,6 +12,8 @@
     });
 
     export let verseData: VerseData;
+    export let parsha: number;
+    export let chapter: number;
 
     const metadata: Metadata = getContext("metadata");
     const commenterNames = metadata.commenter_names;
@@ -23,7 +25,7 @@
             <div class="comments-block">
                 <p class="commenter-name">{commenterNames[commenter]}</p>
                 {#each comments as commentData}
-                    <VerseComment {commentData} />
+                    <VerseComment {commentData} {parsha} {chapter} verse={verseData.verse} />
                 {/each}
             </div>
         {/if}

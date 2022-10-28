@@ -162,7 +162,7 @@
                         ? ""
                         : "display: none;"}
                 >
-                    <VerseComments verseData={verse} />
+                    <VerseComments verseData={verse} parsha={parsha.parsha} chapter={chapter.chapter} />
                 </div>
             {/each}
         {/each}
