@@ -16,7 +16,6 @@
 
     let commentFilters: CommentFilters;
     commentFiltersStore.subscribe((v) => {
-        console.log(v);
         commentFilters = v;
     });
 

@@ -30,8 +30,8 @@
     <Screen>
         <Spinner sizeEm={5} />
     </Screen>
-{:then parsha}
-    <Parsha {parsha} />
+{:then parshaData}
+    <Parsha {parshaData} />
 {:catch error}
     <Error {error} />
 {/await}

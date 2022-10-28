@@ -5,6 +5,7 @@
     import { commentFiltersStore, CommentFilterByBookmarkMode } from "../settings/commentFilters";
     import type { CommentFilters } from "../settings/commentFilters";
     import VerseComment from "./VerseComment.svelte";
+    import { commentPassesFilters } from "../utils";
 
     let commentFilters: CommentFilters;
     commentFiltersStore.subscribe((v) => {
@@ -21,7 +22,9 @@
 
 <div class="container">
     {#each Object.entries(verseData.comments) as [commenter, comments]}
-        {#if commentFilters.bySource[commenter] === true}
+        {#if comments
+            .map((commentData) => commentPassesFilters(commentData, commenter, commentFilters))
+            .reduce((a, b) => a || b, false)}
             <div class="comments-block">
                 <p class="commenter-name">{commenterNames[commenter]}</p>
                 {#each comments as commentData}

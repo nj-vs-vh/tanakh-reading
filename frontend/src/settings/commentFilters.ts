@@ -75,7 +75,6 @@ export function setCommentFilterBySource(bySource: Record<string, boolean>) {
 
 
 export function setCommentFilterByBookmarkMode(mode: CommentFilterByBookmarkMode) {
-    console.log(mode);
     commentFiltersStore.update(current => {
         current.byBookmarkMode = mode;
         save(current);

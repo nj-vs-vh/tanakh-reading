@@ -29,13 +29,11 @@ function save(current: TextDecorationSettings) {
 
 export function initTextDecorationSettings() {
     const loaded = load();
-    console.log(loaded);
     textDecorationSettingsStore.set(loaded);
 }
 
 
 export function setTextDecorationSettings(newSettings: TextDecorationSettings) {
-    console.log(newSettings);
     textDecorationSettingsStore.set(newSettings);
     save(newSettings);
 }
