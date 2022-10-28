@@ -1,3 +1,4 @@
+import copy
 import json
 import logging
 from functools import lru_cache
@@ -17,12 +18,19 @@ def parsha_path(parsha: int) -> Path:
 
 
 @lru_cache(maxsize=None)
-def get_parsha_data(parsha: int) -> Optional[ParshaData]:
+def _get_parsha_data_from_static_json(parsha: int) -> Optional[ParshaData]:
     path = parsha_path(parsha)
     if not path.exists():
         return None
     logger.info(f"Reading parsha #{parsha} from {path}")
     return json.loads(path.read_text())
+
+
+def get_parsha_data(parsha: int) -> Optional[ParshaData]:
+    original = _get_parsha_data_from_static_json(parsha)
+    if original is None:
+        return None
+    return copy.deepcopy(original)
 
 
 @lru_cache(maxsize=None)
