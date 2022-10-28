@@ -61,21 +61,23 @@
             <label for="all">Все</label>
         </div>
     </MenuFolderBlock>
-    <MenuFolderBlock title="Фильтр по закладкам">
-        {#each Object.values(CommentFilterByBookmarkMode) as mode}
-            <div class="input-with-label">
-                <input
-                    type="radio"
-                    id={mode}
-                    name={mode}
-                    checked={mode == commentFilters.byBookmarkMode}
-                    on:change={(e) => {
-                        // @ts-ignore
-                        setCommentFilterByBookmarkMode(e.target.name);
-                    }}
-                />
-                <label for={mode}>{mode}</label>
-            </div>
-        {/each}
-    </MenuFolderBlock>
+    {#if metadata.logged_in_user !== null}
+        <MenuFolderBlock title="Фильтр по закладкам">
+            {#each Object.values(CommentFilterByBookmarkMode) as mode}
+                <div class="input-with-label">
+                    <input
+                        type="radio"
+                        id={mode}
+                        name={mode}
+                        checked={mode == commentFilters.byBookmarkMode}
+                        on:change={(e) => {
+                            // @ts-ignore
+                            setCommentFilterByBookmarkMode(e.target.name);
+                        }}
+                    />
+                    <label for={mode}>{mode}</label>
+                </div>
+            {/each}
+        </MenuFolderBlock>
+    {/if}
 </MenuFolder>
