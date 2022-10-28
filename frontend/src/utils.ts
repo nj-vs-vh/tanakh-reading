@@ -1,4 +1,5 @@
-import type { ParshaData } from "./types";
+import { CommentFilterByBookmarkMode, CommentFilters } from "./settings/commentFilters";
+import type { CommentData, ParshaData, VerseData } from "./types";
 
 export function getUrlHash(): string {
     const url = new URL(window.location.href);
@@ -98,4 +99,21 @@ export function versePath(parsha: number | string, verseCoords: VerseCoords): st
 
 export const sleep = (delaySec: number) => {
     return new Promise(resolve => setTimeout(resolve, delaySec * 1000))
+}
+
+
+export function commentPassesFilters(commentData: CommentData, commenter: string, filters: CommentFilters): boolean {
+    if (filters.byBookmarkMode == CommentFilterByBookmarkMode.MY && commentData.is_starred_by_me !== true) return false;
+    if (filters.bySource[commenter] !== true) return false;
+    return true;
+}
+
+
+export function anyCommentPassesFilters(verseData: VerseData, filters: CommentFilters): boolean {
+    for (const [commenter, comments] of Object.entries(verseData.comments)) {
+        for (const commentData of comments) {
+            if (commentPassesFilters(commentData, commenter, filters)) return true;
+        }
+    }
+    return false;
 }

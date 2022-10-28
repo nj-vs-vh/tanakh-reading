@@ -5,10 +5,10 @@ export enum CommentFormat {
 }
 
 export interface CommentData {
+    id: string;
     anchor_phrase: null | string;
     comment: string;
     format: CommentFormat;
-    id: string;
     is_starred_by_me?: boolean;
 }
 
