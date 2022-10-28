@@ -111,7 +111,6 @@ class CommentCoords(DbSchemaModel):
     """Generic comment coordinates; book/parsha/chapter/verse values are used for faster validation"""
 
     comment_id: str  # comment id in static json file
-    book: int
     parsha: int
     chapter: int
     verse: int

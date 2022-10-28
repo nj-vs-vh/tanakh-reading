@@ -7,6 +7,7 @@
 
     import type { CommentData, Metadata } from "../types";
     import { CommentFormat } from "../types";
+    import { FullCommentCoords, starComment, unstarComment } from "../api";
 
     let commentSourceFlags: CommentSourceFlags;
     commentSourceFlagsStore.subscribe((v) => {
@@ -14,10 +15,13 @@
     });
     const metadata: Metadata = getContext("metadata");
     export let commentData: CommentData;
+    export let parsha: number;
+    export let chapter: number;
+    export let verse: number;
 
-    let isStarred = commentData.is_starred_by_me === true;
     let isLoggedIn = metadata.logged_in_user !== null;
     let isHovering = false;
+    $: isStarred = commentData.is_starred_by_me === true;
 
     function setHovering() {
         isHovering = true;
@@ -26,10 +30,27 @@
         isHovering = false;
     }
 
-    function toggleStarred() {
+    async function toggleStarred() {
         if (!isLoggedIn) return;
+
+        const commentCoords: FullCommentCoords = {
+            comment_id: commentData.id,
+            parsha: parsha,
+            chapter: chapter,
+            verse: verse,
+        };
+
+        // first updating UI
+        const originalIsStarred = isStarred;
         isStarred = !isStarred;
-        console.log("FIRED");
+        commentData.is_starred_by_me = isStarred;
+
+        // then syncing with backend
+        if (originalIsStarred) {
+            await unstarComment(commentCoords);
+        } else {
+            await starComment(commentCoords);
+        }
     }
 </script>
 
@@ -54,7 +75,7 @@
                         : isHovering
                         ? "rgb(170, 170, 170)"
                         : "transparent"}
-                    heightEm={0.8}
+                    heightEm={0.7}
                 />
             </div>
         {/if}
@@ -84,7 +105,7 @@
         min-width: 1em;
         display: flex;
         flex-direction: column;
-        padding-left: 0.05em;
+        padding-left: 0.1em;
         margin-top: 0.1em;
     }
 

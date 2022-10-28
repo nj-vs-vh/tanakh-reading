@@ -42,7 +42,7 @@ async def cors_middleware(request: web.Request, handler: Handler) -> web.StreamR
         resp.headers[
             hdrs.ACCESS_CONTROL_ALLOW_HEADERS
         ] = f"{hdrs.CONTENT_TYPE},{SIGNUP_TOKEN_HEADER},{ACCESS_TOKEN_HEADER}"
-        resp.headers[hdrs.ACCESS_CONTROL_ALLOW_METHODS] = "GET,POST,PUT,OPTIONS"
+        resp.headers[hdrs.ACCESS_CONTROL_ALLOW_METHODS] = "GET,POST,PUT,DELETE,OPTIONS"
         resp.headers[hdrs.ACCESS_CONTROL_MAX_AGE] = "300"
 
     if isinstance(resp, web.HTTPException):
@@ -234,7 +234,6 @@ async def star_comment(request: web.Request) -> web.Response:
         StarredComment(
             starrer_username=user.username,
             comment_id=comment_coords.comment_id,
-            book=comment_coords.book,
             parsha=comment_coords.parsha,
             chapter=comment_coords.chapter,
             verse=comment_coords.verse,
@@ -253,7 +252,6 @@ async def unstar_comment(request: web.Request) -> web.Response:
         StarredComment(
             starrer_username=user.username,
             comment_id=comment_coords.comment_id,
-            book=comment_coords.book,
             parsha=comment_coords.parsha,
             chapter=comment_coords.chapter,
             verse=comment_coords.verse,

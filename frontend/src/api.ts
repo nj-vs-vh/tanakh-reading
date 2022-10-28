@@ -131,3 +131,41 @@ export async function generateSignupToken(): Promise<SignupToken> {
     if (resp.ok) return JSON.parse(respText);
     else throw (respText);
 }
+
+
+export interface FullCommentCoords {
+    comment_id: string;
+    parsha: number;
+    chapter: number;
+    verse: number;
+}
+
+
+export async function starComment(coords: FullCommentCoords): Promise<null> {
+    const resp = await fetch(
+        `${BASE_API_URL}/starred-comments`,
+        {
+            method: "POST",
+            headers: withAccessTokenHeader({}),
+            body: JSON.stringify(coords),
+        }
+    )
+    const respText = await resp.text();
+    if (resp.ok) return null;
+    else throw (respText);
+}
+
+
+export async function unstarComment(coords: FullCommentCoords): Promise<null> {
+    const resp = await fetch(
+        `${BASE_API_URL}/starred-comments`,
+        {
+            method: "DELETE",
+            headers: withAccessTokenHeader({}),
+            body: JSON.stringify(coords),
+        }
+    )
+    const respText = await resp.text();
+    if (resp.ok) return null;
+    else throw (respText);
+}

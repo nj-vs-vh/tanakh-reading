@@ -198,7 +198,7 @@
             </span>
         </div>
     {/each}
-    <VerseComments verseData={currentVerseData} />
+    <VerseComments verseData={currentVerseData} parsha={parsha.parsha} chapter={currentVerseCoords.chapter} />
 </div>
 
 <style>

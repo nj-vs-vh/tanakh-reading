@@ -1,4 +1,5 @@
 from itertools import chain
+from typing import Optional
 
 from aiohttp import web
 
@@ -12,13 +13,14 @@ class ValidationError(web.HTTPBadRequest):
         super().__init__(reason=message)
 
 
-def get_verse_data(book: int, parsha: int, chapter: int, verse: int) -> VerseData:
-    book_parsha_range = metadata.torah_book_parsha_ranges.get(book)
-    if book_parsha_range is None:
-        raise ValidationError(f"Book #{book} does not exist in Torah")
-    first_parsha, next_to_last_parsha = book_parsha_range
-    if not (first_parsha <= parsha < next_to_last_parsha):
-        raise ValidationError(f"Parsha #{parsha} is not in the book #{book}")
+def get_verse_data(book: Optional[int], parsha: int, chapter: int, verse: int) -> VerseData:
+    if book is not None:
+        book_parsha_range = metadata.torah_book_parsha_ranges.get(book)
+        if book_parsha_range is None:
+            raise ValidationError(f"Book #{book} does not exist in Torah")
+        first_parsha, next_to_last_parsha = book_parsha_range
+        if not (first_parsha <= parsha < next_to_last_parsha):
+            raise ValidationError(f"Parsha #{parsha} is not in the book #{book}")
     parsha_data = get_parsha_data(parsha)
     if parsha_data is None:
         raise ValidationError(f"Parsha {parsha} is not yet available")
@@ -35,7 +37,7 @@ def get_verse_data(book: int, parsha: int, chapter: int, verse: int) -> VerseDat
 
 
 def validate_comment_coords(comment: CommentCoords):
-    verse_data = get_verse_data(comment.book, comment.parsha, comment.chapter, comment.verse)
+    verse_data = get_verse_data(None, comment.parsha, comment.chapter, comment.verse)
     verse_comment_ids = {comment_data["id"] for comment_data in chain.from_iterable(verse_data["comments"].values())}
     if comment.comment_id not in verse_comment_ids:
         raise ValidationError("Comment does not exist")
