@@ -1,8 +1,9 @@
 import copy
 import json
 
-from config import parsha_json
-from model import ParshaData
+from backend.model import ParshaData
+from backend.static import parsha_path
+from parsers.identification import ensure_comment_ids
 
 
 def merge_parsha_data(p1: ParshaData, p2: ParshaData) -> ParshaData:
@@ -45,6 +46,7 @@ def merge_parsha_data(p1: ParshaData, p2: ParshaData) -> ParshaData:
 
 
 def merge_and_save_parsha_data(parsha: int, new_parsha_data: ParshaData):
-    existing_parsha_data = json.loads(parsha_json(parsha).read_text())
+    existing_parsha_data = json.loads(parsha_path(parsha).read_text())
     resulting_parsha_data = merge_parsha_data(existing_parsha_data, new_parsha_data)
-    parsha_json(parsha).write_text(json.dumps(resulting_parsha_data, ensure_ascii=False, indent=2))
+    ensure_comment_ids(resulting_parsha_data)
+    parsha_path(parsha).write_text(json.dumps(resulting_parsha_data, ensure_ascii=False, indent=2))

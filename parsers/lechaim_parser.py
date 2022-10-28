@@ -2,19 +2,18 @@
 
 
 import argparse
-import json
 import re
 from collections import defaultdict
 from pathlib import Path
 from typing import Optional, cast
 
 import requests  # type: ignore
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup, Tag  # type: ignore
 
-from merge import merge_and_save_parsha_data
-from metadata import Commenter, TextSource, get_book_by_parsha
-from model import ChapterData, CommentData, ParshaData, VerseData
-from utils import (
+from backend.metadata import Commenter, TextSource, get_book_by_parsha
+from backend.model import ChapterData, CommentData, ParshaData, VerseData
+from parsers.merge import merge_and_save_parsha_data
+from parsers.utils import (
     dump_parsha,
     has_class,
     has_class_that,

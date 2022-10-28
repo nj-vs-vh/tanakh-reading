@@ -2,21 +2,19 @@
 
 
 import argparse
-import json
 import re
-from pathlib import Path
 from typing import Optional
 
 import requests  # type: ignore
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup, Tag  # type: ignore
 
-import metadata
-from config import parsha_json
-from merge import merge_and_save_parsha_data, merge_parsha_data
-from model import ChapterData, ParshaData, VerseData
-from utils import collapse_whitespace, inner_tag_text
+from backend import metadata
+from backend.model import ChapterData, ParshaData, VerseData
+from parsers.merge import merge_and_save_parsha_data
+from parsers.utils import HTML_DIR as COMMON_HTML_DIR
+from parsers.utils import collapse_whitespace, inner_tag_text
 
-HTML_DIR = Path("html/reformjudaism")
+HTML_DIR = COMMON_HTML_DIR / "reformjudaism"
 HTML_DIR.mkdir(exist_ok=True)
 LISTING_HTML = HTML_DIR / "listing.html"
 
@@ -39,9 +37,13 @@ def get_url(parsha_no: int):
     listing = get_listing_html()
     for el in listing.descendants:
         if inner_tag_text(el) == parsha_name and isinstance(el, Tag) and el.name == "a":
-            parsha_path = el.attrs["href"]
-            print(f"Found path for parsha: {parsha_path}")
-            return BASE_URL + parsha_path
+            parsha_href = el.attrs["href"]
+            if parsha_href.startswith("http"):
+                print(f"Found URL for parsha: {parsha_href!r}")
+                return parsha_href
+            else:
+                print(f"Found path for parsha: {parsha_href!r}")
+                return BASE_URL + parsha_href
     raise ValueError(f"Parsha not found by name: {parsha_name}")
 
 

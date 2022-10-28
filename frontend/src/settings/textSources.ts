@@ -10,7 +10,7 @@ interface TextSourcesConfig {
 
 const DEFAULT_MAIN_TEXT_SOURCE = "fg"
 
-export const textSourcesConfigStore: Writable<TextSourcesConfig> = writable({ main: DEFAULT_MAIN_TEXT_SOURCE, enabledInDetails: { } })
+export const textSourcesConfigStore: Writable<TextSourcesConfig> = writable({ main: DEFAULT_MAIN_TEXT_SOURCE, enabledInDetails: {} })
 
 const LOCAL_STORAGE_KEY = 'textSourcesConfig';
 

@@ -1,22 +1,19 @@
 <script lang="ts">
     import { getContext } from "svelte";
-    import type {
-        Metadata,
-        ParshaData,
-        VerseData,
-        ChapterData,
-    } from "../types";
     import VerseDetailsModal from "./VerseDetailsModal.svelte";
     import VerseComments from "./VerseComments.svelte";
     import Icon from "./shared/Icon.svelte";
     import Menu from "./Menu.svelte";
-    import {
-        TextDecorationStyle,
-        textDecorationStyleStore,
-    } from "../settings/textDecorationStyle";
+
+    import { TextDecorationStyle, textDecorationStyleStore } from "../settings/textDecorationStyle";
     import { CommentStyle, commentStyleStore } from "../settings/commentStyle";
     import { textSourcesConfigStore } from "../settings/textSources";
+    import { CommentFilters, commentFiltersStore } from "../settings/commentFilters";
+    import { TextDecorationSettings, textDecorationSettingsStore } from "../settings/textDecorationSettings";
+
+    import type { Metadata, ParshaData, VerseData, ChapterData } from "../types";
     import {
+        anyCommentPassesFilters,
         areInsideVerseCoordsList,
         getUrlHashVerseCoords,
         getVerseCoords,
@@ -24,7 +21,13 @@
         verseCoords2string,
     } from "../utils";
 
+    // context and settings subscription
     const metadata: Metadata = getContext("metadata");
+
+    let textDecorationSettings: TextDecorationSettings;
+    textDecorationSettingsStore.subscribe((v) => {
+        textDecorationSettings = v;
+    });
     let textDecorationStyle: TextDecorationStyle;
     textDecorationStyleStore.subscribe((v) => {
         textDecorationStyle = v;
@@ -37,22 +40,24 @@
     textSourcesConfigStore.subscribe((config) => {
         mainTextSource = config.main;
     });
+    let commentFilters: CommentFilters;
+    commentFiltersStore.subscribe((v) => {
+        commentFilters = v;
+    });
 
-    export let parsha: ParshaData;
-    parsha.chapters.sort((ch1, ch2) => ch1.chapter - ch2.chapter);
-    const parshaVerseCoords = getVerseCoords(parsha);
+    export let parshaData: ParshaData;
+    parshaData.chapters.sort((ch1, ch2) => ch1.chapter - ch2.chapter);
+    const parshaVerseCoords = getVerseCoords(parshaData);
     const firstParshaVerseCoords = parshaVerseCoords[0];
-    const lastParshaVerseCoords =
-        parshaVerseCoords[parshaVerseCoords.length - 1];
+    const lastParshaVerseCoords = parshaVerseCoords[parshaVerseCoords.length - 1];
 
-    const verseId = (chapterNo: number, verseNo: number): number =>
-        chapterNo * 100000 + verseNo;
+    const verseId = (chapterNo: number, verseNo: number): number => chapterNo * 100000 + verseNo;
 
     // @ts-ignore
     const { open } = getContext("simple-modal");
     const openVerseDetailsModal = (chapter: number, verse: number) =>
         open(VerseDetailsModal, {
-            parsha: parsha,
+            parsha: parshaData,
             chapter: chapter,
             verse: verse,
         });
@@ -60,21 +65,16 @@
     let urlHashVerseCoords = getUrlHashVerseCoords();
     if (urlHashVerseCoords !== null) {
         if (areInsideVerseCoordsList(urlHashVerseCoords, parshaVerseCoords)) {
-            openVerseDetailsModal(
-                urlHashVerseCoords.chapter,
-                urlHashVerseCoords.verse
-            );
+            openVerseDetailsModal(urlHashVerseCoords.chapter, urlHashVerseCoords.verse);
         } else {
             setUrlHash("");
         }
     }
 
     let inlineVerseDetailsVisible: Map<number, boolean> = new Map();
-    for (const chapterData of parsha.chapters) {
+    for (const chapterData of parshaData.chapters) {
         for (const verseData of chapterData.verses) {
-            inlineVerseDetailsVisible[
-                verseId(chapterData.chapter, verseData.verse)
-            ] = false;
+            inlineVerseDetailsVisible[verseId(chapterData.chapter, verseData.verse)] = false;
         }
     }
 
@@ -83,32 +83,45 @@
             openVerseDetailsModal(chapter.chapter, verse.verse);
         } else if (commentStyle == CommentStyle.INLINE) {
             inlineVerseDetailsVisible[verseId(chapter.chapter, verse.verse)] =
-                !inlineVerseDetailsVisible[
-                    verseId(chapter.chapter, verse.verse)
-                ];
+                !inlineVerseDetailsVisible[verseId(chapter.chapter, verse.verse)];
             inlineVerseDetailsVisible = { ...inlineVerseDetailsVisible };
         }
     };
+
+    let isDecorated: (verseData: VerseData) => boolean;
+    let isClickableText: (verseData: VerseData) => boolean;
+    let isAstreisk: (verseData: VerseData) => boolean;
+
+    $: {
+        isDecorated = (verseData: VerseData): boolean => {
+            if (textDecorationSettings.onlyDecorateTextWithComments) {
+                return anyCommentPassesFilters(verseData, commentFilters);
+            } else return true;
+        };
+        isClickableText = (v) => textDecorationStyle === TextDecorationStyle.CLICKABLE_TEXT && isDecorated(v);
+        isAstreisk = (v) => textDecorationStyle === TextDecorationStyle.ASTRERISK && isDecorated(v);
+    }
 </script>
 
-<Menu on:verseSearchResult={
-    (event) => {
-        if (event.detail.parsha === parsha.parsha) {
+<Menu
+    on:verseSearchResult={(event) => {
+        if (event.detail.parsha === parshaData.parsha) {
             openVerseDetailsModal(event.detail.chapter, event.detail.verse);
         }
-    }
-} homeButton />
+    }}
+    homeButton
+/>
 <div class="page">
     <div class="container">
         <span class="small-header">
             Книга
             <b
-                >{parsha.book}
-                {metadata.book_names[parsha.book][mainTextSource]}</b
+                >{parshaData.book}
+                {metadata.book_names[parshaData.book][mainTextSource]}</b
             >, недельный раздел
             <b
-                >{parsha.parsha}
-                {metadata.parsha_names[parsha.parsha][mainTextSource]}</b
+                >{parshaData.parsha}
+                {metadata.parsha_names[parshaData.parsha][mainTextSource]}</b
             >,
             <span style="white-space: nowrap;">
                 стихи
@@ -117,52 +130,39 @@
                 <b>{verseCoords2string(lastParshaVerseCoords)}</b>
             </span>
         </span>
-        {#each parsha.chapters as chapter}
+        {#each parshaData.chapters as chapter}
             <h2>Глава {chapter.chapter}</h2>
-            {#each chapter.verses as verse}
+            {#each chapter.verses as verseData}
                 <span class="verse">
-                    <span class="verse-number">{verse.verse}.</span>
+                    <span class="verse-number">{verseData.verse}.</span>
                     <span
-                        class={textDecorationStyle ===
-                        TextDecorationStyle.CLICKABLE_TEXT
-                            ? "verse-text clickable"
+                        class={isClickableText(verseData)
+                            ? textDecorationSettings.onlyDecorateTextWithComments
+                                ? "verse-text clickable"
+                                : "verse-text clickable no-background-in-unhovered"
                             : "verse-text"}
                         on:click={() => {
-                            textDecorationStyle ===
-                            TextDecorationStyle.CLICKABLE_TEXT
-                                ? openVerseDetails(verse, chapter)
-                                : null;
+                            isClickableText(verseData) ? openVerseDetails(verseData, chapter) : null;
                         }}
                         on:keydown={() => {
-                            textDecorationStyle ===
-                            TextDecorationStyle.CLICKABLE_TEXT
-                                ? openVerseDetails(verse, chapter)
-                                : null;
-                        }}>{verse.text[mainTextSource]}</span
+                            isClickableText(verseData) ? openVerseDetails(verseData, chapter) : null;
+                        }}>{verseData.text[mainTextSource]}</span
                     >
-                    {#if textDecorationStyle === TextDecorationStyle.ASTRERISK}
+                    {#if isAstreisk(verseData)}
                         <span
                             class="comment-asterisk"
-                            on:click={() => openVerseDetails(verse, chapter)}
-                            on:keydown={() => openVerseDetails(verse, chapter)}
+                            on:click={() => openVerseDetails(verseData, chapter)}
+                            on:keydown={() => openVerseDetails(verseData, chapter)}
                         >
-                            <Icon
-                                heightEm={0.7}
-                                icon={"asterisk"}
-                                color={"#606060"}
-                            />
+                            <Icon heightEm={0.7} icon={"asterisk"} color={"#606060"} />
                         </span>
                     {/if}
                 </span>
                 <div
                     class="inline-verse-comment-container"
-                    style={inlineVerseDetailsVisible[
-                        verseId(chapter.chapter, verse.verse)
-                    ]
-                        ? ""
-                        : "display: none;"}
+                    style={inlineVerseDetailsVisible[verseId(chapter.chapter, verseData.verse)] ? "" : "display: none;"}
                 >
-                    <VerseComments verseData={verse} />
+                    <VerseComments {verseData} parsha={parshaData.parsha} chapter={chapter.chapter} />
                 </div>
             {/each}
         {/each}
@@ -211,6 +211,9 @@
     .inline-verse-comment-container {
         margin: 0.6em 0;
         padding: 0 0.6em;
-        border-left: 1px black solid;
+    }
+
+    .no-background-in-unhovered {
+        background: transparent;
     }
 </style>

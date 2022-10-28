@@ -7,14 +7,16 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Optional
 
-import bs4
+import bs4  # type: ignore
 import requests  # type: ignore
 
-import metadata
-from config import parsha_json
-from metadata import Commenter, TextSource, get_book_by_parsha
-from model import ChapterData, CommentData, ParshaData, VerseData
-from utils import (
+from backend import metadata
+from backend.metadata import Commenter, TextSource, get_book_by_parsha
+from backend.model import ChapterData, CommentData, ParshaData, VerseData
+from backend.static import parsha_path
+from parsers.identification import ensure_comment_ids
+from parsers.utils import (
+    HTML_DIR,
     are_strings_close,
     collapse_whitespace,
     has_class,
@@ -26,7 +28,7 @@ from utils import (
 
 
 def parsha_html(idx: int) -> Path:
-    return Path(f"html/shabat_shalom_info/{idx}.html")
+    return HTML_DIR / f"shabat_shalom_info/{idx}.html"
 
 
 def download_parsha_html(idx: int):
@@ -245,7 +247,8 @@ def parse_parsha(parsha: int):
         if verses != list(range(min(verses), max(verses) + 1)):
             print(f"WARNING: there are some missing verses in chapter {chapter_data['chapter']}: {verses}")
 
-    parsha_json(parsha).write_text(json.dumps(parsha_data, ensure_ascii=False, indent=2))
+    ensure_comment_ids(parsha_data)
+    parsha_path(parsha).write_text(json.dumps(parsha_data, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":
