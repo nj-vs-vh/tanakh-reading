@@ -4,7 +4,7 @@
     import Modal from "svelte-simple-modal";
     import { Router } from "svelte-router-spa";
 
-    import { initCommentSourceFlags } from "../settings/commentSources";
+    import { initCommentFilters } from "../settings/commentFilters";
     import { initTextDecorationStyle } from "../settings/textDecorationStyle";
     import { initCommentStyle } from "../settings/commentStyle";
     import { initTextSourcesConfig, textSourcesConfigStore } from "../settings/textSources";
@@ -12,14 +12,14 @@
 
     import { routes } from "../routes";
     import { deleteAccessToken } from "../auth";
-    import { initTextDecorationSettings } from "../settings/textDecorationMode";
+    import { initTextDecorationSettings } from "../settings/textDecorationSettings";
 
     export let metadata: Metadata;
     setContext("metadata", metadata);
 
     console.log(metadata);
 
-    initCommentSourceFlags(metadata);
+    initCommentFilters(metadata);
     initTextSourcesConfig(metadata);
     initTextDecorationStyle();
     initCommentStyle();

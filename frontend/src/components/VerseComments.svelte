@@ -2,13 +2,13 @@
     import type { Metadata } from "../types";
     import { getContext } from "svelte";
     import type { VerseData } from "../types";
-    import { commentSourceFlagsStore } from "../settings/commentSources";
-    import type { CommentSourceFlags } from "../settings/commentSources";
+    import { commentFiltersStore, CommentFilterByBookmarkMode } from "../settings/commentFilters";
+    import type { CommentFilters } from "../settings/commentFilters";
     import VerseComment from "./VerseComment.svelte";
 
-    let commentSourceFlags: CommentSourceFlags;
-    commentSourceFlagsStore.subscribe((v) => {
-        commentSourceFlags = v;
+    let commentFilters: CommentFilters;
+    commentFiltersStore.subscribe((v) => {
+        commentFilters = v;
     });
 
     export let verseData: VerseData;
@@ -21,11 +21,18 @@
 
 <div class="container">
     {#each Object.entries(verseData.comments) as [commenter, comments]}
-        {#if commentSourceFlags[commenter]}
+        {#if commentFilters.bySource[commenter] === true}
             <div class="comments-block">
                 <p class="commenter-name">{commenterNames[commenter]}</p>
                 {#each comments as commentData}
-                    <VerseComment {commentData} {parsha} {chapter} verse={verseData.verse} />
+                    {#if // prettier-ignore
+                    commentFilters.byBookmarkMode === CommentFilterByBookmarkMode.NONE
+                    || (
+                        commentFilters.byBookmarkMode === CommentFilterByBookmarkMode.MY
+                        && commentData.is_starred_by_me === true
+                    )}
+                        <VerseComment {commentData} {parsha} {chapter} verse={verseData.verse} />
+                    {/if}
                 {/each}
             </div>
         {/if}

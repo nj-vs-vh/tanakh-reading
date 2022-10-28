@@ -13,7 +13,7 @@
         setTextDecorationSettings,
         TextDecorationSettings,
         textDecorationSettingsStore,
-    } from "../../settings/textDecorationMode";
+    } from "../../settings/textDecorationSettings";
 
     let textDecorationStyle: TextDecorationStyle;
     textDecorationStyleStore.subscribe((v) => {
@@ -39,8 +39,8 @@
     });
 </script>
 
-<MenuFolder icon="sliders" title="Стиль">
-    <MenuFolderBlock title="Разметка текста">
+<MenuFolder icon="sliders" title="Настройки">
+    <MenuFolderBlock title="Общие">
         <div class="input-with-label">
             <input
                 type="checkbox"
@@ -56,7 +56,7 @@
                 }}
             />
             <label for="onlyDecorateTextWithCommentsCheckbox">
-                <span>Только для стихов с комментариями</span>
+                <span>Разметка только для стихов с комментариями</span>
                 <span class="description">(учитывая фильтры)</span>
             </label>
         </div>

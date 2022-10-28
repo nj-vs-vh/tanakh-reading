@@ -3,18 +3,12 @@
     import Keydown from "svelte-keydown";
     import { swipe } from "svelte-gestures";
     import type { Metadata, ParshaData, VerseData } from "../types";
-    import { commentSourceFlagsStore } from "../settings/commentSources";
-    import type { CommentSourceFlags } from "../settings/commentSources";
     import { textSourcesConfigStore } from "../settings/textSources";
     import VerseComments from "./VerseComments.svelte";
     import Icon from "./shared/Icon.svelte";
     import { areInsideVerseCoordsList, getVerseCoords, VerseCoords, versePath, verseCoords2string } from "../utils";
 
     const metadata: Metadata = getContext("metadata");
-    let commentSourceFlags: CommentSourceFlags;
-    commentSourceFlagsStore.subscribe((v) => {
-        commentSourceFlags = v;
-    });
 
     let textSources: Array<string>;
 

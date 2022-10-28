@@ -4,30 +4,35 @@
     import MenuFolderBlock from "./MenuFolderBlock.svelte";
     import WikiStyleLinks from "./WikiStyleLinks.svelte";
 
-    import { commentSourceFlagsStore, toggleCommentSourceFlag } from "../../settings/commentSources";
-    import type { CommentSourceFlags } from "../../settings/commentSources";
+    import {
+        commentFiltersStore,
+        toggleCommentFilterBySource,
+        setCommentFilterBySource,
+        setCommentFilterByBookmarkMode,
+        CommentFilterByBookmarkMode,
+    } from "../../settings/commentFilters";
+    import type { CommentFilters } from "../../settings/commentFilters";
     import type { Metadata } from "../../types";
 
-    let commentSourceFlags: CommentSourceFlags;
-    commentSourceFlagsStore.subscribe((v) => {
-        commentSourceFlags = v;
+    let commentFilters: CommentFilters;
+    commentFiltersStore.subscribe((v) => {
+        console.log(v);
+        commentFilters = v;
     });
 
     const metadata: Metadata = getContext("metadata");
 </script>
 
 <MenuFolder icon="tanakh-book" title="Комментарии">
-    <MenuFolderBlock title="Авторы">
-        {#each Object.entries(commentSourceFlags) as [commenter, isActive]}
+    <MenuFolderBlock title="Фильтр по авторам">
+        {#each Object.entries(commentFilters.bySource) as [commenter, isActive]}
             <div class="input-with-label">
                 <input
                     type="checkbox"
                     id={commenter}
                     name={commenter}
                     checked={isActive}
-                    on:change={(e) => {
-                        toggleCommentSourceFlag(commenter);
-                    }}
+                    on:change={() => toggleCommentFilterBySource(commenter)}
                 />
                 <label for={commenter}>
                     <span>
@@ -44,17 +49,34 @@
                 type="checkbox"
                 id="all"
                 name="all"
-                checked={Object.values(commentSourceFlags).reduce((f1, f2) => f1 & f2, true)}
+                checked={Object.values(commentFilters.bySource).reduce((f1, f2) => f1 && f2, true)}
                 on:change={(e) => {
-                    const newFlags = new Map();
-                    for (const commenter of Object.keys(commentSourceFlags)) {
+                    const newFilterBySource = {};
+                    for (const commenter of Object.keys(commentFilters.bySource)) {
                         // @ts-ignore
-                        newFlags[commenter] = e.target.checked;
+                        newFilterBySource[commenter] = e.target.checked;
                     }
-                    commentSourceFlagsStore.set(newFlags);
+                    setCommentFilterBySource(newFilterBySource);
                 }}
             />
             <label for="all">Все</label>
         </div>
+    </MenuFolderBlock>
+    <MenuFolderBlock title="Фильтр по закладкам">
+        {#each Object.values(CommentFilterByBookmarkMode) as mode}
+            <div class="input-with-label">
+                <input
+                    type="radio"
+                    id={mode}
+                    name={mode}
+                    checked={mode == commentFilters.byBookmarkMode}
+                    on:change={(e) => {
+                        // @ts-ignore
+                        setCommentFilterByBookmarkMode(e.target.name);
+                    }}
+                />
+                <label for={mode}>{mode}</label>
+            </div>
+        {/each}
     </MenuFolderBlock>
 </MenuFolder>

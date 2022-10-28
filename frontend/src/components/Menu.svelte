@@ -8,7 +8,7 @@
     import CommentsSettings from "./MenuItems/CommentsSettings.svelte";
     import Search from "./MenuItems/Search.svelte";
     import type { Metadata } from "../types";
-    import AnnotationSettings from "./MenuItems/AnnotationSettings.svelte";
+    import DisplaySettings from "./MenuItems/DisplaySettings.svelte";
 
     export let homeButton: boolean = false;
 
@@ -34,7 +34,7 @@
         {/if}
         <TextSettings />
         <CommentsSettings />
-        <AnnotationSettings />
+        <DisplaySettings />
         <Search on:verseSearchResult />
         {#if metadata.logged_in_user === null}
             <Navigate to="/login">
