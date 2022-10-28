@@ -4,10 +4,12 @@ export enum CommentFormat {
     PLAIN = "plain",
 }
 
-interface CommentData {
+export interface CommentData {
+    id: string;
     anchor_phrase: null | string;
     comment: string;
     format: CommentFormat;
+    is_starred_by_me?: boolean;
 }
 
 
@@ -45,4 +47,29 @@ export interface Metadata {
     commenter_links: Record<string, Array<string>>;
     commenter_names: Record<string, string>;
     available_parsha: Array<number>;
+    logged_in_user: LoggedInUser | null;
+}
+
+
+export interface UserCredentials {
+    username: string;
+    password: string;
+}
+
+
+export interface UserData {
+    full_name: string;
+}
+
+
+export interface SignupData {
+    credentials: UserCredentials;
+    data: UserData;
+}
+
+
+export interface LoggedInUser {
+    username: string;
+    data: UserData;
+    invited_by_username: string;
 }

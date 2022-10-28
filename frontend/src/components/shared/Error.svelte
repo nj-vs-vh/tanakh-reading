@@ -1,17 +1,20 @@
 <script lang="ts">
-    export let errorMessage: string;
+    import Screen from "./Screen.svelte";
+
+    export let error: string | Error;
+
+    let errorMessage: string;
+
+    if (typeof error === "object") {
+        console.log(error);
+        errorMessage = error.message;
+    } else {
+        errorMessage = error;
+    }
 </script>
 
-<div>
-    <span>{errorMessage}</span>
-</div>
-
-<style>
-    div {
-        padding: 10px 15px;
-        margin: 5px 0;
-        background-color: #fffaf9;
-        border: 1.5px solid #ff6c89;
-        border-radius: 5px;
-    }
-</style>
+<Screen>
+    <div class="error-badge">
+        <span>{errorMessage}</span>
+    </div>
+</Screen>
