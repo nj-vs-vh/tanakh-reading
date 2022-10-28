@@ -26,18 +26,8 @@
 </script>
 
 <Hero>
-    <input
-        type="text"
-        name="username"
-        placeholder="Юзернейм"
-        bind:value={username}
-    />
-    <input
-        type="password"
-        name="password"
-        placeholder="Пароль"
-        bind:value={password}
-    />
+    <input type="text" name="username" placeholder="Юзернейм" bind:value={username} />
+    <input type="password" name="password" placeholder="Пароль" bind:value={password} />
     <button on:click={onLogin}>Войти</button>
     <Keydown on:Enter={onLogin} />
     <div hidden={loginError === null} class="error-badge">

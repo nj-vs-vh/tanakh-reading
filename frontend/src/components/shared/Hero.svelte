@@ -1,11 +1,10 @@
 <script>
     import Screen from "./Screen.svelte";
-
 </script>
 
 <Screen>
     <div class="container">
-        <slot/>
+        <slot />
     </div>
 </Screen>
 

@@ -1,19 +1,11 @@
 <script lang="ts">
     import { getContext } from "svelte";
-    import type {
-        Metadata,
-        ParshaData,
-        VerseData,
-        ChapterData,
-    } from "../types";
+    import type { Metadata, ParshaData, VerseData, ChapterData } from "../types";
     import VerseDetailsModal from "./VerseDetailsModal.svelte";
     import VerseComments from "./VerseComments.svelte";
     import Icon from "./shared/Icon.svelte";
     import Menu from "./Menu.svelte";
-    import {
-        TextDecorationStyle,
-        textDecorationStyleStore,
-    } from "../settings/textDecorationStyle";
+    import { TextDecorationStyle, textDecorationStyleStore } from "../settings/textDecorationStyle";
     import { CommentStyle, commentStyleStore } from "../settings/commentStyle";
     import { textSourcesConfigStore } from "../settings/textSources";
     import {
@@ -42,11 +34,9 @@
     parsha.chapters.sort((ch1, ch2) => ch1.chapter - ch2.chapter);
     const parshaVerseCoords = getVerseCoords(parsha);
     const firstParshaVerseCoords = parshaVerseCoords[0];
-    const lastParshaVerseCoords =
-        parshaVerseCoords[parshaVerseCoords.length - 1];
+    const lastParshaVerseCoords = parshaVerseCoords[parshaVerseCoords.length - 1];
 
-    const verseId = (chapterNo: number, verseNo: number): number =>
-        chapterNo * 100000 + verseNo;
+    const verseId = (chapterNo: number, verseNo: number): number => chapterNo * 100000 + verseNo;
 
     // @ts-ignore
     const { open } = getContext("simple-modal");
@@ -60,10 +50,7 @@
     let urlHashVerseCoords = getUrlHashVerseCoords();
     if (urlHashVerseCoords !== null) {
         if (areInsideVerseCoordsList(urlHashVerseCoords, parshaVerseCoords)) {
-            openVerseDetailsModal(
-                urlHashVerseCoords.chapter,
-                urlHashVerseCoords.verse
-            );
+            openVerseDetailsModal(urlHashVerseCoords.chapter, urlHashVerseCoords.verse);
         } else {
             setUrlHash("");
         }
@@ -72,9 +59,7 @@
     let inlineVerseDetailsVisible: Map<number, boolean> = new Map();
     for (const chapterData of parsha.chapters) {
         for (const verseData of chapterData.verses) {
-            inlineVerseDetailsVisible[
-                verseId(chapterData.chapter, verseData.verse)
-            ] = false;
+            inlineVerseDetailsVisible[verseId(chapterData.chapter, verseData.verse)] = false;
         }
     }
 
@@ -83,21 +68,20 @@
             openVerseDetailsModal(chapter.chapter, verse.verse);
         } else if (commentStyle == CommentStyle.INLINE) {
             inlineVerseDetailsVisible[verseId(chapter.chapter, verse.verse)] =
-                !inlineVerseDetailsVisible[
-                    verseId(chapter.chapter, verse.verse)
-                ];
+                !inlineVerseDetailsVisible[verseId(chapter.chapter, verse.verse)];
             inlineVerseDetailsVisible = { ...inlineVerseDetailsVisible };
         }
     };
 </script>
 
-<Menu on:verseSearchResult={
-    (event) => {
+<Menu
+    on:verseSearchResult={(event) => {
         if (event.detail.parsha === parsha.parsha) {
             openVerseDetailsModal(event.detail.chapter, event.detail.verse);
         }
-    }
-} homeButton />
+    }}
+    homeButton
+/>
 <div class="page">
     <div class="container">
         <span class="small-header">
@@ -123,19 +107,16 @@
                 <span class="verse">
                     <span class="verse-number">{verse.verse}.</span>
                     <span
-                        class={textDecorationStyle ===
-                        TextDecorationStyle.CLICKABLE_TEXT
+                        class={textDecorationStyle === TextDecorationStyle.CLICKABLE_TEXT
                             ? "verse-text clickable"
                             : "verse-text"}
                         on:click={() => {
-                            textDecorationStyle ===
-                            TextDecorationStyle.CLICKABLE_TEXT
+                            textDecorationStyle === TextDecorationStyle.CLICKABLE_TEXT
                                 ? openVerseDetails(verse, chapter)
                                 : null;
                         }}
                         on:keydown={() => {
-                            textDecorationStyle ===
-                            TextDecorationStyle.CLICKABLE_TEXT
+                            textDecorationStyle === TextDecorationStyle.CLICKABLE_TEXT
                                 ? openVerseDetails(verse, chapter)
                                 : null;
                         }}>{verse.text[mainTextSource]}</span
@@ -146,21 +127,13 @@
                             on:click={() => openVerseDetails(verse, chapter)}
                             on:keydown={() => openVerseDetails(verse, chapter)}
                         >
-                            <Icon
-                                heightEm={0.7}
-                                icon={"asterisk"}
-                                color={"#606060"}
-                            />
+                            <Icon heightEm={0.7} icon={"asterisk"} color={"#606060"} />
                         </span>
                     {/if}
                 </span>
                 <div
                     class="inline-verse-comment-container"
-                    style={inlineVerseDetailsVisible[
-                        verseId(chapter.chapter, verse.verse)
-                    ]
-                        ? ""
-                        : "display: none;"}
+                    style={inlineVerseDetailsVisible[verseId(chapter.chapter, verse.verse)] ? "" : "display: none;"}
                 >
                     <VerseComments verseData={verse} parsha={parsha.parsha} chapter={chapter.chapter} />
                 </div>

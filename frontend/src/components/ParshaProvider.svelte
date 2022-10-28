@@ -19,9 +19,7 @@
     $: {
         let parshaIndex = parseInt(currentRoute.namedParams.parshaIndex);
         if (parshaIndex !== lastLoadedParshaIndex) {
-            console.log(
-                `Parsha provider: path change detected ${currentRoute.path}`
-            );
+            console.log(`Parsha provider: path change detected ${currentRoute.path}`);
             parshaPromise = getParsha(parshaIndex, metadata.logged_in_user !== null);
             lastLoadedParshaIndex = parshaIndex;
         }

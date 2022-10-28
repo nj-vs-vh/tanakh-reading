@@ -1,9 +1,6 @@
 <script lang="ts">
     import Icon from "../shared/Icon.svelte";
-    import {
-        commentSourceFlagsStore,
-        toggleCommentSourceFlag,
-    } from "../../settings/commentSources";
+    import { commentSourceFlagsStore, toggleCommentSourceFlag } from "../../settings/commentSources";
     import type { CommentSourceFlags } from "../../settings/commentSources";
     import { getContext } from "svelte";
     import type { Metadata } from "../../types";
@@ -12,11 +9,7 @@
         textDecorationStyleStore,
         setTextDecorationStyle,
     } from "../../settings/textDecorationStyle";
-    import {
-        CommentStyle,
-        commentStyleStore,
-        setCommentStyle,
-    } from "../../settings/commentStyle";
+    import { CommentStyle, commentStyleStore, setCommentStyle } from "../../settings/commentStyle";
     import MenuFolder from "./MenuFolder.svelte";
     import MenuFolderBlock from "./MenuFolderBlock.svelte";
     import WikiStyleLinks from "./WikiStyleLinks.svelte";
@@ -62,9 +55,7 @@
                         <span>
                             {metadata.commenter_names[commenter]}
                         </span>
-                        <WikiStyleLinks
-                            urls={metadata.commenter_links[commenter]}
-                        />
+                        <WikiStyleLinks urls={metadata.commenter_links[commenter]} />
                     </span>
                 </label>
             </div>
@@ -74,10 +65,7 @@
                 type="checkbox"
                 id="all"
                 name="all"
-                checked={Object.values(commentSourceFlags).reduce(
-                    (f1, f2) => f1 & f2,
-                    true
-                )}
+                checked={Object.values(commentSourceFlags).reduce((f1, f2) => f1 & f2, true)}
                 on:change={(e) => {
                     const newFlags = new Map();
                     for (const commenter of Object.keys(commentSourceFlags)) {
@@ -111,8 +99,7 @@
                 id={TextDecorationStyle.CLICKABLE_TEXT}
                 name="textDecorationStyle"
                 value={TextDecorationStyle.CLICKABLE_TEXT}
-                checked={textDecorationStyle ==
-                    TextDecorationStyle.CLICKABLE_TEXT}
+                checked={textDecorationStyle == TextDecorationStyle.CLICKABLE_TEXT}
                 on:change={setTextDecorationStyleFromEvent}
             />
             <label for={TextDecorationStyle.CLICKABLE_TEXT}>
