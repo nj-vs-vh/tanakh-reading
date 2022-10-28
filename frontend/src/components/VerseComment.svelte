@@ -2,17 +2,10 @@
     import { getContext } from "svelte";
     import Icon from "./shared/Icon.svelte";
 
-    import { commentSourceFlagsStore } from "../settings/commentSources";
-    import type { CommentSourceFlags } from "../settings/commentSources";
-
     import type { CommentData, Metadata } from "../types";
     import { CommentFormat } from "../types";
     import { FullCommentCoords, starComment, unstarComment } from "../api";
 
-    let commentSourceFlags: CommentSourceFlags;
-    commentSourceFlagsStore.subscribe((v) => {
-        commentSourceFlags = v;
-    });
     const metadata: Metadata = getContext("metadata");
     export let commentData: CommentData;
     export let parsha: number;
@@ -63,18 +56,10 @@
 >
     <div class="icons-container">
         {#if isLoggedIn}
-            <div
-                class="clickable-icon"
-                on:click={toggleStarred}
-                on:keydown={toggleStarred}
-            >
+            <div class="clickable-icon" on:click={toggleStarred} on:keydown={toggleStarred}>
                 <Icon
                     icon="bookmark"
-                    color={isStarred
-                        ? "#c6a059"
-                        : isHovering
-                        ? "rgb(200, 200, 200)"
-                        : "transparent"}
+                    color={isStarred ? "#c6a059" : isHovering ? "rgb(200, 200, 200)" : "transparent"}
                     heightEm={0.7}
                 />
             </div>
