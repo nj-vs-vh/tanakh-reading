@@ -86,7 +86,7 @@ export function parshaPath(parsha: number | string): string {
 }
 
 
-export function signupPath(signupToken: string) : string {
+export function signupPath(signupToken: string): string {
     return `/signup/${signupToken}`
 }
 

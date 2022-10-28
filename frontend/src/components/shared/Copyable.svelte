@@ -13,11 +13,7 @@
 
 <div class="container">
     <span class="content">{content}</span>
-    <span
-        style="margin-left: 0.5em; cursor: pointer;"
-        on:click={copyContent}
-        on:keydown={copyContent}
-    >
+    <span style="margin-left: 0.5em; cursor: pointer;" on:click={copyContent} on:keydown={copyContent}>
         <Icon icon={isCopied ? "check" : "copy"} heightEm={0.8} />
     </span>
 </div>

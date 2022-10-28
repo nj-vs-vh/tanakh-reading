@@ -36,12 +36,11 @@
             return;
         }
         if (!usernameRe.test(username)) {
-            signupError =
-                "Юзернейм может содержать только латинские буквы, цифры, нижний пробел и дефис";
+            signupError = "Юзернейм может содержать только латинские буквы, цифры, нижний пробел и дефис";
             return;
         }
 
-        const credentials: UserCredentials = { username, password }
+        const credentials: UserCredentials = { username, password };
 
         const res = await signup(signupToken, {
             credentials: credentials,
@@ -68,24 +67,9 @@
 {:then isSignupTokenValid}
     {#if isSignupTokenValid}
         <Hero>
-            <input
-                type="text"
-                name="username"
-                placeholder="Юзернейм"
-                bind:value={username}
-            />
-            <input
-                type="password"
-                name="password"
-                placeholder="Пароль"
-                bind:value={password}
-            />
-            <input
-                type="text"
-                name="full-name"
-                placeholder="Имя"
-                bind:value={fullName}
-            />
+            <input type="text" name="username" placeholder="Юзернейм" bind:value={username} />
+            <input type="password" name="password" placeholder="Пароль" bind:value={password} />
+            <input type="text" name="full-name" placeholder="Имя" bind:value={fullName} />
             <button on:click={onSignup}>Создать учётную запись</button>
             <Keydown on:Enter={onSignup} />
             <div hidden={signupError === null} class="error-badge">

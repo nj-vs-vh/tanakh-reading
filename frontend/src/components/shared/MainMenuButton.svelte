@@ -1,7 +1,6 @@
 <script lang="ts">
     import { navigateTo } from "svelte-router-spa";
 
-
     function goBack() {
         navigateTo("/");
     }

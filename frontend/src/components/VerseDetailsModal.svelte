@@ -8,13 +8,7 @@
     import { textSourcesConfigStore } from "../settings/textSources";
     import VerseComments from "./VerseComments.svelte";
     import Icon from "./shared/Icon.svelte";
-    import {
-        areInsideVerseCoordsList,
-        getVerseCoords,
-        VerseCoords,
-        versePath,
-        verseCoords2string,
-    } from "../utils";
+    import { areInsideVerseCoordsList, getVerseCoords, VerseCoords, versePath, verseCoords2string } from "../utils";
 
     const metadata: Metadata = getContext("metadata");
     let commentSourceFlags: CommentSourceFlags;
@@ -27,9 +21,7 @@
     textSourcesConfigStore.subscribe((config) => {
         textSources = [];
         textSources.push(config.main);
-        for (const [source, isEnabled] of Object.entries(
-            config.enabledInDetails
-        )) {
+        for (const [source, isEnabled] of Object.entries(config.enabledInDetails)) {
             if (isEnabled && source != config.main) textSources.push(source);
         }
     });
@@ -50,17 +42,11 @@
         close();
     }
 
-    function findVerseCoords(
-        chapterNo: number,
-        verseNo: number
-    ): VerseCoords | null {
-        const chapterData = parsha.chapters.find(
-            (ch) => ch.chapter === chapterNo
-        );
+    function findVerseCoords(chapterNo: number, verseNo: number): VerseCoords | null {
+        const chapterData = parsha.chapters.find((ch) => ch.chapter === chapterNo);
         if (chapterData === undefined) return null;
         let verseData: VerseData | null = null;
-        if (verseNo >= 0)
-            verseData = chapterData.verses.find((vd) => vd.verse === verseNo);
+        if (verseNo >= 0) verseData = chapterData.verses.find((vd) => vd.verse === verseNo);
         // support for Python-like negative verse index
         else
             verseData = chapterData.verses.find(
@@ -68,10 +54,10 @@
                     vd.verse ===
                     Math.max.apply(
                         Math,
-                        chapterData.verses.map((v) => v.verse)
+                        chapterData.verses.map((v) => v.verse),
                     ) +
                         verseNo +
-                        1
+                        1,
             );
         if (verseData === undefined) return null;
         else return { chapter: chapterData.chapter, verse: verseData.verse };
@@ -86,24 +72,10 @@
             .find((ch) => ch.chapter === currentVerseCoords.chapter)
             .verses.find((v) => v.verse === currentVerseCoords.verse);
 
-        prevVerseCoords = findVerseCoords(
-            currentVerseCoords.chapter,
-            currentVerseCoords.verse - 1
-        );
-        if (prevVerseCoords === null)
-            prevVerseCoords = findVerseCoords(
-                currentVerseCoords.chapter - 1,
-                -1
-            );
-        nextVerseCoords = findVerseCoords(
-            currentVerseCoords.chapter,
-            currentVerseCoords.verse + 1
-        );
-        if (nextVerseCoords === null)
-            nextVerseCoords = findVerseCoords(
-                currentVerseCoords.chapter + 1,
-                1
-            );
+        prevVerseCoords = findVerseCoords(currentVerseCoords.chapter, currentVerseCoords.verse - 1);
+        if (prevVerseCoords === null) prevVerseCoords = findVerseCoords(currentVerseCoords.chapter - 1, -1);
+        nextVerseCoords = findVerseCoords(currentVerseCoords.chapter, currentVerseCoords.verse + 1);
+        if (nextVerseCoords === null) nextVerseCoords = findVerseCoords(currentVerseCoords.chapter + 1, 1);
     }
 
     let containerEl: HTMLElement;
@@ -144,48 +116,25 @@
     on:swipe={handleSwipe}
 >
     <p class="verse-nav">
-        <span
-            class="icon-button verse-nav-element"
-            on:click={(e) => prevVerse()}
-            on:keyup={(e) => {}}
-        >
-            <Icon
-                heightEm={0.8}
-                icon="chevron-left"
-                color={prevVerseCoords !== null ? "grey" : "white"}
-            />
+        <span class="icon-button verse-nav-element" on:click={(e) => prevVerse()} on:keyup={(e) => {}}>
+            <Icon heightEm={0.8} icon="chevron-left" color={prevVerseCoords !== null ? "grey" : "white"} />
         </span>
         <span class="verse-number verse-nav-element">
             {verseCoords2string(currentVerseCoords)}
         </span>
-        <span
-            class="icon-button verse-nav-element"
-            on:click={(e) => nextVerse()}
-            on:keyup={(e) => {}}
-        >
-            <Icon
-                heightEm={0.8}
-                icon="chevron-right"
-                color={nextVerseCoords !== null ? "grey" : "white"}
-            />
+        <span class="icon-button verse-nav-element" on:click={(e) => nextVerse()} on:keyup={(e) => {}}>
+            <Icon heightEm={0.8} icon="chevron-right" color={nextVerseCoords !== null ? "grey" : "white"} />
         </span>
         <span
             class="icon-button verse-nav-element"
             on:click={(e) => {
-                const url = `${window.location.origin}${versePath(
-                    parsha.parsha,
-                    currentVerseCoords
-                )}`;
+                const url = `${window.location.origin}${versePath(parsha.parsha, currentVerseCoords)}`;
                 navigator.clipboard.writeText(url);
                 isCurrentVerseLinkCopied = true;
             }}
             on:keyup={(e) => {}}
         >
-            <Icon
-                heightEm={0.8}
-                icon={isCurrentVerseLinkCopied ? "check" : "link"}
-                color="grey"
-            />
+            <Icon heightEm={0.8} icon={isCurrentVerseLinkCopied ? "check" : "link"} color="grey" />
         </span>
     </p>
     {#each textSources as textSource}
@@ -226,11 +175,7 @@
     }
 
     span.icon-button:hover {
-        background-image: radial-gradient(
-            closest-side,
-            rgb(221, 221, 221),
-            transparent
-        );
+        background-image: radial-gradient(closest-side, rgb(221, 221, 221), transparent);
     }
 
     span.verse-number {

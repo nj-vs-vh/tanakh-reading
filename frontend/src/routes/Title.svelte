@@ -1,11 +1,11 @@
 <script lang="ts">
     import { getContext } from "svelte";
-    import { Navigate } from 'svelte-router-spa'
-    
+    import { Navigate } from "svelte-router-spa";
+
     import Screen from "../components/shared/Screen.svelte";
-    
+
     import Menu from "../components/Menu.svelte";
-    
+
     import { textSourcesConfigStore } from "../settings/textSources";
     import { parshaPath, range } from "../utils";
     import type { Metadata } from "../types";
@@ -17,16 +17,12 @@
         mainTextSource = config.main;
     });
 
-    const bookIndices = Object.keys(metadata.book_names).map((v) =>
-        parseInt(v)
-    );
+    const bookIndices = Object.keys(metadata.book_names).map((v) => parseInt(v));
     bookIndices.sort();
 
     const parshaArrays = {};
 
-    for (const [bookIndex, parshaMinMax] of Object.entries(
-        metadata.parsha_ranges
-    )) {
+    for (const [bookIndex, parshaMinMax] of Object.entries(metadata.parsha_ranges)) {
         parshaArrays[bookIndex] = range(parshaMinMax[0], parshaMinMax[1]);
     }
 </script>
@@ -43,16 +39,12 @@
                 {#if metadata.available_parsha.includes(parshaIndex)}
                     <Navigate to={parshaPath(parshaIndex)}>
                         <h3>
-                            {parshaIndex}. {metadata.parsha_names[parshaIndex][
-                                mainTextSource
-                            ]}
+                            {parshaIndex}. {metadata.parsha_names[parshaIndex][mainTextSource]}
                         </h3>
                     </Navigate>
                 {:else}
                     <h3 class="inactive">
-                        {parshaIndex}. {metadata.parsha_names[parshaIndex][
-                            mainTextSource
-                        ]}
+                        {parshaIndex}. {metadata.parsha_names[parshaIndex][mainTextSource]}
                     </h3>
                 {/if}
             {/each}

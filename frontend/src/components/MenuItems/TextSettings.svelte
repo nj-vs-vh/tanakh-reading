@@ -46,9 +46,7 @@
                         <span>
                             {metadata.text_source_descriptions[textSource]}
                         </span>
-                        <WikiStyleLinks
-                            urls={metadata.text_source_links[textSource]}
-                        />
+                        <WikiStyleLinks urls={metadata.text_source_links[textSource]} />
                     </span>
                 </label>
             </div>

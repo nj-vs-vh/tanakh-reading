@@ -6,13 +6,7 @@
     import { textSourcesConfigStore } from "../../settings/textSources";
     import Keydown from "svelte-keydown";
 
-    import {
-        cmpVerseCoords,
-        range,
-        string2verseCoords,
-        VerseCoords,
-        versePath,
-    } from "../../utils";
+    import { cmpVerseCoords, range, string2verseCoords, VerseCoords, versePath } from "../../utils";
     import { navigateTo } from "svelte-router-spa";
 
     let mainTextSource: string;
@@ -21,14 +15,13 @@
     });
 
     const metadata: Metadata = getContext("metadata");
-    const latestParsha =
-        metadata.available_parsha[metadata.available_parsha.length - 1];
+    const latestParsha = metadata.available_parsha[metadata.available_parsha.length - 1];
     const availableBooks = Object.keys(metadata.book_names).filter(
-        (book) => metadata.parsha_ranges[book][0] <= latestParsha
+        (book) => metadata.parsha_ranges[book][0] <= latestParsha,
     );
 
     const dispatch = createEventDispatcher<{
-        verseSearchResult: { parsha: number, chapter: number; verse: number };
+        verseSearchResult: { parsha: number; chapter: number; verse: number };
     }>();
 
     let currentVerseCoordsInput: string = "";
@@ -40,7 +33,7 @@
         if (vc !== null) {
             const parshasToSearch = range(
                 metadata.parsha_ranges[currentBook][0],
-                metadata.parsha_ranges[currentBook][1]
+                metadata.parsha_ranges[currentBook][1],
             );
 
             let parshaFound = false;
@@ -60,14 +53,10 @@
                 ) {
                     parshaFound = true;
                     if (metadata.available_parsha.includes(parsha)) {
-                        dispatch(
-                            "verseSearchResult",
-                            {parsha: parsha, chapter: vc.chapter, verse: vc.verse},
-                        );
+                        dispatch("verseSearchResult", { parsha: parsha, chapter: vc.chapter, verse: vc.verse });
                         navigateTo(versePath(parsha, vc));
                     } else {
-                        searchResultsNote =
-                            "Недельный раздел со стихом ещё не доступен";
+                        searchResultsNote = "Недельный раздел со стихом ещё не доступен";
                     }
                 }
             }
@@ -84,11 +73,7 @@
         <div class="search-bar-container">
             <select bind:value={currentBook}>
                 {#each Object.entries(metadata.book_names) as [book, bookName]}
-                    <option
-                        value={book}
-                        disabled={!availableBooks.includes(book)}
-                        >{bookName[mainTextSource]}</option
-                    >
+                    <option value={book} disabled={!availableBooks.includes(book)}>{bookName[mainTextSource]}</option>
                 {/each}
             </select>
             <Keydown on:Enter={findVerse} />
@@ -103,10 +88,7 @@
             />
             <button id="search-btn" on:click={findVerse}>Найти</button>
         </div>
-        <div
-            id="search-results-note"
-            style={searchResultsNote === "" ? "display: none;" : ""}
-        >
+        <div id="search-results-note" style={searchResultsNote === "" ? "display: none;" : ""}>
             {searchResultsNote}
         </div>
     </MenuFolderBlock>

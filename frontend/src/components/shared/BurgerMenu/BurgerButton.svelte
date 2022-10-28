@@ -12,7 +12,7 @@
     on:click={() => (open = !open)}
     style="transition: color {duration}s ease-in-out; color: {open
         ? menuColor
-        : "grey"}; background-image: radial-gradient({open ? burgerColor : 'transparent'}, transparent);"
+        : 'grey'}; background-image: radial-gradient({open ? burgerColor : 'transparent'}, transparent);"
 >
     <svg width="32" height="32" viewBox="-4 -4 40 40">
         <line

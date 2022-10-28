@@ -46,31 +46,21 @@
                 <strong>Ссылка-приглашение</strong>
                 <span>для регистрации новых пользователь:ниц</span>
             </p>
-            <p
-                style="width: 100%; justify-content: center; display: flex; margin-top: 0.8em;"
-            >
+            <p style="width: 100%; justify-content: center; display: flex; margin-top: 0.8em;">
                 {#await mySignupTokenPromise}
                     <Spinner sizeEm={2} marginTopPx={0} />
                 {:then signupToken}
                     {#if signupToken === null}
-                        <button on:click={onGenerateSignupToken}
-                            >Сгенерировать</button
-                        >
+                        <button on:click={onGenerateSignupToken}>Сгенерировать</button>
                     {:else}
-                        <Copyable
-                            content={window.location.origin +
-                                signupPath(signupToken.token)}
-                        />
+                        <Copyable content={window.location.origin + signupPath(signupToken.token)} />
                     {/if}
                 {/await}
             </p>
         </div>
         <div class="account-settings-block">
             <p>
-                <button
-                    style="padding: 0.5em 3em; font-weight: 600;"
-                    on:click={onLogout}>Выйти</button
-                >
+                <button style="padding: 0.5em 3em; font-weight: 600;" on:click={onLogout}>Выйти</button>
             </p>
         </div>
     </Hero>

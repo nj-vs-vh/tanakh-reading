@@ -7,10 +7,7 @@
     import { initCommentSourceFlags } from "../settings/commentSources";
     import { initTextDecorationStyle } from "../settings/textDecorationStyle";
     import { initCommentStyle } from "../settings/commentStyle";
-    import {
-        initTextSourcesConfig,
-        textSourcesConfigStore,
-    } from "../settings/textSources";
+    import { initTextSourcesConfig, textSourcesConfigStore } from "../settings/textSources";
     import { getUrlHashVerseCoords, range, setUrlHash } from "../utils";
 
     import { routes } from "../routes";
@@ -26,7 +23,7 @@
     initTextDecorationStyle();
     initCommentStyle();
     if (metadata.logged_in_user === null) {
-        deleteAccessToken();  // removing possible residual access token
+        deleteAccessToken(); // removing possible residual access token
     }
 
     let mainTextSource: string;
@@ -34,22 +31,18 @@
         mainTextSource = config.main;
     });
 
-    const bookIndices = Object.keys(metadata.book_names).map((v) =>
-        parseInt(v)
-    );
+    const bookIndices = Object.keys(metadata.book_names).map((v) => parseInt(v));
     bookIndices.sort();
 
     const parshaArrays = {};
 
-    for (const [bookIndex, parshaMinMax] of Object.entries(
-        metadata.parsha_ranges
-    )) {
+    for (const [bookIndex, parshaMinMax] of Object.entries(metadata.parsha_ranges)) {
         parshaArrays[bookIndex] = range(parshaMinMax[0], parshaMinMax[1]);
     }
 </script>
 
 <Modal
-    styleCloseButton={{ boxShadow: "none", top: "0.5rem", right: "0.8rem"}}
+    styleCloseButton={{ boxShadow: "none", top: "0.5rem", right: "0.8rem" }}
     styleContent={{ padding: "0", overflowX: "hidden" }}
     styleBg={{ justifyContent: "flex-start" }}
     styleWindow={{ margin: "auto auto" }}

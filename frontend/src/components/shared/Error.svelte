@@ -5,7 +5,7 @@
 
     let errorMessage: string;
 
-    if (typeof error === "object"){
+    if (typeof error === "object") {
         console.log(error);
         errorMessage = error.message;
     } else {

@@ -40,7 +40,7 @@
             verse: verse,
         };
 
-        // first updating UI
+        // first updating the UI
         const originalIsStarred = isStarred;
         isStarred = !isStarred;
         commentData.is_starred_by_me = isStarred;
@@ -73,7 +73,7 @@
                     color={isStarred
                         ? "#c6a059"
                         : isHovering
-                        ? "rgb(170, 170, 170)"
+                        ? "rgb(200, 200, 200)"
                         : "transparent"}
                     heightEm={0.7}
                 />
