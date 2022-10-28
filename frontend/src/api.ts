@@ -7,10 +7,18 @@ import type { ParshaData, Metadata, SignupData, UserCredentials } from "./types"
 const BASE_API_URL = isProduction ? "https://torah-reading-backend.herokuapp.com" : "http://localhost:8081";
 
 
-export async function getParsha(index: number): Promise<ParshaData> {
+export async function getParsha(index: number, withUserData: boolean): Promise<ParshaData> {
+    let url = `${BASE_API_URL}/parsha/${index}`;
+    if (withUserData) {
+        const queryParams = new URLSearchParams({
+            my_starred_comments: "true",
+        })
+        url = url + "?" + queryParams.toString()
+    }
+
     const resp = await fetch(
-        `${BASE_API_URL}/parsha/${index}`,
-        { headers: { 'Content-Type': 'application/json' } }
+        url,
+        { headers: withAccessTokenHeader({ 'Content-Type': 'application/json' }) }
     )
     const respText = await resp.text();
     if (resp.ok)

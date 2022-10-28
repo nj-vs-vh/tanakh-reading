@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { getContext } from "svelte";
     import type { CurrentRoute } from "svelte-router-spa/types/components/route";
 
     import Parsha from "./Parsha.svelte";
@@ -6,8 +7,10 @@
     import Error from "./shared/Error.svelte";
     import Spinner from "./shared/Spinner.svelte";
 
-    import type { ParshaData } from "../types";
+    import type { ParshaData, Metadata } from "../types";
     import { getParsha } from "../api";
+
+    const metadata: Metadata = getContext("metadata");
 
     export let currentRoute: CurrentRoute;
 
@@ -15,11 +18,11 @@
     let lastLoadedParshaIndex: number | null = null;
     $: {
         let parshaIndex = parseInt(currentRoute.namedParams.parshaIndex);
-        if (parshaIndex != lastLoadedParshaIndex) {
+        if (parshaIndex !== lastLoadedParshaIndex) {
             console.log(
                 `Parsha provider: path change detected ${currentRoute.path}`
             );
-            parshaPromise = getParsha(parshaIndex);
+            parshaPromise = getParsha(parshaIndex, metadata.logged_in_user !== null);
             lastLoadedParshaIndex = parshaIndex;
         }
     }

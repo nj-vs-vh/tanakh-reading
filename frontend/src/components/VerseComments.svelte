@@ -1,10 +1,10 @@
 <script lang="ts">
     import type { Metadata } from "../types";
-    import { CommentFormat } from "../types";
     import { getContext } from "svelte";
     import type { VerseData } from "../types";
     import { commentSourceFlagsStore } from "../settings/commentSources";
     import type { CommentSourceFlags } from "../settings/commentSources";
+    import VerseComment from "./VerseComment.svelte";
 
     let commentSourceFlags: CommentSourceFlags;
     commentSourceFlagsStore.subscribe((v) => {
@@ -23,19 +23,7 @@
             <div class="comments-block">
                 <p class="commenter-name">{commenterNames[commenter]}</p>
                 {#each comments as commentData}
-                    <p>
-                        {#if commentData.anchor_phrase !== null}
-                            <b>{commentData.anchor_phrase}</b>
-                            <span>—</span>
-                        {/if}
-                        {#if commentData.format == CommentFormat.HTML}
-                            <span class="html-wrapper"
-                                >{@html commentData.comment}</span
-                            >
-                        {:else}
-                            <span>{commentData.comment}</span>
-                        {/if}
-                    </p>
+                    <VerseComment {commentData} />
                 {/each}
             </div>
         {/if}
@@ -47,12 +35,9 @@
         margin: 0.2em;
     }
 
-    p {
-        margin: 0.2em 0 0.1em 0;
-    }
-
     p.commenter-name {
         color: rgb(80, 80, 80);
+        margin: 0.3em 0;
     }
 
     div.comments-block {

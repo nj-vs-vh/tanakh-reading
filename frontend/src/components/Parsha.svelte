@@ -211,6 +211,5 @@
     .inline-verse-comment-container {
         margin: 0.6em 0;
         padding: 0 0.6em;
-        border-left: 1px black solid;
     }
 </style>
