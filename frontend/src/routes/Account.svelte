@@ -3,7 +3,7 @@
     import { navigateTo } from "svelte-router-spa";
     import { generateSignupToken, logout } from "../api";
     import Hero from "../components/shared/Hero.svelte";
-    import ToMainMenu from "../components/shared/ToMainMenu.svelte";
+    import MainMenuButton from "../components/shared/MainMenuButton.svelte";
     import Copyable from "../components/shared/Copyable.svelte";
 
     import { getMySignupToken } from "../api";
@@ -35,7 +35,7 @@
 </script>
 
 {#if metadata.logged_in_user !== null}
-    <ToMainMenu />
+    <MainMenuButton />
     <Hero>
         <h2>
             <span>{metadata.logged_in_user.data.full_name}</span>
