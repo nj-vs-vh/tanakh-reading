@@ -50,7 +50,7 @@
 
         margin: 7px;
 
-        z-index: 10;
+        z-index: 20;
 
         background-color: Transparent;
         background-repeat: no-repeat;

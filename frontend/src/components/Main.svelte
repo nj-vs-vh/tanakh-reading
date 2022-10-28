@@ -12,6 +12,7 @@
 
     import { routes } from "../routes";
     import { deleteAccessToken } from "../auth";
+    import { initTextDecorationSettings } from "../settings/textDecorationMode";
 
     export let metadata: Metadata;
     setContext("metadata", metadata);
@@ -22,6 +23,7 @@
     initTextSourcesConfig(metadata);
     initTextDecorationStyle();
     initCommentStyle();
+    initTextDecorationSettings();
     if (metadata.logged_in_user === null) {
         deleteAccessToken(); // removing possible residual access token
     }

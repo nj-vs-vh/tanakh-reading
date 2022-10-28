@@ -72,6 +72,16 @@
             inlineVerseDetailsVisible = { ...inlineVerseDetailsVisible };
         }
     };
+
+    function isDecorated(verse: VerseData): boolean {
+        return (
+            commentStyle === CommentStyle.MODAL || // for modal, we want to make text clickable anyway
+            Object.keys(verse.comments).length > 0
+        );
+    }
+
+    $: isClickableText = textDecorationStyle === TextDecorationStyle.CLICKABLE_TEXT;
+    $: isAstreisk = textDecorationStyle === TextDecorationStyle.ASTRERISK;
 </script>
 
 <Menu
@@ -107,21 +117,15 @@
                 <span class="verse">
                     <span class="verse-number">{verse.verse}.</span>
                     <span
-                        class={textDecorationStyle === TextDecorationStyle.CLICKABLE_TEXT
-                            ? "verse-text clickable"
-                            : "verse-text"}
+                        class={isClickableText && isDecorated(verse) ? "verse-text clickable" : "verse-text"}
                         on:click={() => {
-                            textDecorationStyle === TextDecorationStyle.CLICKABLE_TEXT
-                                ? openVerseDetails(verse, chapter)
-                                : null;
+                            isClickableText && isDecorated(verse) ? openVerseDetails(verse, chapter) : null;
                         }}
                         on:keydown={() => {
-                            textDecorationStyle === TextDecorationStyle.CLICKABLE_TEXT
-                                ? openVerseDetails(verse, chapter)
-                                : null;
+                            isClickableText && isDecorated(verse) ? openVerseDetails(verse, chapter) : null;
                         }}>{verse.text[mainTextSource]}</span
                     >
-                    {#if textDecorationStyle === TextDecorationStyle.ASTRERISK}
+                    {#if isAstreisk && isDecorated(verse)}
                         <span
                             class="comment-asterisk"
                             on:click={() => openVerseDetails(verse, chapter)}
