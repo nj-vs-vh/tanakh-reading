@@ -299,4 +299,4 @@ class BackendApp:
         self.app.on_startup.append(db_setup)
 
     def run(self) -> None:
-        web.run_app(self.app, port=config.PORT)
+        web.run_app(self.app, port=config.PORT, access_log=logger if not config.IS_PROD else None)
