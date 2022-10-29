@@ -36,7 +36,9 @@
     commentStyleStore.subscribe((v) => {
         commentStyle = v;
         if (commentStyle === CommentStyle.MODAL) {
-            setAllInlineVerseDetailsTo(false);
+            try {
+                setAllInlineVerseDetailsTo(false);
+            } catch (e) {}
         }
     });
     let mainTextSource: string;
