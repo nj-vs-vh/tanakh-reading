@@ -449,7 +449,7 @@ commenter_names = {
     Commenter.RASHI: "Раши [ФГ]",
     Commenter.RASHI_ALT: "Раши [Лехаим]",
     Commenter.IBN_EZRA: "ибн Эзра [Лехаим]",
-    Commenter.RAMBAN: "Рамбан [Chavel]"
+    Commenter.RAMBAN: "Рамбан [Chavel]",
 }
 
 
@@ -471,5 +471,5 @@ commenter_links = {
         r"https://en.wikipedia.org/wiki/Nachmanides",
         r"https://www.sefaria.org/texts/Tanakh/Rishonim%20on%20Tanakh/Ramban/Torah",
         r"https://www.nli.org.il/he/books/NNL_ALEPH002108945/NLI",
-    ]
+    ],
 }

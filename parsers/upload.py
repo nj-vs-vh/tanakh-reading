@@ -2,6 +2,7 @@ import argparse
 import asyncio
 import json
 import os
+from pprint import pprint
 
 import aiohttp
 
@@ -17,7 +18,8 @@ async def main(index: int):
             headers={"X-Admin-Token": os.environ["ADMIN_TOKEN"]},
         )
         print(f"Response status: {response.status}")
-        print(f"Response body: {await response.text()}")
+        response_json = await response.json()
+        pprint(response_json)
 
 
 if __name__ == "__main__":

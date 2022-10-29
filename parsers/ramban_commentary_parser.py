@@ -7,17 +7,17 @@ import argparse
 import json
 import shutil
 
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup  # type: ignore
+
 from backend import metadata
 from backend.model import CommentData, ParshaData
+from parsers.identification import ensure_comment_ids
 from parsers.local_storage import JSON_DIR, parsha_path
 from parsers.utils import dump_parsha, has_class
-from parsers.identification import ensure_comment_ids
-
 
 JSON_DUMPS_PER_BOOK = {
     1: JSON_DIR
-    / "Ramban on Genesis - en - Commentary on the Torah by Ramban (Nachmanides). Translated and annotated by Charles B. Chavel. New York, Shilo Pub. House, 1971-1976.json"
+    / "Ramban on Genesis - en - Commentary on the Torah by Ramban (Nachmanides). Translated and annotated by Charles B. Chavel. New York, Shilo Pub. House, 1971-1976.json"  # noqa
 }
 
 
@@ -54,7 +54,8 @@ def parse_ramban_commentaries(parsha_index: int):
                 ramban_verse = ramban_chapter[verse_data["verse"] - 1]  # 1-based -> 0-based
             else:
                 print(
-                    f"Verse #{verse_data['verse']} is out of bounds for available Ramban commentary ({len(ramban_chapter)}) "
+                    f"Verse #{verse_data['verse']} is out of bounds "
+                    + f"for available Ramban commentary ({len(ramban_chapter)}) "
                     + f"in chapter {chapter_data['chapter']}, assuming no commentaries for the verse"
                 )
                 ramban_verse = []

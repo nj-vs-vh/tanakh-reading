@@ -1,9 +1,9 @@
 import asyncio
 import logging
 from concurrent.futures import ThreadPoolExecutor
-from async_lru import alru_cache
 from typing import Callable, Optional, TypeVar, cast
 
+from async_lru import alru_cache  # type: ignore
 from pymongo import MongoClient
 
 from backend import config

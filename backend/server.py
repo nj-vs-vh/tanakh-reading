@@ -4,7 +4,7 @@ from typing import cast
 
 from aiohttp import hdrs, web
 from aiohttp.typedefs import Handler
-from dictdiffer import diff
+from dictdiffer import diff  # type: ignore
 
 from backend import config, metadata
 from backend.auth import generate_signup_token, hash_password
@@ -148,7 +148,7 @@ async def save_parsha(request: web.Request) -> web.Response:
     parsha_data = cast(ParshaData, await safe_request_json(request))
     current_parsha_data = await db.get_parsha_data(parsha_data["parsha"])
     if current_parsha_data is not None:
-        diff_ = diff(current_parsha_data, parsha_data)
+        diff_ = list(diff(current_parsha_data, parsha_data))
     else:
         diff_ = []
     await db.save_parsha_data(parsha_data)
