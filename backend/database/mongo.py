@@ -176,7 +176,7 @@ class MongoDatabase(DatabaseInterface):
                 return parsha_data
 
     async def save_parsha_data(self, parsha_data: ParshaData) -> None:
-        await self._awrap(self.parsha_data_coll.insert_one, parsha_data)
+        await self._awrap(self.parsha_data_coll.update_one, {"parsha": parsha_data["parsha"]}, parsha_data, True)
         self.parsha_data_cache.pop(parsha_data["parsha"], None)
         self.get_available_parsha_indices.cache_clear()
 
@@ -184,6 +184,6 @@ class MongoDatabase(DatabaseInterface):
     async def get_available_parsha_indices(self) -> list[int]:
         def blocking() -> list[int]:
             cursor = self.parsha_data_coll.aggregate([{"$project": {"parsha": True, "_id": False}}])
-            return [doc["parsha"] for doc in cursor]
+            return sorted(doc["parsha"] for doc in cursor)
 
         return await self._awrap(blocking)
