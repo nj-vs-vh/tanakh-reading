@@ -35,6 +35,9 @@
     let commentStyle: CommentStyle;
     commentStyleStore.subscribe((v) => {
         commentStyle = v;
+        if (commentStyle === CommentStyle.MODAL) {
+            setAllInlineVerseDetailsTo(false);
+        }
     });
     let mainTextSource: string;
     textSourcesConfigStore.subscribe((config) => {
@@ -72,11 +75,16 @@
     }
 
     let inlineVerseDetailsVisible: Map<number, boolean> = new Map();
-    for (const chapterData of parshaData.chapters) {
-        for (const verseData of chapterData.verses) {
-            inlineVerseDetailsVisible[verseId(chapterData.chapter, verseData.verse)] = false;
+
+    function setAllInlineVerseDetailsTo(value: boolean) {
+        for (const chapterData of parshaData.chapters) {
+            for (const verseData of chapterData.verses) {
+                inlineVerseDetailsVisible[verseId(chapterData.chapter, verseData.verse)] = value;
+            }
         }
     }
+
+    setAllInlineVerseDetailsTo(false);
 
     const openVerseDetails = (verse: VerseData, chapter: ChapterData) => {
         if (commentStyle == CommentStyle.MODAL) {
@@ -113,23 +121,32 @@
 />
 <div class="page">
     <div class="container">
-        <span class="small-header">
-            Книга
-            <b
-                >{parshaData.book}
-                {metadata.book_names[parshaData.book][mainTextSource]}</b
-            >, недельный раздел
-            <b
-                >{parshaData.parsha}
-                {metadata.parsha_names[parshaData.parsha][mainTextSource]}</b
-            >,
-            <span style="white-space: nowrap;">
-                стихи
-                <b>{verseCoords2string(firstParshaVerseCoords)}</b>
-                &ndash;
-                <b>{verseCoords2string(lastParshaVerseCoords)}</b>
-            </span>
-        </span>
+        <div>
+            <p class="header-info">
+                Книга
+                <strong>{parshaData.book} {metadata.book_names[parshaData.book][mainTextSource]}</strong>
+            </p>
+            <p class="header-info">
+                Недельный раздел
+                <strong>{parshaData.parsha} {metadata.parsha_names[parshaData.parsha][mainTextSource]}</strong>
+            </p>
+            <p class="header-info">
+                <span style="white-space: nowrap;">
+                    Стихи
+                    <strong>{verseCoords2string(firstParshaVerseCoords)}</strong>
+                    &ndash;
+                    <strong>{verseCoords2string(lastParshaVerseCoords)}</strong>
+                </span>
+            </p>
+        </div>
+        {#if commentStyle === CommentStyle.INLINE}
+            <div style="margin-top: 1em;">
+                <button class="inline-btn" on:click={() => setAllInlineVerseDetailsTo(true)}>Развернуть</button>
+                или
+                <button class="inline-btn" on:click={() => setAllInlineVerseDetailsTo(false)}>свернуть</button>
+                все комментарии
+            </div>
+        {/if}
         {#each parshaData.chapters as chapter}
             <h2>Глава {chapter.chapter}</h2>
             {#each chapter.verses as verseData}
@@ -158,12 +175,22 @@
                         </span>
                     {/if}
                 </span>
-                <div
-                    class="inline-verse-comment-container"
-                    style={inlineVerseDetailsVisible[verseId(chapter.chapter, verseData.verse)] ? "" : "display: none;"}
-                >
-                    <VerseComments {verseData} parsha={parshaData.parsha} chapter={chapter.chapter} />
-                </div>
+                {#if isDecorated(verseData) && inlineVerseDetailsVisible[verseId(chapter.chapter, verseData.verse)]}
+                    <div class="inline-verse-comment-container">
+                        <VerseComments {verseData} parsha={parshaData.parsha} chapter={chapter.chapter} />
+                        <div
+                            style="font-size: large; width: 100%; display: flex; justify-content: center; cursor: pointer;"
+                            on:click={() => {
+                                inlineVerseDetailsVisible[verseId(chapter.chapter, verseData.verse)] = false;
+                            }}
+                            on:keydown={() => {
+                                inlineVerseDetailsVisible[verseId(chapter.chapter, verseData.verse)] = false;
+                            }}
+                        >
+                            <span>↑</span>
+                        </div>
+                    </div>
+                {/if}
             {/each}
         {/each}
     </div>
@@ -202,18 +229,30 @@
         margin-right: 0.2em;
     }
 
-    .small-header {
-        font-size: medium;
-        font-weight: normal;
-        margin: 0;
+    p.header-info {
+        margin: 0.2em 0;
     }
 
     .inline-verse-comment-container {
-        margin: 0.6em 0;
-        padding: 0 0.6em;
+        margin: 0.8em 0 0.8em 0.2em;
+        padding: 0.2em 0 0.2em 1em;
+        border-left: 1px rgb(189, 189, 189) solid;
     }
 
     .no-background-in-unhovered {
         background: transparent;
+    }
+
+    button.inline-btn {
+        background: rgb(240, 240, 240);
+        border-color: grey;
+        cursor: pointer;
+        padding: 0.2em 0.6em;
+    }
+    button.inline-btn:hover {
+        border-color: black;
+    }
+    button.inline-btn:active {
+        background: rgb(231, 231, 231);
     }
 </style>
