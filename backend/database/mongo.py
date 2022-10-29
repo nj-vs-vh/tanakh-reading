@@ -176,7 +176,9 @@ class MongoDatabase(DatabaseInterface):
                 return parsha_data
 
     async def save_parsha_data(self, parsha_data: ParshaData) -> None:
-        await self._awrap(self.parsha_data_coll.update_one, {"parsha": parsha_data["parsha"]}, parsha_data, True)
+        await self._awrap(
+            self.parsha_data_coll.update_one, {"parsha": parsha_data["parsha"]}, {"$set": parsha_data}, True
+        )
         self.parsha_data_cache.pop(parsha_data["parsha"], None)
         self.get_available_parsha_indices.cache_clear()
 
