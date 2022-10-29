@@ -195,7 +195,7 @@ def parse_parsha(parsha: int):
 
         def split_on_next_verse_start(s: str, next_verse: Optional[int]) -> tuple[str, Optional[str], Optional[int]]:
             try:
-                regex = re.escape(verse_prefix(next_verse)) if next_verse is not None else r"(\d)+\."
+                regex = re.escape(verse_prefix(next_verse)) if next_verse is not None else r"(\d+)\."
                 next_verse_start_match = next(re.finditer(regex, s))
                 next_verse_start_start = next_verse_start_match.start()
                 next_verse = next_verse or int(next_verse_start_match.group(1))

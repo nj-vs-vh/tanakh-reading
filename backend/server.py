@@ -4,6 +4,7 @@ from typing import cast
 
 from aiohttp import hdrs, web
 from aiohttp.typedefs import Handler
+from dictdiffer import diff
 
 from backend import config, metadata
 from backend.auth import generate_signup_token, hash_password
@@ -128,11 +129,10 @@ async def get_parsha(request: web.Request) -> web.Response:
                     starrer_usernames={user.username}, text_coords_query=TextCoordsQuery(parsha=parsha_index)
                 )
                 my_starred_comment_ids = {c.comment_id for c in my_starred_comments}
-                logger.info(f"Marking comments as starred: {my_starred_comment_ids}")
+                logger.info(f"Marking {len(my_starred_comment_ids)} comments as starred by me")
                 for comment in iter_parsha_comments(parsha_data):
                     if comment["id"] in my_starred_comment_ids:
                         comment["is_starred_by_me"] = True
-
         except Exception:
             logger.info("Failed to enrich parsha data", exc_info=True)
             pass
@@ -146,8 +146,13 @@ async def save_parsha(request: web.Request) -> web.Response:
         raise web.HTTPUnauthorized(reason="Valid X-Admin-Token required")
     db = get_db(request)
     parsha_data = cast(ParshaData, await safe_request_json(request))
+    current_parsha_data = await db.get_parsha_data(parsha_data["parsha"])
+    if current_parsha_data is not None:
+        diff_ = diff(current_parsha_data, parsha_data)
+    else:
+        diff_ = []
     await db.save_parsha_data(parsha_data)
-    return web.Response()
+    return web.json_response(diff_)
 
 
 @routes.get("/")

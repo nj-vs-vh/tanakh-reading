@@ -441,6 +441,7 @@ class Commenter:
     RASHI = "rashi"
     RASHI_ALT = "rashi_alt"
     IBN_EZRA = "ibn-ezra"
+    RAMBAN = "ramban"
 
 
 commenter_names = {
@@ -448,6 +449,7 @@ commenter_names = {
     Commenter.RASHI: "Раши [ФГ]",
     Commenter.RASHI_ALT: "Раши [Лехаим]",
     Commenter.IBN_EZRA: "ибн Эзра [Лехаим]",
+    Commenter.RAMBAN: "Рамбан [Chavel]"
 }
 
 
@@ -465,4 +467,9 @@ commenter_links = {
         r"https://toldot.com/ibnEzra.html",
         r"https://ru.wikipedia.org/wiki/%D0%90%D0%B2%D1%80%D0%B0%D0%B0%D0%BC_%D0%B8%D0%B1%D0%BD_%D0%AD%D0%B7%D1%80%D0%B0",  # noqa
     ],
+    Commenter.RAMBAN: [
+        r"https://en.wikipedia.org/wiki/Nachmanides",
+        r"https://www.sefaria.org/texts/Tanakh/Rishonim%20on%20Tanakh/Ramban/Torah",
+        r"https://www.nli.org.il/he/books/NNL_ALEPH002108945/NLI",
+    ]
 }
