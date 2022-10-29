@@ -1,5 +1,6 @@
 venv
 html
+json
 **/__pycache__
 **node_modules
 .vscode
