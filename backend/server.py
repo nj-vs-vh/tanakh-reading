@@ -1,5 +1,6 @@
 import logging
 import secrets
+from typing import cast
 
 from aiohttp import hdrs, web
 from aiohttp.typedefs import Handler
@@ -11,13 +12,13 @@ from backend.database.interface import DatabaseInterface
 from backend.model import (
     CommentCoords,
     NewUser,
+    ParshaData,
     SignupToken,
     StarredComment,
     StoredUser,
     TextCoordsQuery,
     UserCredentials,
 )
-from backend.static import get_available_parsha, get_parsha_data
 from backend.utils import iter_parsha_comments, safe_request_json
 from backend.validation import validate_comment_coords
 
@@ -81,6 +82,7 @@ async def get_metadata(request: web.Request) -> web.Response:
     except Exception:
         user_dump = None
 
+    db = get_db(request)
     return web.json_response(
         {
             "book_names": metadata.torah_book_names,
@@ -93,7 +95,7 @@ async def get_metadata(request: web.Request) -> web.Response:
             "text_source_links": metadata.text_source_links,
             "commenter_names": metadata.commenter_names,
             "commenter_links": metadata.commenter_links,
-            "available_parsha": get_available_parsha(),
+            "available_parsha": await db.get_available_parsha_indices(),
             "logged_in_user": user_dump,
         }
     )
@@ -108,7 +110,9 @@ async def get_parsha(request: web.Request) -> web.Response:
         parsha_index = int(parsha_index_str)
     except Exception:
         raise web.HTTPBadRequest(reason="Parsha index must be a number")
-    parsha_data = get_parsha_data(parsha_index)
+
+    db = get_db(request)
+    parsha_data = await db.get_parsha_data(parsha_index)
     if parsha_data is None:
         raise web.HTTPNotFound(reason="Parsha is not available")
 
@@ -118,7 +122,6 @@ async def get_parsha(request: web.Request) -> web.Response:
         logger.info(f"Enriching parsha with some user-specific data: {add_my_starred_comments_info = }")
         try:
             user, _ = await get_authorized_user(request)
-            db = get_db(request)
 
             if add_my_starred_comments_info:
                 my_starred_comments = await db.lookup_starred_comments(
@@ -135,6 +138,16 @@ async def get_parsha(request: web.Request) -> web.Response:
             pass
 
     return web.json_response(parsha_data)
+
+
+@routes.post("/parsha/{index}")
+async def save_parsha(request: web.Request) -> web.Response:
+    if request.headers.get("X-Admin-Token") != config.ADMIN_TOKEN:
+        raise web.HTTPUnauthorized(reason="Valid X-Admin-Token required")
+    db = get_db(request)
+    parsha_data = cast(ParshaData, await safe_request_json(request))
+    await db.save_parsha_data(parsha_data)
+    return web.Response()
 
 
 @routes.get("/")
@@ -228,8 +241,8 @@ async def get_my_signup_token(request: web.Request) -> web.Response:
 async def star_comment(request: web.Request) -> web.Response:
     user, _ = await get_authorized_user(request)
     comment_coords = CommentCoords.from_request_json(await safe_request_json(request))
-    validate_comment_coords(comment_coords)
     db = get_db(request)
+    await validate_comment_coords(comment_coords, db)
     starred_comment = await db.save_starred_comment(
         StarredComment(
             starrer_username=user.username,
@@ -246,8 +259,8 @@ async def star_comment(request: web.Request) -> web.Response:
 async def unstar_comment(request: web.Request) -> web.Response:
     user, _ = await get_authorized_user(request)
     comment_coords = CommentCoords.from_request_json(await safe_request_json(request))
-    validate_comment_coords(comment_coords)
     db = get_db(request)
+    await validate_comment_coords(comment_coords, db)
     await db.delete_starred_comment(
         StarredComment(
             starrer_username=user.username,
@@ -274,7 +287,7 @@ async def get_starred_comments(request: web.Request) -> web.Response:
 class BackendApp:
     def __init__(self, db: DatabaseInterface) -> None:
         self.db = db
-        self.app = web.Application(client_max_size=1024)
+        self.app = web.Application(client_max_size=10 * 1024**2)
         self.app.middlewares.append(cors_middleware)
         self.app.add_routes(routes)
         self.app[AppExtensions.DB] = db

@@ -2,8 +2,8 @@ import copy
 import json
 
 from backend.model import ParshaData
-from backend.static import parsha_path
 from parsers.identification import ensure_comment_ids
+from parsers.local_storage import parsha_path
 
 
 def merge_parsha_data(p1: ParshaData, p2: ParshaData) -> ParshaData:
