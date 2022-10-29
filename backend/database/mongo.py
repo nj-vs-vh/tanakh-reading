@@ -1,7 +1,7 @@
 import asyncio
 import logging
 from concurrent.futures import ThreadPoolExecutor
-from functools import lru_cache
+from async_lru import alru_cache
 from typing import Callable, Optional, TypeVar, cast
 
 from pymongo import MongoClient
@@ -180,7 +180,7 @@ class MongoDatabase(DatabaseInterface):
         self.parsha_data_cache.pop(parsha_data["parsha"], None)
         self.get_available_parsha_indices.cache_clear()
 
-    @lru_cache(maxsize=None)
+    @alru_cache(maxsize=None)
     async def get_available_parsha_indices(self) -> list[int]:
         def blocking() -> list[int]:
             cursor = self.parsha_data_coll.aggregate([{"$project": {"parsha": True, "_id": False}}])
