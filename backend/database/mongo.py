@@ -1,4 +1,5 @@
 import asyncio
+import copy
 import logging
 from concurrent.futures import ThreadPoolExecutor
 from typing import Callable, Optional, TypeVar, cast
@@ -164,7 +165,7 @@ class MongoDatabase(DatabaseInterface):
     async def get_parsha_data(self, index: int) -> Optional[ParshaData]:
         cached = self.parsha_data_cache.get(index)
         if cached is not None:
-            return cached
+            parsha_data = cached
         else:
             res = await self._awrap(self.parsha_data_coll.find_one, {"parsha": index})
             if res is None:
@@ -173,7 +174,7 @@ class MongoDatabase(DatabaseInterface):
                 res.pop("_id", None)
                 parsha_data = cast(ParshaData, res)
                 self.parsha_data_cache[index] = parsha_data
-                return parsha_data
+        return copy.deepcopy(parsha_data)
 
     async def save_parsha_data(self, parsha_data: ParshaData) -> None:
         await self._awrap(
