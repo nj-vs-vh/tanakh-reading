@@ -1,13 +1,20 @@
 import asyncio
 import logging
 from concurrent.futures import ThreadPoolExecutor
-from typing import Callable, Optional, TypeVar
+from functools import lru_cache
+from typing import Callable, Optional, TypeVar, cast
 
 from pymongo import MongoClient
 
 from backend import config
 from backend.database.interface import DatabaseInterface
-from backend.model import SignupToken, StarredComment, StoredUser, TextCoordsQuery
+from backend.model import (
+    ParshaData,
+    SignupToken,
+    StarredComment,
+    StoredUser,
+    TextCoordsQuery,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -20,14 +27,19 @@ class MongoDatabase(DatabaseInterface):
     SIGNUP_TOKENS_COLLECTION_NAME = "signup-tokens"
     ACCESS_TOKENS_COLLECTION_NAME = "access-tokens"
     STARRED_COMMENTS_COLLECTION_NAME = "starred-comments"
+    PARSHA_DATA_COLLECTION_NAME = "parsha-data"
 
     def __init__(self, mongo_client: MongoClient[dict], db_name: str):
         self.client = mongo_client
         self.db = self.client[db_name]
+
         self.users_coll = self.db[self.USERS_COLLECTION_NAME]
         self.signup_tokens_coll = self.db[self.SIGNUP_TOKENS_COLLECTION_NAME]
         self.access_tokens_coll = self.db[self.ACCESS_TOKENS_COLLECTION_NAME]
         self.starred_comments_coll = self.db[self.STARRED_COMMENTS_COLLECTION_NAME]
+        self.parsha_data_coll = self.db[self.PARSHA_DATA_COLLECTION_NAME]
+
+        self.parsha_data_cache: dict[int, ParshaData] = dict()
         self.threads = ThreadPoolExecutor(max_workers=8)
 
     def __str__(self) -> str:
@@ -146,3 +158,32 @@ class MongoDatabase(DatabaseInterface):
         self, starrer_usernames: set[str], text_coords_query: TextCoordsQuery
     ) -> list[StarredComment]:
         return await self._awrap(self._blocking_lookup_starred_comments, starrer_usernames, text_coords_query)
+
+    # parsha data
+
+    async def get_parsha_data(self, index: int) -> Optional[ParshaData]:
+        cached = self.parsha_data_cache.get(index)
+        if cached is not None:
+            return cached
+        else:
+            res = await self._awrap(self.parsha_data_coll.find_one, {"parsha": index})
+            if res is None:
+                return None
+            else:
+                res.pop("_id", None)
+                parsha_data = cast(ParshaData, res)
+                self.parsha_data_cache[index] = parsha_data
+                return parsha_data
+
+    async def save_parsha_data(self, parsha_data: ParshaData) -> None:
+        await self._awrap(self.parsha_data_coll.insert_one, parsha_data)
+        self.parsha_data_cache.pop(parsha_data["parsha"], None)
+        self.get_available_parsha_indices.cache_clear()
+
+    @lru_cache(maxsize=None)
+    async def get_available_parsha_indices(self) -> list[int]:
+        def blocking() -> list[int]:
+            cursor = self.parsha_data_coll.aggregate([{"$project": {"parsha": True, "_id": False}}])
+            return [doc["parsha"] for doc in cursor]
+
+        return await self._awrap(blocking)
