@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext } from "svelte";
+    import { getContext, onDestroy } from "svelte";
     import Keydown from "svelte-keydown";
     import { swipe } from "svelte-gestures";
     import type { Metadata, ParshaData, VerseData } from "../types";
@@ -7,12 +7,13 @@
     import VerseComments from "./VerseComments.svelte";
     import Icon from "./shared/Icon.svelte";
     import { areInsideVerseCoordsList, getVerseCoords, VerseCoords, versePath, verseCoords2string } from "../utils";
+    import { isEditingStore } from "../editing";
 
     const metadata: Metadata = getContext("metadata");
 
     let textSources: Array<string>;
 
-    textSourcesConfigStore.subscribe((config) => {
+    const textSourcesConfigStoreUnsubscribe = textSourcesConfigStore.subscribe((config) => {
         textSources = [];
         textSources.push(config.main);
         for (const [source, isEnabled] of Object.entries(config.enabledInDetails)) {
@@ -100,9 +101,15 @@
         if (swipeDirection == "left") nextVerse();
         else prevVerse();
     }
+
+    onDestroy(textSourcesConfigStoreUnsubscribe);
 </script>
 
-<Keydown on:ArrowRight={nextVerse} on:ArrowLeft={prevVerse} />
+<Keydown
+    on:ArrowRight={nextVerse}
+    on:ArrowLeft={prevVerse}
+    on:combo={(e) => (e.detail === "Control-q" ? isEditingStore.set(true) : null)}
+/>
 <div
     class="container"
     bind:this={containerEl}

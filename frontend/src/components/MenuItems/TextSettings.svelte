@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext } from "svelte";
+    import { getContext, onDestroy } from "svelte";
     import type { Metadata } from "../../types";
     import {
         enableTextSource,
@@ -13,10 +13,11 @@
 
     let mainTextSource: string;
     let enabledTextSources: Record<string, boolean>;
-    textSourcesConfigStore.subscribe((config) => {
+    const textSourcesConfigStoreUnsubscribe = textSourcesConfigStore.subscribe((config) => {
         mainTextSource = config.main;
         enabledTextSources = config.enabledInDetails;
     });
+
     function setMainTextSourceFromEvent(e) {
         const source = e.target.value;
         setMainTextSource(source);
@@ -24,6 +25,8 @@
     }
 
     const metadata: Metadata = getContext("metadata");
+
+    onDestroy(textSourcesConfigStoreUnsubscribe);
 </script>
 
 <MenuFolder icon="torah-scroll" title="Текст">

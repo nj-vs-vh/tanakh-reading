@@ -7,11 +7,6 @@
     import VerseComment from "./VerseComment.svelte";
     import { commentPassesFilters } from "../utils";
 
-    let commentFilters: CommentFilters;
-    commentFiltersStore.subscribe((v) => {
-        commentFilters = v;
-    });
-
     export let verseData: VerseData;
     export let parsha: number;
     export let chapter: number;
@@ -23,15 +18,15 @@
 <div class="container">
     {#each Object.entries(verseData.comments) as [commenter, comments]}
         {#if comments
-            .map((commentData) => commentPassesFilters(commentData, commenter, commentFilters))
+            .map((commentData) => commentPassesFilters(commentData, commenter, $commentFiltersStore))
             .reduce((a, b) => a || b, false)}
             <div class="comments-block">
                 <p class="commenter-name">{commenterNames[commenter]}</p>
                 {#each comments as commentData}
                     {#if // prettier-ignore
-                    commentFilters.byBookmarkMode === CommentFilterByBookmarkMode.NONE
+                    $commentFiltersStore.byBookmarkMode === CommentFilterByBookmarkMode.NONE
                     || (
-                        commentFilters.byBookmarkMode === CommentFilterByBookmarkMode.MY
+                        $commentFiltersStore.byBookmarkMode === CommentFilterByBookmarkMode.MY
                         && commentData.is_starred_by_me === true
                     )}
                         <VerseComment {commentData} {parsha} {chapter} verse={verseData.verse} />

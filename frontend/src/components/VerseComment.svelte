@@ -5,6 +5,8 @@
     import type { CommentData, Metadata } from "../types";
     import { CommentFormat } from "../types";
     import { FullCommentCoords, starComment, unstarComment } from "../api";
+    import Hoverable from "./shared/Hoverable.svelte";
+    import { isEditingStore } from "../editing";
 
     const metadata: Metadata = getContext("metadata");
     export let commentData: CommentData;
@@ -16,12 +18,8 @@
     let isHovering = false;
     $: isStarred = commentData.is_starred_by_me === true;
 
-    function setHovering() {
-        isHovering = true;
-    }
-    function unsetHovering() {
-        isHovering = false;
-    }
+    let isEditing = false;
+    // isEditingStore.subscribe()
 
     async function toggleStarred() {
         if (!isLoggedIn) return;
@@ -47,36 +45,32 @@
     }
 </script>
 
-<div
-    class="comment-body-container"
-    on:mouseover={setHovering}
-    on:mouseout={unsetHovering}
-    on:focus={setHovering}
-    on:blur={unsetHovering}
->
-    <div class="icons-container">
-        {#if isLoggedIn}
-            <div class="clickable-icon" on:click={toggleStarred} on:keydown={toggleStarred}>
-                <Icon
-                    icon="bookmark"
-                    color={isStarred ? "#c6a059" : isHovering ? "rgb(200, 200, 200)" : "transparent"}
-                    heightEm={0.7}
-                />
-            </div>
-        {/if}
+<Hoverable bind:isHovering>
+    <div class="comment-body-container">
+        <div class="icons-container">
+            {#if isLoggedIn}
+                <div class="clickable-icon" on:click={toggleStarred} on:keydown={toggleStarred}>
+                    <Icon
+                        icon="bookmark"
+                        color={isStarred ? "#c6a059" : isHovering ? "rgb(200, 200, 200)" : "transparent"}
+                        heightEm={0.7}
+                    />
+                </div>
+            {/if}
+        </div>
+        <p class="comment-text">
+            {#if commentData.anchor_phrase !== null}
+                <strong>{commentData.anchor_phrase}</strong>
+                <span>—</span>
+            {/if}
+            {#if commentData.format == CommentFormat.HTML}
+                <span class="html-wrapper">{@html commentData.comment}</span>
+            {:else}
+                <span>{commentData.comment}</span>
+            {/if}
+        </p>
     </div>
-    <p class="comment-text">
-        {#if commentData.anchor_phrase !== null}
-            <strong>{commentData.anchor_phrase}</strong>
-            <span>—</span>
-        {/if}
-        {#if commentData.format == CommentFormat.HTML}
-            <span class="html-wrapper">{@html commentData.comment}</span>
-        {:else}
-            <span>{commentData.comment}</span>
-        {/if}
-    </p>
-</div>
+</Hoverable>
 
 <style>
     .comment-body-container {

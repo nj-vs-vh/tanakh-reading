@@ -28,11 +28,6 @@
         deleteAccessToken(); // removing possible residual access token
     }
 
-    let mainTextSource: string;
-    textSourcesConfigStore.subscribe((config) => {
-        mainTextSource = config.main;
-    });
-
     const bookIndices = Object.keys(metadata.book_names).map((v) => parseInt(v));
     bookIndices.sort();
 

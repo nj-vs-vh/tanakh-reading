@@ -14,29 +14,24 @@
         TextDecorationSettings,
         textDecorationSettingsStore,
     } from "../../settings/textDecorationSettings";
+    import { onDestroy } from "svelte";
 
-    let textDecorationStyle: TextDecorationStyle;
-    textDecorationStyleStore.subscribe((v) => {
-        textDecorationStyle = v;
-    });
     function setTextDecorationStyleFromEvent(e) {
         setTextDecorationStyle(e.target.value);
     }
 
-    let commentStyle: CommentStyle;
-    commentStyleStore.subscribe((v) => {
-        commentStyle = v;
-    });
     function setCommentStyleFromEvent(e) {
         setCommentStyle(e.target.value);
     }
 
     let onlyDecorateTextWithComments: boolean;
     let textDecorationSettings: TextDecorationSettings;
-    textDecorationSettingsStore.subscribe((v) => {
+    const textDecorationSettingsStoreUnsubscribe = textDecorationSettingsStore.subscribe((v) => {
         textDecorationSettings = v;
         onlyDecorateTextWithComments = v.onlyDecorateTextWithComments;
     });
+
+    onDestroy(textDecorationSettingsStoreUnsubscribe);
 </script>
 
 <MenuFolder icon="sliders" title="Настройки">
@@ -68,7 +63,7 @@
                 id={TextDecorationStyle.ASTRERISK}
                 name="textDecorationStyle"
                 value={TextDecorationStyle.ASTRERISK}
-                checked={textDecorationStyle == TextDecorationStyle.ASTRERISK}
+                checked={$textDecorationStyleStore == TextDecorationStyle.ASTRERISK}
                 on:change={setTextDecorationStyleFromEvent}
             />
             <label for={TextDecorationStyle.ASTRERISK}>
@@ -82,7 +77,7 @@
                 id={TextDecorationStyle.CLICKABLE_TEXT}
                 name="textDecorationStyle"
                 value={TextDecorationStyle.CLICKABLE_TEXT}
-                checked={textDecorationStyle == TextDecorationStyle.CLICKABLE_TEXT}
+                checked={$textDecorationStyleStore == TextDecorationStyle.CLICKABLE_TEXT}
                 on:change={setTextDecorationStyleFromEvent}
             />
             <label for={TextDecorationStyle.CLICKABLE_TEXT}>
@@ -97,7 +92,7 @@
                 id={TextDecorationStyle.NONE}
                 name="textDecorationStyle"
                 value={TextDecorationStyle.NONE}
-                checked={textDecorationStyle == TextDecorationStyle.NONE}
+                checked={$textDecorationStyleStore == TextDecorationStyle.NONE}
                 on:change={setTextDecorationStyleFromEvent}
             />
             <label for={TextDecorationStyle.NONE}>
@@ -112,7 +107,7 @@
                 id={CommentStyle.MODAL}
                 name="commentStyle"
                 value={CommentStyle.MODAL}
-                checked={commentStyle == CommentStyle.MODAL}
+                checked={$commentStyleStore == CommentStyle.MODAL}
                 on:change={setCommentStyleFromEvent}
             />
             <label for={CommentStyle.MODAL}>В окне</label>
@@ -123,7 +118,7 @@
                 id={CommentStyle.INLINE}
                 name="commentStyle"
                 value={CommentStyle.INLINE}
-                checked={commentStyle == CommentStyle.INLINE}
+                checked={$commentStyleStore == CommentStyle.INLINE}
                 on:change={setCommentStyleFromEvent}
             />
             <label for={CommentStyle.INLINE}>

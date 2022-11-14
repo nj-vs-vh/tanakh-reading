@@ -11,20 +11,14 @@
         setCommentFilterByBookmarkMode,
         CommentFilterByBookmarkMode,
     } from "../../settings/commentFilters";
-    import type { CommentFilters } from "../../settings/commentFilters";
     import type { Metadata } from "../../types";
-
-    let commentFilters: CommentFilters;
-    commentFiltersStore.subscribe((v) => {
-        commentFilters = v;
-    });
 
     const metadata: Metadata = getContext("metadata");
 </script>
 
 <MenuFolder icon="tanakh-book" title="Комментарии">
     <MenuFolderBlock title="Фильтр по авторам">
-        {#each Object.entries(commentFilters.bySource) as [commenter, isActive]}
+        {#each Object.entries($commentFiltersStore.bySource) as [commenter, isActive]}
             <div class="input-with-label">
                 <input
                     type="checkbox"
@@ -48,10 +42,10 @@
                 type="checkbox"
                 id="all"
                 name="all"
-                checked={Object.values(commentFilters.bySource).reduce((f1, f2) => f1 && f2, true)}
+                checked={Object.values($commentFiltersStore.bySource).reduce((f1, f2) => f1 && f2, true)}
                 on:change={(e) => {
                     const newFilterBySource = {};
-                    for (const commenter of Object.keys(commentFilters.bySource)) {
+                    for (const commenter of Object.keys($commentFiltersStore.bySource)) {
                         // @ts-ignore
                         newFilterBySource[commenter] = e.target.checked;
                     }
@@ -69,7 +63,7 @@
                         type="radio"
                         id={mode}
                         name={mode}
-                        checked={mode == commentFilters.byBookmarkMode}
+                        checked={mode == $commentFiltersStore.byBookmarkMode}
                         on:change={(e) => {
                             // @ts-ignore
                             setCommentFilterByBookmarkMode(e.target.name);
