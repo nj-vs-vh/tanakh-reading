@@ -152,5 +152,6 @@
     div.edited-comment-body > textarea {
         resize: vertical;
         min-height: 5em;
+        padding: 0.3em;
     }
 </style>

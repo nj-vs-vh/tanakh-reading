@@ -87,8 +87,8 @@
     div.edited-text {
         display: flex;
         flex-direction: column;
-        width: 90%;
-        margin: 0 5%;
+        width: calc(100% - 1em);
+        margin: 0 0.5em;
     }
 
     div.edited-text > * {
@@ -98,5 +98,6 @@
     div.edited-text > textarea {
         resize: vertical;
         min-height: 5em;
+        padding: 0.3em;
     }
 </style>
