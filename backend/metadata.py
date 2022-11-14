@@ -186,7 +186,7 @@ parsha_names = {
     },
     7: {
         TextSource.FG: "Вайейцей",
-        TextSource.PLAUT: "Vayeitze (And [Jacob] Left)",
+        TextSource.PLAUT: "Vayeitzei (And [Jacob] Left)",
         TextSource.LECHAIM: "Вайеце",
     },
     8: {
