@@ -169,3 +169,25 @@ export async function unstarComment(coords: FullCommentCoords): Promise<null> {
     if (resp.ok) return null;
     else throw (respText);
 }
+
+
+interface EditCommentRequest {
+    comment_coords: FullCommentCoords;
+    new_comment: string;
+    new_anchor_phrase: string;
+}
+
+
+export async function editComment(request: EditCommentRequest): Promise<null> {
+    const resp = await fetch(
+        `${BASE_API_URL}/comment`,
+        {
+            method: "PUT",
+            headers: withAccessTokenHeader({}),
+            body: JSON.stringify(request),
+        }
+    )
+    const respText = await resp.text();
+    if (resp.ok) return null;
+    else throw (respText);
+}

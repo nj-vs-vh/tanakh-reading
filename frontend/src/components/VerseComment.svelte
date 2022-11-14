@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { getContext } from "svelte";
+    import { getContext, onDestroy } from "svelte";
     import Icon from "./shared/Icon.svelte";
 
     import type { CommentData, Metadata } from "../types";
     import { CommentFormat } from "../types";
-    import { FullCommentCoords, starComment, unstarComment } from "../api";
+    import { editComment, FullCommentCoords, starComment, unstarComment } from "../api";
     import Hoverable from "./shared/Hoverable.svelte";
     import { isEditingStore } from "../editing";
 
@@ -14,22 +14,35 @@
     export let chapter: number;
     export let verse: number;
 
-    let isLoggedIn = metadata.logged_in_user !== null;
-    let isHovering = false;
-    $: isStarred = commentData.is_starred_by_me === true;
-
-    let isEditing = false;
-    // isEditingStore.subscribe()
-
-    async function toggleStarred() {
-        if (!isLoggedIn) return;
-
-        const commentCoords: FullCommentCoords = {
+    let commentCoords: FullCommentCoords;
+    let isStarred: boolean;
+    let editedAnchorPhrase: string;
+    let editedCommentText: string;
+    $: {
+        commentCoords = {
             comment_id: commentData.id,
             parsha: parsha,
             chapter: chapter,
             verse: verse,
         };
+        isStarred = commentData.is_starred_by_me === true;
+    }
+
+    let isLoggedIn = metadata.logged_in_user !== null;
+    let isHovering = false;
+    let isEditing = false;
+    const isEditingStoreUnsubscribe = isEditingStore.subscribe((newIsEditing) => {
+        if (!newIsEditing) {
+            isEditing = false;
+        } else if (isHovering) {
+            isEditing = true;
+            editedAnchorPhrase = commentData.anchor_phrase;
+            editedCommentText = commentData.comment;
+        }
+    });
+
+    async function toggleStarred() {
+        if (!isLoggedIn) return;
 
         // first updating the UI
         const originalIsStarred = isStarred;
@@ -43,6 +56,20 @@
             await starComment(commentCoords);
         }
     }
+
+    async function saveEditedComment() {
+        commentData.anchor_phrase = editedAnchorPhrase;
+        commentData.comment = editedCommentText;
+        isEditingStore.set(false);
+        isHovering = false; // HACK to avoid staying in isHovereing state
+        await editComment({
+            comment_coords: commentCoords,
+            new_anchor_phrase: editedAnchorPhrase,
+            new_comment: editedCommentText,
+        });
+    }
+
+    onDestroy(isEditingStoreUnsubscribe);
 </script>
 
 <Hoverable bind:isHovering>
@@ -58,17 +85,28 @@
                 </div>
             {/if}
         </div>
-        <p class="comment-text">
-            {#if commentData.anchor_phrase !== null}
-                <strong>{commentData.anchor_phrase}</strong>
-                <span>—</span>
-            {/if}
-            {#if commentData.format == CommentFormat.HTML}
-                <span class="html-wrapper">{@html commentData.comment}</span>
-            {:else}
-                <span>{commentData.comment}</span>
-            {/if}
-        </p>
+        {#if isEditing}
+            <div class="edited-comment-body">
+                <input type="text" bind:value={editedAnchorPhrase} />
+                <textarea bind:value={editedCommentText} />
+                <div>
+                    <button on:click={() => isEditingStore.set(false)}>Отмена</button>
+                    <button style="background-color: #e1efe1;" on:click={saveEditedComment}>Сохранить</button>
+                </div>
+            </div>
+        {:else}
+            <p class="comment-text">
+                {#if commentData.anchor_phrase !== null}
+                    <strong>{commentData.anchor_phrase}</strong>
+                    <span>—</span>
+                {/if}
+                {#if commentData.format == CommentFormat.HTML}
+                    <span class="html-wrapper">{@html commentData.comment}</span>
+                {:else}
+                    <span>{commentData.comment}</span>
+                {/if}
+            </p>
+        {/if}
     </div>
 </Hoverable>
 
@@ -95,5 +133,24 @@
     div.clickable-icon {
         cursor: pointer;
         width: 100%;
+    }
+
+    div.edited-comment-body {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    div.edited-comment-body > * {
+        margin: 0.2em 0;
+    }
+
+    div.edited-comment-body > input[type="text"] {
+        font-weight: 600;
+    }
+
+    div.edited-comment-body > textarea {
+        resize: vertical;
+        min-height: 5em;
     }
 </style>

@@ -13,6 +13,7 @@
     import { routes } from "../routes";
     import { deleteAccessToken } from "../auth";
     import { initTextDecorationSettings } from "../settings/textDecorationSettings";
+    import { isEditingStore } from "../editing";
 
     export let metadata: Metadata;
     setContext("metadata", metadata);
@@ -45,6 +46,7 @@
     styleWindow={{ margin: "auto auto" }}
     on:close={() => {
         getUrlHashVerseCoords() === null ? null : setUrlHash("");
+        isEditingStore.set(false);
     }}
 >
     <Router {routes} />

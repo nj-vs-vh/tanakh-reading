@@ -72,4 +72,5 @@ export interface LoggedInUser {
     username: string;
     data: UserData;
     invited_by_username: string;
+    is_editor: boolean;
 }

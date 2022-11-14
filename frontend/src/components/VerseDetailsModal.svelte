@@ -76,7 +76,7 @@
     let containerEl: HTMLElement;
 
     function prevVerse() {
-        if (prevVerseCoords !== null) {
+        if (!$isEditingStore && prevVerseCoords !== null) {
             currentVerseCoords = prevVerseCoords;
             isCurrentVerseLinkCopied = false;
             containerEl.scrollIntoView();
@@ -84,7 +84,7 @@
     }
 
     function nextVerse() {
-        if (nextVerseCoords !== null) {
+        if (!$isEditingStore && nextVerseCoords !== null) {
             currentVerseCoords = nextVerseCoords;
             isCurrentVerseLinkCopied = false;
             containerEl.scrollIntoView();
@@ -108,7 +108,14 @@
 <Keydown
     on:ArrowRight={nextVerse}
     on:ArrowLeft={prevVerse}
-    on:combo={(e) => (e.detail === "Control-q" ? isEditingStore.set(true) : null)}
+    on:combo={(e) => {
+        // console.log(`Current store value: ${$isEditingStore}`);
+        if (metadata.logged_in_user !== null && metadata.logged_in_user.is_editor && e.detail === "Control-q") {
+            isEditingStore.set(true);
+        } else {
+            // console.log(`Ignored combo: ${e.detail}`);
+        }
+    }}
 />
 <div
     class="container"
