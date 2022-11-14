@@ -61,7 +61,7 @@
         commentData.anchor_phrase = editedAnchorPhrase;
         commentData.comment = editedCommentText;
         isEditingStore.set(false);
-        isHovering = false; // HACK to avoid staying in isHovereing state
+        isHovering = false;
         await editComment({
             comment_coords: commentCoords,
             new_anchor_phrase: editedAnchorPhrase,

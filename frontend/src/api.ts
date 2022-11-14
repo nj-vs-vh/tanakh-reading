@@ -191,3 +191,27 @@ export async function editComment(request: EditCommentRequest): Promise<null> {
     if (resp.ok) return null;
     else throw (respText);
 }
+
+
+interface EditTextRequest {
+    parsha: number;
+    chapter: number;
+    verse: number;
+    translation_key: string;
+    new_text: string;
+}
+
+
+export async function editText(request: EditTextRequest): Promise<null> {
+    const resp = await fetch(
+        `${BASE_API_URL}/text`,
+        {
+            method: "PUT",
+            headers: withAccessTokenHeader({}),
+            body: JSON.stringify(request),
+        }
+    )
+    const respText = await resp.text();
+    if (resp.ok) return null;
+    else throw (respText);
+}

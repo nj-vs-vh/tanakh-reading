@@ -8,6 +8,7 @@
     import Icon from "./shared/Icon.svelte";
     import { areInsideVerseCoordsList, getVerseCoords, VerseCoords, versePath, verseCoords2string } from "../utils";
     import { isEditingStore } from "../editing";
+    import VerseText from "./VerseText.svelte";
 
     const metadata: Metadata = getContext("metadata");
 
@@ -146,14 +147,13 @@
         </span>
     </p>
     {#each textSources as textSource}
-        <div class="verse-text-container">
-            <blockquote>
-                {currentVerseData.text[textSource]}
-            </blockquote>
-            <span class="verse-text-source-mark">
-                {metadata.text_source_marks[textSource]}
-            </span>
-        </div>
+        <VerseText
+            verseData={currentVerseData}
+            {textSource}
+            parsha={parsha.parsha}
+            chapter={currentVerseCoords.chapter}
+            verse={currentVerseCoords.verse}
+        />
     {/each}
     <VerseComments verseData={currentVerseData} parsha={parsha.parsha} chapter={currentVerseCoords.chapter} />
 </div>
@@ -187,26 +187,6 @@
     }
 
     span.verse-number {
-        color: grey;
-    }
-
-    blockquote {
-        margin: 0.1em;
-        padding: 0.1em 0.1em 0.1em 0.5em;
-        border-left: solid rgb(179, 179, 179) 2px;
-        color: rgb(68, 68, 68);
-        max-width: 90%;
-    }
-
-    span.verse-text-source-mark {
-        padding-left: 0.2em;
-    }
-
-    .verse-text-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin: 0.3em 0.5em 0.9em 0.1em;
         color: grey;
     }
 </style>
