@@ -87,7 +87,8 @@
     div.edited-text {
         display: flex;
         flex-direction: column;
-        width: 100%;
+        width: 90%;
+        margin: 0 5%;
     }
 
     div.edited-text > * {
