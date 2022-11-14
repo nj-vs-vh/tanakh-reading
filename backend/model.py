@@ -92,6 +92,8 @@ class StoredUser(DbSchemaModel):
 
     invited_by_username: Optional[str]
 
+    is_editor: bool = False
+
     password_hash: str
     salt: str
 
@@ -130,3 +132,17 @@ class TextCoordsQuery(PydanticModel):
 
     def to_mongo_query(self) -> dict[str, int]:
         return self.dict(exclude_defaults=True)
+
+
+class EditTextRequest(PydanticModel):
+    parsha: int
+    chapter: int
+    verse: int
+    translation_key: str
+    new_text: str
+
+
+class EditCommentRequest(PydanticModel):
+    comment_coords: CommentCoords
+    new_comment: str
+    new_anchor_phrase: str

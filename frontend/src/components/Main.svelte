@@ -13,6 +13,7 @@
     import { routes } from "../routes";
     import { deleteAccessToken } from "../auth";
     import { initTextDecorationSettings } from "../settings/textDecorationSettings";
+    import { isEditingStore } from "../editing";
 
     export let metadata: Metadata;
     setContext("metadata", metadata);
@@ -27,11 +28,6 @@
     if (metadata.logged_in_user === null) {
         deleteAccessToken(); // removing possible residual access token
     }
-
-    let mainTextSource: string;
-    textSourcesConfigStore.subscribe((config) => {
-        mainTextSource = config.main;
-    });
 
     const bookIndices = Object.keys(metadata.book_names).map((v) => parseInt(v));
     bookIndices.sort();
@@ -50,6 +46,7 @@
     styleWindow={{ margin: "auto auto" }}
     on:close={() => {
         getUrlHashVerseCoords() === null ? null : setUrlHash("");
+        isEditingStore.set(false);
     }}
 >
     <Router {routes} />

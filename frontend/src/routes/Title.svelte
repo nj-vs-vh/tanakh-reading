@@ -12,11 +12,6 @@
 
     let metadata: Metadata = getContext("metadata");
 
-    let mainTextSource: string;
-    textSourcesConfigStore.subscribe((config) => {
-        mainTextSource = config.main;
-    });
-
     const bookIndices = Object.keys(metadata.book_names).map((v) => parseInt(v));
     bookIndices.sort();
 
@@ -33,18 +28,18 @@
         <h1>Тора</h1>
         {#each bookIndices as bookIndex}
             <h2>
-                {bookIndex}. {metadata.book_names[bookIndex][mainTextSource]}
+                {bookIndex}. {metadata.book_names[bookIndex][$textSourcesConfigStore.main]}
             </h2>
             {#each parshaArrays[bookIndex] as parshaIndex}
                 {#if metadata.available_parsha.includes(parshaIndex)}
                     <Navigate to={parshaPath(parshaIndex)}>
                         <h3>
-                            {parshaIndex}. {metadata.parsha_names[parshaIndex][mainTextSource]}
+                            {parshaIndex}. {metadata.parsha_names[parshaIndex][$textSourcesConfigStore.main]}
                         </h3>
                     </Navigate>
                 {:else}
                     <h3 class="inactive">
-                        {parshaIndex}. {metadata.parsha_names[parshaIndex][mainTextSource]}
+                        {parshaIndex}. {metadata.parsha_names[parshaIndex][$textSourcesConfigStore.main]}
                     </h3>
                 {/if}
             {/each}

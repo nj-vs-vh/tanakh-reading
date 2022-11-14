@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext } from "svelte";
+    import { getContext, onDestroy } from "svelte";
     import Keydown from "svelte-keydown";
     import { swipe } from "svelte-gestures";
     import type { Metadata, ParshaData, VerseData } from "../types";
@@ -7,12 +7,14 @@
     import VerseComments from "./VerseComments.svelte";
     import Icon from "./shared/Icon.svelte";
     import { areInsideVerseCoordsList, getVerseCoords, VerseCoords, versePath, verseCoords2string } from "../utils";
+    import { isEditingStore } from "../editing";
+    import VerseText from "./VerseText.svelte";
 
     const metadata: Metadata = getContext("metadata");
 
     let textSources: Array<string>;
 
-    textSourcesConfigStore.subscribe((config) => {
+    const textSourcesConfigStoreUnsubscribe = textSourcesConfigStore.subscribe((config) => {
         textSources = [];
         textSources.push(config.main);
         for (const [source, isEnabled] of Object.entries(config.enabledInDetails)) {
@@ -75,7 +77,7 @@
     let containerEl: HTMLElement;
 
     function prevVerse() {
-        if (prevVerseCoords !== null) {
+        if (!$isEditingStore && prevVerseCoords !== null) {
             currentVerseCoords = prevVerseCoords;
             isCurrentVerseLinkCopied = false;
             containerEl.scrollIntoView();
@@ -83,7 +85,7 @@
     }
 
     function nextVerse() {
-        if (nextVerseCoords !== null) {
+        if (!$isEditingStore && nextVerseCoords !== null) {
             currentVerseCoords = nextVerseCoords;
             isCurrentVerseLinkCopied = false;
             containerEl.scrollIntoView();
@@ -100,9 +102,22 @@
         if (swipeDirection == "left") nextVerse();
         else prevVerse();
     }
+
+    onDestroy(textSourcesConfigStoreUnsubscribe);
 </script>
 
-<Keydown on:ArrowRight={nextVerse} on:ArrowLeft={prevVerse} />
+<Keydown
+    on:ArrowRight={nextVerse}
+    on:ArrowLeft={prevVerse}
+    on:combo={(e) => {
+        // console.log(`Current store value: ${$isEditingStore}`);
+        if (metadata.logged_in_user !== null && metadata.logged_in_user.is_editor && e.detail === "Control-q") {
+            isEditingStore.set(true);
+        } else {
+            // console.log(`Ignored combo: ${e.detail}`);
+        }
+    }}
+/>
 <div
     class="container"
     bind:this={containerEl}
@@ -132,14 +147,13 @@
         </span>
     </p>
     {#each textSources as textSource}
-        <div class="verse-text-container">
-            <blockquote>
-                {currentVerseData.text[textSource]}
-            </blockquote>
-            <span class="verse-text-source-mark">
-                {metadata.text_source_marks[textSource]}
-            </span>
-        </div>
+        <VerseText
+            verseData={currentVerseData}
+            {textSource}
+            parsha={parsha.parsha}
+            chapter={currentVerseCoords.chapter}
+            verse={currentVerseCoords.verse}
+        />
     {/each}
     <VerseComments verseData={currentVerseData} parsha={parsha.parsha} chapter={currentVerseCoords.chapter} />
 </div>
@@ -173,26 +187,6 @@
     }
 
     span.verse-number {
-        color: grey;
-    }
-
-    blockquote {
-        margin: 0.1em;
-        padding: 0.1em 0.1em 0.1em 0.5em;
-        border-left: solid rgb(179, 179, 179) 2px;
-        color: rgb(68, 68, 68);
-        max-width: 90%;
-    }
-
-    span.verse-text-source-mark {
-        padding-left: 0.2em;
-    }
-
-    .verse-text-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin: 0.3em 0.5em 0.9em 0.1em;
         color: grey;
     }
 </style>

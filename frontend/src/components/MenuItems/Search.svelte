@@ -9,11 +9,6 @@
     import { cmpVerseCoords, range, string2verseCoords, VerseCoords, versePath } from "../../utils";
     import { navigateTo } from "svelte-router-spa";
 
-    let mainTextSource: string;
-    textSourcesConfigStore.subscribe((config) => {
-        mainTextSource = config.main;
-    });
-
     const metadata: Metadata = getContext("metadata");
     const latestParsha = metadata.available_parsha[metadata.available_parsha.length - 1];
     const availableBooks = Object.keys(metadata.book_names).filter(
@@ -73,7 +68,9 @@
         <div class="search-bar-container">
             <select bind:value={currentBook}>
                 {#each Object.entries(metadata.book_names) as [book, bookName]}
-                    <option value={book} disabled={!availableBooks.includes(book)}>{bookName[mainTextSource]}</option>
+                    <option value={book} disabled={!availableBooks.includes(book)}
+                        >{bookName[$textSourcesConfigStore.main]}</option
+                    >
                 {/each}
             </select>
             <Keydown on:Enter={findVerse} />

@@ -12,6 +12,8 @@ from backend.constants import ACCESS_TOKEN_HEADER, SIGNUP_TOKEN_HEADER, AppExten
 from backend.database.interface import DatabaseInterface
 from backend.model import (
     CommentCoords,
+    EditCommentRequest,
+    EditTextRequest,
     NewUser,
     ParshaData,
     SignupToken,
@@ -21,7 +23,12 @@ from backend.model import (
     UserCredentials,
 )
 from backend.utils import iter_parsha_comments, safe_request_json
-from backend.validation import validate_comment_coords
+from backend.validation import (
+    lookup_comment_data,
+    lookup_parsha_data,
+    lookup_verse_data,
+    validate_comment_coords,
+)
 
 logger = logging.getLogger(__name__)
 routes = web.RouteTableDef()
@@ -140,7 +147,7 @@ async def get_parsha(request: web.Request) -> web.Response:
     return web.json_response(parsha_data)
 
 
-@routes.post("/parsha/{index}")
+@routes.post("/parsha")
 async def save_parsha(request: web.Request) -> web.Response:
     if request.headers.get("X-Admin-Token") != config.ADMIN_TOKEN:
         raise web.HTTPUnauthorized(reason="Valid X-Admin-Token required")
@@ -153,6 +160,42 @@ async def save_parsha(request: web.Request) -> web.Response:
         diff_ = []
     await db.save_parsha_data(parsha_data)
     return web.json_response(diff_)
+
+
+@routes.put("/text")
+async def edit_text(request: web.Request) -> web.Response:
+    user, _ = await get_authorized_user(request)
+    if not user.is_editor:
+        raise web.HTTPUnauthorized(reason="Editor permissions required")
+    edit_text_request = EditTextRequest.from_request_json(await safe_request_json(request))
+    db = get_db(request)
+    parsha_data = await lookup_parsha_data(edit_text_request.parsha, db=db)
+    # NOTE: this verse data refers to a field from mutable parsha data, this is why we can mutate it
+    #       and save the whole parsha data at once
+    verse_data = await lookup_verse_data(parsha_data, edit_text_request.chapter, edit_text_request.verse)
+    if edit_text_request.translation_key not in verse_data["text"]:
+        raise web.HTTPBadRequest(reason=f"No translation exists for key {edit_text_request.translation_key!r}")
+    await db.save_parsha_data(parsha_data)
+    return web.Response()
+
+
+@routes.put("/comment")
+async def edit_comment(request: web.Request) -> web.Response:
+    user, _ = await get_authorized_user(request)
+    if not user.is_editor:
+        raise web.HTTPUnauthorized(reason="Editor permissions required")
+    edit_comment_request = EditCommentRequest.from_request_json(await safe_request_json(request))
+    db = get_db(request)
+    parsha_data = await lookup_parsha_data(edit_comment_request.comment_coords.parsha, db=db)
+    # NOTE: see NOTE in the edit_text method, the same applies here
+    verse_data = await lookup_verse_data(
+        parsha_data, edit_comment_request.comment_coords.chapter, edit_comment_request.comment_coords.verse
+    )
+    comment_data = await lookup_comment_data(verse_data, comment_id=edit_comment_request.comment_coords.comment_id)
+    comment_data["anchor_phrase"] = edit_comment_request.new_anchor_phrase
+    comment_data["comment"] = edit_comment_request.new_comment
+    await db.save_parsha_data(parsha_data)
+    return web.Response()
 
 
 @routes.get("/")
