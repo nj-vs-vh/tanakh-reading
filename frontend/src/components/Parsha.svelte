@@ -59,7 +59,15 @@
     const verseId = (chapterNo: number, verseNo: number): number => chapterNo * 100000 + verseNo;
 
     // @ts-ignore
-    const { open } = getContext("simple-modal");
+    const { open, close } = getContext("simple-modal");
+
+    window.addEventListener("popstate", () => {
+        try {
+            // HACK
+            close();
+        } catch (e) {}
+    });
+
     const openVerseDetailsModal = (chapter: number, verse: number) =>
         open(VerseDetailsModal, {
             parsha: parshaData,

@@ -7,7 +7,7 @@
     import { initCommentFilters } from "../settings/commentFilters";
     import { initTextDecorationStyle } from "../settings/textDecorationStyle";
     import { initCommentStyle } from "../settings/commentStyle";
-    import { initTextSourcesConfig, textSourcesConfigStore } from "../settings/textSources";
+    import { initTextSourcesConfig } from "../settings/textSources";
     import { getUrlHashVerseCoords, range, setUrlHash } from "../utils";
 
     import { routes } from "../routes";
