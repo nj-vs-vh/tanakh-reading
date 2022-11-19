@@ -179,6 +179,7 @@ async def edit_text(request: web.Request) -> web.Response:
     verse_data = await lookup_verse_data(parsha_data, edit_text_request.chapter, edit_text_request.verse)
     if edit_text_request.translation_key not in verse_data["text"]:
         raise web.HTTPBadRequest(reason=f"No translation exists for key {edit_text_request.translation_key!r}")
+    verse_data["text"][edit_text_request.translation_key] = edit_text_request.new_text
     await db.save_parsha_data(parsha_data)
     return web.Response()
 
