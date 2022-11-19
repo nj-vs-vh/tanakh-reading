@@ -127,7 +127,7 @@ async def get_parsha(request: web.Request) -> web.Response:
     # optional query param things
     add_my_starred_comments_info = request.query.get("my_starred_comments") == "true"
     if add_my_starred_comments_info:
-        logger.info(f"Enriching parsha with some user-specific data: {add_my_starred_comments_info = }")
+        logger.info(f"Enriching parsha with user-specific data: {add_my_starred_comments_info = }")
         try:
             user, _ = await get_authorized_user(request)
 
@@ -136,7 +136,7 @@ async def get_parsha(request: web.Request) -> web.Response:
                     starrer_usernames={user.username}, text_coords_query=TextCoordsQuery(parsha=parsha_index)
                 )
                 my_starred_comment_ids = {c.comment_id for c in my_starred_comments}
-                logger.info(f"Marking {len(my_starred_comment_ids)} comments as starred by me")
+                logger.info(f"Marking {len(my_starred_comment_ids)} comment(s) as starred by the user")
                 for comment in iter_parsha_comments(parsha_data):
                     if comment["id"] in my_starred_comment_ids:
                         comment["is_starred_by_me"] = True
@@ -153,10 +153,13 @@ async def save_parsha(request: web.Request) -> web.Response:
         raise web.HTTPUnauthorized(reason="Valid X-Admin-Token required")
     db = get_db(request)
     parsha_data = cast(ParshaData, await safe_request_json(request))
+    logger.info(f"Saving parsha data for book {parsha_data['book']}, parsha {parsha_data['parsha']}")
     current_parsha_data = await db.get_parsha_data(parsha_data["parsha"])
     if current_parsha_data is not None:
+        logger.info("Current parsha data exists, updating")
         diff_ = list(diff(current_parsha_data, parsha_data))
     else:
+        logger.info("No current parsha data, creating new one")
         diff_ = []
     await db.save_parsha_data(parsha_data)
     return web.json_response(diff_)
@@ -168,6 +171,7 @@ async def edit_text(request: web.Request) -> web.Response:
     if not user.is_editor:
         raise web.HTTPUnauthorized(reason="Editor permissions required")
     edit_text_request = EditTextRequest.from_request_json(await safe_request_json(request))
+    logger.info(f"Editing text: {edit_text_request}")
     db = get_db(request)
     parsha_data = await lookup_parsha_data(edit_text_request.parsha, db=db)
     # NOTE: this verse data refers to a field from mutable parsha data, this is why we can mutate it
@@ -185,6 +189,7 @@ async def edit_comment(request: web.Request) -> web.Response:
     if not user.is_editor:
         raise web.HTTPUnauthorized(reason="Editor permissions required")
     edit_comment_request = EditCommentRequest.from_request_json(await safe_request_json(request))
+    logger.info(f"Editing comment: {edit_comment_request}")
     db = get_db(request)
     parsha_data = await lookup_parsha_data(edit_comment_request.comment_coords.parsha, db=db)
     # NOTE: see NOTE in the edit_text method, the same applies here
