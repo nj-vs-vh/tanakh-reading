@@ -8,8 +8,8 @@ python parsers/reformjudaism_parser.py $PARSHA
 
 # to find parsha url name go to https://lechaim.ru/torah/, click on your parsha
 # and look for https://lechaim.ru/academy/<parsha-url-name>1/
-export PARHSA_URL_NAME=parsha-url-name
-python parsers/lechaim_parser.py $PARSHA $PARHSA_URL_NAME
+export PARSHA_URL_NAME=parsha-url-name
+python parsers/lechaim_parser.py $PARSHA $PARSHA_URL_NAME
 
 python parsers/ramban_commentary_parser.py $PARSHA
 

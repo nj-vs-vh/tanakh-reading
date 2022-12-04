@@ -22,7 +22,7 @@ text_source_marks = {TextSource.FG: "[ФГ]", TextSource.PLAUT: "[Plaut]", TextS
 text_source_descriptions = {
     TextSource.FG: "Русский перевод Фримы Гурфинкель",
     TextSource.PLAUT: "Английский перевод «The Torah: A Modern Commentary» под редакцией Гюнтера Плаута",
-    TextSource.LECHAIM: "Русский перевод журнала «Лехаим», авторы не указаны",
+    TextSource.LECHAIM: "Русский перевод Давида Сафронова под ред. Андрея Графова (изд. «Лехаим»)",
 }
 
 
@@ -39,6 +39,7 @@ text_source_links = {
     ],
     TextSource.LECHAIM: [
         r"https://lechaim.ru/torah/",
+        r"https://esxatos.com/tora-s-kommentariyami-rashi-v-5-tomah-knizhniki",
     ],
 }
 
