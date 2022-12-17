@@ -33,10 +33,10 @@ def parse_ramban_commentaries(parsha_index: int):
         raise RuntimeError(f"Eror reading parsha data: {e!r}")
 
     # making temp copy to trace changes
-    shutil.copy(
-        parsha_path(parsha_index),
-        parsha_path(parsha_index).with_suffix(".json.temp"),
-    )
+    # shutil.copy(
+    #     parsha_path(parsha_index),
+    #     parsha_path(parsha_index).with_suffix(".json.temp"),
+    # )
 
     ramban_commentary: list[list[list[str]]] = ramban_commentary_raw["text"][""]
     print(f"Ramban commentary chapters: {len(ramban_commentary)}")
@@ -44,11 +44,11 @@ def parse_ramban_commentaries(parsha_index: int):
         if chapter_data["chapter"] <= len(ramban_commentary):
             ramban_chapter = ramban_commentary[chapter_data["chapter"] - 1]  # 1-based -> 0-based
         else:
-            raise RuntimeError(
+            print(
                 f"Chapter #{chapter_data['chapter']} is out of bounds "
                 + f"for available Ramban commentary ({len(ramban_commentary)})"
             )
-            ramban_chapter = []
+            continue
         for verse_data in chapter_data["verses"]:
             if verse_data["verse"] <= len(ramban_chapter):
                 ramban_verse = ramban_chapter[verse_data["verse"] - 1]  # 1-based -> 0-based
