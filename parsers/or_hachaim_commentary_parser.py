@@ -17,6 +17,10 @@ from parsers.utils import dump_parsha, has_class
 
 JSON_DUMPS_PER_BOOK = {
     1: JSON_DIR / "Or HaChaim on Genesis - en - Or Hachayim, trans. Eliyahu Munk.json",
+    2: JSON_DIR / "Or HaChaim on Exodus - en - Or Hachayim, trans. Eliyahu Munk.json",
+    3: JSON_DIR / "Or HaChaim on Leviticus - en - Or Hachayim, trans. Eliyahu Munk.json",
+    4: JSON_DIR / "Or HaChaim on Numbers - en - Or Hachayim, trans. Eliyahu Munk.json",
+    5: JSON_DIR / "Or HaChaim on Deuteronomy - en - Or Hachayim, trans. Eliyahu Munk.json",
 }
 
 
@@ -31,7 +35,7 @@ def parse_or_hachaim_commentaries(parsha_index: int):
     except Exception as e:
         raise RuntimeError(f"Eror reading parsha data: {e!r}")
 
-    commentary: list[list[list[str]]] = commentary_raw["text"][""]
+    commentary: list[list[list[str]]] = commentary_raw["text"][""] if book == 1 else commentary_raw["text"]
     print(f"Commentary chapters: {len(commentary)}")
     for chapter_data in parsha_data["chapters"]:
         if chapter_data["chapter"] <= len(commentary):
