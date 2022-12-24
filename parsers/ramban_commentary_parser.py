@@ -17,7 +17,15 @@ from parsers.utils import dump_parsha, has_class
 
 JSON_DUMPS_PER_BOOK = {
     1: JSON_DIR
-    / "Ramban on Genesis - en - Commentary on the Torah by Ramban (Nachmanides). Translated and annotated by Charles B. Chavel. New York, Shilo Pub. House, 1971-1976.json"  # noqa
+    / "Ramban on Genesis - en - Commentary on the Torah by Ramban (Nachmanides). Translated and annotated by Charles B. Chavel. New York, Shilo Pub. House, 1971-1976.json",  # noqa
+    2: JSON_DIR
+    / "Ramban on Exodus - en - Commentary on the Torah by Ramban (Nachmanides). Translated and annotated by Charles B. Chavel. New York, Shilo Pub. House, 1971-1976.json",
+    3: JSON_DIR
+    / "Ramban on Leviticus - en - Commentary on the Torah by Ramban (Nachmanides). Translated and annotated by Charles B. Chavel. New York, Shilo Pub. House, 1971-1976.json",
+    4: JSON_DIR
+    / "Ramban on Numbers - en - Commentary on the Torah by Ramban (Nachmanides). Translated and annotated by Charles B. Chavel. New York, Shilo Pub. House, 1971-1976.json",
+    5: JSON_DIR
+    / "Ramban on Deuteronomy - en - Commentary on the Torah by Ramban (Nachmanides). Translated and annotated by Charles B. Chavel. New York, Shilo Pub. House, 1971-1976.json",
 }
 
 

@@ -443,6 +443,7 @@ class Commenter:
     RASHI_ALT = "rashi_alt"
     IBN_EZRA = "ibn-ezra"
     RAMBAN = "ramban"
+    OR_HACHAIM = "or_hachaim"
 
 
 commenter_names = {
@@ -451,6 +452,7 @@ commenter_names = {
     Commenter.RASHI_ALT: "Раши [Лехаим]",
     Commenter.IBN_EZRA: "ибн Эзра [Лехаим]",
     Commenter.RAMBAN: "Рамбан [Chavel]",
+    Commenter.OR_HACHAIM: "Ор ха-Хайим [Munk]",
 }
 
 
@@ -472,5 +474,11 @@ commenter_links = {
         r"https://en.wikipedia.org/wiki/Nachmanides",
         r"https://www.sefaria.org/texts/Tanakh/Rishonim%20on%20Tanakh/Ramban/Torah",
         r"https://www.nli.org.il/he/books/NNL_ALEPH002108945/NLI",
+    ],
+    Commenter.OR_HACHAIM: [
+        r"https://en.wikipedia.org/wiki/Chaim_ibn_Attar",
+        r"https://www.sefaria.org/texts/Tanakh/Acharonim%20on%20Tanakh/Or%20HaChaim/Torah",
+        r"https://mysefer.com/Or-HaChaim--Commentary-on-the-Torah-English-5-vol.__p-946.aspx",
+        r"https://www.nehora.com/or-hachaim-commentary-on-the-torah/",
     ],
 }
