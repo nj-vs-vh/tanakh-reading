@@ -12,6 +12,7 @@ export PARSHA_URL_NAME=parsha-url-name
 python parsers/lechaim_parser.py $PARSHA $PARSHA_URL_NAME
 
 python parsers/ramban_commentary_parser.py $PARSHA
+python parsers/or_hachaim_commentary_parser.py $PARSHA
 
 # review 'json/10.json' and if it's ok,
 export ADMIN_TOKEN='whatever'
