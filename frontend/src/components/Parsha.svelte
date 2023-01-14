@@ -167,7 +167,7 @@
                 <span
                     class="verse"
                     style={isMainTextHebrew
-                        ? "width: 100%; text-align: right; display: flex; flex-direction: row-reverse;"
+                        ? "width: 100%; text-align: right; display: flex; flex-direction: row-reverse; align-items: baseline;"
                         : ""}
                 >
                     <span
