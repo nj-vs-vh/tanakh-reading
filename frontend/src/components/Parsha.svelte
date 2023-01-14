@@ -17,6 +17,8 @@
         areInsideVerseCoordsList,
         getUrlHashVerseCoords,
         getVerseCoords,
+        toHebrewNumberal,
+        isHebrewTextSource,
         setUrlHash,
         verseCoords2string,
     } from "../utils";
@@ -42,8 +44,10 @@
         }
     });
     let mainTextSource: string;
+    let isMainTextHebrew: boolean;
     textSourcesConfigStore.subscribe((config) => {
         mainTextSource = config.main;
+        isMainTextHebrew = isHebrewTextSource(mainTextSource);
     });
     let commentFilters: CommentFilters;
     commentFiltersStore.subscribe((v) => {
@@ -160,14 +164,24 @@
         {#each parshaData.chapters as chapter}
             <h2>Глава {chapter.chapter}</h2>
             {#each chapter.verses as verseData}
-                <span class="verse">
-                    <span class="verse-number">{verseData.verse}.</span>
+                <span
+                    class="verse"
+                    style={isMainTextHebrew
+                        ? "width: 100%; text-align: right; display: flex; flex-direction: row-reverse;"
+                        : ""}
+                >
+                    <span
+                        class="verse-number"
+                        style={isMainTextHebrew ? "min-width: 1.6em; margin-left: 0.1em" : "margin-right: 0.2em;"}
+                        >{isMainTextHebrew ? `${toHebrewNumberal(verseData.verse)}` : `${verseData.verse}.`}</span
+                    >
                     <span
                         class={isClickableText(verseData)
                             ? textDecorationSettings.onlyDecorateTextWithComments
                                 ? "verse-text clickable"
                                 : "verse-text clickable no-background-in-unhovered"
                             : "verse-text"}
+                        style={isMainTextHebrew ? "width: 100%; text-align: right;" : ""}
                         on:click={() => {
                             isClickableText(verseData) ? openVerseDetails(verseData, chapter) : null;
                         }}
@@ -181,7 +195,7 @@
                             on:click={() => openVerseDetails(verseData, chapter)}
                             on:keydown={() => openVerseDetails(verseData, chapter)}
                         >
-                            <Icon heightEm={0.7} icon={"asterisk"} color={"#606060"} />
+                            <Icon heightEm={0.7} icon={"asterisk"} color={"#aaaaaa"} />
                         </span>
                     {/if}
                 </span>
@@ -220,8 +234,8 @@
     }
 
     span.verse {
-        /* temp */
-        background-color: white;
+        /* dummy */
+        background-color: transparent;
     }
 
     span.verse-text {
@@ -236,7 +250,7 @@
     span.verse-number {
         color: rgb(105, 105, 105);
         user-select: none;
-        margin-right: 0.2em;
+        /* margin-right: 0.2em; */
     }
 
     p.header-info {

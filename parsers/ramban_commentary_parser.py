@@ -5,7 +5,6 @@ Download per-book-json from https://www.sefaria.org/texts/Tanakh/Rishonim%20on%2
 
 import argparse
 import json
-import shutil
 
 from bs4 import BeautifulSoup  # type: ignore
 

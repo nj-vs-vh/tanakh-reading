@@ -3,6 +3,7 @@
     import { editText } from "../api";
     import { isEditingStore } from "../editing";
     import type { Metadata, VerseData } from "../types";
+    import { isHebrewTextSource } from "../utils";
     import Hoverable from "./shared/Hoverable.svelte";
 
     const metadata: Metadata = getContext("metadata");
@@ -53,7 +54,7 @@
         </div>
     {:else}
         <div class="verse-text-container">
-            <blockquote>
+            <blockquote style={isHebrewTextSource(textSource) ? "text-align: right;" : ""}>
                 {verseData.text[textSource]}
             </blockquote>
             <span class="verse-text-source-mark">
@@ -69,7 +70,7 @@
         padding: 0.1em 0.1em 0.1em 0.5em;
         border-left: solid rgb(179, 179, 179) 2px;
         color: rgb(68, 68, 68);
-        max-width: 90%;
+        width: 95%;
     }
 
     span.verse-text-source-mark {

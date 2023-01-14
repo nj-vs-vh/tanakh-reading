@@ -5,10 +5,11 @@ class TextSource:
     FG = "fg"
     PLAUT = "plaut"
     LECHAIM = "lechaim"
+    HEBREW = "hebrew"
 
     @classmethod
     def all(cls) -> list[str]:
-        return [cls.FG, cls.PLAUT, cls.LECHAIM]
+        return [cls.FG, cls.PLAUT, cls.LECHAIM, cls.HEBREW]
 
     @classmethod
     def validate_per_text_source_dict(cls, d: dict[str, Any]):
@@ -16,13 +17,14 @@ class TextSource:
             raise SystemExit(f"Missing or extra records in per-text source dict {d}")
 
 
-text_source_marks = {TextSource.FG: "[ФГ]", TextSource.PLAUT: "[Plaut]", TextSource.LECHAIM: "[Лехаим]"}
+text_source_marks = {TextSource.FG: "[ФГ]", TextSource.PLAUT: "[Plaut]", TextSource.LECHAIM: "[Лехаим]", TextSource.HEBREW: ""}
 
 
 text_source_descriptions = {
     TextSource.FG: "Русский перевод Фримы Гурфинкель",
     TextSource.PLAUT: "Английский перевод «The Torah: A Modern Commentary» под редакцией Гюнтера Плаута",
     TextSource.LECHAIM: "Русский перевод Давида Сафронова под ред. Андрея Графова (изд. «Лехаим»)",
+    TextSource.HEBREW: "Версия на иврите с огласовками (никуд)",
 }
 
 
@@ -41,6 +43,10 @@ text_source_links = {
         r"https://lechaim.ru/torah/",
         r"https://esxatos.com/tora-s-kommentariyami-rashi-v-5-tomah-knizhniki",
     ],
+    TextSource.HEBREW: [
+        r"https://www.sefaria.org/texts/Tanakh",
+        r"https://en.wikipedia.org/wiki/Niqqud",
+    ]
 }
 
 
@@ -49,26 +55,32 @@ torah_book_names = {
         TextSource.FG: "Берейшис",
         TextSource.PLAUT: "Genesis",
         TextSource.LECHAIM: "Берешит",
+        TextSource.HEBREW: "בראשית",
     },
     2: {
         TextSource.FG: "Шемот",
         TextSource.PLAUT: "Exodus",
         TextSource.LECHAIM: "Шмот",
+        TextSource.HEBREW: "שמות",
+        
     },
     3: {
         TextSource.FG: "Вайикра",
         TextSource.PLAUT: "Leviticus",
         TextSource.LECHAIM: "Ваикра",
+        TextSource.HEBREW: "ויקרא",
     },
     4: {
         TextSource.FG: "Бемидбар",
         TextSource.PLAUT: "Numbers",
         TextSource.LECHAIM: "Бемидбар",
+        TextSource.HEBREW: "במדבר",
     },
     5: {
         TextSource.FG: "Деварим",
         TextSource.PLAUT: "Deuteronomy",
         TextSource.LECHAIM: "Дварим",
+        TextSource.HEBREW: "דברים",
     },
 }
 
@@ -159,271 +171,325 @@ parsha_names = {
         TextSource.FG: "Берейшис",
         TextSource.PLAUT: "B’reishit (In the Beginning)",
         TextSource.LECHAIM: "Берешит",
+        TextSource.HEBREW: "בראשית",
     },
     2: {
         TextSource.FG: "Нойах",
         TextSource.PLAUT: "Noach (Noah)",
         TextSource.LECHAIM: "Ноах",
+        TextSource.HEBREW: "נח",
     },
     3: {
         TextSource.FG: "Лех Лехо",
         TextSource.PLAUT: "Lech L’cha (Go Forth)",
         TextSource.LECHAIM: "Лех-леха",
+        TextSource.HEBREW: "לך לך",
     },
     4: {
         TextSource.FG: "Вайейро",
         TextSource.PLAUT: "Vayeira (I (God) Appeared [to Abraham, Isaac, and Jacob])",
         TextSource.LECHAIM: "Вайера",
+        TextSource.HEBREW: "וירא",
     },
     5: {
         TextSource.FG: "Хайей Соро",
         TextSource.PLAUT: "Chayei Sarah (The Life of Sarah)",
         TextSource.LECHAIM: "Хайей сара",
+        TextSource.HEBREW: "חיי שרה",
     },
     6: {
         TextSource.FG: "Толдойс",
         TextSource.PLAUT: "Tol’dot (The Generations [of Isaac])",
         TextSource.LECHAIM: "Тольдот",
+        TextSource.HEBREW: "תולדות",
     },
     7: {
         TextSource.FG: "Вайейцей",
         TextSource.PLAUT: "Vayeitzei (And [Jacob] Left)",
         TextSource.LECHAIM: "Вайеце",
+        TextSource.HEBREW: "ויצא",
     },
     8: {
         TextSource.FG: "Вайишлах",
         TextSource.PLAUT: "Vayishlach ([Jacob] Sent)",
         TextSource.LECHAIM: "Ваишлах",
+        TextSource.HEBREW: "וישלח",
     },
     9: {
         TextSource.FG: "Вайейшев",
         TextSource.PLAUT: "Vayeishev ([Jacob] Settled)",
         TextSource.LECHAIM: "Вайешев",
+        TextSource.HEBREW: "וישב",
     },
     10: {
         TextSource.FG: "Микец",
         TextSource.PLAUT: "Mikeitz (After [Two Years])",
         TextSource.LECHAIM: "Микец",
+        TextSource.HEBREW: "מקץ",
     },
     11: {
         TextSource.FG: "Вайигаш",
         TextSource.PLAUT: "Vayigash (And [Judah] Approached [Joseph])",
         TextSource.LECHAIM: "Ваигаш",
+        TextSource.HEBREW: "ויגש",
     },
     12: {
         TextSource.FG: "Вайхи",
         TextSource.PLAUT: "Va-y’chi ([Jacob] Lived)",
         TextSource.LECHAIM: "Вайехи",
+        TextSource.HEBREW: "ויחי",
     },
     13: {
         TextSource.FG: "Шемойс",
         TextSource.PLAUT: "Sh’mot (Names)",
         TextSource.LECHAIM: "Шмот",
+        TextSource.HEBREW: "שמות",
     },
     14: {
         TextSource.FG: "Воэйро",
         TextSource.PLAUT: "Va-eira (I (God) Appeared [to Abraham, Isaac, and Jacob])",
         TextSource.LECHAIM: "Ваэра",
+        TextSource.HEBREW: "וארא",
     },
     15: {
         TextSource.FG: "Бой",
         TextSource.PLAUT: "Bo (Go [to Pharaoh])",
         TextSource.LECHAIM: "Бо",
+        TextSource.HEBREW: "בא",
     },
     16: {
         TextSource.FG: "Бешалах",
         TextSource.PLAUT: "B’shalach (Now When [Pharaoh] Let [the People] Go)",
         TextSource.LECHAIM: "Бешалах",
+        TextSource.HEBREW: "בשלח",
     },
     17: {
         TextSource.FG: "Йисрой",
         TextSource.PLAUT: "Yitro (Jethro)",
         TextSource.LECHAIM: "Итро",
+        TextSource.HEBREW: "יתרו",
     },
     18: {
         TextSource.FG: "Мишпотим",
         TextSource.PLAUT: "Mishpatim ([These Are the] Rules)",
         TextSource.LECHAIM: "Мишпатим",
+        TextSource.HEBREW: "משפטים",
     },
     19: {
         TextSource.FG: "Терумо",
         TextSource.PLAUT: "T’rumah (Gifts)",
         TextSource.LECHAIM: "Трума",
+        TextSource.HEBREW: "תרומה",
     },
     20: {
         TextSource.FG: "Тецаве",
         TextSource.PLAUT: "T’tzaveh ([You] Shall Further Instruct)",
         TextSource.LECHAIM: "Тецаве",
+        TextSource.HEBREW: "תצוה",
     },
     21: {
         TextSource.FG: "Тисо",
         TextSource.PLAUT: "Ki Tisa (When You Take a Census)",
         TextSource.LECHAIM: "Ки тиса",
+        TextSource.HEBREW: "כי תשא",
     },
     22: {
         TextSource.FG: "Вайакгел",
         TextSource.PLAUT: "Vayak’heil ([Moses] Assembled)",
         TextSource.LECHAIM: "Ваякгель",
+        TextSource.HEBREW: "ויקהל",
     },
     23: {
         TextSource.FG: "Пкудей",
         TextSource.PLAUT: "P’kudei ([The] Records [of the Tabernacle])",
         TextSource.LECHAIM: "Пекудей",
+        TextSource.HEBREW: "פקודי",
     },
     24: {
         TextSource.FG: "Вайикро",
         TextSource.PLAUT: "Vayikra ([God] Called Out)",
         TextSource.LECHAIM: "Ваикра",
+        TextSource.HEBREW: "ויקרא",
     },
     25: {
         TextSource.FG: "Цав",
         TextSource.PLAUT: "Tzav (Command [Aaron and His Sons])",
         TextSource.LECHAIM: "Цав",
+        TextSource.HEBREW: "צו",
     },
     26: {
         TextSource.FG: "Шмини",
         TextSource.PLAUT: "Sh’mini (The Eighth [Day])",
         TextSource.LECHAIM: "Шмини",
+        TextSource.HEBREW: "שמיני",
     },
     27: {
         TextSource.FG: "Тазриа",
         TextSource.PLAUT: "Tazria (Bearing Seed)",
         TextSource.LECHAIM: "Тазриа",
+        TextSource.HEBREW: "תזריע",
     },
     28: {
         TextSource.FG: "Мецойро",
         TextSource.PLAUT: "M’tzor (A Leper)",
         TextSource.LECHAIM: "Мецора",
+        TextSource.HEBREW: "מצורע",
     },
     29: {
         TextSource.FG: "Ахарей",
         TextSource.PLAUT: "Acharei Mot (After the Death [of the Two Sons of Aaron])",
         TextSource.LECHAIM: "Ахарей мот",
+        TextSource.HEBREW: "אחרי מות",
     },
     30: {
         TextSource.FG: "Кдойшим",
         TextSource.PLAUT: "K’doshim ([You Shall Be] Holy)",
         TextSource.LECHAIM: "Кдошим",
+        TextSource.HEBREW: "קדושים",
     },
     31: {
         TextSource.FG: "Эмойр",
         TextSource.PLAUT: "Emor (Speak)",
         TextSource.LECHAIM: "Эмор",
+        TextSource.HEBREW: "אמור",
     },
     32: {
         TextSource.FG: "Бегар",
         TextSource.PLAUT: "B’har (On Mount [Sinai])",
         TextSource.LECHAIM: "Бегар",
+        TextSource.HEBREW: "בהר",
     },
     33: {
         TextSource.FG: "Бехукойсай",
         TextSource.PLAUT: "B’chukotai (My Laws)",
         TextSource.LECHAIM: "Бехукотай",
+        TextSource.HEBREW: "בחוקתי",
     },
     34: {
         TextSource.FG: "Бемидбар",
         TextSource.PLAUT: "B’midbar (In the Wilderness)",
         TextSource.LECHAIM: "Бемидбар",
+        TextSource.HEBREW: "במדבר",
     },
     35: {
         TextSource.FG: "Носой",
         TextSource.PLAUT: "Naso (Take a Census)",
         TextSource.LECHAIM: "Насо",
+        TextSource.HEBREW: "נשא",
     },
     36: {
         TextSource.FG: "Бегаалойсхо",
         TextSource.PLAUT: "B’haalot’cha (When You Raise [the Lamps])",
         TextSource.LECHAIM: "Бегаалотха",
+        TextSource.HEBREW: "בהעלותך",
     },
     37: {
         TextSource.FG: "Шлах",
         TextSource.PLAUT: "Sh’lach L’cha (Send [Notables to Scout the Land])",
         TextSource.LECHAIM: "Шлах",
+        TextSource.HEBREW: "שלח",
     },
     38: {
         TextSource.FG: "Койрах",
         TextSource.PLAUT: "Korach (Korach)",
         TextSource.LECHAIM: "Корах",
+        TextSource.HEBREW: "קרח",
     },
     39: {
         TextSource.FG: "Хукас",
         TextSource.PLAUT: "Chukat (The Ritual Law)",
         TextSource.LECHAIM: "Хукат",
+        TextSource.HEBREW: "חקת",
     },
     40: {
         TextSource.FG: "Болок",
         TextSource.PLAUT: "Balak (Balak)",
         TextSource.LECHAIM: "Балак",
+        TextSource.HEBREW: "בלק",
     },
     41: {
         TextSource.FG: "Пинхас",
         TextSource.PLAUT: "Pinchas (Phinehas)",
         TextSource.LECHAIM: "Пинхас",
+        TextSource.HEBREW: "פנחס",
     },
     42: {
         TextSource.FG: "Матойс",
         TextSource.PLAUT: "Matot (Tribes)",
         TextSource.LECHAIM: "Матот",
+        TextSource.HEBREW: "מטות",
     },
     43: {
         TextSource.FG: "Масэй",
         TextSource.PLAUT: "Mas-ei (The Marches)",
         TextSource.LECHAIM: "Масеэй",
+        TextSource.HEBREW: "מסעי",
     },
     44: {
         TextSource.FG: "Деворим",
         TextSource.PLAUT: "D’varim (The Words)",
         TextSource.LECHAIM: "Дварим",
+        TextSource.HEBREW: "דברים",
     },
     45: {
         TextSource.FG: "Воэсханан",
         TextSource.PLAUT: "Va-et’chanan (I [Moses] Pleaded with the Eternal)",
         TextSource.LECHAIM: "Ваэтханан",
+        TextSource.HEBREW: "ואתחנן",
     },
     46: {
         TextSource.FG: "Экев",
         TextSource.PLAUT: "Eikev ([And if You] Obey [These Rules])",
         TextSource.LECHAIM: "Экев",
+        TextSource.HEBREW: "עקב",
     },
     47: {
         TextSource.FG: "Рээй",
         TextSource.PLAUT: "R’eih (See [This Day I Set Before You Blessing and Curse])",
         TextSource.LECHAIM: "Реэ",
+        TextSource.HEBREW: "ראה",
     },
     48: {
         TextSource.FG: "Шойфтим",
         TextSource.PLAUT: "Shof’tim (Judges)",
         TextSource.LECHAIM: "Шофтим",
+        TextSource.HEBREW: "שופטים",
     },
     49: {
         TextSource.FG: "Ки Тейцей",
         TextSource.PLAUT: "Ki’Teitzei (When You Go Out (to Battle))",
         TextSource.LECHAIM: "Ки теце",
+        TextSource.HEBREW: "כי תצא",
     },
     50: {
         TextSource.FG: "Ки Совой",
         TextSource.PLAUT: "Ki Tavo (When You Enter [the Land])",
         TextSource.LECHAIM: "Ки таво",
+        TextSource.HEBREW: "כי תבוא",
     },
     51: {
         TextSource.FG: "Ницовим",
         TextSource.PLAUT: "Nitzavim (You Stand [This Day])",
         TextSource.LECHAIM: "Ницавим",
+        TextSource.HEBREW: "נצבים",
     },
     52: {
         TextSource.FG: "Вайейлех",
         TextSource.PLAUT: "Vayeilech ([Moses] Went)",
         TextSource.LECHAIM: "Вайелех",
+        TextSource.HEBREW: "וילך",
     },
     53: {
         TextSource.FG: "Гаазину",
         TextSource.PLAUT: "Haazinu (Listen)",
         TextSource.LECHAIM: "Гаазину",
+        TextSource.HEBREW: "האזינו",
     },
     54: {
         TextSource.FG: "Везойс гаБрохо",
         TextSource.PLAUT: "V’zot Hab’rachah (And This is the Blessing)",
         TextSource.LECHAIM: "Везот га-браха",
+        TextSource.HEBREW: "וזאת הברכה",
     },
 }
 

@@ -117,3 +117,57 @@ export function anyCommentPassesFilters(verseData: VerseData, filters: CommentFi
     }
     return false;
 }
+
+
+export function isHebrewTextSource(textSource: string): boolean {
+    return textSource == "hebrew"
+}
+
+
+export function toHebrewNumberal(i: number): string {
+    // credits: https://hebrewnumerals.github.io/
+    let result = "";
+    var digits = (i.toString()).split("").reverse();
+
+    // Hebrew Multiplier
+    var multiplier = 0;
+
+    // Hebrew Numerals
+    var numerals = [
+        //0   1    2    3    4    5    6    7    8    9
+        ["", "א", "ב", "ג", "ד", "ה", "ו", "ז", "ח", "ט"],       // x1
+        ["", "י", "כ", "ל", "מ", "נ", "ס", "ע", "פ", "צ"],       // x10
+        ["", "ק", "ר", "ש", "ת", "תק", "תר", "תש", "תת", "תתק"], // x100
+        ["׳", "׳", "׳", "׳", "׳", "׳", "׳", "׳", "׳", "׳"]       // x1000
+    ];
+
+    // Loop through number array, reading each digit
+    for (i = 0; i < digits.length; i++) {
+        result = numerals[multiplier][digits[i]] + result;
+
+        if (multiplier == 3) {
+            // Reset the multiplier
+            multiplier = 0;
+
+            // Run the Convert again
+            result = numerals[multiplier][digits[i]] + result;
+        }
+
+        multiplier++;
+    }
+
+    // 15 Filter
+    result = result.replace("יה", "טו");
+    // 16 Filter
+    result = result.replace("יו", "טז");
+
+    // Insert quote " before last character
+    if (result.length > 1 &&  // Hebrew digit count must be greater than 1
+        !result.endsWith("׳")  // Hebrew result must not end with Geresh ׳ for thousand 000
+    ) {
+        var len = result.length;
+        result = result.substring(0, len - 1) + "\"" + result.substring(len - 1);
+    }
+
+    return result;
+}
