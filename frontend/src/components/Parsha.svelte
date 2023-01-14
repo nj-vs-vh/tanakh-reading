@@ -181,7 +181,7 @@
                                 ? "verse-text clickable"
                                 : "verse-text clickable no-background-in-unhovered"
                             : "verse-text"}
-                        style={isMainTextHebrew ? "width: 100%; text-align: right;" : ""}
+                        style={isMainTextHebrew ? "font-size: x-large;" : ""}
                         on:click={() => {
                             isClickableText(verseData) ? openVerseDetails(verseData, chapter) : null;
                         }}

@@ -54,7 +54,7 @@
         </div>
     {:else}
         <div class="verse-text-container">
-            <blockquote style={isHebrewTextSource(textSource) ? "text-align: right;" : ""}>
+            <blockquote style={isHebrewTextSource(textSource) ? "text-align: right; font-size: x-large;" : ""}>
                 {verseData.text[textSource]}
             </blockquote>
             <span class="verse-text-source-mark">
