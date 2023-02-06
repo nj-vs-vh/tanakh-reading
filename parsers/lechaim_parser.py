@@ -113,7 +113,11 @@ def parse(parsha: int, parsha_url_path: str):
                         elif css_class_prefix == "ezra":
                             new_commenter = Commenter.IBN_EZRA
                         else:
-                            raise ValueError(f"Unexpected css class prefix for comment paragraph: {css_class_prefix}")
+                            print(
+                                "Ignoring element with unexpected css class prefix "
+                                + f"for comment paragraph: {css_class_prefix} (from {child})"
+                            )
+                            continue
 
                         if (
                             anchor_phrase is not None

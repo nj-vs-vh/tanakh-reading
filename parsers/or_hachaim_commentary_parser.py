@@ -52,7 +52,7 @@ def parse_or_hachaim_commentaries(parsha_index: int):
             else:
                 print(
                     f"Verse #{verse_data['verse']} is out of bounds "
-                    + f"for available Ramban commentary ({len(chapter)}) "
+                    + f"for available commentary ({len(chapter)}) "
                     + f"in chapter {chapter_data['chapter']}, assuming no commentaries for the verse"
                 )
                 verse = []
