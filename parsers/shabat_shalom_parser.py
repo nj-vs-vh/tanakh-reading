@@ -39,7 +39,7 @@ def download_parsha_html(idx: int):
     print(f"Downloading parsha #{idx}")
     url = f"http://www.shabat-shalom.info/books/Tanach-ru/Chumash_Rashi/{idx}.htm"
     print(f"URL = {url}")
-    resp = requests.get(url)
+    resp = requests.get(url, headers={"Content-Type": "text/html; charset=utf-8"})
     if resp.status_code != 200:
         print(resp.text)
         raise RuntimeError()

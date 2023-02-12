@@ -1,9 +1,9 @@
-from typing import List, Literal, TypedDict, Union
-import json
 import argparse
+import json
+from typing import List, Literal, TypedDict, Union
 
-from backend.model import ParshaData
 from backend import metadata
+from backend.model import ParshaData
 from parsers.local_storage import JSON_DIR, parsha_path
 from parsers.utils import dump_parsha
 
@@ -45,7 +45,9 @@ def parse_hebrew_text(parsha_index: int):
 
     for chapter in parsha_data["chapters"]:
         for verse in chapter["verses"]:
-            verse["text"][metadata.TextSource.HEBREW] = hebrew_text_doc["text"][chapter["chapter"] - 1][verse["verse"] - 1]
+            verse["text"][metadata.TextSource.HEBREW] = hebrew_text_doc["text"][chapter["chapter"] - 1][
+                verse["verse"] - 1
+            ]
 
     parsha_path(parsha_index).write_text(dump_parsha(parsha_data))
 

@@ -17,7 +17,12 @@ class TextSource:
             raise SystemExit(f"Missing or extra records in per-text source dict {d}")
 
 
-text_source_marks = {TextSource.FG: "[ФГ]", TextSource.PLAUT: "[Plaut]", TextSource.LECHAIM: "[Лехаим]", TextSource.HEBREW: ""}
+text_source_marks = {
+    TextSource.FG: "[ФГ]",
+    TextSource.PLAUT: "[Plaut]",
+    TextSource.LECHAIM: "[Лехаим]",
+    TextSource.HEBREW: "",
+}
 
 
 text_source_descriptions = {
@@ -46,7 +51,7 @@ text_source_links = {
     TextSource.HEBREW: [
         r"https://www.sefaria.org/texts/Tanakh",
         r"https://en.wikipedia.org/wiki/Niqqud",
-    ]
+    ],
 }
 
 
@@ -62,7 +67,6 @@ torah_book_names = {
         TextSource.PLAUT: "Exodus",
         TextSource.LECHAIM: "Шмот",
         TextSource.HEBREW: "שמות",
-        
     },
     3: {
         TextSource.FG: "Вайикра",
