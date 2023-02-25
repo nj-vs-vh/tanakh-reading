@@ -332,7 +332,7 @@ class BackendApp:
 
         async def db_setup(app: web.Application):
             logger.info(f"Setting up db: {db}")
-            app["db_setup_task"] = asyncio.create_task(db.setup())
+            await db.setup()
 
         self.app.on_startup.append(db_setup)
         self.app.on_startup.append(start_background_jobs)
