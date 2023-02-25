@@ -205,7 +205,7 @@ class MongoDatabase(DatabaseInterface):
         existing_comment_doc = await self._awrap(
             self.starred_comments_coll.find_one,
             {
-                "comment_id": bson.ObjectId(starred_comment.comment_id),
+                "comment_id": starred_comment.comment_id,
                 "starrer_username": starred_comment.starrer_username,
             },
         )

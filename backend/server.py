@@ -289,6 +289,7 @@ async def star_comment(request: web.Request) -> web.Response:
             parsha=star_comment_request.parsha,
         )
     )
+    # NOTE: using pydantic's .json() here directly because it knows how to serialize PydanticObjectId
     return web.json_response(text=starred_comment.json())
 
 
