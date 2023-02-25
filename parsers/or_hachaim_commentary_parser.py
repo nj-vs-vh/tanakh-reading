@@ -87,7 +87,7 @@ def parse_or_hachaim_commentaries(parsha_index: int):
                     )
 
             if parsed_comments:
-                verse_data["comments"][metadata.Commenter.OR_HACHAIM] = parsed_comments
+                verse_data["comments"][metadata.CommentSource.OR_HACHAIM] = parsed_comments
 
     ensure_comment_ids(parsha_data)
     parsha_path(parsha_index).write_text(dump_parsha(parsha_data))

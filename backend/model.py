@@ -1,20 +1,30 @@
 import logging
+from re import A
 from typing import Any, Literal, Optional, Type, TypedDict, TypeVar
 
+import pydantic
 from aiohttp import web
 from pydantic import BaseModel, Field, ValidationError
 from pydantic.error_wrappers import display_errors
 from pymongo.results import InsertOneResult
 from typing_extensions import NotRequired
 
+from backend.metadata import CommentSource, TextSource
+
 logger = logging.getLogger(__name__)
+
+
+# these TypedDict types are used in parsers and on frontend for default parsha page rendering
+
+
+CommentFormat = Literal["plain", "markdown", "html"]
 
 
 class CommentData(TypedDict):
     id: NotRequired[str]
     anchor_phrase: Optional[str]
     comment: str
-    format: Literal["plain", "markdown", "html"]
+    format: CommentFormat
     is_starred_by_me: NotRequired[bool]
 
 
@@ -54,7 +64,7 @@ UNSET_DB_IT = "<not-set>"
 
 
 class DbSchemaModel(PydanticModel):
-    db_id: str = Field(UNSET_DB_IT, exclude=True)
+    db_id: str = Field(default=UNSET_DB_IT, exclude=True)
 
     def is_stored(self) -> bool:
         return self.db_id != UNSET_DB_IT
@@ -148,3 +158,41 @@ class EditCommentRequest(PydanticModel):
     comment_coords: CommentCoords
     new_comment: str
     new_anchor_phrase: str
+
+
+class TextCoords(PydanticModel):
+    book: int
+    parsha: int
+    chapter: int
+    verse: int
+
+
+class StoredText(DbSchemaModel):
+    text_coords: TextCoords
+    text_source: str
+    text: str
+
+    @pydantic.validator("text_source")
+    def text_source_key_must_be_known(cls, text_source):
+        if text_source not in TextSource.all():
+            raise ValueError(f"Unexpectede text source: {text_source}")
+        return text_source
+
+
+class StoredComment(DbSchemaModel):
+    text_coords: TextCoords
+    comment_source: str
+    anchor_phrase: Optional[str]
+    comment: str
+    format_: CommentFormat = Field(alias="format")
+
+    @pydantic.validator("comment_source")
+    def validate_comment_source(cls, comment_source):
+        if comment_source not in CommentSource.all():
+            raise ValueError(f"Unexpectede comment source: {comment_source}")
+        return comment_source
+
+    def to_mongo_db(self) -> dict[str, Any]:
+        dump = super().to_mongo_db()
+        dump["_id"] = self.db_id  # comments are a special case where we want to set id ourselves
+        return dump

@@ -1,21 +1,29 @@
 import asyncio
+import collections
 import copy
+import itertools
 import logging
 from concurrent.futures import ThreadPoolExecutor
-from typing import Callable, Optional, TypeVar, cast
+from typing import Any, Callable, Optional, TypeVar, cast
 
+import pymongo
 from async_lru import alru_cache  # type: ignore
 from pymongo import MongoClient
-import pymongo
 
 from backend import config
 from backend.database.interface import DatabaseInterface
 from backend.model import (
+    ChapterData,
+    CommentData,
     ParshaData,
     SignupToken,
     StarredComment,
+    StoredComment,
+    StoredText,
     StoredUser,
+    TextCoords,
     TextCoordsQuery,
+    VerseData,
 )
 
 logger = logging.getLogger(__name__)
@@ -70,6 +78,8 @@ class MongoDatabase(DatabaseInterface):
             ],
         )
         await self._awrap(self.parsha_data_coll.create_index, [("parsha", pymongo.ASCENDING)])
+        # using wildcard search because of the dynamic keys for authors :(
+        await self._awrap(self.parsha_data_coll.create_index, [("$**", pymongo.TEXT)])
         logger.info("Indices created")
 
     # users
@@ -212,3 +222,84 @@ class MongoDatabase(DatabaseInterface):
 
     async def get_cached_parsha_indices(self) -> list[int]:
         return list(self.parsha_data_cache.keys())
+
+
+def parsha_data_to_texts_and_comments(parsha_data: ParshaData) -> tuple[list[StoredText], list[StoredComment]]:
+    stored_texts: list[StoredText] = []
+    stored_comments: list[StoredComment] = []
+    for chapter_data in parsha_data["chapters"]:
+        for verse_data in chapter_data["verses"]:
+            text_coords = TextCoords(
+                book=parsha_data["book"],
+                parsha=parsha_data["parsha"],
+                chapter=chapter_data["chapter"],
+                verse=verse_data["verse"],
+            )
+            for text_source, text in verse_data["text"].items():
+                stored_texts.append(
+                    StoredText(
+                        text_coords=text_coords,
+                        text_source=text_source,
+                        text=text,
+                    )
+                )
+            for comment_source, comments in verse_data["comments"].items():
+                for comment in comments:
+                    stored_comments.append(
+                        StoredComment(
+                            db_id=comment["id"],
+                            text_coords=text_coords,
+                            comment_source=comment_source,
+                            anchor_phrase=comment["anchor_phrase"],
+                            comment=comment["comment"],
+                            format=comment["format"],
+                        )
+                    )
+    return stored_texts, stored_comments
+
+
+def texts_and_comments_to_parsha_data(texts: list[StoredText], comments: list[StoredComment]) -> ParshaData:
+    book_values = {t.text_coords.book for t in texts} | {c.text_coords.book for c in comments}
+    if len(book_values) > 1:
+        raise ValueError("Stored texts and comments are from several books, can't construct parsha data")
+    parsha_values = {t.text_coords.parsha for t in texts} | {c.text_coords.parsha for c in comments}
+    if len(parsha_values) > 1:
+        raise ValueError("Stored texts and comments are from several parshas, can't construct parsha data")
+    parsha_data = ParshaData(
+        book=next(iter(book_values)),
+        parsha=next(iter(parsha_values)),
+        chapters=[],
+    )
+
+    texts = sorted(texts, key=lambda t: t.text_coords.chapter)
+    for chapter, chapter_texts_iter in itertools.groupby(texts, key=lambda t: t.text_coords.chapter):
+        chapter_texts = sorted(chapter_texts_iter, key=lambda t: t.text_coords.verse)
+        chapter_data = ChapterData(chapter=chapter, verses=[])
+        parsha_data["chapters"].append(chapter_data)
+        for verse, verse_texts_iter in itertools.groupby(chapter_texts, key=lambda t: t.text_coords.verse):
+            verse_texts = list(verse_texts_iter)
+            verse_texts_source_keys = {vt.text_source for vt in verse_texts}
+            if len(verse_texts_source_keys) != len(verse_texts):
+                raise ValueError(f"Stored texts for verse {chapter}:{verse} contain duplicate keys: {verse_texts}")
+
+            verse_comments = [c for c in comments if c.text_coords.chapter == chapter and c.text_coords.verse == verse]
+            verse_data_by_source = collections.defaultdict[str, list[CommentData]](list)
+            for vc in verse_comments:
+                verse_data_by_source[vc.comment_source].append(
+                    CommentData(
+                        id=vc.db_id,
+                        anchor_phrase=vc.anchor_phrase,
+                        comment=vc.comment,
+                        format=vc.format_,
+                    )
+                )
+
+            chapter_data["verses"].append(
+                VerseData(
+                    verse=verse,
+                    text={vt.text_source: vt.text for vt in verse_texts},
+                    comments=verse_data_by_source,
+                )
+            )
+
+    return parsha_data

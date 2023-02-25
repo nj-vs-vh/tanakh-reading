@@ -102,8 +102,8 @@ async def get_metadata(request: web.Request) -> web.Response:
             "text_source_marks": metadata.text_source_marks,
             "text_source_descriptions": metadata.text_source_descriptions,
             "text_source_links": metadata.text_source_links,
-            "commenter_names": metadata.commenter_names,
-            "commenter_links": metadata.commenter_links,
+            "commenter_names": metadata.comment_source_names,
+            "commenter_links": metadata.comment_source_links,
             "available_parsha": await db.get_available_parsha_indices(),
             "logged_in_user": user_dump,
         }

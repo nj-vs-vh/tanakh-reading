@@ -507,7 +507,7 @@ for _, names in parsha_names.items():
     TextSource.validate_per_text_source_dict(names)
 
 
-class Commenter:
+class CommentSource:
     SONCHINO = "sonchino"
     RASHI = "rashi"
     RASHI_ALT = "rashi_alt"
@@ -515,40 +515,52 @@ class Commenter:
     RAMBAN = "ramban"
     OR_HACHAIM = "or_hachaim"
 
+    @classmethod
+    def all(cls) -> list[str]:
+        return [cls.SONCHINO, cls.RASHI, cls.RASHI_ALT, cls.IBN_EZRA, cls.RAMBAN, cls.OR_HACHAIM]
 
-commenter_names = {
-    Commenter.SONCHINO: "Сончино [ФГ]",
-    Commenter.RASHI: "Раши [ФГ]",
-    Commenter.RASHI_ALT: "Раши [Лехаим]",
-    Commenter.IBN_EZRA: "ибн Эзра [Лехаим]",
-    Commenter.RAMBAN: "Рамбан [Chavel]",
-    Commenter.OR_HACHAIM: "Ор ха-Хайим [Munk]",
+    @classmethod
+    def validate_per_comment_source_dict(cls, d: dict[str, Any]):
+        if set(d.keys()) != set(cls.all()):
+            raise SystemExit(f"Missing or extra records in per-comment source dict {d}")
+
+
+comment_source_names = {
+    CommentSource.SONCHINO: "Сончино [ФГ]",
+    CommentSource.RASHI: "Раши [ФГ]",
+    CommentSource.RASHI_ALT: "Раши [Лехаим]",
+    CommentSource.IBN_EZRA: "ибн Эзра [Лехаим]",
+    CommentSource.RAMBAN: "Рамбан [Chavel]",
+    CommentSource.OR_HACHAIM: "Ор ха-Хайим [Munk]",
 }
 
 
-commenter_links = {
-    Commenter.SONCHINO: [
+comment_source_links = {
+    CommentSource.SONCHINO: [
         r"https://toldot.com/Sonchino.html",
         r"https://ru.wikipedia.org/wiki/%D0%93%D0%B5%D1%80%D1%86,_%D0%99%D0%BE%D1%81%D0%B5%D1%84_%D0%A6%D0%B2%D0%B8",
     ],
-    Commenter.RASHI: [
+    CommentSource.RASHI: [
         r"https://toldot.com/TorahRashi.html",
         r"https://ru.wikipedia.org/wiki/%D0%A0%D0%B0%D1%88%D0%B8",
     ],
-    Commenter.RASHI_ALT: [],
-    Commenter.IBN_EZRA: [
+    CommentSource.RASHI_ALT: [],
+    CommentSource.IBN_EZRA: [
         r"https://toldot.com/ibnEzra.html",
         r"https://ru.wikipedia.org/wiki/%D0%90%D0%B2%D1%80%D0%B0%D0%B0%D0%BC_%D0%B8%D0%B1%D0%BD_%D0%AD%D0%B7%D1%80%D0%B0",  # noqa
     ],
-    Commenter.RAMBAN: [
+    CommentSource.RAMBAN: [
         r"https://en.wikipedia.org/wiki/Nachmanides",
         r"https://www.sefaria.org/texts/Tanakh/Rishonim%20on%20Tanakh/Ramban/Torah",
         r"https://www.nli.org.il/he/books/NNL_ALEPH002108945/NLI",
     ],
-    Commenter.OR_HACHAIM: [
+    CommentSource.OR_HACHAIM: [
         r"https://en.wikipedia.org/wiki/Chaim_ibn_Attar",
         r"https://www.sefaria.org/texts/Tanakh/Acharonim%20on%20Tanakh/Or%20HaChaim/Torah",
         r"https://mysefer.com/Or-HaChaim--Commentary-on-the-Torah-English-5-vol.__p-946.aspx",
         r"https://www.nehora.com/or-hachaim-commentary-on-the-torah/",
     ],
 }
+
+CommentSource.validate_per_comment_source_dict(comment_source_names)
+CommentSource.validate_per_comment_source_dict(comment_source_links)
