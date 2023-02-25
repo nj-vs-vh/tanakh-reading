@@ -6,6 +6,7 @@ from typing import Callable, Optional, TypeVar, cast
 
 from async_lru import alru_cache  # type: ignore
 from pymongo import MongoClient
+import pymongo
 
 from backend import config
 from backend.database.interface import DatabaseInterface
@@ -52,6 +53,24 @@ class MongoDatabase(DatabaseInterface):
 
     async def _awrap(self, func: Callable[..., T], *args) -> T:
         return await asyncio.get_running_loop().run_in_executor(self.threads, func, *args)
+
+    async def create_indices(self) -> None:
+        logger.info("Creating indices in Mongo")
+        await self._awrap(self.users_coll.create_index, [("username", pymongo.HASHED)])
+        await self._awrap(self.signup_tokens_coll.create_index, [("token", pymongo.HASHED)])
+        await self._awrap(self.signup_tokens_coll.create_index, [("creator_username", pymongo.HASHED)])
+        await self._awrap(self.starred_comments_coll.create_index, [("comment_id", pymongo.HASHED)])
+        await self._awrap(
+            self.starred_comments_coll.create_index,
+            [
+                ("starrer_username", pymongo.HASHED),
+                ("parsha", pymongo.ASCENDING),
+                ("chapter", pymongo.ASCENDING),
+                ("verse", pymongo.ASCENDING),
+            ],
+        )
+        await self._awrap(self.parsha_data_coll.create_index, [("parsha", pymongo.ASCENDING)])
+        logger.info("Indices created")
 
     # users
 
@@ -145,20 +164,20 @@ class MongoDatabase(DatabaseInterface):
         )
 
     def _blocking_lookup_starred_comments(
-        self, starrer_usernames: set[str], text_coords_query: TextCoordsQuery
+        self, starrer_username: str, text_coords_query: TextCoordsQuery
     ) -> list[StarredComment]:
         cursor = self.starred_comments_coll.find(
             {
-                "starrer_username": {"$in": list(starrer_usernames)},
+                "starrer_username": starrer_username,
                 **text_coords_query.to_mongo_query(),
             }
         )
         return [StarredComment.from_mongo_db(doc) for doc in cursor]
 
     async def lookup_starred_comments(
-        self, starrer_usernames: set[str], text_coords_query: TextCoordsQuery
+        self, starrer_username: str, text_coords_query: TextCoordsQuery
     ) -> list[StarredComment]:
-        return await self._awrap(self._blocking_lookup_starred_comments, starrer_usernames, text_coords_query)
+        return await self._awrap(self._blocking_lookup_starred_comments, starrer_username, text_coords_query)
 
     # parsha data
 
@@ -190,3 +209,6 @@ class MongoDatabase(DatabaseInterface):
             return sorted(doc["parsha"] for doc in cursor)
 
         return await self._awrap(blocking)
+
+    async def get_cached_parsha_indices(self) -> list[int]:
+        return list(self.parsha_data_cache.keys())

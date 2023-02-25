@@ -50,11 +50,14 @@ class PydanticModel(BaseModel):
         return self.dict()  # Config/Field-level excludes are respected
 
 
+UNSET_DB_IT = "<not-set>"
+
+
 class DbSchemaModel(PydanticModel):
-    db_id: str = Field("n/a", exclude=True)
+    db_id: str = Field(UNSET_DB_IT, exclude=True)
 
     def is_stored(self) -> bool:
-        return self.db_id != "n/a"
+        return self.db_id != UNSET_DB_IT
 
     def to_mongo_db(self) -> dict[str, Any]:
         return self.dict()  # Config/Field-level excludes are respected
@@ -125,7 +128,6 @@ class StarredComment(CommentCoords):
 class TextCoordsQuery(PydanticModel):
     """Generic text coords query for getting info about more or less specific parts of the text"""
 
-    book: Optional[int] = None
     parsha: Optional[int] = None
     chapter: Optional[int] = None
     verse: Optional[int] = None

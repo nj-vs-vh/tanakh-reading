@@ -1,6 +1,7 @@
+import asyncio
 import logging
 import secrets
-from typing import cast
+from typing import NoReturn, cast
 
 from aiohttp import hdrs, web
 from aiohttp.typedefs import Handler
@@ -133,7 +134,7 @@ async def get_parsha(request: web.Request) -> web.Response:
 
             if add_my_starred_comments_info:
                 my_starred_comments = await db.lookup_starred_comments(
-                    starrer_usernames={user.username}, text_coords_query=TextCoordsQuery(parsha=parsha_index)
+                    starrer_username=user.username, text_coords_query=TextCoordsQuery(parsha=parsha_index)
                 )
                 my_starred_comment_ids = {c.comment_id for c in my_starred_comments}
                 logger.info(f"Marking {len(my_starred_comment_ids)} comment(s) as starred by the user")
@@ -333,9 +334,23 @@ async def get_starred_comments(request: web.Request) -> web.Response:
     text_coords_query = TextCoordsQuery.from_request_json(await safe_request_json(request))
     db = get_db(request)
     starred_comments = await db.lookup_starred_comments(
-        starrer_usernames={user.username}, text_coords_query=text_coords_query
+        starrer_username=user.username, text_coords_query=text_coords_query
     )
     return web.json_response([sc.to_public_json() for sc in starred_comments])
+
+
+async def start_background_jobs(app: web.Application) -> None:
+    background_jobs = set[asyncio.Task[NoReturn]]()
+
+    async def monitor_parsha_cache() -> NoReturn:
+        logger.info("Running parsha cache monitoring")
+        db: DatabaseInterface = app[AppExtensions.DB]
+        while True:
+            logger.info(f"Cached parsha indices: {await db.get_cached_parsha_indices()}")
+            await asyncio.sleep(60 * 60)
+
+    background_jobs.add(asyncio.create_task(monitor_parsha_cache()))
+    app[AppExtensions.BACKGROUND_JOBS_SET] = background_jobs  # to prevent garbage collection
 
 
 class BackendApp:
@@ -351,6 +366,7 @@ class BackendApp:
             await db.setup()
 
         self.app.on_startup.append(db_setup)
+        self.app.on_startup.append(start_background_jobs)
 
     def run(self) -> None:
         web.run_app(self.app, port=config.PORT, access_log=logger if not config.IS_PROD else None)

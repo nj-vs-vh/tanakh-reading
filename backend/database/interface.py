@@ -23,6 +23,12 @@ class DatabaseInterface(abc.ABC):
                 SignupToken(creator_username=None, token=generate_signup_token())
             )
         logger.info(f"Root signup token: {root_signup_token}")
+        await self.create_indices()
+
+    @abc.abstractmethod
+    async def create_indices(self) -> None:
+        """Must be indempotent as it is run on every app startup"""
+        ...
 
     # user management
 
@@ -76,7 +82,7 @@ class DatabaseInterface(abc.ABC):
 
     @abc.abstractmethod
     async def lookup_starred_comments(
-        self, starrer_usernames: set[str], text_coords_query: TextCoordsQuery
+        self, starrer_username: str, text_coords_query: TextCoordsQuery
     ) -> list[StarredComment]:
         ...
 
@@ -92,4 +98,8 @@ class DatabaseInterface(abc.ABC):
 
     @abc.abstractmethod
     async def get_available_parsha_indices(self) -> list[int]:
+        ...
+
+    @abc.abstractmethod
+    async def get_cached_parsha_indices(self) -> list[int]:
         ...
