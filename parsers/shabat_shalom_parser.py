@@ -12,7 +12,6 @@ import requests  # type: ignore
 from backend import metadata
 from backend.metadata import CommentSource, TextSource, get_book_by_parsha
 from backend.model import ChapterData, CommentData, ParshaData, VerseData
-from parsers.identification import ensure_comment_ids
 from parsers.local_storage import parsha_path
 from parsers.utils import (
     HTML_DIR,
@@ -247,7 +246,6 @@ def parse_parsha(parsha: int):
         if verses != list(range(min(verses), max(verses) + 1)):
             print(f"WARNING: there are some missing verses in chapter {chapter_data['chapter']}: {verses}")
 
-    ensure_comment_ids(parsha_data)
     parsha_path(parsha).write_text(dump_parsha(parsha_data))
 
 

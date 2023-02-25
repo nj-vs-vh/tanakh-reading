@@ -81,53 +81,6 @@ class MongoDatabase(DatabaseInterface):
         )
         logger.info("Indices created")
 
-        if await self._awrap(self.texts_coll.count_documents, {}) and await self._awrap(
-            self.comments_coll.count_documents, {}
-        ):
-            logger.info("Both texts and comments collections are not empty, migration not required")
-        else:
-            logger.info("Running migration from parsha data to texts and comments")
-            self.texts_coll.drop()
-            self.comments_coll.drop()
-            starred_legacy_comment_ids = {doc["comment_id"] for doc in self.starred_comments_coll.find({})}
-            new_id_by_legacy_id = dict[str, bson.ObjectId]()
-            logger.info(f"Starred legacy comment ids: {len(starred_legacy_comment_ids)}")
-
-            cursor = self.parsha_data_coll.find({})
-            for doc in cursor:
-                doc.pop("_id")
-                parsha_data = cast(ParshaData, doc)
-                logger.info(f"Migrating parsha #{parsha_data['parsha']}")
-                texts, comments = parsha_data_to_texts_and_comments(parsha_data)
-                logger.info(f"Got {len(texts)} texts and {len(comments)} comments")
-                self.texts_coll.insert_many([t.to_mongo_db() for t in texts])
-                logger.info("Inserted texts")
-                comment_docs = [c.to_mongo_db() for c in comments]
-                for comment_doc in comment_docs:
-                    comment_doc["_id"] = bson.ObjectId()
-                    if comment_doc["legacy_id"] in starred_legacy_comment_ids:
-                        new_id_by_legacy_id[comment_doc["legacy_id"]] = comment_doc["_id"]
-                self.comments_coll.insert_many(comment_docs)
-                logger.info("Inserted comments")
-
-            for old_comment_id, new_comment_id in new_id_by_legacy_id.items():
-                self.starred_comments_coll.update_many(
-                    {"comment_id": old_comment_id},
-                    {"$set": {"comment_id": new_comment_id}},
-                )
-            logger.info("Saved new indices to starred comments collection")
-
-            logger.info("Parsha data migration completed")
-
-        logger.info("Migrating access tokens to directly reference object id of a user")
-        self.access_tokens_coll.aggregate(
-            [
-                {"$set": {"user_id": {"$toObjectId": "$user_id"}}},
-                {"$out": "access-tokens"},
-            ]
-        )
-        logger.info("Access token migration completed")
-
     # users
 
     async def lookup_user(self, username: str) -> Optional[StoredUser]:

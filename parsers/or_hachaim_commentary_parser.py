@@ -11,7 +11,6 @@ import bs4  # type: ignore
 
 from backend import metadata
 from backend.model import CommentData, ParshaData
-from parsers.identification import ensure_comment_ids
 from parsers.local_storage import JSON_DIR, parsha_path
 from parsers.utils import dump_parsha, has_class
 
@@ -89,7 +88,6 @@ def parse_or_hachaim_commentaries(parsha_index: int):
             if parsed_comments:
                 verse_data["comments"][metadata.CommentSource.OR_HACHAIM] = parsed_comments
 
-    ensure_comment_ids(parsha_data)
     parsha_path(parsha_index).write_text(dump_parsha(parsha_data))
 
 
