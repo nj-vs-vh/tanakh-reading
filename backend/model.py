@@ -185,6 +185,7 @@ class StoredComment(DbSchemaModel):
     anchor_phrase: Optional[str]
     comment: str
     format_: CommentFormat = Field(alias="format")
+    index: int  # index within one source's comments
 
     @pydantic.validator("comment_source")
     def validate_comment_source(cls, comment_source):
@@ -194,5 +195,7 @@ class StoredComment(DbSchemaModel):
 
     def to_mongo_db(self) -> dict[str, Any]:
         dump = super().to_mongo_db()
-        dump["_id"] = self.db_id  # comments are a special case where we want to set id ourselves
+        if self.db_id != UNSET_DB_IT:
+            # comments are a special case where we want to set id ourselves
+            dump["_id"] = self.db_id
         return dump

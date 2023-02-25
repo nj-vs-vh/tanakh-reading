@@ -244,7 +244,7 @@ def parsha_data_to_texts_and_comments(parsha_data: ParshaData) -> tuple[list[Sto
                     )
                 )
             for comment_source, comments in verse_data["comments"].items():
-                for comment in comments:
+                for index, comment in enumerate(comments):
                     stored_comments.append(
                         StoredComment(
                             db_id=comment["id"],
@@ -253,6 +253,7 @@ def parsha_data_to_texts_and_comments(parsha_data: ParshaData) -> tuple[list[Sto
                             anchor_phrase=comment["anchor_phrase"],
                             comment=comment["comment"],
                             format=comment["format"],
+                            index=index,
                         )
                     )
     return stored_texts, stored_comments
@@ -283,6 +284,7 @@ def texts_and_comments_to_parsha_data(texts: list[StoredText], comments: list[St
                 raise ValueError(f"Stored texts for verse {chapter}:{verse} contain duplicate keys: {verse_texts}")
 
             verse_comments = [c for c in comments if c.text_coords.chapter == chapter and c.text_coords.verse == verse]
+            verse_comments.sort(key=lambda c: c.index)
             verse_data_by_source = collections.defaultdict[str, list[CommentData]](list)
             for vc in verse_comments:
                 verse_data_by_source[vc.comment_source].append(
