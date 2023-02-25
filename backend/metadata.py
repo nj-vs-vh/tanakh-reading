@@ -167,7 +167,7 @@ def get_book_by_parsha(parsha: int) -> int:
         if parsha >= parsha_range[0] and parsha < parsha_range[1]:
             return book
     else:
-        raise ValueError(f"No torah book found for parsha {parsha}")
+        raise ValueError(f"No Torah book found for parsha {parsha}")
 
 
 parsha_names = {

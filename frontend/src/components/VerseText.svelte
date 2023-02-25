@@ -32,11 +32,13 @@
         isEditingStore.set(false);
         isHovering = false;
         await editText({
-            parsha: parsha,
-            chapter: chapter,
-            verse: verse,
-            translation_key: textSource,
-            new_text: editedText,
+            text_coords: {
+                parsha: parsha,
+                chapter: chapter,
+                verse: verse,
+            },
+            text_source_key: textSource,
+            text: editedText,
         });
     }
 

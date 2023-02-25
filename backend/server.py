@@ -12,24 +12,17 @@ from backend.auth import generate_signup_token, hash_password
 from backend.constants import ACCESS_TOKEN_HEADER, SIGNUP_TOKEN_HEADER, AppExtensions
 from backend.database.interface import DatabaseInterface
 from backend.model import (
-    CommentCoords,
     EditCommentRequest,
     EditTextRequest,
     NewUser,
     ParshaData,
     SignupToken,
+    StarCommentRequest,
     StarredComment,
     StoredUser,
-    TextCoordsQuery,
     UserCredentials,
 )
 from backend.utils import iter_parsha_comments, safe_request_json
-from backend.validation import (
-    lookup_comment_data,
-    lookup_parsha_data,
-    lookup_verse_data,
-    validate_comment_coords,
-)
 
 logger = logging.getLogger(__name__)
 routes = web.RouteTableDef()
@@ -134,9 +127,10 @@ async def get_parsha(request: web.Request) -> web.Response:
 
             if add_my_starred_comments_info:
                 my_starred_comments = await db.lookup_starred_comments(
-                    starrer_username=user.username, text_coords_query=TextCoordsQuery(parsha=parsha_index)
+                    starrer_username=user.username,
+                    parsha=parsha_index,
                 )
-                my_starred_comment_ids = {c.comment_id for c in my_starred_comments}
+                my_starred_comment_ids = {str(c.comment_id) for c in my_starred_comments}
                 logger.info(f"Marking {len(my_starred_comment_ids)} comment(s) as starred by the user")
                 for comment in iter_parsha_comments(parsha_data):
                     if comment["id"] in my_starred_comment_ids:
@@ -174,14 +168,11 @@ async def edit_text(request: web.Request) -> web.Response:
     edit_text_request = EditTextRequest.from_request_json(await safe_request_json(request))
     logger.info(f"Editing text: {edit_text_request}")
     db = get_db(request)
-    parsha_data = await lookup_parsha_data(edit_text_request.parsha, db=db)
-    # NOTE: this verse data refers to a field from mutable parsha data, this is why we can mutate it
-    #       and save the whole parsha data at once
-    verse_data = await lookup_verse_data(parsha_data, edit_text_request.chapter, edit_text_request.verse)
-    if edit_text_request.translation_key not in verse_data["text"]:
-        raise web.HTTPBadRequest(reason=f"No translation exists for key {edit_text_request.translation_key!r}")
-    verse_data["text"][edit_text_request.translation_key] = edit_text_request.new_text
-    await db.save_parsha_data(parsha_data)
+    await db.edit_text(
+        text_coords=edit_text_request.text_coords,
+        text_source_key=edit_text_request.text_source_key,
+        text=edit_text_request.text,
+    )
     return web.Response()
 
 
@@ -193,15 +184,9 @@ async def edit_comment(request: web.Request) -> web.Response:
     edit_comment_request = EditCommentRequest.from_request_json(await safe_request_json(request))
     logger.info(f"Editing comment: {edit_comment_request}")
     db = get_db(request)
-    parsha_data = await lookup_parsha_data(edit_comment_request.comment_coords.parsha, db=db)
-    # NOTE: see NOTE in the edit_text method, the same applies here
-    verse_data = await lookup_verse_data(
-        parsha_data, edit_comment_request.comment_coords.chapter, edit_comment_request.comment_coords.verse
+    await db.edit_comment(
+        comment_id=edit_comment_request.comment_id, edited_comment=edit_comment_request.edited_comment
     )
-    comment_data = await lookup_comment_data(verse_data, comment_id=edit_comment_request.comment_coords.comment_id)
-    comment_data["anchor_phrase"] = edit_comment_request.new_anchor_phrase
-    comment_data["comment"] = edit_comment_request.new_comment
-    await db.save_parsha_data(parsha_data)
     return web.Response()
 
 
@@ -295,48 +280,31 @@ async def get_my_signup_token(request: web.Request) -> web.Response:
 @routes.post("/starred-comments")
 async def star_comment(request: web.Request) -> web.Response:
     user, _ = await get_authorized_user(request)
-    comment_coords = CommentCoords.from_request_json(await safe_request_json(request))
+    star_comment_request = StarCommentRequest.from_request_json(await safe_request_json(request))
     db = get_db(request)
-    await validate_comment_coords(comment_coords, db)
     starred_comment = await db.save_starred_comment(
         StarredComment(
             starrer_username=user.username,
-            comment_id=comment_coords.comment_id,
-            parsha=comment_coords.parsha,
-            chapter=comment_coords.chapter,
-            verse=comment_coords.verse,
+            comment_id=star_comment_request.comment_id,
+            parsha=star_comment_request.parsha,
         )
     )
-    return web.json_response(starred_comment.to_public_json())
+    return web.json_response(text=starred_comment.json())
 
 
 @routes.delete("/starred-comments")
 async def unstar_comment(request: web.Request) -> web.Response:
     user, _ = await get_authorized_user(request)
-    comment_coords = CommentCoords.from_request_json(await safe_request_json(request))
+    star_comment_request = StarCommentRequest.from_request_json(await safe_request_json(request))
     db = get_db(request)
-    await validate_comment_coords(comment_coords, db)
     await db.delete_starred_comment(
         StarredComment(
             starrer_username=user.username,
-            comment_id=comment_coords.comment_id,
-            parsha=comment_coords.parsha,
-            chapter=comment_coords.chapter,
-            verse=comment_coords.verse,
+            comment_id=star_comment_request.comment_id,
+            parsha=star_comment_request.parsha,
         )
     )
     return web.Response()
-
-
-@routes.get("/starred-comments")
-async def get_starred_comments(request: web.Request) -> web.Response:
-    user, _ = await get_authorized_user(request)
-    text_coords_query = TextCoordsQuery.from_request_json(await safe_request_json(request))
-    db = get_db(request)
-    starred_comments = await db.lookup_starred_comments(
-        starrer_username=user.username, text_coords_query=text_coords_query
-    )
-    return web.json_response([sc.to_public_json() for sc in starred_comments])
 
 
 async def start_background_jobs(app: web.Application) -> None:

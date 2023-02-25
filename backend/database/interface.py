@@ -2,13 +2,16 @@ import abc
 import logging
 from typing import Optional
 
+from bson import ObjectId
+
 from backend.auth import generate_signup_token
 from backend.model import (
+    EditedComment,
     ParshaData,
     SignupToken,
     StarredComment,
     StoredUser,
-    TextCoordsQuery,
+    TextCoords,
 )
 
 logger = logging.getLogger(__name__)
@@ -72,6 +75,7 @@ class DatabaseInterface(abc.ABC):
         ...
 
     # starred comments
+
     @abc.abstractmethod
     async def save_starred_comment(self, starred_comment: StarredComment) -> StarredComment:
         ...
@@ -81,9 +85,7 @@ class DatabaseInterface(abc.ABC):
         ...
 
     @abc.abstractmethod
-    async def lookup_starred_comments(
-        self, starrer_username: str, text_coords_query: TextCoordsQuery
-    ) -> list[StarredComment]:
+    async def lookup_starred_comments(self, starrer_username: str, parsha: int) -> list[StarredComment]:
         ...
 
     # parsha data storage
@@ -102,4 +104,12 @@ class DatabaseInterface(abc.ABC):
 
     @abc.abstractmethod
     async def get_cached_parsha_indices(self) -> list[int]:
+        ...
+
+    @abc.abstractmethod
+    async def edit_comment(self, comment_id: ObjectId, edited_comment: EditedComment) -> None:
+        ...
+
+    @abc.abstractmethod
+    async def edit_text(self, text_coords: TextCoords, text_source_key: str, text: str) -> None:
         ...
