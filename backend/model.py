@@ -1,20 +1,31 @@
 import logging
+from re import A
 from typing import Any, Literal, Optional, Type, TypedDict, TypeVar
 
+import pydantic
 from aiohttp import web
+from bson import ObjectId
 from pydantic import BaseModel, Field, ValidationError
 from pydantic.error_wrappers import display_errors
 from pymongo.results import InsertOneResult
 from typing_extensions import NotRequired
 
+from backend.metadata import CommentSource, TextSource
+
 logger = logging.getLogger(__name__)
+
+
+# TypedDict types are used in parsers and on frontend for default parsha page rendering
+
+
+CommentFormat = Literal["plain", "markdown", "html"]
 
 
 class CommentData(TypedDict):
     id: NotRequired[str]
     anchor_phrase: Optional[str]
     comment: str
-    format: Literal["plain", "markdown", "html"]
+    format: CommentFormat
     is_starred_by_me: NotRequired[bool]
 
 
@@ -35,7 +46,20 @@ class ParshaData(TypedDict):
     chapters: list[ChapterData]
 
 
+# pydantic models for DB and request data validation
+
+
 T = TypeVar("T", bound=BaseModel)
+
+
+class PydanticObjectId(ObjectId):
+    @classmethod
+    def __get_validators__(cls):
+        yield cls.validate
+
+    @classmethod
+    def validate(cls, v: str):
+        return cls(v)
 
 
 class PydanticModel(BaseModel):
@@ -44,32 +68,47 @@ class PydanticModel(BaseModel):
         try:
             return cls.parse_obj(raw)
         except ValidationError as e:
+            logger.exception(f"Error validating request JSON: {raw}")
             raise web.HTTPBadRequest(reason=display_errors(e.errors()))
 
     def to_public_json(self) -> dict[str, Any]:
         return self.dict()  # Config/Field-level excludes are respected
 
 
+UNSET_DB_IT = ObjectId(b"0" * 12)
+
+
 class DbSchemaModel(PydanticModel):
-    db_id: str = Field("n/a", exclude=True)
+    db_id: PydanticObjectId = Field(default=UNSET_DB_IT, exclude=True)
+
+    class Config:
+        json_encoders = {
+            PydanticObjectId: str,
+        }
 
     def is_stored(self) -> bool:
-        return self.db_id != "n/a"
+        return self.db_id != UNSET_DB_IT
 
     def to_mongo_db(self) -> dict[str, Any]:
-        return self.dict()  # Config/Field-level excludes are respected
+        dump = self.dict()
+        if self.db_id != UNSET_DB_IT:
+            dump["_id"] = self.db_id
+        return dump
 
     @classmethod
     def from_mongo_db(cls: Type[T], raw: Any) -> T:
         try:
-            raw["db_id"] = str(raw.pop("_id"))  # id field returned by MongoDB
+            raw["db_id"] = raw.pop("_id")
             return cls.parse_obj(raw)
         except (KeyError, ValidationError):
             logger.exception("Error parsing data from db")
             raise web.HTTPInternalServerError(reason="Internal server error")
 
     def inserted_as(self: T, insert_one_result: InsertOneResult) -> T:
-        return self.copy(update={"db_id": str(insert_one_result.inserted_id)})
+        return self.copy(update={"db_id": insert_one_result.inserted_id})
+
+
+# user / account models
 
 
 class UserCredentials(PydanticModel):
@@ -109,40 +148,71 @@ class SignupToken(DbSchemaModel):
     token: str
 
 
-class CommentCoords(DbSchemaModel):
-    """Generic comment coordinates; book/parsha/chapter/verse values are used for faster validation"""
+# user action models
 
-    comment_id: str  # comment id in static json file
+
+class StarredComment(DbSchemaModel):
+    comment_id: PydanticObjectId
+    parsha: int
+    starrer_username: str
+
+    class Config:
+        allow_extra = True
+
+
+class StarCommentRequest(PydanticModel):
+    comment_id: PydanticObjectId
+    parsha: int
+
+
+class TextCoords(PydanticModel):
     parsha: int
     chapter: int
     verse: int
-
-
-class StarredComment(CommentCoords):
-    starrer_username: str
-
-
-class TextCoordsQuery(PydanticModel):
-    """Generic text coords query for getting info about more or less specific parts of the text"""
-
-    book: Optional[int] = None
-    parsha: Optional[int] = None
-    chapter: Optional[int] = None
-    verse: Optional[int] = None
-
-    def to_mongo_query(self) -> dict[str, int]:
-        return self.dict(exclude_defaults=True)
 
 
 class EditTextRequest(PydanticModel):
-    parsha: int
-    chapter: int
-    verse: int
-    translation_key: str
-    new_text: str
+    text_coords: TextCoords
+    text_source_key: str
+    text: str
+
+
+class EditedComment(PydanticModel):
+    comment: str
+    anchor_phrase: Optional[str]
 
 
 class EditCommentRequest(PydanticModel):
-    comment_coords: CommentCoords
-    new_comment: str
-    new_anchor_phrase: str
+    comment_id: PydanticObjectId
+    edited_comment: EditedComment
+
+
+# text and comment storage models
+
+
+class StoredText(DbSchemaModel):
+    text_coords: TextCoords
+    text_source: str
+    text: str
+
+    @pydantic.validator("text_source")
+    def text_source_key_must_be_known(cls, text_source):
+        if text_source not in TextSource.all():
+            raise ValueError(f"Unexpectede text source: {text_source}")
+        return text_source
+
+
+class StoredComment(DbSchemaModel):
+    text_coords: TextCoords
+    comment_source: str
+    anchor_phrase: Optional[str]
+    comment: str
+    format: CommentFormat
+    index: int  # index within one source's comments
+    legacy_id: str
+
+    @pydantic.validator("comment_source")
+    def validate_comment_source(cls, comment_source):
+        if comment_source not in CommentSource.all():
+            raise ValueError(f"Unexpectede comment source: {comment_source}")
+        return comment_source

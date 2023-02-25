@@ -4,17 +4,15 @@
 
     import type { CommentData, Metadata } from "../types";
     import { CommentFormat } from "../types";
-    import { editComment, FullCommentCoords, starComment, unstarComment } from "../api";
+    import { editComment, CommentCoords, starComment, unstarComment } from "../api";
     import Hoverable from "./shared/Hoverable.svelte";
     import { isEditingStore } from "../editing";
 
     const metadata: Metadata = getContext("metadata");
     export let commentData: CommentData;
     export let parsha: number;
-    export let chapter: number;
-    export let verse: number;
 
-    let commentCoords: FullCommentCoords;
+    let commentCoords: CommentCoords;
     let isStarred: boolean;
     let editedAnchorPhrase: string;
     let editedCommentText: string;
@@ -22,8 +20,6 @@
         commentCoords = {
             comment_id: commentData.id,
             parsha: parsha,
-            chapter: chapter,
-            verse: verse,
         };
         isStarred = commentData.is_starred_by_me === true;
     }
@@ -58,14 +54,16 @@
     }
 
     async function saveEditedComment() {
-        commentData.anchor_phrase = editedAnchorPhrase;
+        commentData.anchor_phrase = editedAnchorPhrase.length > 0 ? editedAnchorPhrase : null;
         commentData.comment = editedCommentText;
         isEditingStore.set(false);
         isHovering = false;
         await editComment({
-            comment_coords: commentCoords,
-            new_anchor_phrase: editedAnchorPhrase,
-            new_comment: editedCommentText,
+            comment_id: commentCoords.comment_id,
+            edited_comment: {
+                anchor_phrase: commentData.anchor_phrase,
+                comment: commentData.comment,
+            },
         });
     }
 

@@ -133,15 +133,13 @@ export async function generateSignupToken(): Promise<SignupToken> {
 }
 
 
-export interface FullCommentCoords {
+export interface CommentCoords {
     comment_id: string;
     parsha: number;
-    chapter: number;
-    verse: number;
 }
 
 
-export async function starComment(coords: FullCommentCoords): Promise<null> {
+export async function starComment(coords: CommentCoords): Promise<null> {
     const resp = await fetch(
         `${BASE_API_URL}/starred-comments`,
         {
@@ -156,7 +154,7 @@ export async function starComment(coords: FullCommentCoords): Promise<null> {
 }
 
 
-export async function unstarComment(coords: FullCommentCoords): Promise<null> {
+export async function unstarComment(coords: CommentCoords): Promise<null> {
     const resp = await fetch(
         `${BASE_API_URL}/starred-comments`,
         {
@@ -170,11 +168,14 @@ export async function unstarComment(coords: FullCommentCoords): Promise<null> {
     else throw (respText);
 }
 
+interface EditedComment {
+    anchor_phrase: string | null,
+    comment: string
+}
 
 interface EditCommentRequest {
-    comment_coords: FullCommentCoords;
-    new_comment: string;
-    new_anchor_phrase: string;
+    comment_id: string,
+    edited_comment: EditedComment,
 }
 
 
@@ -193,12 +194,17 @@ export async function editComment(request: EditCommentRequest): Promise<null> {
 }
 
 
-interface EditTextRequest {
+interface TextCoords {
     parsha: number;
     chapter: number;
     verse: number;
-    translation_key: string;
-    new_text: string;
+}
+
+
+interface EditTextRequest {
+    text_coords: TextCoords,
+    text_source_key: string;
+    text: string;
 }
 
 

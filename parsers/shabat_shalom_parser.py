@@ -10,7 +10,7 @@ import bs4  # type: ignore
 import requests  # type: ignore
 
 from backend import metadata
-from backend.metadata import Commenter, TextSource, get_book_by_parsha
+from backend.metadata import CommentSource, TextSource, get_book_by_parsha
 from backend.model import ChapterData, CommentData, ParshaData, VerseData
 from parsers.identification import ensure_comment_ids
 from parsers.local_storage import parsha_path
@@ -134,7 +134,7 @@ def parse_parsha(parsha: int):
                             continue
                     comment_text_html += " " + collapse_whitespace(str(comment_span_child))
                 if current_verse_data is not None:
-                    current_verse_data["comments"][Commenter.RASHI].append(
+                    current_verse_data["comments"][CommentSource.RASHI].append(
                         CommentData(
                             anchor_phrase=anchor_phrase,
                             comment=strip_leading_dot(postprocess_patched_text(strip_html_breaks(comment_text_html))),
@@ -181,7 +181,7 @@ def parse_parsha(parsha: int):
                     comment_data["comment"] = strip_html_breaks(comment_data["comment"])
 
                 if current_verse_data is not None:
-                    current_verse_data["comments"][Commenter.SONCHINO] = sonchino_comments
+                    current_verse_data["comments"][CommentSource.SONCHINO] = sonchino_comments
 
                 # the actual handle is not inserted in the final text
                 continue

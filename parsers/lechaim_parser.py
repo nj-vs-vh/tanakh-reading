@@ -10,7 +10,7 @@ from typing import Optional, cast
 import requests  # type: ignore
 from bs4 import BeautifulSoup, Tag  # type: ignore
 
-from backend.metadata import Commenter, TextSource, get_book_by_parsha
+from backend.metadata import CommentSource, TextSource, get_book_by_parsha
 from backend.model import ChapterData, CommentData, ParshaData, VerseData
 from parsers.merge import merge_and_save_parsha_data
 from parsers.utils import (
@@ -109,9 +109,9 @@ def parse(parsha: int, parsha_url_path: str):
                             continue
 
                         if css_class_prefix == "rashi" or css_class_prefix == "editor":
-                            new_commenter = Commenter.RASHI_ALT
+                            new_commenter = CommentSource.RASHI_ALT
                         elif css_class_prefix == "ezra":
-                            new_commenter = Commenter.IBN_EZRA
+                            new_commenter = CommentSource.IBN_EZRA
                         else:
                             print(
                                 "Ignoring element with unexpected css class prefix "
