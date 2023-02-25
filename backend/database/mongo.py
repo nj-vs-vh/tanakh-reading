@@ -81,9 +81,6 @@ class MongoDatabase(DatabaseInterface):
         )
         logger.info("Indices created")
 
-        self.texts_coll.drop()
-        self.comments_coll.drop()
-
         if await self._awrap(self.texts_coll.count_documents, {}) and await self._awrap(
             self.comments_coll.count_documents, {}
         ):
