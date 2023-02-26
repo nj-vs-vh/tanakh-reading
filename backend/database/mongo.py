@@ -2,9 +2,11 @@ import asyncio
 import collections
 import copy
 import itertools
+import json
 import logging
+import random
 from concurrent.futures import ThreadPoolExecutor
-from typing import Callable, Optional, TypeVar
+from typing import Any, Callable, Optional, TypeVar, Union
 
 import bson
 import pymongo
@@ -12,7 +14,11 @@ from async_lru import alru_cache  # type: ignore
 from pymongo import MongoClient
 
 from backend import config
-from backend.database.interface import DatabaseInterface
+from backend.database.interface import (
+    DatabaseInterface,
+    SearchTextIn,
+    SearchTextSorting,
+)
 from backend.metadata import (
     comment_source_languages,
     get_book_by_parsha,
@@ -22,7 +28,9 @@ from backend.model import (
     ChapterData,
     CommentData,
     EditedComment,
+    FoundMatches,
     ParshaData,
+    SearchTextResult,
     SignupToken,
     StarredComment,
     StoredComment,
@@ -64,8 +72,14 @@ class MongoDatabase(DatabaseInterface):
     def from_config(cls) -> "MongoDatabase":
         return MongoDatabase(mongo_client=MongoClient(config.MONGO_URL), db_name=config.MONGO_DB)
 
-    async def _awrap(self, func: Callable[..., T], *args) -> T:
-        return await asyncio.get_running_loop().run_in_executor(self.threads, func, *args)
+    async def _awrap(self, func: Callable[..., T], *args, **kwargs) -> T:
+        def wrapped_func():
+            try:
+                return func(*args, **kwargs)
+            except Exception:
+                logger.exception("Error in _awrap-ped func")
+
+        return await asyncio.get_running_loop().run_in_executor(self.threads, wrapped_func)
 
     async def create_indices(self) -> None:
         logger.info("Creating indices in Mongo")
@@ -88,6 +102,39 @@ class MongoDatabase(DatabaseInterface):
         logger.info("Indices created")
 
         self._background_task = asyncio.create_task(self.create_text_indices())
+
+    async def _rebuild_text_and_comments_collections(self):
+        """One-time code, useful during test and debugging"""
+        logger.info("Running migration from parsha data to texts and comments")
+        self.texts_coll.drop()
+        self.comments_coll.drop()
+        starred_legacy_comment_ids = {doc["comment_id"] for doc in self.starred_comments_coll.find({})}
+        new_id_by_legacy_id = dict[str, bson.ObjectId]()
+        logger.info(f"Starred legacy comment ids: {len(starred_legacy_comment_ids)}")
+
+        cursor = self.parsha_data_coll.find({})
+        for doc in cursor:
+            doc.pop("_id")
+            parsha_data = doc
+            logger.info(f"Migrating parsha #{parsha_data['parsha']}")
+            texts, comments = parsha_data_to_texts_and_comments(parsha_data)
+            logger.info(f"Got {len(texts)} texts and {len(comments)} comments")
+            self.texts_coll.insert_many([t.to_mongo_db() for t in texts])
+            logger.info("Inserted texts")
+            comment_docs = [c.to_mongo_db() for c in comments]
+            for comment_doc in comment_docs:
+                comment_doc["_id"] = bson.ObjectId()
+                if comment_doc["legacy_id"] in starred_legacy_comment_ids:
+                    new_id_by_legacy_id[comment_doc["legacy_id"]] = comment_doc["_id"]
+            self.comments_coll.insert_many(comment_docs)
+            logger.info("Inserted comments")
+
+        for old_comment_id, new_comment_id in new_id_by_legacy_id.items():
+            self.starred_comments_coll.update_many(
+                {"comment_id": old_comment_id},
+                {"$set": {"comment_id": new_comment_id}},
+            )
+        logger.info("Saved new indices to starred comments collection")
 
     async def create_text_indices(self) -> None:
         logger.info("Creating text indices in the background")
@@ -288,6 +335,153 @@ class MongoDatabase(DatabaseInterface):
         )
         self.parsha_data_cache.pop(text_coords.parsha)
 
+    async def search_text(
+        self,
+        query: str,
+        language: str,
+        page: int,
+        page_size: int,
+        sorting: SearchTextSorting,
+        search_in: list[SearchTextIn],
+        with_verse_parsha_data: bool,
+    ) -> SearchTextResult:
+        def blocking() -> SearchTextResult:
+            logger.info(
+                f"Searching texts with {query = } {page = } {page_size = } {sorting = } "
+                + f"{search_in = } {with_verse_parsha_data = }"
+            )
+            if sorting is SearchTextSorting.BEST_TO_WORST:
+                sort_step: dict[str, Any] = {"score": {"$meta": "textScore"}}
+            else:
+                if sorting is SearchTextSorting.END_TO_START:
+                    order = pymongo.DESCENDING
+                else:
+                    order = pymongo.ASCENDING
+                sort_step = {key: order for key in ["text_coords.parsha", "text_coords.chapter", "text_coords.verse"]}
+
+            match_step = {"$match": {"$text": {"$search": query, "$language": to_mongo_language(language)}}}
+            count_pipeline: list[dict[str, Any]] = [match_step, {"$count": "total"}]
+            search_pipeline: list[dict[str, Any]] = [
+                match_step,
+                {"$sort": sort_step},
+                {"$skip": page * page_size},
+                {"$limit": page_size},
+            ]
+            logger.info(
+                f"Generated search pipeline:\n{json.dumps(search_pipeline, ensure_ascii=False)}\n"
+                + f"and count pipeline:\n{json.dumps(count_pipeline, ensure_ascii=False)}"
+            )
+            if SearchTextIn.TEXTS in search_in:
+                texts = [StoredText.from_mongo_db(doc) for doc in self.texts_coll.aggregate(search_pipeline)]
+
+                try:
+                    text_matches: Optional[int] = (self.texts_coll.aggregate(count_pipeline)).next()["total"]
+                except StopIteration:
+                    text_matches = 0
+            else:
+                texts = []
+                text_matches = None
+
+            if SearchTextIn.COMMENTS in search_in:
+                comments = [StoredComment.from_mongo_db(doc) for doc in self.comments_coll.aggregate(search_pipeline)]
+                try:
+                    comment_matches: Optional[int] = self.comments_coll.aggregate(count_pipeline).next()["total"]
+                except StopIteration:
+                    comment_matches = 0
+            else:
+                comments = []
+                comment_matches = None
+
+            texts_and_comments = texts + comments
+            if not texts_and_comments:
+                return SearchTextResult(
+                    found_matches=[],
+                    total_matched_comments=comment_matches,
+                    total_matched_texts=text_matches,
+                )
+
+            logger.info(f"Got {len(texts)} texts and {len(comments)} comments")
+
+            def toc_to_coord_triplet(toc: Union[StoredComment, StoredText]) -> tuple[int, int, int]:
+                return (toc.text_coords.parsha, toc.text_coords.chapter, toc.text_coords.verse)
+
+            if len(search_in) > 1:  # e.g. we concatenate results of several queries and need to reorder them
+                if sorting is SearchTextSorting.START_TO_END:
+                    texts_and_comments.sort(key=toc_to_coord_triplet)
+                elif sorting is SearchTextSorting.END_TO_START:
+                    texts_and_comments.sort(key=toc_to_coord_triplet, reverse=True)
+                elif sorting is SearchTextSorting.BEST_TO_WORST:
+                    random.seed(f"{query}-{page}-{page_size}")  # ensuring query repeatability
+                    # it's reasonable to expect that on a single page all results are more or less equal in score
+                    random.shuffle(texts_and_comments)
+
+            verse_parsha_data_by_coords: dict[tuple[int, int, int], ParshaData] = dict()
+            if with_verse_parsha_data:
+                coord_triplets = {toc_to_coord_triplet(toc) for toc in texts_and_comments}
+                logger.info(f"Fetching verses for {len(coord_triplets)} coords")
+                subquery_let = {"p": "$parsha", "c": "$chapter", "v": "$verse"}
+                subquery_pipeline = [
+                    {
+                        "$match": {
+                            "$expr": {
+                                "$and": [
+                                    {"$eq": ["$text_coords.parsha", "$$p"]},
+                                    {"$eq": ["$text_coords.chapter", "$$c"]},
+                                    {"$eq": ["$text_coords.verse", "$$v"]},
+                                ]
+                            }
+                        }
+                    }
+                ]
+
+                for doc in self.db.aggregate(
+                    [
+                        {
+                            "$documents": [
+                                {"parsha": parsha, "chapter": chapter, "verse": verse}
+                                for parsha, chapter, verse in coord_triplets
+                            ]
+                        },
+                        {
+                            "$lookup": {
+                                "from": "texts",
+                                "as": "texts",
+                                "let": subquery_let,
+                                "pipeline": subquery_pipeline,
+                            }
+                        },
+                        {
+                            "$lookup": {
+                                "from": "comments",
+                                "as": "comments",
+                                "let": subquery_let,
+                                "pipeline": subquery_pipeline,
+                            }
+                        },
+                    ]
+                ):
+                    verse_texts = [StoredText.from_mongo_db(t) for t in doc["texts"]]
+                    verse_comments = [StoredComment.from_mongo_db(c) for c in doc["comments"]]
+                    verse_parsha_data_by_coords[
+                        (doc["parsha"], doc["chapter"], doc["verse"])
+                    ] = texts_and_comments_to_parsha_data(verse_texts, verse_comments)
+
+            found_matches = list[FoundMatches]()
+            for toc in texts_and_comments:
+                parsha_data = verse_parsha_data_by_coords.get(toc_to_coord_triplet(toc))
+                if isinstance(toc, StoredText):
+                    found_matches.append(FoundMatches(text=toc, parsha_data=parsha_data))
+                else:
+                    found_matches.append(FoundMatches(comment=toc, parsha_data=parsha_data))
+
+            return SearchTextResult(
+                found_matches=found_matches,
+                total_matched_comments=comment_matches,
+                total_matched_texts=text_matches,
+            )
+
+        return await self._awrap(blocking)
+
 
 def to_mongo_language(iso: str) -> str:
     return (
@@ -360,15 +554,15 @@ def parsha_data_to_texts_and_comments(parsha_data: ParshaData) -> tuple[list[Sto
                             format=comment["format"],
                             language=to_mongo_language(comment_source_languages[comment_source]),
                             index=index,
-                            legacy_id=comment["id"],
+                            legacy_id=comment.get("id"),
                         )
                     )
     return stored_texts, stored_comments
 
 
-def texts_and_comments_to_parsha_data(texts: list[StoredText], comments: list[StoredComment]) -> Optional[ParshaData]:
+def texts_and_comments_to_parsha_data(texts: list[StoredText], comments: list[StoredComment]) -> ParshaData:
     if not texts:
-        return None
+        raise ValueError("No texts provided to consturct parsha data")
     parsha_values = {t.text_coords.parsha for t in texts} | {c.text_coords.parsha for c in comments}
     if len(parsha_values) > 1:
         raise ValueError("Stored texts and comments are from several parshas, can't construct parsha data")
@@ -397,7 +591,7 @@ def texts_and_comments_to_parsha_data(texts: list[StoredText], comments: list[St
             for vc in verse_comments:
                 verse_data_by_source[vc.comment_source].append(
                     CommentData(
-                        id=str(vc.db_id) if vc.is_stored() else vc.legacy_id,
+                        id=str(vc.db_id) if vc.is_stored() else vc.legacy_id or "<unset>",
                         anchor_phrase=vc.anchor_phrase,
                         comment=vc.comment,
                         format=vc.format,

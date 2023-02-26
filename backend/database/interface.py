@@ -1,5 +1,6 @@
 import abc
 import logging
+from enum import Enum
 from typing import Optional
 
 from bson import ObjectId
@@ -8,6 +9,7 @@ from backend.auth import generate_signup_token
 from backend.model import (
     EditedComment,
     ParshaData,
+    SearchTextResult,
     SignupToken,
     StarredComment,
     StoredUser,
@@ -15,6 +17,17 @@ from backend.model import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+class SearchTextSorting(Enum):
+    BEST_TO_WORST = "best_to_worst"
+    START_TO_END = "start_to_end"
+    END_TO_START = "end_to_start"
+
+
+class SearchTextIn(Enum):
+    TEXTS = "texts"
+    COMMENTS = "comments"
 
 
 class DatabaseInterface(abc.ABC):
@@ -112,4 +125,20 @@ class DatabaseInterface(abc.ABC):
 
     @abc.abstractmethod
     async def edit_text(self, text_coords: TextCoords, text_source_key: str, text: str) -> None:
+        ...
+
+    # full text search
+
+    @abc.abstractmethod
+    async def search_text(
+        self,
+        query: str,
+        language: str,
+        page: int,
+        page_size: int,
+        sorting: SearchTextSorting,
+        search_in: list[SearchTextIn],
+        with_verse_parsha_data: bool,
+    ) -> SearchTextResult:
+        """Each returned ParshaData will have only one chapter with one verse, containing the matched phrase"""
         ...

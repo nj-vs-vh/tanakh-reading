@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import re
 import secrets
 from typing import NoReturn, cast
 
@@ -10,7 +11,11 @@ from dictdiffer import diff  # type: ignore
 from backend import config, metadata
 from backend.auth import generate_signup_token, hash_password
 from backend.constants import ACCESS_TOKEN_HEADER, SIGNUP_TOKEN_HEADER, AppExtensions
-from backend.database.interface import DatabaseInterface
+from backend.database.interface import (
+    DatabaseInterface,
+    SearchTextIn,
+    SearchTextSorting,
+)
 from backend.model import (
     EditCommentRequest,
     EditTextRequest,
@@ -22,7 +27,11 @@ from backend.model import (
     StoredUser,
     UserCredentials,
 )
-from backend.utils import iter_parsha_comments, safe_request_json
+from backend.utils import (
+    iter_parsha_comments,
+    safe_request_json,
+    worst_language_detection_ever,
+)
 
 logger = logging.getLogger(__name__)
 routes = web.RouteTableDef()
@@ -303,6 +312,44 @@ async def unstar_comment(request: web.Request) -> web.Response:
         )
     )
     return web.Response()
+
+
+query_peproc_re = re.compile(r"\s+", flags=re.MULTILINE)
+MAX_QUERY_LEN = 1024
+MIN_QUERY_LEN = 3
+
+
+@routes.get("/search-text")
+async def search_text(request: web.Request) -> web.Response:
+    db = get_db(request)
+    try:
+        query = request.query["query"]
+        if len(query) > MAX_QUERY_LEN:
+            raise ValueError(f"Query is too long: must be under {MAX_QUERY_LEN} characters")
+        query = query_peproc_re.sub(" ", query.strip())
+        if len(query) < MIN_QUERY_LEN:
+            raise ValueError(f"Query is too short: must be over {MIN_QUERY_LEN} meaningful characters")
+        page_size = int(request.query.get("page_size", "50"))
+        if not 1 <= page_size <= 100:
+            raise ValueError(f"page_size must be between 1 and 100")
+        page = int(request.query.get("page", "0"))
+        if page < 0:
+            raise ValueError(f"page must be positive")
+
+        search_text_results = await db.search_text(
+            query=query,
+            language=worst_language_detection_ever(query),
+            page=page,
+            page_size=page_size,
+            sorting=SearchTextSorting(request.query.get("sort", SearchTextSorting.START_TO_END.value)),
+            search_in=[SearchTextIn(v) for v in request.query.getall("search_in", [sti.value for sti in SearchTextIn])],
+            with_verse_parsha_data=bool(request.query.get("with_verse_parsha_data", False)),
+        )
+    except KeyError as e:
+        raise web.HTTPBadRequest(reason=f"Missing required query param: {e}")
+    except ValueError as e:
+        raise web.HTTPBadRequest(reason=f"Invalid query param: {e}")
+    return web.json_response(search_text_results.to_public_json())
 
 
 async def start_background_jobs(app: web.Application) -> None:

@@ -1,5 +1,8 @@
+import itertools
 import logging
-from typing import Any, Generator
+import string
+import unicodedata
+from typing import Any, Generator, Hashable, Iterable, Sequence, TypeVar
 
 from aiohttp import web
 
@@ -22,3 +25,34 @@ def iter_parsha_comments(parsha_data: ParshaData) -> Generator[CommentData, None
             for _, comments in verse["comments"].items():
                 for comment in comments:
                     yield comment
+
+
+ItemT = TypeVar("ItemT", bound=Hashable)
+
+
+def deduplicate_keeping_order(iterable: Iterable[ItemT]) -> list[ItemT]:
+    seen = set[ItemT]()
+    result = list[ItemT]()
+    for item in iterable:
+        if item in seen:
+            continue
+        result.append(item)
+        seen.add(item)
+    return result
+
+
+ALPHABETS = {
+    "en": set(string.ascii_lowercase),
+    "ru": set("абвгдеёжзийклмнопрстуфхцчшщъыьэюя"),
+}
+
+
+def worst_language_detection_ever(s: str) -> str:
+    s = unicodedata.normalize("NFKD", s)
+    scores = [(lang, len([ch for ch in s if ch in alphabet])) for lang, alphabet in ALPHABETS.items()]
+    scores.sort(key=lambda l_s: l_s[1], reverse=True)
+    top_lang, top_lang_score = next(iter(scores))
+    if top_lang_score > 3:
+        return top_lang
+    else:
+        return "none"
