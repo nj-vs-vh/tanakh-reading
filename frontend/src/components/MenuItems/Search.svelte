@@ -8,6 +8,7 @@
 
     import { cmpVerseCoords, range, string2verseCoords, VerseCoords, versePath } from "../../utils";
     import { navigateTo } from "svelte-router-spa";
+    import Icon from "../shared/Icon.svelte";
 
     const metadata: Metadata = getContext("metadata");
     const latestParsha = metadata.available_parsha[metadata.available_parsha.length - 1];
@@ -61,6 +62,12 @@
         }
         currentVerseCoordsInput = "";
     }
+
+    let currentSearchQueryInput: string = "";
+    function fullTextSearch() {
+        currentSearchQueryInput = "";
+        window.alert(currentSearchQueryInput);
+    }
 </script>
 
 <MenuFolder icon="search" title="Поиск">
@@ -83,10 +90,21 @@
                     searchResultsNote = "";
                 }}
             />
-            <button id="search-btn" on:click={findVerse}>Найти</button>
+            <button on:click={findVerse}>
+                <Icon icon="search" heightEm={1.2} />
+            </button>
         </div>
         <div id="search-results-note" style={searchResultsNote === "" ? "display: none;" : ""}>
             {searchResultsNote}
+        </div>
+    </MenuFolderBlock>
+    <MenuFolderBlock title="По тексту">
+        <div class="search-bar-container">
+            <Keydown on:Enter={fullTextSearch} />
+            <input type="text" placeholder="" bind:value={currentSearchQueryInput} />
+            <button on:click={fullTextSearch}>
+                <Icon icon="search" heightEm={1.2} />
+            </button>
         </div>
     </MenuFolderBlock>
 </MenuFolder>
@@ -98,14 +116,22 @@
         justify-content: space-between;
     }
 
-    #chapter-verse-input {
+    input {
         font-size: inherit;
         margin-right: 0.4em;
+        flex-grow: 10;
+    }
+
+    #chapter-verse-input {
         max-width: 25%;
     }
 
-    #search-btn {
-        flex-grow: 4;
+    button {
+        width: 3em;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     #search-results-note {
