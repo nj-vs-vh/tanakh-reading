@@ -87,43 +87,6 @@ class MongoDatabase(DatabaseInterface):
         await self._awrap(self.comments_coll.create_index, text_coords_index + [("comment_source", pymongo.HASHED)])
         logger.info("Indices created")
 
-        logger.info("Adding languages to stored comments and texts")
-        self.texts_coll.aggregate(
-            [
-                {
-                    "$addFields": {
-                        "language": {
-                            "$switch": {
-                                "branches": [
-                                    {"case": {"$eq": ["$text_source", text_source]}, "then": lang}
-                                    for text_source, lang in text_source_languages.items()
-                                ],
-                            }
-                        }
-                    }
-                },
-                {"$out": self.texts_coll.name},
-            ]
-        )
-        self.comments_coll.aggregate(
-            [
-                {
-                    "$addFields": {
-                        "language": {
-                            "$switch": {
-                                "branches": [
-                                    {"case": {"$eq": ["$comment_source", comment_source]}, "then": lang}
-                                    for comment_source, lang in comment_source_languages.items()
-                                ]
-                            }
-                        }
-                    }
-                },
-                {"$out": self.comments_coll.name},
-            ]
-        )
-        logger.info("Languages added")
-
     # users
 
     async def lookup_user(self, username: str) -> Optional[StoredUser]:
