@@ -21,7 +21,7 @@ text_source_marks = {
     TextSource.FG: "[ФГ]",
     TextSource.PLAUT: "[Plaut]",
     TextSource.LECHAIM: "[Лехаим]",
-    TextSource.HEBREW: "",
+    TextSource.HEBREW: "[אָ]",
 }
 
 
