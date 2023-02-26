@@ -135,7 +135,6 @@ export async function generateSignupToken(): Promise<SignupToken> {
 
 export interface CommentCoords {
     comment_id: string;
-    parsha: number;
 }
 
 

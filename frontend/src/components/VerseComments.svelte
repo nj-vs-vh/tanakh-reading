@@ -3,13 +3,10 @@
     import { getContext } from "svelte";
     import type { VerseData } from "../types";
     import { commentFiltersStore, CommentFilterByBookmarkMode } from "../settings/commentFilters";
-    import type { CommentFilters } from "../settings/commentFilters";
     import VerseComment from "./VerseComment.svelte";
     import { commentPassesFilters } from "../utils";
 
     export let verseData: VerseData;
-    export let parsha: number;
-    export let chapter: number;
 
     const metadata: Metadata = getContext("metadata");
     const commenterNames = metadata.commenter_names;
@@ -29,7 +26,7 @@
                         $commentFiltersStore.byBookmarkMode === CommentFilterByBookmarkMode.MY
                         && commentData.is_starred_by_me === true
                     )}
-                        <VerseComment {commentData} {parsha} {chapter} verse={verseData.verse} />
+                        <VerseComment {commentData} />
                     {/if}
                 {/each}
             </div>

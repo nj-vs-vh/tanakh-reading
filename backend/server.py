@@ -282,13 +282,11 @@ async def star_comment(request: web.Request) -> web.Response:
     user, _ = await get_authorized_user(request)
     star_comment_request = StarCommentRequest.from_request_json(await safe_request_json(request))
     db = get_db(request)
-    starred_comment = await db.save_starred_comment(
-        StarredComment(
-            starrer_username=user.username,
-            comment_id=star_comment_request.comment_id,
-            parsha=star_comment_request.parsha,
-        )
+    starred_comment = StarredComment(
+        starrer_username=user.username,
+        comment_id=star_comment_request.comment_id,
     )
+    await db.save_starred_comment(starred_comment)
     # NOTE: using pydantic's .json() here directly because it knows how to serialize PydanticObjectId
     return web.json_response(text=starred_comment.json())
 
@@ -302,7 +300,6 @@ async def unstar_comment(request: web.Request) -> web.Response:
         StarredComment(
             starrer_username=user.username,
             comment_id=star_comment_request.comment_id,
-            parsha=star_comment_request.parsha,
         )
     )
     return web.Response()

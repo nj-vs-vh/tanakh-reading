@@ -77,7 +77,7 @@ class DatabaseInterface(abc.ABC):
     # starred comments
 
     @abc.abstractmethod
-    async def save_starred_comment(self, starred_comment: StarredComment) -> StarredComment:
+    async def save_starred_comment(self, starred_comment: StarredComment) -> None:
         ...
 
     @abc.abstractmethod

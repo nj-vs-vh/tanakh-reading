@@ -1,5 +1,4 @@
 import logging
-from re import A
 from typing import Any, Literal, Optional, Type, TypedDict, TypeVar
 
 import pydantic
@@ -7,7 +6,7 @@ from aiohttp import web
 from bson import ObjectId
 from pydantic import BaseModel, Field, ValidationError
 from pydantic.error_wrappers import display_errors
-from pymongo.results import InsertOneResult
+from pymongo.results import InsertOneResult, UpdateResult
 from typing_extensions import NotRequired
 
 from backend.metadata import CommentSource, TextSource
@@ -107,6 +106,9 @@ class DbSchemaModel(PydanticModel):
     def inserted_as(self: T, insert_one_result: InsertOneResult) -> T:
         return self.copy(update={"db_id": insert_one_result.inserted_id})
 
+    def upserted_as(self: T, update_one_result: UpdateResult) -> T:
+        return self.copy(update={"db_id": update_one_result.upserted_id or UNSET_DB_IT})
+
 
 # user / account models
 
@@ -153,16 +155,11 @@ class SignupToken(DbSchemaModel):
 
 class StarredComment(DbSchemaModel):
     comment_id: PydanticObjectId
-    parsha: int
     starrer_username: str
-
-    class Config:
-        allow_extra = True
 
 
 class StarCommentRequest(PydanticModel):
     comment_id: PydanticObjectId
-    parsha: int
 
 
 class TextCoords(PydanticModel):

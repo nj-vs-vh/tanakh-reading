@@ -81,6 +81,15 @@ class MongoDatabase(DatabaseInterface):
         )
         logger.info("Indices created")
 
+        logger.info("Migrating starred-comments collection")
+        self.starred_comments_coll.aggregate(
+            [
+                {"$project": {"comment_id": True, "starrer_username": True}},
+                {"$out": "starred-comments"},
+            ]
+        )
+        logger.info("Migration done")
+
     # users
 
     async def lookup_user(self, username: str) -> Optional[StoredUser]:
@@ -154,29 +163,40 @@ class MongoDatabase(DatabaseInterface):
 
     # starred comments
 
-    async def save_starred_comment(self, starred_comment: StarredComment) -> StarredComment:
-        existing_comment_doc = await self._awrap(
-            self.starred_comments_coll.find_one,
-            {
-                "comment_id": starred_comment.comment_id,
-                "starrer_username": starred_comment.starrer_username,
-            },
-        )
-        if existing_comment_doc is None:
-            res = await self._awrap(self.starred_comments_coll.insert_one, starred_comment.to_mongo_db())
-            return starred_comment.inserted_as(res)
-        else:
-            return StarredComment.from_mongo_db(existing_comment_doc)
+    async def save_starred_comment(self, starred_comment: StarredComment) -> None:
+        def blocking(starred_comment: StarredComment):
+            self.starred_comments_coll.update_one(
+                filter=starred_comment.to_mongo_db(),
+                update={"$set": starred_comment.to_mongo_db()},
+                upsert=True,
+            )
+
+        await self._awrap(blocking, starred_comment)
 
     async def delete_starred_comment(self, starred_comment: StarredComment) -> None:
         await self._awrap(
             self.starred_comments_coll.delete_one,
-            {"comment_id": starred_comment.comment_id, "starrer_username": starred_comment.starrer_username},
+            starred_comment.to_mongo_db(),
         )
 
     async def lookup_starred_comments(self, starrer_username: str, parsha: int) -> list[StarredComment]:
         def blocking():
-            cursor = self.starred_comments_coll.find({"starrer_username": starrer_username, "parsha": parsha})
+            cursor = self.starred_comments_coll.aggregate(
+                [
+                    {"$match": {"starrer_username": starrer_username}},
+                    {
+                        "$lookup": {
+                            "from": self.comments_coll.name,
+                            "localField": "comment_id",
+                            "foreignField": "_id",
+                            "as": "comments",
+                        }
+                    },
+                    #                     V  take the first element from joined list because it's and ID
+                    {"$match": {"comments.0.text_coords.parsha": parsha}},
+                    {"$project": {"comments": False}},
+                ]
+            )
             return [StarredComment.from_mongo_db(doc) for doc in cursor]
 
         return await self._awrap(blocking)

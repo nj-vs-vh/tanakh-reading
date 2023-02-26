@@ -155,7 +155,7 @@
             verse={currentVerseCoords.verse}
         />
     {/each}
-    <VerseComments verseData={currentVerseData} parsha={parsha.parsha} chapter={currentVerseCoords.chapter} />
+    <VerseComments verseData={currentVerseData} />
 </div>
 
 <style>

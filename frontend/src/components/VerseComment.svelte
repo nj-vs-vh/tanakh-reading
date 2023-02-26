@@ -10,7 +10,6 @@
 
     const metadata: Metadata = getContext("metadata");
     export let commentData: CommentData;
-    export let parsha: number;
 
     let commentCoords: CommentCoords;
     let isStarred: boolean;
@@ -19,7 +18,6 @@
     $: {
         commentCoords = {
             comment_id: commentData.id,
-            parsha: parsha,
         };
         isStarred = commentData.is_starred_by_me === true;
     }
