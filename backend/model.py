@@ -191,6 +191,7 @@ class StoredText(DbSchemaModel):
     text_coords: TextCoords
     text_source: str
     text: str
+    language: str
 
     @pydantic.validator("text_source")
     def text_source_key_must_be_known(cls, text_source):
@@ -205,6 +206,7 @@ class StoredComment(DbSchemaModel):
     anchor_phrase: Optional[str]
     comment: str
     format: CommentFormat
+    language: str
     index: int  # index within one source's comments
     legacy_id: str
 

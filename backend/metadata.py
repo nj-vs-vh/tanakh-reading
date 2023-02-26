@@ -89,6 +89,20 @@ torah_book_names = {
 }
 
 
+class IsoLang:
+    RU = "ru"
+    EN = "en"
+    HE = "he"  # hebrew
+
+
+text_source_languages: dict[str, str] = {
+    TextSource.FG: IsoLang.RU,
+    TextSource.PLAUT: IsoLang.EN,
+    TextSource.LECHAIM: IsoLang.RU,
+    TextSource.HEBREW: IsoLang.HE,
+}
+
+
 torah_book_parsha_ranges: dict[int, tuple[int, int]] = {  # upper bound not included, as in list ranges
     1: (1, 13),
     2: (13, 24),
@@ -505,6 +519,7 @@ for _, names in torah_book_names.items():
     TextSource.validate_per_text_source_dict(names)
 for _, names in parsha_names.items():
     TextSource.validate_per_text_source_dict(names)
+TextSource.validate_per_text_source_dict(text_source_languages)
 
 
 class CommentSource:
@@ -562,5 +577,16 @@ comment_source_links = {
     ],
 }
 
+
+comment_source_languages = {
+    CommentSource.SONCHINO: IsoLang.RU,
+    CommentSource.RASHI: IsoLang.RU,
+    CommentSource.RASHI_ALT: IsoLang.RU,
+    CommentSource.IBN_EZRA: IsoLang.RU,
+    CommentSource.RAMBAN: IsoLang.EN,
+    CommentSource.OR_HACHAIM: IsoLang.EN,
+}
+
 CommentSource.validate_per_comment_source_dict(comment_source_names)
 CommentSource.validate_per_comment_source_dict(comment_source_links)
+CommentSource.validate_per_comment_source_dict(comment_source_languages)

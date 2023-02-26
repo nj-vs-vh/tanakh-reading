@@ -4,7 +4,7 @@ import copy
 import itertools
 import logging
 from concurrent.futures import ThreadPoolExecutor
-from typing import Callable, Optional, TypeVar, cast
+from typing import Callable, Optional, TypeVar
 
 import bson
 import pymongo
@@ -13,7 +13,11 @@ from pymongo import MongoClient
 
 from backend import config
 from backend.database.interface import DatabaseInterface
-from backend.metadata import get_book_by_parsha
+from backend.metadata import (
+    comment_source_languages,
+    get_book_by_parsha,
+    text_source_languages,
+)
 from backend.model import (
     ChapterData,
     CommentData,
@@ -27,7 +31,6 @@ from backend.model import (
     TextCoords,
     VerseData,
 )
-from backend.server import edit_comment
 
 logger = logging.getLogger(__name__)
 
@@ -83,6 +86,43 @@ class MongoDatabase(DatabaseInterface):
         await self._awrap(self.texts_coll.create_index, text_coords_index + [("text_source", pymongo.HASHED)])
         await self._awrap(self.comments_coll.create_index, text_coords_index + [("comment_source", pymongo.HASHED)])
         logger.info("Indices created")
+
+        logger.info("Adding languages to stored comments and texts")
+        self.texts_coll.aggregate(
+            [
+                {
+                    "$addFields": {
+                        "language": {
+                            "$switch": {
+                                "branches": [
+                                    {"case": {"$eq": ["$text_source", text_source]}, "then": lang}
+                                    for text_source, lang in text_source_languages.items()
+                                ],
+                            }
+                        }
+                    }
+                },
+                {"$out": self.texts_coll.name},
+            ]
+        )
+        self.comments_coll.aggregate(
+            [
+                {
+                    "$addFields": {
+                        "language": {
+                            "$switch": {
+                                "branches": [
+                                    {"case": {"$eq": ["$comment_source", comment_source]}, "then": lang}
+                                    for comment_source, lang in comment_source_languages.items()
+                                ]
+                            }
+                        }
+                    }
+                },
+                {"$out": self.comments_coll.name},
+            ]
+        )
+        logger.info("Languages added")
 
     # users
 
@@ -279,6 +319,7 @@ def parsha_data_to_texts_and_comments(parsha_data: ParshaData) -> tuple[list[Sto
                         text_coords=text_coords,
                         text_source=text_source,
                         text=text,
+                        language=text_source_languages[text_source],
                     )
                 )
             for comment_source, comments in verse_data["comments"].items():
@@ -290,6 +331,7 @@ def parsha_data_to_texts_and_comments(parsha_data: ParshaData) -> tuple[list[Sto
                             anchor_phrase=comment["anchor_phrase"],
                             comment=comment["comment"],
                             format=comment["format"],
+                            language=comment_source_languages[comment_source],
                             index=index,
                             legacy_id=comment["id"],
                         )
