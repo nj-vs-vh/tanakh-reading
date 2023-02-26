@@ -14,9 +14,9 @@
 
 <div class="container">
     {#each $commentSourcesConfigStore.sourcesOrder as commentSource}
-        {#if verseData.comments[commentSource]
-            .map((commentData) => commentPassesFilters(commentData, commentSource, $commentSourcesConfigStore))
-            .reduce((a, b) => a || b, false)}
+        {#if verseData.comments[commentSource] !== undefined && verseData.comments[commentSource]
+                .map((commentData) => commentPassesFilters(commentData, commentSource, $commentSourcesConfigStore))
+                .reduce((a, b) => a || b, false)}
             <div class="comments-block">
                 <p class="comment-source-name">{commenterNames[commentSource]}</p>
                 {#each verseData.comments[commentSource] as commentData}

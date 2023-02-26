@@ -18,6 +18,7 @@
     import Icon from "../shared/Icon.svelte";
 
     const metadata: Metadata = getContext("metadata");
+    const initialSourcesOrder = $commentSourcesConfigStore.sourcesOrder;
 </script>
 
 <MenuFolder icon="tanakh-book" title="Комментарии">
@@ -29,14 +30,14 @@
                 moveElementInSourceOrder(e.oldIndex, e.newIndex);
             }}
         >
-            {#each Object.entries($commentSourcesConfigStore.filterBySource) as [commentSource, isActive]}
+            {#each initialSourcesOrder as commentSource}
                 <div class="input-with-label">
                     <div class="checkbox-with-grip">
                         <input
                             type="checkbox"
                             id={commentSource}
                             name={commentSource}
-                            checked={isActive}
+                            checked={$commentSourcesConfigStore.filterBySource[commentSource]}
                             on:change={() => toggleCommentFilterBySource(commentSource)}
                         />
                         <div class="grip-handle-container">

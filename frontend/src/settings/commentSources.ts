@@ -100,11 +100,13 @@ export function setCommentFilterByBookmarkMode(mode: CommentFilterByBookmarkMode
 
 export function swapElementsInSourceOrder(oldIndex: number, newIndex: number) {
     commentSourcesConfigStore.update(current => {
-        const el = current.sourcesOrder[oldIndex];
-        console.log(`Moving ${el} ${oldIndex} -> ${newIndex}; before: ${current.sourcesOrder}`)
-        current.sourcesOrder.splice(oldIndex, 1);
-        current.sourcesOrder.splice(newIndex, 0, el)
-        console.log(`...after: ${current.sourcesOrder}`)
+        let sourcesOrder = [...current.sourcesOrder];
+        const el = sourcesOrder[oldIndex];
+        console.log(`Moving ${el} ${oldIndex} -> ${newIndex}; before: ${sourcesOrder}`)
+        sourcesOrder.splice(oldIndex, 1);
+        sourcesOrder.splice(newIndex, 0, el)
+        console.log(`...after: ${sourcesOrder}`)
+        current.sourcesOrder = [...sourcesOrder];
         save(current);
         return current;
     })
