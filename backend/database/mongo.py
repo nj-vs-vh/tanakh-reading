@@ -87,6 +87,30 @@ class MongoDatabase(DatabaseInterface):
         await self._awrap(self.comments_coll.create_index, text_coords_index + [("comment_source", pymongo.HASHED)])
         logger.info("Indices created")
 
+        self._background_task = asyncio.create_task(self.create_text_indices())
+
+    async def create_text_indices(self) -> None:
+        logger.info("Creating text indices in the background")
+
+        def blocking() -> None:
+            logger.info("Changing unsupported languages to none")
+            self.texts_coll.update_many(
+                filter={"language": {"$not": {"$in": ["ru", "en"]}}},
+                update={"$set": {"language": "none"}},
+            )
+            self.comments_coll.update_many(
+                filter={"language": {"$not": {"$in": ["ru", "en"]}}},
+                update={"$set": {"language": "none"}},
+            )
+
+            logger.info("Creating text index for texts collection")
+            self.texts_coll.create_index([("text", pymongo.TEXT)])
+            logger.info("Creating text index for comments collection")
+            self.comments_coll.create_index([("anchor_phrase", pymongo.TEXT), ("comment", pymongo.TEXT)])
+            logger.info("Text indices done")
+
+        await self._awrap(blocking)
+
     # users
 
     async def lookup_user(self, username: str) -> Optional[StoredUser]:
@@ -265,6 +289,46 @@ class MongoDatabase(DatabaseInterface):
         self.parsha_data_cache.pop(text_coords.parsha)
 
 
+def to_mongo_language(iso: str) -> str:
+    return (
+        iso
+        if iso
+        in {  # see https://www.mongodb.com/docs/manual/reference/text-search-languages/#std-label-text-search-languages
+            "danish",
+            "da",
+            "dutch",
+            "nl",
+            "english",
+            "en",
+            "finnish",
+            "fi",
+            "french",
+            "fr",
+            "german",
+            "de",
+            "hungarian",
+            "hu",
+            "italian",
+            "it",
+            "norwegian",
+            "nb",
+            "portuguese",
+            "pt",
+            "romanian",
+            "ro",
+            "russian",
+            "ru",
+            "spanish",
+            "es",
+            "swedish",
+            "sv",
+            "turkish",
+            "tr",
+        }
+        else "none"
+    )
+
+
 def parsha_data_to_texts_and_comments(parsha_data: ParshaData) -> tuple[list[StoredText], list[StoredComment]]:
     stored_texts: list[StoredText] = []
     stored_comments: list[StoredComment] = []
@@ -282,7 +346,7 @@ def parsha_data_to_texts_and_comments(parsha_data: ParshaData) -> tuple[list[Sto
                         text_coords=text_coords,
                         text_source=text_source,
                         text=text,
-                        language=text_source_languages[text_source],
+                        language=to_mongo_language(text_source_languages[text_source]),
                     )
                 )
             for comment_source, comments in verse_data["comments"].items():
@@ -294,7 +358,7 @@ def parsha_data_to_texts_and_comments(parsha_data: ParshaData) -> tuple[list[Sto
                             anchor_phrase=comment["anchor_phrase"],
                             comment=comment["comment"],
                             format=comment["format"],
-                            language=comment_source_languages[comment_source],
+                            language=to_mongo_language(comment_source_languages[comment_source]),
                             index=index,
                             legacy_id=comment["id"],
                         )
