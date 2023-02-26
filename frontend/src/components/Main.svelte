@@ -4,7 +4,7 @@
     import Modal from "svelte-simple-modal";
     import { Router } from "svelte-router-spa";
 
-    import { initCommentFilters } from "../settings/commentFilters";
+    import { initCommentSourcesConfig } from "../settings/commentSources";
     import { initTextDecorationStyle } from "../settings/textDecorationStyle";
     import { initCommentStyle } from "../settings/commentStyle";
     import { initTextSourcesConfig } from "../settings/textSources";
@@ -20,7 +20,7 @@
 
     console.log(metadata);
 
-    initCommentFilters(metadata);
+    initCommentSourcesConfig(metadata);
     initTextSourcesConfig(metadata);
     initTextDecorationStyle();
     initCommentStyle();

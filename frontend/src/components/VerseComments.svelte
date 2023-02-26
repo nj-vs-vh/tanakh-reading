@@ -2,7 +2,7 @@
     import type { Metadata } from "../types";
     import { getContext } from "svelte";
     import type { VerseData } from "../types";
-    import { commentFiltersStore, CommentFilterByBookmarkMode } from "../settings/commentFilters";
+    import { commentSourcesConfigStore, CommentFilterByBookmarkMode } from "../settings/commentSources";
     import VerseComment from "./VerseComment.svelte";
     import { commentPassesFilters } from "../utils";
 
@@ -13,17 +13,17 @@
 </script>
 
 <div class="container">
-    {#each Object.entries(verseData.comments) as [commenter, comments]}
-        {#if comments
-            .map((commentData) => commentPassesFilters(commentData, commenter, $commentFiltersStore))
+    {#each $commentSourcesConfigStore.sourcesOrder as commentSource}
+        {#if verseData.comments[commentSource]
+            .map((commentData) => commentPassesFilters(commentData, commentSource, $commentSourcesConfigStore))
             .reduce((a, b) => a || b, false)}
             <div class="comments-block">
-                <p class="commenter-name">{commenterNames[commenter]}</p>
-                {#each comments as commentData}
+                <p class="comment-source-name">{commenterNames[commentSource]}</p>
+                {#each verseData.comments[commentSource] as commentData}
                     {#if // prettier-ignore
-                    $commentFiltersStore.byBookmarkMode === CommentFilterByBookmarkMode.NONE
+                    $commentSourcesConfigStore.filterByBookmarkMode === CommentFilterByBookmarkMode.NONE
                     || (
-                        $commentFiltersStore.byBookmarkMode === CommentFilterByBookmarkMode.MY
+                        $commentSourcesConfigStore.filterByBookmarkMode === CommentFilterByBookmarkMode.MY
                         && commentData.is_starred_by_me === true
                     )}
                         <VerseComment {commentData} />
@@ -39,7 +39,7 @@
         margin: 0.2em;
     }
 
-    p.commenter-name {
+    p.comment-source-name {
         color: rgb(80, 80, 80);
         margin: 0.3em 0;
     }

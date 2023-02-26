@@ -5,12 +5,12 @@
     import WikiStyleLinks from "./WikiStyleLinks.svelte";
 
     import {
-        commentFiltersStore,
+        commentSourcesConfigStore,
         toggleCommentFilterBySource,
         setCommentFilterBySource,
         setCommentFilterByBookmarkMode,
         CommentFilterByBookmarkMode,
-    } from "../../settings/commentFilters";
+    } from "../../settings/commentSources";
     import type { Metadata } from "../../types";
 
     const metadata: Metadata = getContext("metadata");
@@ -18,21 +18,21 @@
 
 <MenuFolder icon="tanakh-book" title="Комментарии">
     <MenuFolderBlock title="Фильтр по авторам">
-        {#each Object.entries($commentFiltersStore.bySource) as [commenter, isActive]}
+        {#each Object.entries($commentSourcesConfigStore.filterBySource) as [commentSource, isActive]}
             <div class="input-with-label">
                 <input
                     type="checkbox"
-                    id={commenter}
-                    name={commenter}
+                    id={commentSource}
+                    name={commentSource}
                     checked={isActive}
-                    on:change={() => toggleCommentFilterBySource(commenter)}
+                    on:change={() => toggleCommentFilterBySource(commentSource)}
                 />
-                <label for={commenter}>
+                <label for={commentSource}>
                     <span>
                         <span>
-                            {metadata.commenter_names[commenter]}
+                            {metadata.commenter_names[commentSource]}
                         </span>
-                        <WikiStyleLinks urls={metadata.commenter_links[commenter]} />
+                        <WikiStyleLinks urls={metadata.commenter_links[commentSource]} />
                     </span>
                 </label>
             </div>
@@ -42,12 +42,12 @@
                 type="checkbox"
                 id="all"
                 name="all"
-                checked={Object.values($commentFiltersStore.bySource).reduce((f1, f2) => f1 && f2, true)}
+                checked={Object.values($commentSourcesConfigStore.filterBySource).reduce((f1, f2) => f1 && f2, true)}
                 on:change={(e) => {
                     const newFilterBySource = {};
-                    for (const commenter of Object.keys($commentFiltersStore.bySource)) {
+                    for (const commentSource of Object.keys($commentSourcesConfigStore.filterBySource)) {
                         // @ts-ignore
-                        newFilterBySource[commenter] = e.target.checked;
+                        newFilterBySource[commentSource] = e.target.checked;
                     }
                     setCommentFilterBySource(newFilterBySource);
                 }}
@@ -63,7 +63,7 @@
                         type="radio"
                         id={mode}
                         name={mode}
-                        checked={mode == $commentFiltersStore.byBookmarkMode}
+                        checked={mode == $commentSourcesConfigStore.filterByBookmarkMode}
                         on:change={(e) => {
                             // @ts-ignore
                             setCommentFilterByBookmarkMode(e.target.name);

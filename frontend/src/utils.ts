@@ -1,4 +1,4 @@
-import { CommentFilterByBookmarkMode, CommentFilters } from "./settings/commentFilters";
+import { CommentFilterByBookmarkMode, CommentSourcesConfig } from "./settings/commentSources";
 import type { CommentData, ParshaData, VerseData } from "./types";
 
 export function getUrlHash(): string {
@@ -102,17 +102,17 @@ export const sleep = (delaySec: number) => {
 }
 
 
-export function commentPassesFilters(commentData: CommentData, commenter: string, filters: CommentFilters): boolean {
-    if (filters.byBookmarkMode == CommentFilterByBookmarkMode.MY && commentData.is_starred_by_me !== true) return false;
-    if (filters.bySource[commenter] !== true) return false;
+export function commentPassesFilters(commentData: CommentData, commentSource: string, commentSourcesConfig: CommentSourcesConfig): boolean {
+    if (commentSourcesConfig.filterByBookmarkMode == CommentFilterByBookmarkMode.MY && commentData.is_starred_by_me !== true) return false;
+    if (commentSourcesConfig.filterBySource[commentSource] !== true) return false;
     return true;
 }
 
 
-export function anyCommentPassesFilters(verseData: VerseData, filters: CommentFilters): boolean {
-    for (const [commenter, comments] of Object.entries(verseData.comments)) {
+export function anyCommentPassesFilters(verseData: VerseData, commentSourcesConfig: CommentSourcesConfig): boolean {
+    for (const [commentSource, comments] of Object.entries(verseData.comments)) {
         for (const commentData of comments) {
-            if (commentPassesFilters(commentData, commenter, filters)) return true;
+            if (commentPassesFilters(commentData, commentSource, commentSourcesConfig)) return true;
         }
     }
     return false;

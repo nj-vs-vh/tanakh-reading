@@ -8,7 +8,7 @@
     import { TextDecorationStyle, textDecorationStyleStore } from "../settings/textDecorationStyle";
     import { CommentStyle, commentStyleStore } from "../settings/commentStyle";
     import { textSourcesConfigStore } from "../settings/textSources";
-    import { CommentFilters, commentFiltersStore } from "../settings/commentFilters";
+    import { CommentSourcesConfig, commentSourcesConfigStore } from "../settings/commentSources";
     import { TextDecorationSettings, textDecorationSettingsStore } from "../settings/textDecorationSettings";
 
     import type { Metadata, ParshaData, VerseData, ChapterData } from "../types";
@@ -49,9 +49,9 @@
         mainTextSource = config.main;
         isMainTextHebrew = isHebrewTextSource(mainTextSource);
     });
-    let commentFilters: CommentFilters;
-    commentFiltersStore.subscribe((v) => {
-        commentFilters = v;
+    let commentSourcesConfig: CommentSourcesConfig;
+    commentSourcesConfigStore.subscribe((v) => {
+        commentSourcesConfig = v;
     });
 
     export let parshaData: ParshaData;
@@ -117,7 +117,7 @@
     $: {
         isDecorated = (verseData: VerseData): boolean => {
             if (textDecorationSettings.onlyDecorateTextWithComments) {
-                return anyCommentPassesFilters(verseData, commentFilters);
+                return anyCommentPassesFilters(verseData, commentSourcesConfig);
             } else return true;
         };
         isClickableText = (v) => textDecorationStyle === TextDecorationStyle.CLICKABLE_TEXT && isDecorated(v);
