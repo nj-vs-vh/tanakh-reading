@@ -1,5 +1,7 @@
 <script lang="ts">
     import { getContext } from "svelte";
+    import { SortableList } from "@jhubbardsf/svelte-sortablejs";
+
     import MenuFolder from "./MenuFolder.svelte";
     import MenuFolderBlock from "./MenuFolderBlock.svelte";
     import WikiStyleLinks from "./WikiStyleLinks.svelte";
@@ -10,33 +12,48 @@
         setCommentFilterBySource,
         setCommentFilterByBookmarkMode,
         CommentFilterByBookmarkMode,
+        swapElementsInSourceOrder as moveElementInSourceOrder,
     } from "../../settings/commentSources";
     import type { Metadata } from "../../types";
+    import Icon from "../shared/Icon.svelte";
 
     const metadata: Metadata = getContext("metadata");
 </script>
 
 <MenuFolder icon="tanakh-book" title="Комментарии">
     <MenuFolderBlock title="Фильтр по авторам">
-        {#each Object.entries($commentSourcesConfigStore.filterBySource) as [commentSource, isActive]}
-            <div class="input-with-label">
-                <input
-                    type="checkbox"
-                    id={commentSource}
-                    name={commentSource}
-                    checked={isActive}
-                    on:change={() => toggleCommentFilterBySource(commentSource)}
-                />
-                <label for={commentSource}>
-                    <span>
+        <SortableList
+            class="sortable-class-unused"
+            handle=".checkbox-with-grip"
+            onSort={(e) => {
+                moveElementInSourceOrder(e.oldIndex, e.newIndex);
+            }}
+        >
+            {#each Object.entries($commentSourcesConfigStore.filterBySource) as [commentSource, isActive]}
+                <div class="input-with-label">
+                    <div class="checkbox-with-grip">
+                        <input
+                            type="checkbox"
+                            id={commentSource}
+                            name={commentSource}
+                            checked={isActive}
+                            on:change={() => toggleCommentFilterBySource(commentSource)}
+                        />
+                        <div class="grip-handle-container">
+                            <Icon icon="grip" heightEm={1} />
+                        </div>
+                    </div>
+                    <label for={commentSource}>
                         <span>
-                            {metadata.commenter_names[commentSource]}
+                            <span>
+                                {metadata.commenter_names[commentSource]}
+                            </span>
+                            <WikiStyleLinks urls={metadata.commenter_links[commentSource]} />
                         </span>
-                        <WikiStyleLinks urls={metadata.commenter_links[commentSource]} />
-                    </span>
-                </label>
-            </div>
-        {/each}
+                    </label>
+                </div>
+            {/each}
+        </SortableList>
         <div class="input-with-label">
             <input
                 type="checkbox"
@@ -75,3 +92,16 @@
         </MenuFolderBlock>
     {/if}
 </MenuFolder>
+
+<style>
+    .grip-handle-container {
+        cursor: grab;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .grip-handle-container:active {
+        cursor: grabbing;
+    }
+</style>
