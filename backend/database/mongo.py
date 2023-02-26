@@ -67,28 +67,22 @@ class MongoDatabase(DatabaseInterface):
     async def create_indices(self) -> None:
         logger.info("Creating indices in Mongo")
         await self._awrap(self.users_coll.create_index, [("username", pymongo.HASHED)])
+
         await self._awrap(self.signup_tokens_coll.create_index, [("token", pymongo.HASHED)])
         await self._awrap(self.signup_tokens_coll.create_index, [("creator_username", pymongo.HASHED)])
-        await self._awrap(self.starred_comments_coll.create_index, [("comment_id", pymongo.HASHED)])
-        await self._awrap(
-            self.starred_comments_coll.create_index,
-            [
-                ("starrer_username", pymongo.HASHED),
-                ("parsha", pymongo.ASCENDING),
-                ("chapter", pymongo.ASCENDING),
-                ("verse", pymongo.ASCENDING),
-            ],
-        )
-        logger.info("Indices created")
 
-        logger.info("Migrating starred-comments collection")
-        self.starred_comments_coll.aggregate(
-            [
-                {"$project": {"comment_id": True, "starrer_username": True}},
-                {"$out": "starred-comments"},
-            ]
-        )
-        logger.info("Migration done")
+        await self._awrap(self.starred_comments_coll.create_index, [("starrer_username", pymongo.HASHED)])
+
+        await self._awrap(self.access_tokens_coll.create_index, [("token", pymongo.HASHED)])
+
+        text_coords_index = [
+            ("text_coords.parsha", pymongo.ASCENDING),
+            ("text_coords.chapter", pymongo.ASCENDING),
+            ("text_coords.verse", pymongo.ASCENDING),
+        ]
+        await self._awrap(self.texts_coll.create_index, text_coords_index + [("text_source", pymongo.HASHED)])
+        await self._awrap(self.comments_coll.create_index, text_coords_index + [("comment_source", pymongo.HASHED)])
+        logger.info("Indices created")
 
     # users
 
