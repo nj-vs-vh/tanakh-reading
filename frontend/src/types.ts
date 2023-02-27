@@ -74,3 +74,29 @@ export interface LoggedInUser {
     invited_by_username: string;
     is_editor: boolean;
 }
+
+// new style text and coords storage interfaces
+
+export interface TextCoords {
+    parsha: number;
+    chapter: number;
+    verse: number;
+}
+
+export interface FoundText {
+    text_coords: TextCoords;
+    text_source: string;
+    text: string;
+    language: string;
+}
+
+export interface FoundComment {
+    text_coords: TextCoords;
+    comment_source: string;
+    anchor_phrase: string | null;
+    comment: string;
+    format: CommentFormat;
+    language: string;
+    index: number;
+    legacy_id: string | null;
+}

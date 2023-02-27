@@ -138,11 +138,13 @@
         <div>
             <p class="header-info">
                 Книга
-                <strong>{parshaData.book} {metadata.book_names[parshaData.book][mainTextSource]}</strong>
+                <strong>{parshaData.book}</strong>:
+                <strong>{metadata.book_names[parshaData.book][mainTextSource]}</strong>
             </p>
             <p class="header-info">
                 Недельный раздел
-                <strong>{parshaData.parsha} {metadata.parsha_names[parshaData.parsha][mainTextSource]}</strong>
+                <strong>{parshaData.parsha}</strong>:
+                <strong>{metadata.parsha_names[parshaData.parsha][mainTextSource]}</strong>
             </p>
             <p class="header-info">
                 <span style="white-space: nowrap;">
@@ -224,7 +226,6 @@
     div.page {
         display: flex;
         justify-content: center;
-        align-items: center;
     }
 
     div.container {

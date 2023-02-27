@@ -8,7 +8,7 @@
 
     import { cmpVerseCoords, range, string2verseCoords, VerseCoords, versePath } from "../../utils";
     import { navigateTo } from "svelte-router-spa";
-    import Icon from "../shared/Icon.svelte";
+    import SearchButton from "../shared/SearchButton.svelte";
 
     const metadata: Metadata = getContext("metadata");
     const latestParsha = metadata.available_parsha[metadata.available_parsha.length - 1];
@@ -90,9 +90,7 @@
                     searchResultsNote = "";
                 }}
             />
-            <button on:click={findVerse}>
-                <Icon icon="search" heightEm={1.2} />
-            </button>
+            <SearchButton on:click={findVerse} />
         </div>
         <div id="search-results-note" style={searchResultsNote === "" ? "display: none;" : ""}>
             {searchResultsNote}
@@ -102,9 +100,7 @@
         <div class="search-bar-container">
             <Keydown on:Enter={fullTextSearch} />
             <input type="text" placeholder="" bind:value={currentSearchQueryInput} />
-            <button on:click={fullTextSearch}>
-                <Icon icon="search" heightEm={1.2} />
-            </button>
+            <SearchButton on:click={fullTextSearch} />
         </div>
     </MenuFolderBlock>
 </MenuFolder>
@@ -124,14 +120,6 @@
 
     #chapter-verse-input {
         max-width: 25%;
-    }
-
-    button {
-        width: 3em;
-        cursor: pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
 
     #search-results-note {

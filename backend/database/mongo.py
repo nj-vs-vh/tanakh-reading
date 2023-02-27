@@ -28,7 +28,7 @@ from backend.model import (
     ChapterData,
     CommentData,
     EditedComment,
-    FoundMatches,
+    FoundMatch,
     ParshaData,
     SearchTextResult,
     SignupToken,
@@ -466,13 +466,13 @@ class MongoDatabase(DatabaseInterface):
                         (doc["parsha"], doc["chapter"], doc["verse"])
                     ] = texts_and_comments_to_parsha_data(verse_texts, verse_comments)
 
-            found_matches = list[FoundMatches]()
+            found_matches = list[FoundMatch]()
             for toc in texts_and_comments:
                 parsha_data = verse_parsha_data_by_coords.get(toc_to_coord_triplet(toc))
                 if isinstance(toc, StoredText):
-                    found_matches.append(FoundMatches(text=toc, parsha_data=parsha_data))
+                    found_matches.append(FoundMatch(text=toc, parsha_data=parsha_data))
                 else:
-                    found_matches.append(FoundMatches(comment=toc, parsha_data=parsha_data))
+                    found_matches.append(FoundMatch(comment=toc, parsha_data=parsha_data))
 
             return SearchTextResult(
                 found_matches=found_matches,

@@ -220,7 +220,7 @@ class StoredComment(DbSchemaModel):
 # search result models
 
 
-class FoundMatches(PydanticModel):
+class FoundMatch(PydanticModel):
     text: Optional[StoredText] = None
     comment: Optional[StoredComment] = None
     # single-chapter and single-verse parsha data ready for rendering
@@ -235,6 +235,6 @@ class FoundMatches(PydanticModel):
 
 
 class SearchTextResult(PydanticModel):
-    found_matches: list[FoundMatches]
+    found_matches: list[FoundMatch]
     total_matched_texts: Optional[int]
     total_matched_comments: Optional[int]
