@@ -74,10 +74,7 @@ class MongoDatabase(DatabaseInterface):
 
     async def _awrap(self, func: Callable[..., T], *args, **kwargs) -> T:
         def wrapped_func():
-            try:
-                return func(*args, **kwargs)
-            except Exception:
-                logger.exception("Error in _awrap-ped func")
+            return func(*args, **kwargs)
 
         return await asyncio.get_running_loop().run_in_executor(self.threads, wrapped_func)
 
@@ -272,9 +269,11 @@ class MongoDatabase(DatabaseInterface):
     # parsha data
 
     async def get_parsha_data(self, index: int) -> Optional[ParshaData]:
-        def blocking(parsha: int):
+        def blocking(parsha: int) -> Optional[ParshaData]:
             query = {"text_coords.parsha": parsha}
             texts = [StoredText.from_mongo_db(d) for d in self.texts_coll.find(query)]
+            if not texts:
+                return None
             comments = [StoredComment.from_mongo_db(d) for d in self.comments_coll.find(query)]
             return texts_and_comments_to_parsha_data(texts, comments)
 
