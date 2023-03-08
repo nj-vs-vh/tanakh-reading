@@ -1,13 +1,14 @@
 <script lang="ts">
+    import { navigateTo } from "svelte-router-spa";
+    import Keydown from "svelte-keydown";
+
     import MenuFolder from "./MenuFolder.svelte";
     import MenuFolderBlock from "./MenuFolderBlock.svelte";
     import { createEventDispatcher, getContext } from "svelte";
     import type { Metadata } from "../../types";
     import { textSourcesConfigStore } from "../../settings/textSources";
-    import Keydown from "svelte-keydown";
 
     import { cmpVerseCoords, range, string2verseCoords, VerseCoords, versePath } from "../../utils";
-    import { navigateTo } from "svelte-router-spa";
     import SearchButton from "../shared/SearchButton.svelte";
 
     const metadata: Metadata = getContext("metadata");
@@ -65,8 +66,7 @@
 
     let currentSearchQueryInput: string = "";
     function fullTextSearch() {
-        currentSearchQueryInput = "";
-        window.alert(currentSearchQueryInput);
+        navigateTo(`/search#${encodeURIComponent(currentSearchQueryInput)}`);
     }
 </script>
 
