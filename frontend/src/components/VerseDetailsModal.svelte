@@ -2,15 +2,13 @@
     import { getContext, onDestroy } from "svelte";
     import Keydown from "svelte-keydown";
     import { swipe } from "svelte-gestures";
-    import type { Metadata, ParshaData, VerseData } from "../types";
+    import type { ParshaData, VerseData } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
     import VerseComments from "./VerseComments.svelte";
     import Icon from "./shared/Icon.svelte";
     import { areInsideVerseCoordsList, getVerseCoords, VerseCoords, versePath, verseCoords2string } from "../utils";
     import { isEditingStore } from "../editing";
-    import VerseText from "./VerseText.svelte";
-
-    const metadata: Metadata = getContext("metadata");
+    import VerseTextBadge from "./VerseTextBadge.svelte";
 
     let textSources: Array<string>;
 
@@ -106,18 +104,7 @@
     onDestroy(textSourcesConfigStoreUnsubscribe);
 </script>
 
-<Keydown
-    on:ArrowRight={nextVerse}
-    on:ArrowLeft={prevVerse}
-    on:combo={(e) => {
-        // console.log(`Current store value: ${$isEditingStore}`);
-        if (metadata.logged_in_user !== null && metadata.logged_in_user.is_editor && e.detail === "Control-q") {
-            isEditingStore.set(true);
-        } else {
-            // console.log(`Ignored combo: ${e.detail}`);
-        }
-    }}
-/>
+<Keydown on:ArrowRight={nextVerse} on:ArrowLeft={prevVerse} />
 <div
     class="container"
     bind:this={containerEl}
@@ -147,12 +134,10 @@
         </span>
     </p>
     {#each textSources as textSource}
-        <VerseText
-            verseData={currentVerseData}
+        <VerseTextBadge
+            textId={currentVerseData.text_ids[textSource]}
+            text={currentVerseData.text[textSource]}
             {textSource}
-            parsha={parsha.parsha}
-            chapter={currentVerseCoords.chapter}
-            verse={currentVerseCoords.verse}
         />
     {/each}
     <VerseComments verseData={currentVerseData} />

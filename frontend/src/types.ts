@@ -15,21 +15,22 @@ export interface CommentData {
 
 export interface VerseData {
     verse: number;
-    text: Record<string, string>
-    comments: Record<string, Array<CommentData>>
+    text: Record<string, string>;
+    text_ids: Record<string, string>;
+    comments: Record<string, Array<CommentData>>;
 }
 
 
 export interface ChapterData {
     chapter: number;
-    verses: Array<VerseData>
+    verses: Array<VerseData>;
 }
 
 
 export interface ParshaData {
     book: number;
     parsha: number;
-    chapters: Array<ChapterData>
+    chapters: Array<ChapterData>;
 }
 
 
@@ -84,6 +85,7 @@ export interface TextCoords {
 }
 
 export interface FoundText {
+    id: string;
     text_coords: TextCoords;
     text_source: string;
     text: string;
@@ -91,6 +93,7 @@ export interface FoundText {
 }
 
 export interface FoundComment {
+    id: string;
     text_coords: TextCoords;
     comment_source: string;
     anchor_phrase: string | null;

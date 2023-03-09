@@ -310,29 +310,22 @@ class MongoDatabase(DatabaseInterface):
         return list(self.parsha_data_cache.keys())
 
     async def edit_comment(self, comment_id: bson.ObjectId, edited_comment: EditedComment) -> None:
-        await self._awrap(
-            self.comments_coll.update_one,
+        comment_doc = await self._awrap(
+            self.comments_coll.find_one_and_update,
             {"_id": comment_id},
             {"$set": edited_comment.to_public_json()},
         )
-        comment_doc = await self._awrap(self.comments_coll.find_one, {"_id": comment_id})
-        if comment_doc is None:
-            raise ValueError(f"Comment not found: {comment_id}")
         comment = StoredComment.from_mongo_db(comment_doc)
         self.parsha_data_cache.pop(comment.text_coords.parsha, None)
 
-    async def edit_text(self, text_coords: TextCoords, text_source_key: str, text: str) -> None:
-        await self._awrap(
-            self.texts_coll.update_one,
-            {
-                "text_coords.parsha": text_coords.parsha,
-                "text_coords.chapter": text_coords.chapter,
-                "text_coords.verse": text_coords.verse,
-                "text_source": text_source_key,
-            },
+    async def edit_text(self, text_id: bson.ObjectId, text: str) -> None:
+        text_doc = await self._awrap(
+            self.texts_coll.find_one_and_update,
+            {"_id": text_id},
             {"$set": {"text": text}},
         )
-        self.parsha_data_cache.pop(text_coords.parsha)
+        stored_text = StoredText.from_mongo_db(text_doc)
+        self.parsha_data_cache.pop(stored_text.text_coords.parsha)
 
     async def search_text(
         self,
@@ -536,6 +529,7 @@ def parsha_data_to_texts_and_comments(parsha_data: ParshaData) -> tuple[list[Sto
             for text_source, text in verse_data["text"].items():
                 stored_texts.append(
                     StoredText(
+                        # not parsing text ids from parsha data here, because this is used only for saving new data to DB
                         text_coords=text_coords,
                         text_source=text_source,
                         text=text,
@@ -601,6 +595,7 @@ def texts_and_comments_to_parsha_data(texts: list[StoredText], comments: list[St
                 VerseData(
                     verse=verse,
                     text={vt.text_source: vt.text for vt in verse_texts},
+                    text_ids={vt.text_source: str(vt.db_id) for vt in verse_texts},
                     comments=verse_data_by_source,
                 )
             )

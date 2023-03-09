@@ -194,8 +194,7 @@ export async function editComment(request: EditCommentRequest): Promise<null> {
 
 
 interface EditTextRequest {
-    text_coords: TextCoords;
-    text_source_key: string;
+    id: string,
     text: string;
 }
 
@@ -234,7 +233,7 @@ export interface SearchTextRequest {
     with_verse_parsha_data: boolean;
 }
 
-interface FoundMatch {
+export interface FoundMatch {
     text: FoundText | null;
     comment: FoundComment | null;
     parsha_data: ParshaData | null;  // null = was not requested
@@ -248,15 +247,19 @@ export interface SearchTextResponse {
 }
 
 export async function searchText(request: SearchTextRequest): Promise<SearchTextResponse> {
+    console.log(`Params for text search:`);
+    console.log(request);
     let parts = new Array<string>();
     parts.push(`query=${encodeURIComponent(request.query)}`);
     parts.push(`page=${encodeURIComponent(request.page)}`);
     parts.push(`page_size=${encodeURIComponent(request.page_size)}`);
     parts.push(`sorting=${encodeURIComponent(request.sorting)}`);
-    for (const searchInOption in request.search_in) {
+    for (const searchInOption of request.search_in) {
         parts.push(`search_in=${encodeURIComponent(searchInOption)}`);
+
     }
-    parts.push(`with_verse_parsha_data=${encodeURIComponent(request.with_verse_parsha_data)}`);
+    if (request.with_verse_parsha_data)
+        parts.push(`with_verse_parsha_data=true`);
     const query = parts.join("&")
     const requestUrl = `${BASE_API_URL}/search-text?${query}`;
     console.log(`Generated request URL for text search: ${requestUrl}`)

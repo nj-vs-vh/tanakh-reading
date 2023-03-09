@@ -178,8 +178,7 @@ async def edit_text(request: web.Request) -> web.Response:
     logger.info(f"Editing text: {edit_text_request}")
     db = get_db(request)
     await db.edit_text(
-        text_coords=edit_text_request.text_coords,
-        text_source_key=edit_text_request.text_source_key,
+        text_id=edit_text_request.id,
         text=edit_text_request.text,
     )
     return web.Response()

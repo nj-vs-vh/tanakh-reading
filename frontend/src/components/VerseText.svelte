@@ -1,18 +1,13 @@
 <script lang="ts">
-    import { getContext, onDestroy } from "svelte";
+    import { onDestroy } from "svelte";
     import { editText } from "../api";
     import { isEditingStore } from "../editing";
-    import type { Metadata, VerseData } from "../types";
     import { isHebrewTextSource } from "../utils";
     import Hoverable from "./shared/Hoverable.svelte";
 
-    const metadata: Metadata = getContext("metadata");
-
-    export let verseData: VerseData;
+    export let textId: string;
+    export let text: string;
     export let textSource: string;
-    export let parsha: number;
-    export let chapter: number;
-    export let verse: number;
 
     let isHovering = false;
     let isEditing = false;
@@ -23,21 +18,16 @@
             isEditing = false;
         } else if (isHovering) {
             isEditing = true;
-            editedText = verseData.text[textSource];
+            editedText = text;
         }
     });
 
     async function saveEditedText() {
-        verseData.text[textSource] = editedText;
+        text = editedText;
         isEditingStore.set(false);
         isHovering = false;
         await editText({
-            text_coords: {
-                parsha: parsha,
-                chapter: chapter,
-                verse: verse,
-            },
-            text_source_key: textSource,
+            id: textId,
             text: editedText,
         });
     }
@@ -55,38 +45,13 @@
             </div>
         </div>
     {:else}
-        <div class="verse-text-container">
-            <blockquote style={isHebrewTextSource(textSource) ? "text-align: right; font-size: x-large;" : ""}>
-                {verseData.text[textSource]}
-            </blockquote>
-            <span class="verse-text-source-mark">
-                {metadata.text_source_marks[textSource]}
-            </span>
-        </div>
+        <span style={isHebrewTextSource(textSource) ? "text-align: right; font-size: x-large;" : ""}>
+            {text}
+        </span>
     {/if}
 </Hoverable>
 
 <style>
-    blockquote {
-        margin: 0.1em;
-        padding: 0.1em 0.1em 0.1em 0.5em;
-        border-left: solid rgb(179, 179, 179) 2px;
-        color: rgb(68, 68, 68);
-        width: 95%;
-    }
-
-    span.verse-text-source-mark {
-        padding-left: 0.2em;
-    }
-
-    .verse-text-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin: 0.3em 0.5em 0.9em 0.1em;
-        color: grey;
-    }
-
     div.edited-text {
         display: flex;
         flex-direction: column;

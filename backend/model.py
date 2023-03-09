@@ -31,6 +31,9 @@ class CommentData(TypedDict):
 class VerseData(TypedDict):
     verse: int
     text: dict[str, str]
+    # not parsed, but returned to frontend from DB
+    # text_ids object has the same keys as text, returned separately only for backwards compatibility
+    text_ids: NotRequired[dict[str, str]]  
     comments: dict[str, list[CommentData]]
 
 
@@ -74,11 +77,11 @@ class PydanticModel(BaseModel):
         return self.dict()  # Config/Field-level excludes are respected
 
 
-UNSET_DB_IT = ObjectId(b"0" * 12)
+UNSET_DB_ID = ObjectId(b"0" * 12)
 
 
 class DbSchemaModel(PydanticModel):
-    db_id: PydanticObjectId = Field(default=UNSET_DB_IT, exclude=True)
+    db_id: PydanticObjectId = Field(default=UNSET_DB_ID, exclude=True)
 
     class Config:
         json_encoders = {
@@ -86,11 +89,11 @@ class DbSchemaModel(PydanticModel):
         }
 
     def is_stored(self) -> bool:
-        return self.db_id != UNSET_DB_IT
+        return self.db_id != UNSET_DB_ID
 
     def to_mongo_db(self) -> dict[str, Any]:
         dump = self.dict()
-        if self.db_id != UNSET_DB_IT:
+        if self.db_id != UNSET_DB_ID:
             dump["_id"] = self.db_id
         return dump
 
@@ -107,7 +110,15 @@ class DbSchemaModel(PydanticModel):
         return self.copy(update={"db_id": insert_one_result.inserted_id})
 
     def upserted_as(self: T, update_one_result: UpdateResult) -> T:
-        return self.copy(update={"db_id": update_one_result.upserted_id or UNSET_DB_IT})
+        return self.copy(update={"db_id": update_one_result.upserted_id or UNSET_DB_ID})
+
+
+class PublicIdDbSchemaModel(DbSchemaModel):
+    def to_public_json(self) -> dict[str, Any]:
+        raw = super().to_public_json()
+        if self.db_id != UNSET_DB_ID:
+            raw["id"] = str(self.db_id)
+        return raw
 
 
 # user / account models
@@ -169,8 +180,7 @@ class TextCoords(PydanticModel):
 
 
 class EditTextRequest(PydanticModel):
-    text_coords: TextCoords
-    text_source_key: str
+    id: PydanticObjectId
     text: str
 
 
@@ -187,7 +197,7 @@ class EditCommentRequest(PydanticModel):
 # text and comment storage models
 
 
-class StoredText(DbSchemaModel):
+class StoredText(PublicIdDbSchemaModel):
     text_coords: TextCoords
     text_source: str
     text: str
@@ -200,7 +210,7 @@ class StoredText(DbSchemaModel):
         return text_source
 
 
-class StoredComment(DbSchemaModel):
+class StoredComment(PublicIdDbSchemaModel):
     text_coords: TextCoords
     comment_source: str
     anchor_phrase: Optional[str]

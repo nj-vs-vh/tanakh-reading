@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Keydown from "svelte-keydown";
     import type { Metadata } from "../types";
     import { setContext } from "svelte";
     import Modal from "svelte-simple-modal";
@@ -49,5 +50,13 @@
         isEditingStore.set(false);
     }}
 >
+    <Keydown
+        on:combo={(e) => {
+            if (metadata.logged_in_user !== null && metadata.logged_in_user.is_editor && e.detail === "Control-q") {
+                isEditingStore.set(true);
+                console.log(`isEditingStore set to true`);
+            }
+        }}
+    />
     <Router {routes} />
 </Modal>

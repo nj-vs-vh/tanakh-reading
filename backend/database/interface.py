@@ -124,7 +124,7 @@ class DatabaseInterface(abc.ABC):
         ...
 
     @abc.abstractmethod
-    async def edit_text(self, text_coords: TextCoords, text_source_key: str, text: str) -> None:
+    async def edit_text(self, text_id: ObjectId, text: str) -> None:
         ...
 
     # full text search
