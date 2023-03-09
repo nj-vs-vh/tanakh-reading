@@ -1,5 +1,7 @@
 <script lang="ts">
     import Keydown from "svelte-keydown";
+    import { inview } from "svelte-inview";
+
     import { searchText, SearchTextIn, SearchTextResponse, SearchTextSorting } from "../api";
     import Menu from "../components/Menu.svelte";
     import SearchResultEntry from "../components/SearchResultEntry.svelte";
@@ -11,19 +13,19 @@
     let currentQuery = decodeURIComponent(window.location.hash.split("#").pop());
 
     let nextPageToFetch = 0;
-    let pageSize = 50;
+    let pageSize = 10;
     let sorting = SearchTextSorting.START_TO_END;
     let searchIn = [SearchTextIn.COMMENTS, SearchTextIn.TEXTS];
 
     let currentSearchTextResponse: SearchTextResponse | null = null;
     let isLoading = false;
 
-    async function search() {
+    async function loadSearchResponse() {
         window.location.hash = encodeURIComponent(currentQuery);
         isLoading = true;
         // await sleep(1);
         try {
-            currentSearchTextResponse = await searchText({
+            return await searchText({
                 query: currentQuery,
                 page: nextPageToFetch,
                 page_size: pageSize,
@@ -31,28 +33,39 @@
                 search_in: searchIn,
                 with_verse_parsha_data: false,
             });
-            // currentSearchTextResponse = {
-            //     found_matches: currentSearchTextResponse.found_matches.concat(newSearchTextResponse.found_matches),
-            //     total_matched_comments: currentSearchTextResponse.total_matched_comments,
-            //     total_matched_texts: currentSearchTextResponse.total_matched_texts,
-            // };
         } finally {
             isLoading = false;
         }
     }
 
+    async function newSearch() {
+        currentSearchTextResponse = null;
+        nextPageToFetch = 0;
+        currentSearchTextResponse = await loadSearchResponse();
+    }
+
+    async function loadMoreSearchResults() {
+        nextPageToFetch += 1;
+        let newSearchTextResponse = await loadSearchResponse();
+        currentSearchTextResponse = {
+            found_matches: currentSearchTextResponse.found_matches.concat(newSearchTextResponse.found_matches),
+            total_matched_comments: currentSearchTextResponse.total_matched_comments,
+            total_matched_texts: currentSearchTextResponse.total_matched_texts,
+        };
+    }
+
     if (currentQuery.length > 0) {
-        search();
+        newSearch();
     }
 </script>
 
 <Menu homeButton />
 <Hero>
-    <div>
+    <div id="query-controls">
         <div id="query-input-row">
             <input id="query-input" type="text" bind:value={currentQuery} />
-            <SearchButton on:click={search} />
-            <Keydown on:Enter={search} />
+            <SearchButton on:click={newSearch} />
+            <Keydown on:Enter={newSearch} />
         </div>
     </div>
     {#if currentSearchTextResponse !== null}
@@ -62,12 +75,29 @@
             </div>
         {/each}
     {/if}
+    <div
+        use:inview={{}}
+        on:enter={async (e) => {
+            const { inView } = e.detail;
+            if (currentSearchTextResponse !== null) {
+                // i.e. if the initial load is completed
+                if (inView) {
+                    await loadMoreSearchResults();
+                }
+            }
+        }}
+    />
     {#if isLoading}
         <Spinner sizeEm={3} />
     {/if}
 </Hero>
 
 <style>
+    #query-controls {
+        font-size: large;
+        margin-top: 2em;
+    }
+
     #query-input {
         margin-right: 0.4em;
         flex-grow: 100;

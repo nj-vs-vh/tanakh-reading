@@ -85,7 +85,7 @@ export interface TextCoords {
 }
 
 export interface FoundText {
-    id: string;
+    db_id: string;
     text_coords: TextCoords;
     text_source: string;
     text: string;
@@ -93,7 +93,7 @@ export interface FoundText {
 }
 
 export interface FoundComment {
-    id: string;
+    db_id: string;
     text_coords: TextCoords;
     comment_source: string;
     anchor_phrase: string | null;

@@ -313,7 +313,7 @@ class MongoDatabase(DatabaseInterface):
         comment_doc = await self._awrap(
             self.comments_coll.find_one_and_update,
             {"_id": comment_id},
-            {"$set": edited_comment.to_public_json()},
+            {"$set": edited_comment.dict()},
         )
         comment = StoredComment.from_mongo_db(comment_doc)
         self.parsha_data_cache.pop(comment.text_coords.parsha, None)

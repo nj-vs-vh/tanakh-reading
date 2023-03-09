@@ -1,4 +1,5 @@
 import asyncio
+import json
 import logging
 import re
 import secrets
@@ -89,9 +90,9 @@ async def get_authorized_user(request: web.Request) -> tuple[StoredUser, str]:
 async def get_metadata(request: web.Request) -> web.Response:
     try:
         user, _ = await get_authorized_user(request)
-        user_dump = user.to_public_json()
+        user_json = json.loads(user.to_public_json())
     except Exception:
-        user_dump = None
+        user_json = None
 
     db = get_db(request)
     return web.json_response(
@@ -107,7 +108,7 @@ async def get_metadata(request: web.Request) -> web.Response:
             "commenter_names": metadata.comment_source_names,
             "commenter_links": metadata.comment_source_links,
             "available_parsha": await db.get_available_parsha_indices(),
-            "logged_in_user": user_dump,
+            "logged_in_user": user_json,
         }
     )
 
@@ -239,7 +240,7 @@ async def sign_up(request: web.Request) -> web.Response:
         raise web.HTTPConflict(reason="Username already taken")
 
     created_user = await db.save_user(new_stored_user)
-    return web.json_response(created_user.to_public_json())
+    return web.json_response(text=created_user.to_public_json())
 
 
 @routes.post("/login")
@@ -272,7 +273,7 @@ async def new_signup_token(request: web.Request) -> web.Response:
     if existing_token is not None:
         raise web.HTTPForbidden(reason="You can only create one signup token")
     token = await db.save_signup_token(SignupToken(creator_username=user.username, token=generate_signup_token()))
-    return web.json_response(token.to_public_json())
+    return web.json_response(text=token.to_public_json())
 
 
 @routes.get("/signup-token")
@@ -282,7 +283,7 @@ async def get_my_signup_token(request: web.Request) -> web.Response:
     token = await db.get_signup_token(creator_username=user.username)
     if token is None:
         raise web.HTTPNotFound(reason="You have not yet created a signup token")
-    return web.json_response(token.to_public_json())
+    return web.json_response(text=token.to_public_json())
 
 
 @routes.post("/starred-comments")
@@ -348,7 +349,7 @@ async def search_text(request: web.Request) -> web.Response:
         raise web.HTTPBadRequest(reason=f"Missing required query param: {e}")
     except ValueError as e:
         raise web.HTTPBadRequest(reason=f"Invalid query param: {e}")
-    return web.json_response(search_text_results.to_public_json())
+    return web.json_response(text=search_text_results.to_public_json())
 
 
 async def start_background_jobs(app: web.Application) -> None:

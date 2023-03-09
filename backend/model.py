@@ -33,7 +33,7 @@ class VerseData(TypedDict):
     text: dict[str, str]
     # not parsed, but returned to frontend from DB
     # text_ids object has the same keys as text, returned separately only for backwards compatibility
-    text_ids: NotRequired[dict[str, str]]  
+    text_ids: NotRequired[dict[str, str]]
     comments: dict[str, list[CommentData]]
 
 
@@ -73,20 +73,21 @@ class PydanticModel(BaseModel):
             logger.exception(f"Error validating request JSON: {raw}")
             raise web.HTTPBadRequest(reason=display_errors(e.errors()))
 
-    def to_public_json(self) -> dict[str, Any]:
-        return self.dict()  # Config/Field-level excludes are respected
+    def to_public_json(self) -> str:
+        return self.json(by_alias=True)  # Config/Field-level excludes are respected
+
+    class Config:
+        json_encoders = {
+            PydanticObjectId: lambda oid: str(oid) if oid != UNSET_DB_ID else "AAA",  # type: ignore
+            ObjectId: lambda oid: str(oid) if oid != UNSET_DB_ID else "AAA",  # type: ignore
+        }
 
 
-UNSET_DB_ID = ObjectId(b"0" * 12)
+UNSET_DB_ID = PydanticObjectId(b"0" * 12)
 
 
 class DbSchemaModel(PydanticModel):
     db_id: PydanticObjectId = Field(default=UNSET_DB_ID, exclude=True)
-
-    class Config:
-        json_encoders = {
-            PydanticObjectId: str,
-        }
 
     def is_stored(self) -> bool:
         return self.db_id != UNSET_DB_ID
@@ -100,25 +101,21 @@ class DbSchemaModel(PydanticModel):
     @classmethod
     def from_mongo_db(cls: Type[T], raw: Any) -> T:
         try:
-            raw["db_id"] = raw.pop("_id")
+            raw["db_id"] = PydanticObjectId(raw.pop("_id"))
             return cls.parse_obj(raw)
         except (KeyError, ValidationError):
             logger.exception("Error parsing data from db")
             raise web.HTTPInternalServerError(reason="Internal server error")
 
     def inserted_as(self: T, insert_one_result: InsertOneResult) -> T:
-        return self.copy(update={"db_id": insert_one_result.inserted_id})
+        return self.copy(update={"db_id": PydanticObjectId(insert_one_result.inserted_id)})
 
     def upserted_as(self: T, update_one_result: UpdateResult) -> T:
-        return self.copy(update={"db_id": update_one_result.upserted_id or UNSET_DB_ID})
+        return self.copy(update={"db_id": PydanticObjectId(update_one_result.upserted_id) or UNSET_DB_ID})
 
 
 class PublicIdDbSchemaModel(DbSchemaModel):
-    def to_public_json(self) -> dict[str, Any]:
-        raw = super().to_public_json()
-        if self.db_id != UNSET_DB_ID:
-            raw["id"] = str(self.db_id)
-        return raw
+    db_id: PydanticObjectId = Field(default=UNSET_DB_ID, exclude=False)
 
 
 # user / account models
@@ -146,14 +143,8 @@ class StoredUser(DbSchemaModel):
 
     is_editor: bool = False
 
-    password_hash: str
-    salt: str
-
-    def to_public_json(self) -> dict[str, Any]:
-        dump = super().to_public_json()
-        dump.pop("password_hash")
-        dump.pop("salt")
-        return dump
+    password_hash: str = Field(exclude=True)
+    salt: str = Field(exclude=True)
 
 
 class SignupToken(DbSchemaModel):

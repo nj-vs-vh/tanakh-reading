@@ -1,5 +1,5 @@
 import { CommentFilterByBookmarkMode, CommentSourcesConfig } from "./settings/commentSources";
-import type { CommentData, ParshaData, VerseData } from "./types";
+import type { CommentData, Metadata, ParshaData, VerseData } from "./types";
 
 export function getUrlHash(): string {
     const url = new URL(window.location.href);
@@ -116,6 +116,16 @@ export function anyCommentPassesFilters(verseData: VerseData, commentSourcesConf
         }
     }
     return false;
+}
+
+
+export function bookNoByParsha(parsha: number, metadata: Metadata): number {
+    for (const [bookNo, parshaRange] of Object.entries(metadata.parsha_ranges)) {
+        if (parsha >= parshaRange[0] && parsha < parshaRange[1]) {
+            return parseInt(bookNo)
+        }
+    }
+    throw Error(`No book found for parsha ${parsha}`)
 }
 
 

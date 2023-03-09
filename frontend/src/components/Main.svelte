@@ -29,15 +29,6 @@
     if (metadata.logged_in_user === null) {
         deleteAccessToken(); // removing possible residual access token
     }
-
-    const bookIndices = Object.keys(metadata.book_names).map((v) => parseInt(v));
-    bookIndices.sort();
-
-    const parshaArrays = {};
-
-    for (const [bookIndex, parshaMinMax] of Object.entries(metadata.parsha_ranges)) {
-        parshaArrays[bookIndex] = range(parshaMinMax[0], parshaMinMax[1]);
-    }
 </script>
 
 <Modal
