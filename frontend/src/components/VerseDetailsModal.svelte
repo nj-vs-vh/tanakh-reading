@@ -2,15 +2,24 @@
     import { getContext, onDestroy } from "svelte";
     import Keydown from "svelte-keydown";
     import { swipe } from "svelte-gestures";
-    import type { ParshaData, VerseData } from "../types";
+    import type { Metadata, ParshaData, VerseData } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
     import VerseComments from "./VerseComments.svelte";
     import Icon from "./shared/Icon.svelte";
-    import { areInsideVerseCoordsList, getVerseCoords, VerseCoords, versePath, verseCoords2string } from "../utils";
+    import {
+        areInsideVerseCoordsList,
+        getVerseCoords,
+        VerseCoords,
+        versePath,
+        verseCoords2string,
+        bookNoByParsha,
+    } from "../utils";
     import { isEditingStore } from "../editing";
     import VerseTextBadge from "./VerseTextBadge.svelte";
 
     let textSources: Array<string>;
+
+    const metadata: Metadata = getContext("metadata");
 
     const textSourcesConfigStoreUnsubscribe = textSourcesConfigStore.subscribe((config) => {
         textSources = [];
@@ -25,6 +34,8 @@
 
     export let verse: number;
     export let chapter: number;
+
+    export let navigable: boolean = true;
 
     let isCurrentVerseLinkCopied = false;
 
@@ -112,15 +123,20 @@
     on:swipe={handleSwipe}
 >
     <p class="verse-nav">
-        <span class="icon-button verse-nav-element" on:click={(e) => prevVerse()} on:keyup={(e) => {}}>
-            <Icon heightEm={0.8} icon="chevron-left" color={prevVerseCoords !== null ? "grey" : "white"} />
-        </span>
+        {#if navigable}
+            <span class="icon-button verse-nav-element" on:click={(e) => prevVerse()} on:keyup={(e) => {}}>
+                <Icon heightEm={0.8} icon="chevron-left" color={prevVerseCoords !== null ? "grey" : "white"} />
+            </span>
+        {/if}
         <span class="verse-number verse-nav-element">
+            {metadata.book_names[bookNoByParsha(parsha.parsha, metadata)][$textSourcesConfigStore.main]}
             {verseCoords2string(currentVerseCoords)}
         </span>
-        <span class="icon-button verse-nav-element" on:click={(e) => nextVerse()} on:keyup={(e) => {}}>
-            <Icon heightEm={0.8} icon="chevron-right" color={nextVerseCoords !== null ? "grey" : "white"} />
-        </span>
+        {#if navigable}
+            <span class="icon-button verse-nav-element" on:click={(e) => nextVerse()} on:keyup={(e) => {}}>
+                <Icon heightEm={0.8} icon="chevron-right" color={nextVerseCoords !== null ? "grey" : "white"} />
+            </span>
+        {/if}
         <span
             class="icon-button verse-nav-element"
             on:click={(e) => {

@@ -26,7 +26,9 @@
                         $commentSourcesConfigStore.filterByBookmarkMode === CommentFilterByBookmarkMode.MY
                         && commentData.is_starred_by_me === true
                     )}
-                        <VerseComment {commentData} />
+                        <div class="comment-container">
+                            <VerseComment {commentData} />
+                        </div>
                     {/if}
                 {/each}
             </div>
@@ -41,7 +43,8 @@
 
     p.comment-source-name {
         color: rgb(80, 80, 80);
-        margin: 0.3em 0;
+        margin-bottom: 0.4em;
+        margin-top: 0;
     }
 
     div.comments-block {
@@ -56,5 +59,9 @@
     div.comments-block:last-of-type {
         padding-bottom: 0;
         border-bottom: none;
+    }
+
+    div.comment-container {
+        margin-top: 0.4em;
     }
 </style>

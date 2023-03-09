@@ -13,12 +13,13 @@
     let currentQuery = decodeURIComponent(window.location.hash.split("#").pop());
 
     let nextPageToFetch = 0;
-    let pageSize = 10;
+    let pageSize = 5;
     let sorting = SearchTextSorting.START_TO_END;
     let searchIn = [SearchTextIn.COMMENTS, SearchTextIn.TEXTS];
 
     let currentSearchTextResponse: SearchTextResponse | null = null;
     let isLoading = false;
+    let allLoaded = false;
 
     async function loadSearchResponse() {
         window.location.hash = encodeURIComponent(currentQuery);
@@ -31,7 +32,7 @@
                 page_size: pageSize,
                 sorting: sorting,
                 search_in: searchIn,
-                with_verse_parsha_data: false,
+                with_verse_parsha_data: true,
             });
         } finally {
             isLoading = false;
@@ -47,6 +48,9 @@
     async function loadMoreSearchResults() {
         nextPageToFetch += 1;
         let newSearchTextResponse = await loadSearchResponse();
+        if (newSearchTextResponse.found_matches.length === 0) {
+            allLoaded = true;
+        }
         currentSearchTextResponse = {
             found_matches: currentSearchTextResponse.found_matches.concat(newSearchTextResponse.found_matches),
             total_matched_comments: currentSearchTextResponse.total_matched_comments,
@@ -79,7 +83,7 @@
         use:inview={{}}
         on:enter={async (e) => {
             const { inView } = e.detail;
-            if (currentSearchTextResponse !== null) {
+            if (currentSearchTextResponse !== null && !allLoaded) {
                 // i.e. if the initial load is completed
                 if (inView) {
                     await loadMoreSearchResults();
@@ -96,6 +100,7 @@
     #query-controls {
         font-size: large;
         margin-top: 2em;
+        margin-bottom: 1em;
     }
 
     #query-input {
@@ -112,7 +117,12 @@
     }
 
     div.search-entry-li-container {
-        margin-top: 0.25em;
-        padding-top: 0.25em;
+        margin-top: 0.8em;
+        padding-top: 0.4em;
+        border-top: 1px grey solid;
+    }
+
+    div.search-entry-li-container:first-of-type {
+        background-color: red;
     }
 </style>
