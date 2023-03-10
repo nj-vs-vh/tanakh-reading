@@ -411,7 +411,7 @@ class MongoDatabase(DatabaseInterface):
             if with_verse_parsha_data:
                 coord_triplets = {toc_to_coord_triplet(toc) for toc in texts_and_comments}
                 logger.info(f"Fetching verses for {len(coord_triplets)} coords")
-                subquery_let = {"p": "$parsha", "c": "$chapter", "v": "$verse"}
+                subquery_let = {"p": "$coords.parsha", "c": "$coords.chapter", "v": "$coords.verse"}
                 subquery_pipeline = [
                     {
                         "$match": {
@@ -426,14 +426,26 @@ class MongoDatabase(DatabaseInterface):
                     }
                 ]
 
-                for doc in self.db.aggregate(
+                for doc in self.texts_coll.aggregate(
                     [
+                        # {
+                        #     "$documents": [
+                        #         {"parsha": parsha, "chapter": chapter, "verse": verse}
+                        #         for parsha, chapter, verse in coord_triplets
+                        #     ]
+                        # },
+                        # NOTE: ^^^ $documents is not available in Mongo 5, so we emulate it below
+                        {"$limit": 1},
                         {
-                            "$documents": [
-                                {"parsha": parsha, "chapter": chapter, "verse": verse}
-                                for parsha, chapter, verse in coord_triplets
-                            ]
+                            "$addFields": {
+                                "coords": [
+                                    {"parsha": parsha, "chapter": chapter, "verse": verse}
+                                    for parsha, chapter, verse in coord_triplets
+                                ]
+                            }
                         },
+                        {"$project": {"coords": True}},
+                        {"$unwind": "$coords"},
                         {
                             "$lookup": {
                                 "from": "texts",
@@ -455,7 +467,7 @@ class MongoDatabase(DatabaseInterface):
                     verse_texts = [StoredText.from_mongo_db(t) for t in doc["texts"]]
                     verse_comments = [StoredComment.from_mongo_db(c) for c in doc["comments"]]
                     verse_parsha_data_by_coords[
-                        (doc["parsha"], doc["chapter"], doc["verse"])
+                        (doc["coords"]["parsha"], doc["coords"]["chapter"], doc["coords"]["verse"])
                     ] = texts_and_comments_to_parsha_data(verse_texts, verse_comments)
 
             found_matches = list[FoundMatch]()
