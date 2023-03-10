@@ -6,8 +6,9 @@
     import VerseText from "./VerseText.svelte";
     import type { Metadata, TextCoords } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
-    import { bookNoByParsha } from "../utils";
+    import { bookNoByParsha, parshaPath, versePath } from "../utils";
     import VerseDetailsModal from "./VerseDetailsModal.svelte";
+    import Icon from "./shared/Icon.svelte";
 
     export let match: FoundMatch;
 
@@ -24,6 +25,9 @@
 
     let textCoords: TextCoords;
     let textCoordsStr: string;
+    let parshaHref: string;
+    let parshaLinkColor = "rgb(180, 180, 180)";
+    let parshaLinkSizeEm = 0.7;
 
     const openVerseDetailsModal = () =>
         open(VerseDetailsModal, {
@@ -38,14 +42,27 @@
         textCoordsStr = `${
             metadata.book_names[bookNoByParsha(textCoords.parsha, metadata)][$textSourcesConfigStore.main]
         } ${textCoords.chapter}:${textCoords.verse}`;
+        parshaHref = versePath(textCoords.parsha, {
+            chapter: textCoords.chapter,
+            verse: textCoords.verse,
+        });
     }
 </script>
 
 <div>
     {#if match.comment !== null}
         <div class="match-header">
-            {metadata.commenter_names[match.comment.comment_source]}, комментарий к
-            <button on:click={openVerseDetailsModal} on:keypress={openVerseDetailsModal}>{textCoordsStr}</button>
+            <span class="text-with-icon">
+                <Icon icon="tanakh-book" heightEm={1} />
+                <span>
+                    {metadata.commenter_names[match.comment.comment_source]} к
+                    <button on:click={openVerseDetailsModal} on:keypress={openVerseDetailsModal}>{textCoordsStr}</button
+                    >
+                </span>
+            </span>
+            <a href={parshaHref} target="_blank" rel="noreferrer">
+                <Icon icon="external-link" heightEm={parshaLinkSizeEm} color={parshaLinkColor} />
+            </a>
         </div>
         <VerseComment
             commentData={{
@@ -57,8 +74,17 @@
         />
     {:else}
         <div class="match-header">
-            <button on:click={openVerseDetailsModal} on:keypress={openVerseDetailsModal}>{textCoordsStr}</button>
-            {metadata.text_source_marks[match.text.text_source]}
+            <span class="text-with-icon">
+                <Icon icon="torah-scroll" heightEm={1} />
+                <span>
+                    <button on:click={openVerseDetailsModal} on:keypress={openVerseDetailsModal}>{textCoordsStr}</button
+                    >
+                    {metadata.text_source_marks[match.text.text_source]}
+                </span>
+            </span>
+            <a href={parshaHref} target="_blank" rel="noreferrer">
+                <Icon icon="external-link" heightEm={parshaLinkSizeEm} color={parshaLinkColor} />
+            </a>
         </div>
         <VerseText textId={match.text.db_id} text={match.text.text} textSource={match.text.text_source} />
     {/if}
@@ -68,6 +94,18 @@
     div.match-header {
         color: rgb(80, 80, 80);
         margin: 0.4em 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    span.text-with-icon {
+        display: flex;
+        align-items: center;
+    }
+
+    span.text-with-icon > span {
+        margin-left: 0.4em;
     }
 
     button {
