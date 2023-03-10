@@ -22,6 +22,13 @@
     let isLoading = false;
     let allLoaded = false;
 
+    function resetSearch() {
+        currentSearchTextResponse = null;
+        nextPageToFetch = 0;
+        isLoading = false;
+        allLoaded = false;
+    }
+
     let queryControlsEl: HTMLElement;
 
     async function loadSearchResponse() {
@@ -43,8 +50,7 @@
     }
 
     async function newSearch() {
-        currentSearchTextResponse = null;
-        nextPageToFetch = 0;
+        resetSearch();
         currentSearchTextResponse = await loadSearchResponse();
     }
 
