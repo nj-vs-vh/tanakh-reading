@@ -35,21 +35,21 @@
     onDestroy(isEditingStoreUnsubscribe);
 </script>
 
-<Hoverable bind:isHovering>
-    {#if isEditing}
-        <div class="edited-text">
-            <textarea bind:value={editedText} />
-            <div>
-                <button on:click={() => isEditingStore.set(false)}>Отмена</button>
-                <button style="background-color: #e1efe1;" on:click={saveEditedText}>Сохранить</button>
+<span style={isHebrewTextSource(textSource) ? "text-align: right; font-size: x-large;" : ""}>
+    <Hoverable bind:isHovering>
+        {#if isEditing}
+            <div class="edited-text">
+                <textarea bind:value={editedText} />
+                <div>
+                    <button on:click={() => isEditingStore.set(false)}>Отмена</button>
+                    <button style="background-color: #e1efe1;" on:click={saveEditedText}>Сохранить</button>
+                </div>
             </div>
-        </div>
-    {:else}
-        <span style={isHebrewTextSource(textSource) ? "text-align: right; font-size: x-large;" : ""}>
+        {:else}
             {text}
-        </span>
-    {/if}
-</Hoverable>
+        {/if}
+    </Hoverable>
+</span>
 
 <style>
     div.edited-text {
