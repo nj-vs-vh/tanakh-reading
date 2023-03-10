@@ -22,6 +22,7 @@
         setUrlHash,
         verseCoords2string,
     } from "../utils";
+    import UpButton from "./shared/UpButton.svelte";
 
     // context and settings subscription
     const metadata: Metadata = getContext("metadata");
@@ -204,17 +205,11 @@
                 {#if isDecorated(verseData) && inlineVerseDetailsVisible[verseId(chapter.chapter, verseData.verse)]}
                     <div class="inline-verse-comment-container">
                         <VerseComments {verseData} />
-                        <div
-                            style="font-size: large; width: 100%; display: flex; justify-content: center; cursor: pointer;"
-                            on:click={() => {
+                        <UpButton
+                            on:up={() => {
                                 inlineVerseDetailsVisible[verseId(chapter.chapter, verseData.verse)] = false;
                             }}
-                            on:keydown={() => {
-                                inlineVerseDetailsVisible[verseId(chapter.chapter, verseData.verse)] = false;
-                            }}
-                        >
-                            <span>↑</span>
-                        </div>
+                        />
                     </div>
                 {/if}
             {/each}

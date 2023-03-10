@@ -9,6 +9,7 @@
     import SearchButton from "../components/shared/SearchButton.svelte";
     import Spinner from "../components/shared/Spinner.svelte";
     import { sleep } from "../utils";
+    import UpButton from "../components/shared/UpButton.svelte";
 
     let currentQuery = decodeURIComponent(window.location.hash.split("#").pop());
 
@@ -20,6 +21,8 @@
     let currentSearchTextResponse: SearchTextResponse | null = null;
     let isLoading = false;
     let allLoaded = false;
+
+    let queryControlsEl: HTMLElement;
 
     async function loadSearchResponse() {
         window.location.hash = encodeURIComponent(currentQuery);
@@ -65,7 +68,7 @@
 
 <Menu homeButton />
 <Hero>
-    <div id="query-controls">
+    <div id="query-controls" bind:this={queryControlsEl}>
         <div id="query-input-row">
             <input id="query-input" type="text" bind:value={currentQuery} />
             <SearchButton on:click={newSearch} />
@@ -73,6 +76,18 @@
         </div>
     </div>
     {#if currentSearchTextResponse !== null}
+        <p class="search-meta">
+            <span>Всего совпадений:</span>
+            {#if currentSearchTextResponse.total_matched_texts != null}
+                <span
+                    >{currentSearchTextResponse.total_matched_texts} в тексте{#if currentSearchTextResponse.total_matched_comments != null},
+                    {/if}
+                </span>
+            {/if}
+            {#if currentSearchTextResponse.total_matched_comments != null}
+                <span>{currentSearchTextResponse.total_matched_comments} в комментариях </span>
+            {/if}
+        </p>
         {#each currentSearchTextResponse.found_matches as foundMatch}
             <div class="search-entry-li-container">
                 <SearchResultEntry match={foundMatch} />
@@ -93,6 +108,13 @@
     />
     {#if isLoading}
         <Spinner sizeEm={3} />
+    {/if}
+    {#if allLoaded}
+        <UpButton
+            on:up={() => {
+                queryControlsEl.scrollIntoView();
+            }}
+        />
     {/if}
 </Hero>
 
@@ -122,7 +144,9 @@
         border-top: 1px grey solid;
     }
 
-    div.search-entry-li-container:first-of-type {
-        background-color: red;
+    p.search-meta {
+        margin: 0;
+        color: grey;
+        font-size: small;
     }
 </style>
