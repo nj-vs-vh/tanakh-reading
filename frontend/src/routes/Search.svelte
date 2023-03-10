@@ -120,7 +120,7 @@
                         }
                     }}
                 />
-                <label for="search-in-texts-checkbox">текстах</label>
+                <label for="search-in-texts-checkbox">тексте</label>
                 <input
                     id="search-in-comments-checkbox"
                     type="checkbox"
