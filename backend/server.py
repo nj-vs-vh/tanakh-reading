@@ -341,7 +341,7 @@ async def search_text(request: web.Request) -> web.Response:
             language=worst_language_detection_ever(query),
             page=page,
             page_size=page_size,
-            sorting=SearchTextSorting(request.query.get("sort", SearchTextSorting.START_TO_END.value)),
+            sorting=SearchTextSorting(request.query.get("sorting", SearchTextSorting.START_TO_END.value)),
             search_in=[SearchTextIn(v) for v in request.query.getall("search_in", [sti.value for sti in SearchTextIn])],
             with_verse_parsha_data=bool(request.query.get("with_verse_parsha_data", False)),
         )

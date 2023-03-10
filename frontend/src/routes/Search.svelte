@@ -14,9 +14,27 @@
     let currentQuery = decodeURIComponent(window.location.hash.split("#").pop());
 
     let nextPageToFetch = 0;
-    let pageSize = 5;
+    let pageSize = 30;
     let sorting = SearchTextSorting.START_TO_END;
-    let searchIn = [SearchTextIn.COMMENTS, SearchTextIn.TEXTS];
+
+    let sortingName = (s: SearchTextSorting) => {
+        switch (s) {
+            case SearchTextSorting.START_TO_END:
+                return "от начала к концу";
+            case SearchTextSorting.END_TO_START:
+                return "от конца к началу";
+            case SearchTextSorting.BEST_TO_WORST:
+                return "по релевантности";
+        }
+    };
+
+    // search settings
+    let searchInTexts: boolean = true;
+    let searchInComments: boolean = true;
+
+    function atLeastOneSource(): boolean {
+        return searchInTexts || searchInComments;
+    }
 
     let currentSearchTextResponse: SearchTextResponse | null = null;
     let isLoading = false;
@@ -35,6 +53,13 @@
         window.location.hash = encodeURIComponent(currentQuery);
         isLoading = true;
         // await sleep(1);
+        const searchIn = [];
+        if (searchInComments) {
+            searchIn.push(SearchTextIn.COMMENTS);
+        }
+        if (searchInTexts) {
+            searchIn.push(SearchTextIn.TEXTS);
+        }
         try {
             return await searchText({
                 query: currentQuery,
@@ -75,10 +100,51 @@
 <Menu homeButton />
 <Hero>
     <div id="query-controls" bind:this={queryControlsEl}>
-        <div id="query-input-row">
+        <div class="query-input-row">
             <input id="query-input" type="text" bind:value={currentQuery} />
             <SearchButton on:click={newSearch} />
             <Keydown on:Enter={newSearch} />
+        </div>
+        <div class="query-input-row secondary-query-controls">
+            <span class="inline-controls-container">
+                Искать в
+                <input
+                    id="search-in-texts-checkbox"
+                    type="checkbox"
+                    bind:checked={searchInTexts}
+                    on:change={() => {
+                        if (!atLeastOneSource()) {
+                            searchInTexts = true;
+                        } else {
+                            newSearch();
+                        }
+                    }}
+                />
+                <label for="search-in-texts-checkbox">текстах</label>
+                <input
+                    id="search-in-comments-checkbox"
+                    type="checkbox"
+                    bind:checked={searchInComments}
+                    on:change={() => {
+                        if (!atLeastOneSource()) {
+                            searchInComments = true;
+                        } else {
+                            newSearch();
+                        }
+                    }}
+                />
+                <label for="search-in-comments-checkbox">комментариях</label>
+            </span>
+        </div>
+        <div class="query-input-row secondary-query-controls">
+            <span class="inline-controls-container">
+                Сортировка
+                <select bind:value={sorting} on:change={newSearch}>
+                    {#each Object.entries(SearchTextSorting) as [_, sts]}
+                        <option value={sts}>{sortingName(sts)}</option>
+                    {/each}
+                </select>
+            </span>
         </div>
     </div>
     {#if currentSearchTextResponse !== null}
@@ -137,11 +203,32 @@
         line-height: 1.2em;
     }
 
-    #query-input-row {
+    div.query-input-row {
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
+        margin-top: 0.5em;
+    }
+
+    div.secondary-query-controls {
+        font-size: smaller;
+        color: rgb(80, 80, 80);
+    }
+
+    span.inline-controls-container {
+        display: flex;
+        align-items: center;
+    }
+
+    span.inline-controls-container > input {
+        margin: 0 0.5em;
+    }
+
+    span.inline-controls-container > select {
+        margin: 0 0.5em;
+        padding: 0.1em;
+        background-color: unset;
     }
 
     div.search-entry-li-container {

@@ -219,6 +219,7 @@ export enum SearchTextSorting {
     START_TO_END = "start_to_end",
     END_TO_START = "end_to_start",
 }
+
 export enum SearchTextIn {
     TEXTS = "texts",
     COMMENTS = "comments",
