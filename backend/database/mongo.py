@@ -325,7 +325,7 @@ class MongoDatabase(DatabaseInterface):
             {"$set": {"text": text}},
         )
         stored_text = StoredText.from_mongo_db(text_doc)
-        self.parsha_data_cache.pop(stored_text.text_coords.parsha)
+        self.parsha_data_cache.pop(stored_text.text_coords.parsha, None)
 
     async def search_text(
         self,
