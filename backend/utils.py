@@ -1,8 +1,7 @@
-import itertools
 import logging
 import string
 import unicodedata
-from typing import Any, Generator, Hashable, Iterable, Sequence, TypeVar
+from typing import Any, Generator, Hashable, Iterable, TypeVar
 
 from aiohttp import web
 

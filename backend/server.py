@@ -331,10 +331,10 @@ async def search_text(request: web.Request) -> web.Response:
             raise ValueError(f"Query is too short: must be over {MIN_QUERY_LEN} meaningful characters")
         page_size = int(request.query.get("page_size", "50"))
         if not 1 <= page_size <= 100:
-            raise ValueError(f"page_size must be between 1 and 100")
+            raise ValueError("page_size must be between 1 and 100")
         page = int(request.query.get("page", "0"))
         if page < 0:
-            raise ValueError(f"page must be positive")
+            raise ValueError("page must be positive")
 
         search_text_results = await db.search_text(
             query=query,

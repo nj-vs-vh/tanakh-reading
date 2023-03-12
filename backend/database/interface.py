@@ -13,7 +13,6 @@ from backend.model import (
     SignupToken,
     StarredComment,
     StoredUser,
-    TextCoords,
 )
 
 logger = logging.getLogger(__name__)

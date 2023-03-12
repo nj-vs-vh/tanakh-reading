@@ -5,14 +5,13 @@ Download per-book-json from https://www.sefaria.org/texts/Tanakh/Acharonim%20on%
 
 import argparse
 import json
-from re import L
 
 import bs4  # type: ignore
 
 from backend import metadata
 from backend.model import CommentData, ParshaData
 from parsers.local_storage import JSON_DIR, parsha_path
-from parsers.utils import dump_parsha, has_class
+from parsers.utils import dump_parsha
 
 JSON_DUMPS_PER_BOOK = {
     1: JSON_DIR / "Or HaChaim on Genesis - en - Or Hachayim, trans. Eliyahu Munk.json",

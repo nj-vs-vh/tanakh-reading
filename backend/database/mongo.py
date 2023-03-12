@@ -541,7 +541,8 @@ def parsha_data_to_texts_and_comments(parsha_data: ParshaData) -> tuple[list[Sto
             for text_source, text in verse_data["text"].items():
                 stored_texts.append(
                     StoredText(
-                        # not parsing text ids from parsha data here, because this is used only for saving new data to DB
+                        # not parsing text ids from parsha data here, because this is used only
+                        # for saving new data to DB
                         text_coords=text_coords,
                         text_source=text_source,
                         text=text,
