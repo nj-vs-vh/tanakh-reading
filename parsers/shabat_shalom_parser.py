@@ -186,7 +186,15 @@ def parse_parsha(parsha: int):
                 continue
 
         text_part = inner_tag_text(child)
-        if not text_part or text_part.startswith("Глава"):  # skipping chapter header and whitespace
+        if (
+            not text_part  # skipping whitespace
+            or text_part.startswith("Глава")  # skipping chapter header
+            or (
+                # skipping center-aligned "day xxx" subheaders
+                isinstance(child, bs4.Tag)
+                and child.attrs.get("align") == "center"
+            )
+        ):
             continue
 
         def verse_prefix(no: int) -> str:
