@@ -43,10 +43,12 @@
 >
     <Keydown
         on:combo={(e) => {
-            console.log(`kbd combo: ${e.detail}`);
-            if (metadata.logged_in_user !== null && metadata.logged_in_user.is_editor && e.detail === "Control-q") {
+            if (
+                metadata.logged_in_user !== null &&
+                metadata.logged_in_user.is_editor &&
+                e.detail.includes("Control-q")
+            ) {
                 isEditingStore.set(true);
-                console.log(`isEditingStore set to true`);
             }
         }}
     />
