@@ -107,6 +107,10 @@ class DatabaseInterface(abc.ABC):
         ...
 
     @abc.abstractmethod
+    async def drop_parsha_cache(self) -> None:
+        ...
+
+    @abc.abstractmethod
     async def save_parsha_data(self, parsha_data: ParshaData) -> None:
         ...
 

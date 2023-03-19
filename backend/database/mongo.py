@@ -309,6 +309,10 @@ class MongoDatabase(DatabaseInterface):
     async def get_cached_parsha_indices(self) -> list[int]:
         return list(self.parsha_data_cache.keys())
 
+    async def drop_parsha_cache(self) -> None:
+        self.get_available_parsha_indices.cache_clear()
+        self.parsha_data_cache.clear()
+
     async def edit_comment(self, comment_id: bson.ObjectId, edited_comment: EditedComment) -> None:
         comment_doc = await self._awrap(
             self.comments_coll.find_one_and_update,

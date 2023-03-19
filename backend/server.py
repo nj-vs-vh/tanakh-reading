@@ -152,10 +152,14 @@ async def get_parsha(request: web.Request) -> web.Response:
     return web.json_response(parsha_data)
 
 
-@routes.post("/parsha")
-async def save_parsha(request: web.Request) -> web.Response:
+def check_admin_token(request: web.Request) -> None:
     if request.headers.get("X-Admin-Token") != config.ADMIN_TOKEN:
         raise web.HTTPUnauthorized(reason="Valid X-Admin-Token required")
+
+
+@routes.post("/parsha")
+async def save_parsha(request: web.Request) -> web.Response:
+    check_admin_token(request)
     db = get_db(request)
     parsha_data = cast(ParshaData, await safe_request_json(request))
     logger.info(f"Saving parsha data for book {parsha_data['book']}, parsha {parsha_data['parsha']}")
@@ -168,6 +172,13 @@ async def save_parsha(request: web.Request) -> web.Response:
         diff_ = []
     await db.save_parsha_data(parsha_data)
     return web.json_response(diff_)
+
+
+@routes.delete("/parsha-cache")
+async def invalidate_parsha_cache(request: web.Request) -> web.Response:
+    check_admin_token(request)
+    await get_db(request).drop_parsha_cache()
+    return web.Response()
 
 
 @routes.put("/text")
