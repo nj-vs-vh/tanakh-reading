@@ -46,7 +46,7 @@
             if (
                 metadata.logged_in_user !== null &&
                 metadata.logged_in_user.is_editor &&
-                e.detail.includes("Control-q")
+                e.detail.endsWith("Control-q")
             ) {
                 isEditingStore.set(true);
             }
