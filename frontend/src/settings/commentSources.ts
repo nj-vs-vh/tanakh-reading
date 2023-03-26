@@ -52,6 +52,8 @@ export function initCommentSourcesConfig(metadata: Metadata) {
         // @ts-ignore
         config.filterBySource = config.bySource;
     }
+    // NOTE: filtering by bookmark is disabled
+    config.filterByBookmarkMode = CommentFilterByBookmarkMode.NONE;
 
     const metadataCommentSources = Object.keys(metadata.commenter_names);
     for (const commentSource of metadataCommentSources) {

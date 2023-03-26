@@ -73,7 +73,8 @@
             <label for="all">Все</label>
         </div>
     </MenuFolderBlock>
-    {#if metadata.logged_in_user !== null}
+    <!-- NOTE: filter by bookmark status is disabled -->
+    <!-- {#if metadata.logged_in_user !== null}
         <MenuFolderBlock title="Фильтр по закладкам">
             {#each Object.values(CommentFilterByBookmarkMode) as mode}
                 <div class="input-with-label">
@@ -91,7 +92,7 @@
                 </div>
             {/each}
         </MenuFolderBlock>
-    {/if}
+    {/if} -->
 </MenuFolder>
 
 <style>
