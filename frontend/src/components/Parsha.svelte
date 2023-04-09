@@ -8,8 +8,8 @@
     import { TextDecorationStyle, textDecorationStyleStore } from "../settings/textDecorationStyle";
     import { CommentStyle, commentStyleStore } from "../settings/commentStyle";
     import { textSourcesConfigStore } from "../settings/textSources";
-    import { CommentSourcesConfig, commentSourcesConfigStore } from "../settings/commentSources";
-    import { TextDecorationSettings, textDecorationSettingsStore } from "../settings/textDecorationSettings";
+    import { commentSourcesConfigStore } from "../settings/commentSources";
+    import { textDecorationSettingsStore } from "../settings/textDecorationSettings";
 
     import type { Metadata, ParshaData, VerseData, ChapterData } from "../types";
     import {
@@ -20,7 +20,7 @@
         toHebrewNumberal,
         isHebrewTextSource,
         setUrlHash,
-        verseCoords2string,
+        verseCoords2String,
         setPageTitle,
     } from "../utils";
     import UpButton from "./shared/UpButton.svelte";
@@ -31,14 +31,6 @@
     // context and settings subscription
     const metadata: Metadata = getContext("metadata");
 
-    let textDecorationSettings: TextDecorationSettings;
-    textDecorationSettingsStore.subscribe((v) => {
-        textDecorationSettings = v;
-    });
-    let textDecorationStyle: TextDecorationStyle;
-    textDecorationStyleStore.subscribe((v) => {
-        textDecorationStyle = v;
-    });
     let commentStyle: CommentStyle;
     commentStyleStore.subscribe((v) => {
         commentStyle = v;
@@ -55,15 +47,8 @@
         isMainTextHebrew = isHebrewTextSource(mainTextSource);
         setPageTitle(metadata.parsha_names[parshaData.parsha][mainTextSource]);
     });
-    let commentSourcesConfig: CommentSourcesConfig;
-    commentSourcesConfigStore.subscribe((v) => {
-        commentSourcesConfig = v;
-    });
 
     const parshaVerseCoords = getVerseCoords(parshaData);
-    const firstParshaVerseCoords = parshaVerseCoords[0];
-    const lastParshaVerseCoords = parshaVerseCoords[parshaVerseCoords.length - 1];
-
     const verseId = (chapterNo: number, verseNo: number): number => chapterNo * 100000 + verseNo;
 
     // @ts-ignore
@@ -92,12 +77,12 @@
         }
     }
 
-    let inlineVerseDetailsVisible: Map<number, boolean> = new Map();
+    let inlineVerseDetailsVisibilityMask: Map<number, boolean> = new Map();
 
     function setAllInlineVerseDetailsTo(value: boolean) {
         for (const chapterData of parshaData.chapters) {
             for (const verseData of chapterData.verses) {
-                inlineVerseDetailsVisible[verseId(chapterData.chapter, verseData.verse)] = value;
+                inlineVerseDetailsVisibilityMask[verseId(chapterData.chapter, verseData.verse)] = value;
             }
         }
     }
@@ -108,25 +93,21 @@
         if (commentStyle == CommentStyle.MODAL) {
             openVerseDetailsModal(chapter.chapter, verse.verse);
         } else if (commentStyle == CommentStyle.INLINE) {
-            inlineVerseDetailsVisible[verseId(chapter.chapter, verse.verse)] =
-                !inlineVerseDetailsVisible[verseId(chapter.chapter, verse.verse)];
-            inlineVerseDetailsVisible = { ...inlineVerseDetailsVisible };
+            inlineVerseDetailsVisibilityMask[verseId(chapter.chapter, verse.verse)] =
+                !inlineVerseDetailsVisibilityMask[verseId(chapter.chapter, verse.verse)];
         }
     };
 
-    let isDecorated: (verseData: VerseData) => boolean;
-    let isClickableText: (verseData: VerseData) => boolean;
-    let isAstreisk: (verseData: VerseData) => boolean;
+    const shouldDecorateVerseText = (verseData: VerseData): boolean => {
+        if ($textDecorationSettingsStore.onlyDecorateTextWithComments) {
+            return anyCommentPassesFilters(verseData, $commentSourcesConfigStore);
+        } else return true;
+    };
 
-    $: {
-        isDecorated = (verseData: VerseData): boolean => {
-            if (textDecorationSettings.onlyDecorateTextWithComments) {
-                return anyCommentPassesFilters(verseData, commentSourcesConfig);
-            } else return true;
-        };
-        isClickableText = (v) => textDecorationStyle === TextDecorationStyle.CLICKABLE_TEXT && isDecorated(v);
-        isAstreisk = (v) => textDecorationStyle === TextDecorationStyle.ASTRERISK && isDecorated(v);
-    }
+    const shouldVerseTextBeClickable = (v: VerseData) =>
+        $textDecorationStyleStore === TextDecorationStyle.CLICKABLE_TEXT && shouldDecorateVerseText(v);
+    const shouldVerseTextHaveAsterisk = (v: VerseData) =>
+        $textDecorationStyleStore === TextDecorationStyle.ASTRERISK && shouldDecorateVerseText(v);
 </script>
 
 <Menu
@@ -153,9 +134,9 @@
             <p class="header-info">
                 <span style="white-space: nowrap;">
                     Стихи
-                    <strong>{verseCoords2string(firstParshaVerseCoords)}</strong>
+                    <strong>{verseCoords2String(parshaVerseCoords[0])}</strong>
                     &ndash;
-                    <strong>{verseCoords2string(lastParshaVerseCoords)}</strong>
+                    <strong>{verseCoords2String(parshaVerseCoords[parshaVerseCoords.length - 1])}</strong>
                 </span>
             </p>
         </div>
@@ -170,32 +151,25 @@
         {#each parshaData.chapters as chapter}
             <h2>Глава {chapter.chapter}</h2>
             {#each chapter.verses as verseData}
-                <span
-                    class="verse"
-                    style={isMainTextHebrew
-                        ? "width: 100%; text-align: right; display: flex; flex-direction: row-reverse; align-items: baseline;"
-                        : ""}
-                >
-                    <span
-                        class="verse-number"
-                        style={isMainTextHebrew ? "min-width: 1.6em; margin-left: 0.1em" : "margin-right: 0.2em;"}
+                <span class={isMainTextHebrew ? "verse verse-hebrew" : "verse"}>
+                    <span class={isMainTextHebrew ? "verse-number verse-number-hebrew" : "verse-number"}
                         >{isMainTextHebrew ? `${toHebrewNumberal(verseData.verse)}` : `${verseData.verse}.`}</span
                     >
                     <span
-                        class={isClickableText(verseData)
-                            ? textDecorationSettings.onlyDecorateTextWithComments
+                        class={shouldVerseTextBeClickable(verseData)
+                            ? $textDecorationSettingsStore.onlyDecorateTextWithComments
                                 ? "verse-text clickable"
                                 : "verse-text clickable no-background-in-unhovered"
                             : "verse-text"}
                         style={isMainTextHebrew ? "font-size: x-large;" : ""}
                         on:click={() => {
-                            isClickableText(verseData) ? openVerseDetails(verseData, chapter) : null;
+                            shouldVerseTextBeClickable(verseData) ? openVerseDetails(verseData, chapter) : null;
                         }}
                         on:keydown={() => {
-                            isClickableText(verseData) ? openVerseDetails(verseData, chapter) : null;
+                            shouldVerseTextBeClickable(verseData) ? openVerseDetails(verseData, chapter) : null;
                         }}>{verseData.text[mainTextSource]}</span
                     >
-                    {#if isAstreisk(verseData)}
+                    {#if shouldVerseTextHaveAsterisk(verseData)}
                         <span
                             class="comment-asterisk"
                             on:click={() => openVerseDetails(verseData, chapter)}
@@ -205,12 +179,12 @@
                         </span>
                     {/if}
                 </span>
-                {#if isDecorated(verseData) && inlineVerseDetailsVisible[verseId(chapter.chapter, verseData.verse)]}
+                {#if shouldDecorateVerseText(verseData) && inlineVerseDetailsVisibilityMask[verseId(chapter.chapter, verseData.verse)]}
                     <div class="inline-verse-comment-container">
                         <VerseComments {verseData} />
                         <UpButton
                             on:up={() => {
-                                inlineVerseDetailsVisible[verseId(chapter.chapter, verseData.verse)] = false;
+                                inlineVerseDetailsVisibilityMask[verseId(chapter.chapter, verseData.verse)] = false;
                             }}
                         />
                     </div>
@@ -237,6 +211,14 @@
         background-color: transparent;
     }
 
+    span.verse-hebrew {
+        width: 100%;
+        text-align: right;
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: baseline;
+    }
+
     span.verse-text {
         margin-right: 0.1em;
     }
@@ -249,7 +231,12 @@
     span.verse-number {
         color: rgb(105, 105, 105);
         user-select: none;
-        /* margin-right: 0.2em; */
+        margin-right: 0.2em;
+    }
+
+    span.verse-number-hebrew {
+        min-width: 1.6em;
+        margin-left: 0.1em;
     }
 
     p.header-info {

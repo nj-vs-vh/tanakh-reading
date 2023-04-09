@@ -11,7 +11,7 @@
         getVerseCoords,
         VerseCoords,
         versePath,
-        verseCoords2string,
+        verseCoords2String,
         bookNoByParsha,
     } from "../utils";
     import { isEditingStore } from "../editing";
@@ -130,7 +130,7 @@
         {/if}
         <span class="verse-number verse-nav-element">
             {metadata.book_names[bookNoByParsha(parsha.parsha, metadata)][$textSourcesConfigStore.main]}
-            {verseCoords2string(currentVerseCoords)}
+            {verseCoords2String(currentVerseCoords)}
         </span>
         {#if navigable}
             <span class="icon-button verse-nav-element" on:click={(e) => nextVerse()} on:keyup={(e) => {}}>
