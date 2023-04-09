@@ -103,3 +103,8 @@ export interface FoundComment {
     index: number;
     legacy_id: string | null;
 }
+
+export interface CommentStarToggledEvent {
+    commentId: string;
+    newIsStarred: boolean;
+}

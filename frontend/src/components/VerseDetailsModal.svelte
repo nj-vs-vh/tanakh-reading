@@ -2,7 +2,7 @@
     import { getContext, onDestroy } from "svelte";
     import Keydown from "svelte-keydown";
     import { swipe } from "svelte-gestures";
-    import type { Metadata, ParshaData, VerseData } from "../types";
+    import type { CommentStarToggledEvent, Metadata, ParshaData, VerseData } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
     import VerseComments from "./VerseComments.svelte";
     import Icon from "./shared/Icon.svelte";
@@ -36,6 +36,8 @@
     export let chapter: number;
 
     export let navigable: boolean = true;
+
+    export let onCommentStarToggled: (e: CustomEvent<CommentStarToggledEvent>) => void = (e) => {};
 
     let isCurrentVerseLinkCopied = false;
 
@@ -156,7 +158,7 @@
             {textSource}
         />
     {/each}
-    <VerseComments verseData={currentVerseData} />
+    <VerseComments verseData={currentVerseData} on:commentStarToggled={onCommentStarToggled} />
 </div>
 
 <style>

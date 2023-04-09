@@ -27,7 +27,7 @@
                         && commentData.is_starred_by_me === true
                     )}
                         <div class="comment-container">
-                            <VerseComment {commentData} />
+                            <VerseComment {commentData} on:commentStarToggled />
                         </div>
                     {/if}
                 {/each}
