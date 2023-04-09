@@ -7,8 +7,10 @@
     import Menu from "../components/Menu.svelte";
 
     import { textSourcesConfigStore } from "../settings/textSources";
-    import { parshaPath, range } from "../utils";
+    import { parshaPath, range, setPageTitle } from "../utils";
     import type { Metadata } from "../types";
+
+    setPageTitle(null);
 
     let metadata: Metadata = getContext("metadata");
 

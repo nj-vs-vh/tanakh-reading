@@ -21,8 +21,12 @@
         isHebrewTextSource,
         setUrlHash,
         verseCoords2string,
+        setPageTitle,
     } from "../utils";
     import UpButton from "./shared/UpButton.svelte";
+
+    export let parshaData: ParshaData;
+    parshaData.chapters.sort((ch1, ch2) => ch1.chapter - ch2.chapter);
 
     // context and settings subscription
     const metadata: Metadata = getContext("metadata");
@@ -49,14 +53,13 @@
     textSourcesConfigStore.subscribe((config) => {
         mainTextSource = config.main;
         isMainTextHebrew = isHebrewTextSource(mainTextSource);
+        setPageTitle(metadata.parsha_names[parshaData.parsha][mainTextSource]);
     });
     let commentSourcesConfig: CommentSourcesConfig;
     commentSourcesConfigStore.subscribe((v) => {
         commentSourcesConfig = v;
     });
 
-    export let parshaData: ParshaData;
-    parshaData.chapters.sort((ch1, ch2) => ch1.chapter - ch2.chapter);
     const parshaVerseCoords = getVerseCoords(parshaData);
     const firstParshaVerseCoords = parshaVerseCoords[0];
     const lastParshaVerseCoords = parshaVerseCoords[parshaVerseCoords.length - 1];
@@ -67,8 +70,8 @@
     const { open, close } = getContext("simple-modal");
 
     window.addEventListener("popstate", () => {
+        // close window on "back" in history
         try {
-            // HACK
             close();
         } catch (e) {}
     });

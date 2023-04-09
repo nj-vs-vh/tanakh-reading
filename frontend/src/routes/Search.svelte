@@ -8,14 +8,16 @@
     import Hero from "../components/shared/Hero.svelte";
     import SearchButton from "../components/shared/SearchButton.svelte";
     import Spinner from "../components/shared/Spinner.svelte";
-    import { sleep } from "../utils";
     import UpButton from "../components/shared/UpButton.svelte";
+    import { setPageTitle } from "../utils";
 
     let currentQuery = decodeURIComponent(window.location.hash.split("#").pop());
 
     let nextPageToFetch = 0;
     let pageSize = 30;
     let sorting = SearchTextSorting.START_TO_END;
+
+    setPageTitle("Поиск");
 
     let sortingName = (s: SearchTextSorting) => {
         switch (s) {

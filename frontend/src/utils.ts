@@ -181,3 +181,16 @@ export function toHebrewNumberal(i: number): string {
 
     return result;
 }
+
+
+export function setPageTitle(subtitle: string | null) {
+    const titleTags = document.getElementsByTagName("title");
+    if (titleTags.length > 0) {
+        if (subtitle !== null && subtitle.length > 0) {
+            titleTags[0].innerText = `Тора | ${subtitle}`;
+        } else {
+            titleTags[0].innerText = `Тора`;
+        }
+
+    }
+}
