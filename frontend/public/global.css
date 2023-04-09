@@ -7,6 +7,10 @@ body {
 	padding: 0;
 }
 
+:root {
+	--starred-comment-color: #c6a059
+}
+
 body {
 	color: rgb(36, 36, 36);
 	box-sizing: border-box;

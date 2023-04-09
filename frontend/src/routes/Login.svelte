@@ -5,11 +5,14 @@
     import { saveAccessToken } from "../auth";
 
     import Hero from "../components/shared/Hero.svelte";
+    import { setPageTitle } from "../utils";
 
     let username = "";
     let password = "";
 
     let loginError: string | null = null;
+
+    setPageTitle("Логин");
 
     async function onLogin() {
         if (username.length < 5 || password.length < 6) return;

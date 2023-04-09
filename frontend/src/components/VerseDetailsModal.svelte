@@ -2,7 +2,7 @@
     import { getContext, onDestroy } from "svelte";
     import Keydown from "svelte-keydown";
     import { swipe } from "svelte-gestures";
-    import type { Metadata, ParshaData, VerseData } from "../types";
+    import type { CommentStarToggledEvent, Metadata, ParshaData, VerseData } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
     import VerseComments from "./VerseComments.svelte";
     import Icon from "./shared/Icon.svelte";
@@ -11,7 +11,7 @@
         getVerseCoords,
         VerseCoords,
         versePath,
-        verseCoords2string,
+        verseCoords2String,
         bookNoByParsha,
     } from "../utils";
     import { isEditingStore } from "../editing";
@@ -36,6 +36,8 @@
     export let chapter: number;
 
     export let navigable: boolean = true;
+
+    export let onCommentStarToggled: (e: CustomEvent<CommentStarToggledEvent>) => void = (e) => {};
 
     let isCurrentVerseLinkCopied = false;
 
@@ -130,7 +132,7 @@
         {/if}
         <span class="verse-number verse-nav-element">
             {metadata.book_names[bookNoByParsha(parsha.parsha, metadata)][$textSourcesConfigStore.main]}
-            {verseCoords2string(currentVerseCoords)}
+            {verseCoords2String(currentVerseCoords)}
         </span>
         {#if navigable}
             <span class="icon-button verse-nav-element" on:click={(e) => nextVerse()} on:keyup={(e) => {}}>
@@ -156,7 +158,7 @@
             {textSource}
         />
     {/each}
-    <VerseComments verseData={currentVerseData} />
+    <VerseComments verseData={currentVerseData} on:commentStarToggled={onCommentStarToggled} />
 </div>
 
 <style>

@@ -20,7 +20,7 @@ export interface VerseCoords {
     verse: number;
 }
 
-export function verseCoords2string(vc: VerseCoords): string {
+export function verseCoords2String(vc: VerseCoords): string {
     return `${vc.chapter}:${vc.verse}`
 }
 
@@ -93,7 +93,7 @@ export function signupPath(signupToken: string): string {
 
 
 export function versePath(parsha: number | string, verseCoords: VerseCoords): string {
-    return `${parshaPath(parsha)}#${verseCoords2string(verseCoords)}`
+    return `${parshaPath(parsha)}#${verseCoords2String(verseCoords)}`
 }
 
 
@@ -180,4 +180,17 @@ export function toHebrewNumberal(i: number): string {
     }
 
     return result;
+}
+
+
+export function setPageTitle(subtitle: string | null) {
+    const titleTags = document.getElementsByTagName("title");
+    if (titleTags.length > 0) {
+        if (subtitle !== null && subtitle.length > 0) {
+            titleTags[0].innerText = `Тора | ${subtitle}`;
+        } else {
+            titleTags[0].innerText = `Тора`;
+        }
+
+    }
 }

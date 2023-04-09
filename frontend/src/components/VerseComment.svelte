@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { getContext, onDestroy } from "svelte";
+    import { createEventDispatcher, getContext, onDestroy } from "svelte";
     import Icon from "./shared/Icon.svelte";
 
-    import type { CommentData, Metadata } from "../types";
+    import type { CommentData, CommentStarToggledEvent, Metadata } from "../types";
     import { CommentFormat } from "../types";
     import { editComment, CommentCoords, starComment, unstarComment } from "../api";
     import Hoverable from "./shared/Hoverable.svelte";
@@ -35,19 +35,32 @@
         }
     });
 
+    let toggleStarredRunning = false;
+
+    const dispatch = createEventDispatcher<{ commentStarToggled: CommentStarToggledEvent }>();
+
     async function toggleStarred() {
+        if (toggleStarredRunning) return; // preventing double-click race condition issues
         if (!isLoggedIn) return;
 
-        // first updating the UI
-        const originalIsStarred = isStarred;
-        isStarred = !isStarred;
-        commentData.is_starred_by_me = isStarred;
+        try {
+            toggleStarredRunning = true;
 
-        // then syncing with backend
-        if (originalIsStarred) {
-            await unstarComment(commentCoords);
-        } else {
-            await starComment(commentCoords);
+            // first updating the UI
+            const originalIsStarred = isStarred;
+            isStarred = !isStarred;
+            commentData.is_starred_by_me = isStarred;
+
+            dispatch("commentStarToggled", { commentId: commentCoords.comment_id, newIsStarred: isStarred });
+
+            // then syncing with backend
+            if (originalIsStarred) {
+                await unstarComment(commentCoords);
+            } else {
+                await starComment(commentCoords);
+            }
+        } finally {
+            toggleStarredRunning = false;
         }
     }
 
@@ -75,7 +88,11 @@
                 <div class="clickable-icon" on:click={toggleStarred} on:keydown={toggleStarred}>
                     <Icon
                         icon="bookmark"
-                        color={isStarred ? "#c6a059" : isHovering ? "rgb(200, 200, 200)" : "transparent"}
+                        color={isStarred
+                            ? "var(--starred-comment-color)"
+                            : isHovering
+                            ? "rgb(200, 200, 200)"
+                            : "transparent"}
                         heightEm={0.7}
                     />
                 </div>

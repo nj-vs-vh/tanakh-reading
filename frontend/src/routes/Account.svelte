@@ -9,7 +9,7 @@
     import { getMySignupToken } from "../api";
     import type { Metadata } from "../types";
     import Spinner from "../components/shared/Spinner.svelte";
-    import { signupPath } from "../utils";
+    import { setPageTitle, signupPath } from "../utils";
     import { deleteAccessToken } from "../auth";
 
     const metadata: Metadata = getContext("metadata");
@@ -17,6 +17,8 @@
     if (metadata.logged_in_user === null) {
         navigateTo("/login");
     }
+
+    setPageTitle("Аккаунт");
 
     let mySignupTokenPromise = getMySignupToken();
 

@@ -9,6 +9,9 @@
     import Hero from "../components/shared/Hero.svelte";
     import type { UserCredentials } from "../types";
     import { saveAccessToken } from "../auth";
+    import { setPageTitle } from "../utils";
+
+    setPageTitle("Регистрация");
 
     export let currentRoute: CurrentRoute;
     const signupToken: string = currentRoute.namedParams.token;
