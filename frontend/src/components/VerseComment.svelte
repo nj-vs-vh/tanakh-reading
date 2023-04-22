@@ -30,7 +30,7 @@
             isEditing = false;
         } else if (isHovering) {
             isEditing = true;
-            editedAnchorPhrase = commentData.anchor_phrase;
+            editedAnchorPhrase = commentData.anchor_phrase === null ? "" : commentData.anchor_phrase;
             editedCommentText = commentData.comment;
         }
     });
