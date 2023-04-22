@@ -1,6 +1,5 @@
 """Parser for https://lechaim.ru/torah/ """
 
-
 import argparse
 import re
 from collections import defaultdict
@@ -79,16 +78,18 @@ def parse(parsha: int, parsha_url_path: str):
                 )
 
                 def parse_comment_paragraph(
-                    p: Tag,
+                    maybe_comment_paragraph: Tag,
                 ) -> tuple[str, Optional[str], str]:  # class, anchor phrase, comment html
-                    if not isinstance(p, Tag) or not has_class_that(p, lambda css_class: "-comment" in css_class):
+                    if not isinstance(maybe_comment_paragraph, Tag) or not has_class_that(
+                        maybe_comment_paragraph, lambda css_class: "-comment" in css_class
+                    ):
                         raise ValueError("not a comment")
-                    css_class = p.attrs["class"][0]
-                    # rashi, editor or ezra
+                    css_class = maybe_comment_paragraph.attrs["class"][0]
+                    # hopefully, rashi, editor or ezra
                     css_class_prefix = re.sub(r"-comment.*", "", css_class)
                     anchor_phrase: Optional[str] = None
                     comment_html = ""
-                    for child in p.children:
+                    for child in maybe_comment_paragraph.children:
                         if has_class_that(child, lambda c: c.endswith("-translation-fragment")):
                             anchor_phrase = inner_tag_text(child)
                         elif has_class(child, "article-part_text-marked"):
@@ -97,21 +98,47 @@ def parse(parsha: int, parsha_url_path: str):
                             comment_html += str(child)
                     return css_class_prefix, anchor_phrase, postprocess_patched_text(comment_html)
 
-                for comments_container in verse_container.find_all(tag_filter("div", ["article-part_tab-content"])):
+                for comments_container in verse_container.find_all(
+                    tag_filter("div", required_classes=["article-part_tab-content"])
+                ):
                     comments_container = cast(Tag, comments_container)
 
+                    if any(ch.name == "p" for ch in comments_container.children if isinstance(ch, Tag)):
+                        # normal structure of the container:
+                        # <div class="article-part_comment-main"> [verse text copy] </div>
+                        # <p class="rashi-comment"> ... </p>
+                        # <p class="ezra-comment"> ... </p>
+                        maybe_comments_iter = comments_container.children
+                    else:
+                        # alternative structure
+                        # <div class="article-part_comment-main"> [verse text copy] </div>
+                        # ... plain rashi comment
+                        # in this case we remove the div and use the whole comments_container
+                        # as a single rashi comment
+                        print(
+                            f"Detected alternative comment structure for {chapter_data['chapter']}:{verse_data['verse']}"
+                        )
+                        for div in comments_container.find_all(  # yes, this naming is confusing
+                            tag_filter("div", required_classes=["article-part_comment-main"])
+                        ):
+                            if isinstance(div, Tag):
+                                div.decompose()
+                        # faking the way paragraphs are class-ed in the normal layout
+                        comments_container.attrs["class"].insert(0, "rashi-comment")
+                        maybe_comments_iter = [comments_container]
+
                     current_comment_data: Optional[CommentData] = None
-                    current_commenter: Optional[str] = None
-                    for child in comments_container.children:
+                    current_comment_source: Optional[str] = None
+                    for child in maybe_comments_iter:
                         try:
                             css_class_prefix, anchor_phrase, comment_html = parse_comment_paragraph(child)
                         except Exception:
                             continue
 
                         if css_class_prefix == "rashi" or css_class_prefix == "editor":
-                            new_commenter = CommentSource.RASHI_ALT
+                            new_comment_source = CommentSource.RASHI_ALT
                         elif css_class_prefix == "ezra":
-                            new_commenter = CommentSource.IBN_EZRA
+                            new_comment_source = CommentSource.IBN_EZRA
                         else:
                             print(
                                 "Ignoring element with unexpected css class prefix "
@@ -122,21 +149,22 @@ def parse(parsha: int, parsha_url_path: str):
                         if (
                             anchor_phrase is not None
                             or current_comment_data is None
-                            or new_commenter != current_commenter
+                            or new_comment_source != current_comment_source
                         ):  # new comment!
-                            if current_comment_data is not None and current_commenter is not None:
-                                verse_data["comments"][current_commenter].append(current_comment_data)
+                            if current_comment_data is not None and current_comment_source is not None:
+                                verse_data["comments"][current_comment_source].append(current_comment_data)
 
                             current_comment_data = CommentData(
                                 anchor_phrase=anchor_phrase,
                                 comment=comment_html,
                                 format="html",
                             )
-                            current_commenter = new_commenter
+                            current_comment_source = new_comment_source
                         else:
                             current_comment_data["comment"] += "<br/>" + comment_html
-                    if current_comment_data is not None and current_commenter is not None:
-                        verse_data["comments"][current_commenter].append(current_comment_data)
+
+                    if current_comment_data is not None and current_comment_source is not None:
+                        verse_data["comments"][current_comment_source].append(current_comment_data)
 
                 chapter_data["verses"].append(verse_data)
             if add_chapter_to_parsha:

@@ -165,7 +165,7 @@ async def save_parsha(request: web.Request) -> web.Response:
     logger.info(f"Saving parsha data for book {parsha_data['book']}, parsha {parsha_data['parsha']}")
     current_parsha_data = await db.get_parsha_data(parsha_data["parsha"])
     if current_parsha_data is not None:
-        logger.info("Current parsha data exists, updating")
+        logger.info("Current parsha data exists, will overwrite")
         diff_ = list(diff(current_parsha_data, parsha_data))
     else:
         logger.info("No current parsha data, creating new one")

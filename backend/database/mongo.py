@@ -290,10 +290,14 @@ class MongoDatabase(DatabaseInterface):
         return copy.deepcopy(parsha_data)
 
     async def save_parsha_data(self, parsha_data: ParshaData) -> None:
-        if parsha_data["parsha"] in await self.get_available_parsha_indices():
-            raise ValueError(f"Parsha #{parsha_data['parsha']} already exists")
+        delete_existing = parsha_data["parsha"] in await self.get_available_parsha_indices()
+        logger.info(f"Saving parsha data, {delete_existing = }")
 
         def blocking(parsha_data: ParshaData) -> None:
+            if delete_existing:
+                filter_ = {"text_coords.parsha": parsha_data["parsha"]}
+                self.texts_coll.delete_many(filter_)
+                self.comments_coll.delete_many(filter_)
             texts, comments = parsha_data_to_texts_and_comments(parsha_data)
             self.texts_coll.insert_many([t.to_mongo_db() for t in texts])
             self.comments_coll.insert_many([c.to_mongo_db() for c in comments])
