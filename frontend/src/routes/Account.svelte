@@ -46,7 +46,6 @@
         <div class="account-settings-block">
             <p>
                 <strong>Ссылка-приглашение</strong>
-                <span>для регистрации</span>
             </p>
             <p style="width: 100%; justify-content: center; display: flex; margin-top: 0.8em;">
                 {#await mySignupTokenPromise}
