@@ -77,9 +77,8 @@ def parse(parsha: int, parsha_url_path: str):
                     comments=defaultdict(list),
                 )
 
-                def parse_comment_paragraph(
-                    maybe_comment_paragraph: Tag,
-                ) -> tuple[str, Optional[str], str]:  # class, anchor phrase, comment html
+                def parse_comment_paragraph(maybe_comment_paragraph: Tag) -> tuple[str, Optional[str], str]:
+                    #                                                            class, anchor phrase, comment html
                     if not isinstance(maybe_comment_paragraph, Tag) or not has_class_that(
                         maybe_comment_paragraph, lambda css_class: "-comment" in css_class
                     ):
