@@ -42,7 +42,7 @@
 </script>
 
 {#if metadata.logged_in_user !== null}
-    <Menu />
+    <Menu homeButton />
     <Hero verticalCentering={false}>
         <h1>
             <span>{metadata.logged_in_user.data.full_name}</span>

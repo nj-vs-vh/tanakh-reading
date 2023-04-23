@@ -1,11 +1,13 @@
 <script lang="ts">
     import { createEventDispatcher, getContext, onDestroy } from "svelte";
+
+    import Hoverable from "./shared/Hoverable.svelte";
+    import FoldedOverflow from "./shared/FoldedOverflow.svelte";
     import Icon from "./shared/Icon.svelte";
 
     import type { CommentData, CommentStarToggledEvent, Metadata } from "../types";
     import { CommentFormat } from "../types";
     import { editComment, CommentCoords, starComment, unstarComment } from "../api";
-    import Hoverable from "./shared/Hoverable.svelte";
     import { isEditingStore } from "../editing";
 
     const metadata: Metadata = getContext("metadata");
@@ -110,15 +112,18 @@
             </div>
         {:else}
             <p class="comment-text">
-                {#if commentData.anchor_phrase !== null}
-                    <strong>{commentData.anchor_phrase}</strong>
-                    <span>—</span>
-                {/if}
-                {#if commentData.format == CommentFormat.HTML}
-                    <span class="html-wrapper">{@html commentData.comment}</span>
-                {:else}
-                    <span>{commentData.comment}</span>
-                {/if}
+                <FoldedOverflow id={commentData.id}>
+                    <!-- <span>{commentData.id}</span> -->
+                    {#if commentData.anchor_phrase !== null}
+                        <strong>{commentData.anchor_phrase}</strong>
+                        <span>—</span>
+                    {/if}
+                    {#if commentData.format == CommentFormat.HTML}
+                        <span class="html-wrapper">{@html commentData.comment}</span>
+                    {:else}
+                        <span>{commentData.comment}</span>
+                    {/if}
+                </FoldedOverflow>
             </p>
         {/if}
     </div>
