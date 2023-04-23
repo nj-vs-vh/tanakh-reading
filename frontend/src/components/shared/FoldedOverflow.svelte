@@ -1,7 +1,6 @@
 <script lang="ts">
     import { afterUpdate } from "svelte";
 
-    // export let maxHeight: string = "50vh";
     export let maxHeightPx: number = 400;
 
     // HACK: used to force rerender of folded overflow component
