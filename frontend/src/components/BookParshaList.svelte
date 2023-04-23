@@ -40,6 +40,7 @@
     .container {
         --custom-border-spacing: 0.5em;
         border: 1px grey solid;
+        border-radius: 5px 0 0 5px;
         padding: 0 0.5em;
         align-self: start;
         /* width: max(90%, 300px); */
