@@ -12,8 +12,8 @@ from backend.model import (
     SearchTextResult,
     SignupToken,
     StarredComment,
-    StoredUser,
     StarredCommentData,
+    StoredUser,
 )
 
 logger = logging.getLogger(__name__)
@@ -151,6 +151,7 @@ class DatabaseInterface(abc.ABC):
         sorting: SearchTextSorting,
         search_in: list[SearchTextIn],
         with_verse_parsha_data: bool,
+        username: Optional[str],
     ) -> SearchTextResult:
         """Each returned ParshaData will have only one chapter with one verse, containing the matched phrase"""
         ...

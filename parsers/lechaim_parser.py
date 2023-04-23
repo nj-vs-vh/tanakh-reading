@@ -115,7 +115,8 @@ def parse(parsha: int, parsha_url_path: str):
                         # in this case we remove the div and use the whole comments_container
                         # as a single rashi comment
                         print(
-                            f"Detected alternative comment structure for {chapter_data['chapter']}:{verse_data['verse']}"
+                            "Detected alternative comment structure for "
+                            + f"{chapter_data['chapter']}:{verse_data['verse']}"
                         )
                         for div in comments_container.find_all(  # yes, this naming is confusing
                             tag_filter("div", required_classes=["article-part_comment-main"])

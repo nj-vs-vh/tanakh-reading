@@ -1,6 +1,6 @@
 import { withAccessTokenHeader } from "./auth";
 import { isProduction } from "./config";
-import type { ParshaData, Metadata, SignupData, UserCredentials, TextCoords, FoundText, FoundComment } from "./types";
+import type { ParshaData, Metadata, SignupData, UserCredentials, SingleText, SingleComment } from "./types";
 
 
 // @ts-ignore
@@ -235,8 +235,8 @@ export interface SearchTextRequest {
 }
 
 export interface FoundMatch {
-    text: FoundText | null;
-    comment: FoundComment | null;
+    text: SingleText | null;
+    comment: SingleComment | null;
     parsha_data: ParshaData | null;  // null = was not requested
 }
 
@@ -264,7 +264,25 @@ export async function searchText(request: SearchTextRequest): Promise<SearchText
     const query = parts.join("&")
     const requestUrl = `${BASE_API_URL}/search-text?${query}`;
     console.log(`Generated request URL for text search: ${requestUrl}`)
-    const resp = await fetch(requestUrl);
+    const resp = await fetch(requestUrl, { headers: withAccessTokenHeader({}) });
+    const respText = await resp.text();
+    if (resp.ok) return JSON.parse(respText);
+    else throw (respText);
+}
+
+
+export interface StarredCommentData {
+    comment: SingleComment;
+    parsha_data: ParshaData;
+}
+
+export interface StarredCommentsMeta {
+    total: number;
+    random_starred_comment_data: StarredCommentData;
+}
+
+export async function getStarredCommentsMeta(): Promise<StarredCommentsMeta> {
+    const resp = await fetch(`${BASE_API_URL}/starred-comments-meta`, { headers: withAccessTokenHeader({}) })
     const respText = await resp.text();
     if (resp.ok) return JSON.parse(respText);
     else throw (respText);

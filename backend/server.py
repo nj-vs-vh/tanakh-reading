@@ -3,7 +3,7 @@ import json
 import logging
 import re
 import secrets
-from typing import NoReturn, cast
+from typing import NoReturn, Optional, cast
 
 from aiohttp import hdrs, web
 from aiohttp.typedefs import Handler
@@ -326,7 +326,7 @@ async def unstar_comment(request: web.Request) -> web.Response:
     return web.Response()
 
 
-@routes.get("/starred-comment-meta")
+@routes.get("/starred-comments-meta")
 async def get_starred_comments_meta(request: web.Request) -> web.Response:
     user, _ = await get_authorized_user(request)
     db = get_db(request)
@@ -345,6 +345,12 @@ MIN_QUERY_LEN = 3
 
 @routes.get("/search-text")
 async def search_text(request: web.Request) -> web.Response:
+    try:
+        user, _ = await get_authorized_user(request)
+        username: Optional[str] = user.username
+    except Exception:
+        username = None
+
     db = get_db(request)
     try:
         query = request.query["query"]
@@ -368,6 +374,7 @@ async def search_text(request: web.Request) -> web.Response:
             sorting=SearchTextSorting(request.query.get("sorting", SearchTextSorting.START_TO_END.value)),
             search_in=[SearchTextIn(v) for v in request.query.getall("search_in", [sti.value for sti in SearchTextIn])],
             with_verse_parsha_data=bool(request.query.get("with_verse_parsha_data", False)),
+            username=username,
         )
     except KeyError as e:
         raise web.HTTPBadRequest(reason=f"Missing required query param: {e}")

@@ -84,7 +84,7 @@ export interface TextCoords {
     verse: number;
 }
 
-export interface FoundText {
+export interface SingleText {
     db_id: string;
     text_coords: TextCoords;
     text_source: string;
@@ -92,7 +92,7 @@ export interface FoundText {
     language: string;
 }
 
-export interface FoundComment {
+export interface SingleComment {
     db_id: string;
     text_coords: TextCoords;
     comment_source: string;
@@ -102,6 +102,7 @@ export interface FoundComment {
     language: string;
     index: number;
     legacy_id: string | null;
+    is_starred: boolean | null;
 }
 
 export interface CommentStarToggledEvent {

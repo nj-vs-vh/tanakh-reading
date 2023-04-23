@@ -6,11 +6,12 @@
     import VerseText from "./VerseText.svelte";
     import type { Metadata, TextCoords } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
-    import { bookNoByParsha, parshaPath, versePath } from "../utils";
+    import { bookNoByParsha, versePath } from "../utils";
     import VerseDetailsModal from "./VerseDetailsModal.svelte";
     import Icon from "./shared/Icon.svelte";
 
     export let match: FoundMatch;
+    export let isStarrable: boolean = true;
 
     const metadata: Metadata = getContext("metadata");
 
@@ -70,7 +71,9 @@
                 anchor_phrase: match.comment.anchor_phrase,
                 comment: match.comment.comment,
                 format: match.comment.format,
+                is_starred_by_me: match.comment.is_starred,
             }}
+            {isStarrable}
         />
     {:else}
         <div class="match-header">

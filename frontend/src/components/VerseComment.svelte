@@ -10,6 +10,7 @@
 
     const metadata: Metadata = getContext("metadata");
     export let commentData: CommentData;
+    export let isStarrable: boolean = true;
 
     let commentCoords: CommentCoords;
     let isStarred: boolean;
@@ -84,7 +85,7 @@
 <Hoverable bind:isHovering>
     <div class="comment-body-container">
         <div class="icons-container">
-            {#if isLoggedIn}
+            {#if isLoggedIn && isStarrable}
                 <div class="clickable-icon" on:click={toggleStarred} on:keydown={toggleStarred}>
                     <Icon
                         icon="bookmark"

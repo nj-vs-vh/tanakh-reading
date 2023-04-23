@@ -302,18 +302,41 @@ class MongoDatabase(DatabaseInterface):
             try:
                 comment_doc = docs[0]["comment"][0]
             except Exception:
-                logger.info(f"No random comments found for {starrer_username!r} ({docs = })")
+                logger.info(f"No random starred comments found for {starrer_username!r} ({docs = })")
                 return None
-            comment = StoredComment(**comment_doc)
+            comment = StoredComment.from_mongo_db(comment_doc)
+            comment.is_starred = True
             coords = CoordsTriplet.from_text_or_comment(comment)
-            parsha_data = self._lookup_single_verses_as_parsha_data({coords}).get(coords)
+            parsha_data = self._lookup_single_verses_as_parsha_data(starrer_username, {coords}).get(coords)
             return StarredCommentData(comment=comment, parsha_data=parsha_data)
 
         return await self._awrap(blocking)
 
+    def _set_is_starred(self, starrer_username: str, stored_comments: list[StoredComment]):
+        """Modify StoredComment objects with data from starred-comments collection"""
+
+        logger.info(f"Setting is_starred flag on {len(stored_comments)} comments with {starrer_username = }")
+        comment_ids = [sc.db_id for sc in stored_comments if sc.is_stored()]
+        cursor = self.starred_comments_coll.find(
+            {
+                "starrer_username": starrer_username,
+                "comment_id": {"$in": comment_ids},
+            }
+        )
+        starred_comment_ids = {c["comment_id"] for c in cursor}
+        logger.debug(f"{starred_comment_ids = }, {comment_ids = }")
+        for sc in stored_comments:
+            if not sc.is_stored():
+                continue
+            sc.is_starred = sc.db_id in starred_comment_ids
+
     def _lookup_single_verses_as_parsha_data(
-        self, coord_triplets: set[CoordsTriplet]
+        self,
+        username: Optional[str],
+        coord_triplets: set[CoordsTriplet],
     ) -> dict[CoordsTriplet, ParshaData]:
+        """Load verse texts and comments and wrap them in a single-verse parsha data object"""
+
         res: dict[CoordsTriplet, ParshaData] = dict()
         logger.info(f"Fetching verses (single-verse parsha data objects) for {len(coord_triplets)} coords")
         subquery_let = {"p": "$coords.parsha", "c": "$coords.chapter", "v": "$coords.verse"}
@@ -376,6 +399,8 @@ class MongoDatabase(DatabaseInterface):
         ):
             verse_texts = [StoredText.from_mongo_db(t) for t in doc["texts"]]
             verse_comments = [StoredComment.from_mongo_db(c) for c in doc["comments"]]
+            if username is not None:
+                self._set_is_starred(username, verse_comments)
             res[
                 CoordsTriplet(
                     doc["coords"]["parsha"],
@@ -463,6 +488,7 @@ class MongoDatabase(DatabaseInterface):
         sorting: SearchTextSorting,
         search_in: list[SearchTextIn],
         with_verse_parsha_data: bool,
+        username: Optional[str],
     ) -> SearchTextResult:
         def blocking() -> SearchTextResult:
             logger.info(
@@ -502,6 +528,8 @@ class MongoDatabase(DatabaseInterface):
 
             if SearchTextIn.COMMENTS in search_in:
                 comments = [StoredComment.from_mongo_db(doc) for doc in self.comments_coll.aggregate(search_pipeline)]
+                if username is not None:
+                    self._set_is_starred(username, comments)
                 try:
                     comment_matches: Optional[int] = self.comments_coll.aggregate(count_pipeline).next()["total"]
                 except StopIteration:
@@ -532,7 +560,8 @@ class MongoDatabase(DatabaseInterface):
 
             if with_verse_parsha_data:
                 verse_parsha_data_by_coords = self._lookup_single_verses_as_parsha_data(
-                    {CoordsTriplet.from_text_or_comment(toc) for toc in texts_and_comments}
+                    username=username,
+                    coord_triplets={CoordsTriplet.from_text_or_comment(toc) for toc in texts_and_comments},
                 )
             else:
                 verse_parsha_data_by_coords = dict()
@@ -628,6 +657,7 @@ def parsha_data_to_texts_and_comments(parsha_data: ParshaData) -> tuple[list[Sto
                             language=to_mongo_language(comment_source_languages[comment_source]),
                             index=index,
                             legacy_id=comment.get("id"),
+                            is_starred=comment.get("is_starred_by_me"),
                         )
                     )
     return stored_texts, stored_comments
@@ -662,14 +692,15 @@ def texts_and_comments_to_parsha_data(texts: list[StoredText], comments: list[St
             verse_comments.sort(key=lambda c: c.index)
             verse_data_by_source = collections.defaultdict[str, list[CommentData]](list)
             for vc in verse_comments:
-                verse_data_by_source[vc.comment_source].append(
-                    CommentData(
-                        id=str(vc.db_id) if vc.is_stored() else vc.legacy_id or "<unset>",
-                        anchor_phrase=vc.anchor_phrase,
-                        comment=vc.comment,
-                        format=vc.format,
-                    )
+                comment_data = CommentData(
+                    id=str(vc.db_id) if vc.is_stored() else vc.legacy_id or "<unset>",
+                    anchor_phrase=vc.anchor_phrase,
+                    comment=vc.comment,
+                    format=vc.format,
                 )
+                if vc.is_starred is True:
+                    comment_data["is_starred_by_me"] = True
+                verse_data_by_source[vc.comment_source].append(comment_data)
 
             chapter_data["verses"].append(
                 VerseData(

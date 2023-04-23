@@ -211,6 +211,8 @@ class StoredComment(PublicIdDbSchemaModel):
     index: int  # index within one source's comments
     legacy_id: Optional[str] = None
 
+    is_starred: Optional[bool] = None
+
     @pydantic.validator("comment_source")
     def validate_comment_source(cls, comment_source):
         if comment_source not in CommentSource.all():
