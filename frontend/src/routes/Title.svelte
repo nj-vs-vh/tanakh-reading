@@ -1,14 +1,11 @@
 <script lang="ts">
     import { getContext } from "svelte";
-    import { Navigate } from "svelte-router-spa";
-
-    import Screen from "../components/shared/Screen.svelte";
 
     import Menu from "../components/Menu.svelte";
 
-    import { textSourcesConfigStore } from "../settings/textSources";
-    import { parshaPath, range, setPageTitle } from "../utils";
+    import { setPageTitle } from "../utils";
     import type { Metadata } from "../types";
+    import BookParshaList from "../components/BookParshaList.svelte";
 
     setPageTitle(null);
 
@@ -16,59 +13,40 @@
 
     const bookIndices = Object.keys(metadata.book_names).map((v) => parseInt(v));
     bookIndices.sort();
-
-    const parshaArrays = {};
-
-    for (const [bookIndex, parshaMinMax] of Object.entries(metadata.parsha_ranges)) {
-        parshaArrays[bookIndex] = range(parshaMinMax[0], parshaMinMax[1]);
-    }
 </script>
 
 <Menu />
-<Screen>
-    <div class="container">
+<div class="horizontal-centering">
+    <div class="vertical-flow-container">
         <h1>Тора</h1>
-        {#each bookIndices as bookIndex}
-            <h2>
-                {bookIndex}. {metadata.book_names[bookIndex][$textSourcesConfigStore.main]}
-            </h2>
-            {#each parshaArrays[bookIndex] as parshaIndex}
-                {#if metadata.available_parsha.includes(parshaIndex)}
-                    <Navigate to={parshaPath(parshaIndex)}>
-                        <h3>
-                            {parshaIndex}. {metadata.parsha_names[parshaIndex][$textSourcesConfigStore.main]}
-                        </h3>
-                    </Navigate>
-                {:else}
-                    <h3 class="inactive">
-                        {parshaIndex}. {metadata.parsha_names[parshaIndex][$textSourcesConfigStore.main]}
-                    </h3>
-                {/if}
+        <div class="cards-container">
+            {#each bookIndices as bookIndex}
+                <BookParshaList {bookIndex} />
             {/each}
-        {/each}
+        </div>
     </div>
-</Screen>
+</div>
 
 <style>
-    .container {
-        min-width: 50vw;
-        margin: 3em 1em;
+    .horizontal-centering {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .vertical-flow-container {
+        min-width: 40vw;
+        max-width: 100%;
+        margin-top: 4em;
     }
 
     h1 {
-        margin: 3em 0 0 0;
+        margin-bottom: 1em;
     }
 
-    h2 {
-        margin: 1em 0 0 0;
-    }
-
-    h3 {
-        margin: 0.5em 0 0 1em;
-    }
-
-    .inactive {
-        color: rgb(196, 196, 196);
-        cursor: not-allowed;
+    .cards-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
     }
 </style>

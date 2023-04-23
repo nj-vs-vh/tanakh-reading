@@ -1,7 +1,7 @@
 <script lang="ts">
     import Icon from "../shared/Icon.svelte";
 
-    export let icon: string;
+    export let icon: string | null = null;
     export let title: string;
 
     let isFolded = true;
@@ -11,10 +11,12 @@
 </script>
 
 <h2 on:click={toggleFolded} on:keydown={toggleFolded}>
-    <div class="nav-icon">
-        <Icon heightEm={0.9} {icon} color="black" />
-    </div>
-    <span class="nav-caption">{title}</span>
+    {#if icon !== null}
+        <div class="nav-icon">
+            <Icon heightEm={0.9} {icon} color="black" />
+        </div>
+    {/if}
+    <span class={icon !== null ? "nav-caption-with-icon" : ""}>{title}</span>
 </h2>
 <div class={isFolded ? "folded" : ""}>
     <slot />
@@ -33,7 +35,7 @@
         text-decoration: underline;
     }
 
-    .nav-caption {
+    .nav-caption-with-icon {
         margin-left: 0.3em;
     }
 
