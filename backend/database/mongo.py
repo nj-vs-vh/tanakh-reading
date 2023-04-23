@@ -314,21 +314,44 @@ class MongoDatabase(DatabaseInterface):
 
     def _set_is_starred(self, starrer_username: str, stored_comments: list[StoredComment]):
         """Modify StoredComment objects with data from starred-comments collection"""
+        stored_comments_by_id = {sc.db_id: sc for sc in stored_comments if sc.is_stored()}
 
         logger.info(f"Setting is_starred flag on {len(stored_comments)} comments with {starrer_username = }")
-        comment_ids = [sc.db_id for sc in stored_comments if sc.is_stored()]
-        cursor = self.starred_comments_coll.find(
-            {
-                "starrer_username": starrer_username,
-                "comment_id": {"$in": comment_ids},
-            }
+        cursor = self.comments_coll.aggregate(
+            [
+                {"$limit": 1},
+                {"$addFields": {"comment_id": list(stored_comments_by_id.keys())}},
+                {"$project": {"comment_id": True}},
+                {"$unwind": "$comment_id"},
+                {
+                    "$lookup": {
+                        "from": "starred-comments",
+                        "as": "starred",
+                        "let": {"comment_id": "$comment_id"},
+                        "pipeline": [
+                            {
+                                "$match": {
+                                    "$expr": {
+                                        "$and": [
+                                            {"$eq": ["$starrer_username", starrer_username]},
+                                            {"$eq": ["$comment_id", "$$comment_id"]},
+                                        ]
+                                    }
+                                }
+                            }
+                        ],
+                    }
+                },
+                {"$project": {"comment_id": True, "is_starred": {"$size": "$starred"}}},
+            ]
         )
-        starred_comment_ids = {c["comment_id"] for c in cursor}
-        logger.debug(f"{starred_comment_ids = }, {comment_ids = }")
-        for sc in stored_comments:
-            if not sc.is_stored():
-                continue
-            sc.is_starred = sc.db_id in starred_comment_ids
+        total_starred = 0
+        for doc in cursor:
+            is_starred = bool(doc["is_starred"])
+            if is_starred:
+                total_starred += 1
+            stored_comments_by_id[doc["comment_id"]].is_starred = is_starred
+        logger.info(f"Total starred comments: {total_starred}")
 
     def _lookup_single_verses_as_parsha_data(
         self,
@@ -337,7 +360,7 @@ class MongoDatabase(DatabaseInterface):
     ) -> dict[CoordsTriplet, ParshaData]:
         """Load verse texts and comments and wrap them in a single-verse parsha data object"""
 
-        res: dict[CoordsTriplet, ParshaData] = dict()
+        texts_and_comments_by_coords: dict[CoordsTriplet, tuple[list[StoredText], list[StoredComment]]] = dict()
         logger.info(f"Fetching verses (single-verse parsha data objects) for {len(coord_triplets)} coords")
         subquery_let = {"p": "$coords.parsha", "c": "$coords.chapter", "v": "$coords.verse"}
         subquery_pipeline = [
@@ -399,16 +422,23 @@ class MongoDatabase(DatabaseInterface):
         ):
             verse_texts = [StoredText.from_mongo_db(t) for t in doc["texts"]]
             verse_comments = [StoredComment.from_mongo_db(c) for c in doc["comments"]]
-            if username is not None:
-                self._set_is_starred(username, verse_comments)
-            res[
+            texts_and_comments_by_coords[
                 CoordsTriplet(
                     doc["coords"]["parsha"],
                     doc["coords"]["chapter"],
                     doc["coords"]["verse"],
                 )
-            ] = texts_and_comments_to_parsha_data(verse_texts, verse_comments)
-        return res
+            ] = (verse_texts, verse_comments)
+
+        if username is not None:
+            self._set_is_starred(
+                username,
+                list(itertools.chain.from_iterable(comments for _, comments in texts_and_comments_by_coords.values())),
+            )
+        return {
+            coords: texts_and_comments_to_parsha_data(texts, comments)
+            for coords, (texts, comments) in texts_and_comments_by_coords.items()
+        }
 
     # parsha data
 

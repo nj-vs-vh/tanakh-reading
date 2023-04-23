@@ -3,7 +3,6 @@
     import { navigateTo } from "svelte-router-spa";
     import { generateSignupToken, getStarredCommentsMeta, logout } from "../api";
     import Hero from "../components/shared/Hero.svelte";
-    import MainMenuButton from "../components/shared/MainMenuButton.svelte";
     import Copyable from "../components/shared/Copyable.svelte";
 
     import { getMySignupToken } from "../api";
@@ -14,6 +13,7 @@
     import Icon from "../components/shared/Icon.svelte";
     import SearchResultEntry from "../components/SearchResultEntry.svelte";
     import { FoundMatch } from "../api";
+    import Menu from "../components/Menu.svelte";
 
     const metadata: Metadata = getContext("metadata");
 
@@ -42,7 +42,7 @@
 </script>
 
 {#if metadata.logged_in_user !== null}
-    <MainMenuButton />
+    <Menu />
     <Hero>
         <h1>
             <span>{metadata.logged_in_user.data.full_name}</span>
@@ -70,7 +70,8 @@
                                     comment: starredCommentsMeta.random_starred_comment_data.comment,
                                     parsha_data: starredCommentsMeta.random_starred_comment_data.parsha_data,
                                 }}
-                                isStarrable={false}
+                                isCommentStarrable={false}
+                                addTextCommentIcon={false}
                             />
                         </div>
                     {/if}

@@ -11,7 +11,10 @@
     import Icon from "./shared/Icon.svelte";
 
     export let match: FoundMatch;
-    export let isStarrable: boolean = true;
+    // if the match contains comment, this flag allows to make it starrable or not
+    export let isCommentStarrable: boolean = true;
+    // add icon specifying text / comment
+    export let addTextCommentIcon: boolean = true;
 
     const metadata: Metadata = getContext("metadata");
 
@@ -54,8 +57,10 @@
     {#if match.comment !== null}
         <div class="match-header">
             <span class="text-with-icon">
-                <Icon icon="tanakh-book" heightEm={1} />
-                <span>
+                {#if addTextCommentIcon}
+                    <Icon icon="tanakh-book" heightEm={1} />
+                {/if}
+                <span style={addTextCommentIcon ? "margin-left: 0.4em" : ""}>
                     {metadata.commenter_names[match.comment.comment_source]} к
                     <button on:click={openVerseDetailsModal} on:keypress={openVerseDetailsModal}>{textCoordsStr}</button
                     >
@@ -73,13 +78,15 @@
                 format: match.comment.format,
                 is_starred_by_me: match.comment.is_starred,
             }}
-            {isStarrable}
+            isStarrable={isCommentStarrable}
         />
     {:else}
         <div class="match-header">
             <span class="text-with-icon">
-                <Icon icon="torah-scroll" heightEm={1} />
-                <span>
+                {#if addTextCommentIcon}
+                    <Icon icon="torah-scroll" heightEm={1} />
+                {/if}
+                <span style={addTextCommentIcon ? "margin-left: 0.4em" : ""}>
                     <button on:click={openVerseDetailsModal} on:keypress={openVerseDetailsModal}>{textCoordsStr}</button
                     >
                     {metadata.text_source_marks[match.text.text_source]}
@@ -105,10 +112,6 @@
     span.text-with-icon {
         display: flex;
         align-items: center;
-    }
-
-    span.text-with-icon > span {
-        margin-left: 0.4em;
     }
 
     button {
