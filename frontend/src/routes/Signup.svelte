@@ -1,12 +1,14 @@
 <script lang="ts">
     import type { CurrentRoute } from "svelte-router-spa/types/components/route";
-    import { checkSignupToken, login, signup } from "../api";
+    import Keydown from "svelte-keydown";
+    import { navigateTo } from "svelte-router-spa";
+
     import Screen from "../components/shared/Screen.svelte";
     import Error from "../components/shared/Error.svelte";
     import Spinner from "../components/shared/Spinner.svelte";
-    import { navigateTo } from "svelte-router-spa";
-    import Keydown from "svelte-keydown";
     import Hero from "../components/shared/Hero.svelte";
+
+    import { checkSignupToken, login, signup } from "../api";
     import type { UserCredentials } from "../types";
     import { saveAccessToken } from "../auth";
     import { setPageTitle } from "../utils";

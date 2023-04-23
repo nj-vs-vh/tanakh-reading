@@ -2,10 +2,10 @@
     import { getContext } from "svelte";
 
     import Menu from "../components/Menu.svelte";
+    import BookParshaList from "../components/BookParshaList.svelte";
 
     import { setPageTitle } from "../utils";
     import type { Metadata } from "../types";
-    import BookParshaList from "../components/BookParshaList.svelte";
 
     setPageTitle(null);
 

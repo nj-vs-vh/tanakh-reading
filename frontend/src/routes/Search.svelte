@@ -2,13 +2,14 @@
     import Keydown from "svelte-keydown";
     import { inview } from "svelte-inview";
 
-    import { searchText, SearchTextIn, SearchTextResponse, SearchTextSorting } from "../api";
     import Menu from "../components/Menu.svelte";
     import SearchResultEntry from "../components/SearchResultEntry.svelte";
     import Hero from "../components/shared/Hero.svelte";
     import SearchButton from "../components/shared/SearchButton.svelte";
     import Spinner from "../components/shared/Spinner.svelte";
     import UpButton from "../components/shared/UpButton.svelte";
+
+    import { searchText, SearchTextIn, SearchTextResponse, SearchTextSorting } from "../api";
     import { setPageTitle } from "../utils";
 
     let currentQuery = decodeURIComponent(window.location.hash.split("#").pop());
@@ -173,7 +174,6 @@
         on:enter={async (e) => {
             const { inView } = e.detail;
             if (currentSearchTextResponse !== null && !allLoaded) {
-                // i.e. if the initial load is completed
                 if (inView) {
                     await loadMoreSearchResults();
                 }

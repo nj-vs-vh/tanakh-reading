@@ -2,18 +2,18 @@
     import { getContext } from "svelte";
     import { navigateTo } from "svelte-router-spa";
     import { generateSignupToken, getStarredCommentsMeta, logout } from "../api";
+
+    import Menu from "../components/Menu.svelte";
     import Hero from "../components/shared/Hero.svelte";
     import Copyable from "../components/shared/Copyable.svelte";
+    import SearchResultEntry from "../components/SearchResultEntry.svelte";
+    import Icon from "../components/shared/Icon.svelte";
+    import Spinner from "../components/shared/Spinner.svelte";
 
     import { getMySignupToken } from "../api";
     import type { Metadata } from "../types";
-    import Spinner from "../components/shared/Spinner.svelte";
     import { setPageTitle, signupPath } from "../utils";
     import { deleteAccessToken } from "../auth";
-    import Icon from "../components/shared/Icon.svelte";
-    import SearchResultEntry from "../components/SearchResultEntry.svelte";
-    import { FoundMatch } from "../api";
-    import Menu from "../components/Menu.svelte";
 
     const metadata: Metadata = getContext("metadata");
 

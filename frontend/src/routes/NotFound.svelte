@@ -1,5 +1,6 @@
 <script lang="ts">
     import Screen from "../components/shared/Screen.svelte";
+
     import { setPageTitle } from "../utils";
 
     setPageTitle("404");
