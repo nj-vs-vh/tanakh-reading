@@ -25,6 +25,7 @@ from backend.model import (
     SignupToken,
     StarCommentRequest,
     StarredComment,
+    StarredCommentMetaResponse,
     StoredUser,
     UserCredentials,
 )
@@ -323,6 +324,18 @@ async def unstar_comment(request: web.Request) -> web.Response:
         )
     )
     return web.Response()
+
+
+@routes.get("/starred-comment-meta")
+async def get_starred_comments_meta(request: web.Request) -> web.Response:
+    user, _ = await get_authorized_user(request)
+    db = get_db(request)
+    return web.json_response(
+        text=StarredCommentMetaResponse(
+            total=await db.count_starred_comments(user.username),
+            random_starred_comment_data=await db.load_random_starred_comment(user.username),
+        ).to_public_json()
+    )
 
 
 query_peproc_re = re.compile(r"\s+", flags=re.MULTILINE)

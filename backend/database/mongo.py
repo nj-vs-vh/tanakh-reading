@@ -6,7 +6,7 @@ import json
 import logging
 import random
 from concurrent.futures import ThreadPoolExecutor
-from typing import Any, Callable, Optional, TypeVar, Union
+from typing import Any, Callable, NamedTuple, Optional, TypeVar, Union
 
 import bson
 import pymongo
@@ -33,6 +33,7 @@ from backend.model import (
     SearchTextResult,
     SignupToken,
     StarredComment,
+    StarredCommentData,
     StoredComment,
     StoredText,
     StoredUser,
@@ -44,6 +45,18 @@ logger = logging.getLogger(__name__)
 
 
 T = TypeVar("T")
+
+
+class CoordsTriplet(NamedTuple):
+    """Verse coordinates used internally"""
+
+    parsha: int
+    chapter: int
+    verse: int
+
+    @classmethod
+    def from_text_or_comment(cls, toc: Union[StoredText, StoredComment]) -> "CoordsTriplet":
+        return CoordsTriplet(toc.text_coords.parsha, toc.text_coords.chapter, toc.text_coords.verse)
 
 
 class MongoDatabase(DatabaseInterface):
@@ -266,6 +279,112 @@ class MongoDatabase(DatabaseInterface):
 
         return await self._awrap(blocking)
 
+    async def count_starred_comments(self, starrer_username: str) -> int:
+        return await self._awrap(self.starred_comments_coll.count_documents, {"starrer_username": starrer_username})
+
+    async def load_random_starred_comment(self, starrer_username: str) -> Optional[StarredCommentData]:
+        def blocking() -> Optional[StarredCommentData]:
+            cursor = self.starred_comments_coll.aggregate(
+                [
+                    {"$match": {"starrer_username": starrer_username}},
+                    {"$sample": {"size": 1}},
+                    {
+                        "$lookup": {
+                            "from": "comments",
+                            "localField": "comment_id",
+                            "foreignField": "_id",
+                            "as": "comment",
+                        }
+                    },
+                ]
+            )
+            docs = list(cursor)
+            try:
+                comment_doc = docs[0]["comment"][0]
+            except Exception:
+                logger.info(f"No random comments found for {starrer_username!r} ({docs = })")
+                return None
+            comment = StoredComment(**comment_doc)
+            coords = CoordsTriplet.from_text_or_comment(comment)
+            parsha_data = self._lookup_single_verses_as_parsha_data({coords}).get(coords)
+            return StarredCommentData(comment=comment, parsha_data=parsha_data)
+
+        return await self._awrap(blocking)
+
+    def _lookup_single_verses_as_parsha_data(
+        self, coord_triplets: set[CoordsTriplet]
+    ) -> dict[CoordsTriplet, ParshaData]:
+        res: dict[CoordsTriplet, ParshaData] = dict()
+        logger.info(f"Fetching verses (single-verse parsha data objects) for {len(coord_triplets)} coords")
+        subquery_let = {"p": "$coords.parsha", "c": "$coords.chapter", "v": "$coords.verse"}
+        subquery_pipeline = [
+            {
+                "$match": {
+                    "$expr": {
+                        "$and": [
+                            {"$eq": ["$text_coords.parsha", "$$p"]},
+                            {"$eq": ["$text_coords.chapter", "$$c"]},
+                            {"$eq": ["$text_coords.verse", "$$v"]},
+                        ]
+                    }
+                }
+            }
+        ]
+
+        for doc in self.texts_coll.aggregate(
+            [
+                # {
+                #     "$documents": [
+                #         {"parsha": parsha, "chapter": chapter, "verse": verse}
+                #         for parsha, chapter, verse in coord_triplets
+                #     ]
+                # },
+                # ^^^ $documents is not available in Mongo 5, so we emulate it below
+                {"$limit": 1},
+                {
+                    "$addFields": {
+                        "coords": [
+                            {
+                                "parsha": ct.parsha,
+                                "chapter": ct.chapter,
+                                "verse": ct.verse,
+                            }
+                            for ct in coord_triplets
+                        ]
+                    }
+                },
+                {"$project": {"coords": True}},
+                {"$unwind": "$coords"},
+                # now we have a stream of {"parsha": ..., "chapter": ..., "verse": ...} docs
+                {
+                    "$lookup": {
+                        "from": "texts",
+                        "as": "texts",
+                        "let": subquery_let,
+                        "pipeline": subquery_pipeline,
+                    }
+                },
+                {
+                    "$lookup": {
+                        "from": "comments",
+                        "as": "comments",
+                        "let": subquery_let,
+                        "pipeline": subquery_pipeline,
+                    }
+                },
+            ]
+        ):
+            verse_texts = [StoredText.from_mongo_db(t) for t in doc["texts"]]
+            verse_comments = [StoredComment.from_mongo_db(c) for c in doc["comments"]]
+            res[
+                CoordsTriplet(
+                    doc["coords"]["parsha"],
+                    doc["coords"]["chapter"],
+                    doc["coords"]["verse"],
+                )
+            ] = texts_and_comments_to_parsha_data(verse_texts, verse_comments)
+        return res
+
     # parsha data
 
     async def get_parsha_data(self, index: int) -> Optional[ParshaData]:
@@ -373,7 +492,6 @@ class MongoDatabase(DatabaseInterface):
             )
             if SearchTextIn.TEXTS in search_in:
                 texts = [StoredText.from_mongo_db(doc) for doc in self.texts_coll.aggregate(search_pipeline)]
-
                 try:
                     text_matches: Optional[int] = (self.texts_coll.aggregate(count_pipeline)).next()["total"]
                 except StopIteration:
@@ -402,85 +520,26 @@ class MongoDatabase(DatabaseInterface):
 
             logger.info(f"Got {len(texts)} texts and {len(comments)} comments")
 
-            def toc_to_coord_triplet(toc: Union[StoredComment, StoredText]) -> tuple[int, int, int]:
-                return (toc.text_coords.parsha, toc.text_coords.chapter, toc.text_coords.verse)
-
             if len(search_in) > 1:  # e.g. we concatenate results of several queries and need to reorder them
                 if sorting is SearchTextSorting.START_TO_END:
-                    texts_and_comments.sort(key=toc_to_coord_triplet)
+                    texts_and_comments.sort(key=CoordsTriplet.from_text_or_comment)
                 elif sorting is SearchTextSorting.END_TO_START:
-                    texts_and_comments.sort(key=toc_to_coord_triplet, reverse=True)
+                    texts_and_comments.sort(key=CoordsTriplet.from_text_or_comment, reverse=True)
                 elif sorting is SearchTextSorting.BEST_TO_WORST:
                     random.seed(f"{query}-{page}-{page_size}")  # ensuring query repeatability
                     # it's reasonable to expect that on a single page all results are more or less equal in score
                     random.shuffle(texts_and_comments)
 
-            verse_parsha_data_by_coords: dict[tuple[int, int, int], ParshaData] = dict()
             if with_verse_parsha_data:
-                coord_triplets = {toc_to_coord_triplet(toc) for toc in texts_and_comments}
-                logger.info(f"Fetching verses for {len(coord_triplets)} coords")
-                subquery_let = {"p": "$coords.parsha", "c": "$coords.chapter", "v": "$coords.verse"}
-                subquery_pipeline = [
-                    {
-                        "$match": {
-                            "$expr": {
-                                "$and": [
-                                    {"$eq": ["$text_coords.parsha", "$$p"]},
-                                    {"$eq": ["$text_coords.chapter", "$$c"]},
-                                    {"$eq": ["$text_coords.verse", "$$v"]},
-                                ]
-                            }
-                        }
-                    }
-                ]
-
-                for doc in self.texts_coll.aggregate(
-                    [
-                        # {
-                        #     "$documents": [
-                        #         {"parsha": parsha, "chapter": chapter, "verse": verse}
-                        #         for parsha, chapter, verse in coord_triplets
-                        #     ]
-                        # },
-                        # NOTE: ^^^ $documents is not available in Mongo 5, so we emulate it below
-                        {"$limit": 1},
-                        {
-                            "$addFields": {
-                                "coords": [
-                                    {"parsha": parsha, "chapter": chapter, "verse": verse}
-                                    for parsha, chapter, verse in coord_triplets
-                                ]
-                            }
-                        },
-                        {"$project": {"coords": True}},
-                        {"$unwind": "$coords"},
-                        {
-                            "$lookup": {
-                                "from": "texts",
-                                "as": "texts",
-                                "let": subquery_let,
-                                "pipeline": subquery_pipeline,
-                            }
-                        },
-                        {
-                            "$lookup": {
-                                "from": "comments",
-                                "as": "comments",
-                                "let": subquery_let,
-                                "pipeline": subquery_pipeline,
-                            }
-                        },
-                    ]
-                ):
-                    verse_texts = [StoredText.from_mongo_db(t) for t in doc["texts"]]
-                    verse_comments = [StoredComment.from_mongo_db(c) for c in doc["comments"]]
-                    verse_parsha_data_by_coords[
-                        (doc["coords"]["parsha"], doc["coords"]["chapter"], doc["coords"]["verse"])
-                    ] = texts_and_comments_to_parsha_data(verse_texts, verse_comments)
+                verse_parsha_data_by_coords = self._lookup_single_verses_as_parsha_data(
+                    {CoordsTriplet.from_text_or_comment(toc) for toc in texts_and_comments}
+                )
+            else:
+                verse_parsha_data_by_coords = dict()
 
             found_matches = list[FoundMatch]()
             for toc in texts_and_comments:
-                parsha_data = verse_parsha_data_by_coords.get(toc_to_coord_triplet(toc))
+                parsha_data = verse_parsha_data_by_coords.get(CoordsTriplet.from_text_or_comment(toc))
                 if isinstance(toc, StoredText):
                     found_matches.append(FoundMatch(text=toc, parsha_data=parsha_data))
                 else:

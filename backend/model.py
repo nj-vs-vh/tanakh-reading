@@ -239,3 +239,17 @@ class SearchTextResult(PydanticModel):
     found_matches: list[FoundMatch]
     total_matched_texts: Optional[int]
     total_matched_comments: Optional[int]
+
+
+# starred comments looked up with the actual comment & verse data
+
+
+class StarredCommentData(PydanticModel):
+    comment: StoredComment
+    # same as in found match, single-chapter-single-verse parsha-like container
+    parsha_data: Optional[ParshaData]
+
+
+class StarredCommentMetaResponse(PydanticModel):
+    total: int
+    random_starred_comment_data: Optional[StarredCommentData]

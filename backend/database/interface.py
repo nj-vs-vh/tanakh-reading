@@ -13,6 +13,7 @@ from backend.model import (
     SignupToken,
     StarredComment,
     StoredUser,
+    StarredCommentData,
 )
 
 logger = logging.getLogger(__name__)
@@ -99,6 +100,14 @@ class DatabaseInterface(abc.ABC):
     @abc.abstractmethod
     async def lookup_starred_comments(self, starrer_username: str, parsha: int) -> list[StarredComment]:
         ...
+
+    @abc.abstractmethod
+    async def count_starred_comments(self, starrer_username: str) -> int:
+        ...
+
+    @abc.abstractmethod
+    async def load_random_starred_comment(self, starrer_username: str) -> Optional[StarredCommentData]:
+        pass
 
     # parsha data storage
 
