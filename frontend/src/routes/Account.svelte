@@ -60,8 +60,9 @@
                     Пока ни одной...
                 {:else}
                     <p>
-                        Всего комментариев: <strong>{starredCommentsMeta.total}</strong>, например:
+                        Всего комментариях в закладках: <strong>{starredCommentsMeta.total}</strong>.
                     </p>
+                    <p>Один из них:</p>
                     {#if starredCommentsMeta.random_starred_comment_data !== null}
                         <div class="random-starred-comment-container">
                             <SearchResultEntry

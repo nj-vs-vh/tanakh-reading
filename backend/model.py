@@ -146,6 +146,12 @@ class StoredUser(DbSchemaModel):
     password_hash: str = Field(exclude=True)
     salt: str = Field(exclude=True)
 
+    def to_mongo_db(self) -> dict[str, Any]:
+        dump = super().to_mongo_db()
+        dump["password_hash"] = self.password_hash
+        dump["salt"] = self.salt
+        return dump
+
 
 class SignupToken(DbSchemaModel):
     creator_username: Optional[str]
