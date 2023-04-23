@@ -1,7 +1,7 @@
 <script lang="ts">
     import Screen from "./Screen.svelte";
 
-    export let verticalCentering: boolean = false;
+    export let verticalCentering: boolean = true;
 </script>
 
 <Screen {verticalCentering}>
