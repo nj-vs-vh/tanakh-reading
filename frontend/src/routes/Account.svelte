@@ -43,7 +43,7 @@
 
 {#if metadata.logged_in_user !== null}
     <Menu />
-    <Hero>
+    <Hero verticalCentering={false}>
         <h1>
             <span>{metadata.logged_in_user.data.full_name}</span>
             <span class="username">@{metadata.logged_in_user.username}</span>
@@ -110,6 +110,7 @@
 
     h1 {
         margin: 0;
+        margin-top: min(max(1em, 10vw), 20vh);
         margin-bottom: 0.5em;
         padding-bottom: 0.5em;
         border-bottom: 1px grey solid;

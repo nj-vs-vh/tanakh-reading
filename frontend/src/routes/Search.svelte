@@ -101,7 +101,7 @@
 </script>
 
 <Menu homeButton />
-<Hero>
+<Hero verticalCentering={false}>
     <div id="query-controls" bind:this={queryControlsEl}>
         <div class="query-input-row">
             <input id="query-input" type="text" bind:value={currentQuery} />

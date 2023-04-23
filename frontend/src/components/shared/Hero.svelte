@@ -1,8 +1,10 @@
-<script>
+<script lang="ts">
     import Screen from "./Screen.svelte";
+
+    export let verticalCentering: boolean = false;
 </script>
 
-<Screen>
+<Screen {verticalCentering}>
     <div class="container">
         <slot />
     </div>
