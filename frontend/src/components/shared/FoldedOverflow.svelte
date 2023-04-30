@@ -1,7 +1,8 @@
 <script lang="ts">
     import { afterUpdate } from "svelte";
 
-    export let maxHeightPx: number = 400;
+    const maxHeightWindowHeightFraction = 2;
+    export let maxHeightPx: number = window.innerHeight / maxHeightWindowHeightFraction;
 
     // HACK: used to force rerender of folded overflow component
     export let id: string = "";
@@ -51,6 +52,7 @@
 <style>
     div.overflow-container {
         overflow-y: hidden;
+        position: relative;
     }
 
     button.show-more {
@@ -63,6 +65,6 @@
         font-size: larger;
         border: none;
         cursor: pointer;
-        background: linear-gradient(0deg, white, transparent);
+        background: linear-gradient(0deg, var(--overflown-element-background, white), transparent);
     }
 </style>

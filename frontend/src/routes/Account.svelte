@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getContext } from "svelte";
-    import { navigateTo } from "svelte-router-spa";
+    import { Navigate, navigateTo } from "svelte-router-spa";
     import { generateSignupToken, getStarredCommentsMeta, logout } from "../api";
 
     import Menu from "../components/Menu.svelte";
@@ -60,9 +60,8 @@
                     Пока ни одной...
                 {:else}
                     <p>
-                        Всего комментариях в закладках: <strong>{starredCommentsMeta.total}</strong>.
+                        Всего комментариев: <strong>{starredCommentsMeta.total}</strong>, например:
                     </p>
-                    <p>Один из них:</p>
                     {#if starredCommentsMeta.random_starred_comment_data !== null}
                         <div class="random-starred-comment-container">
                             <SearchResultEntry
@@ -76,6 +75,16 @@
                             />
                         </div>
                     {/if}
+                    <!-- <p> -->
+                    <!-- <span style="display: flex; justify-items: baseline; margin-top: 0.5em;"> -->
+                    <!-- <Icon icon="angle-right" heightEm={1} /> -->
+                    <!-- <a id="link-to-bookmarks" href="/bookmarks">Все закладки</a> -->
+                    <!-- </span> -->
+                    <button on:click={() => navigateTo("/bookmarks")}>
+                        <Icon icon="angle-right" heightEm={0.7} />
+                        <span>Все закладки</span>
+                    </button>
+                    <!-- </p> -->
                 {/if}
             {/await}
         </div>
@@ -95,9 +104,10 @@
             {/await}
         </div>
         <div class="account-settings-block">
-            <p>
-                <button style="padding: 0.5em 3em; font-weight: 600;" on:click={onLogout}>Выйти</button>
-            </p>
+            <button on:click={onLogout} style="font-weight: 600;">
+                <Icon icon="logout" heightEm={0.7} />
+                <span>Выйти</span>
+            </button>
         </div>
     </Hero>
 {/if}
@@ -112,9 +122,6 @@
     h1 {
         margin: 0;
         margin-top: min(max(1em, 10vw), 20vh);
-        margin-bottom: 0.5em;
-        padding-bottom: 0.5em;
-        border-bottom: 1px grey solid;
     }
 
     h3 {
@@ -124,7 +131,7 @@
     }
 
     span.subtitle-with-icon {
-        margin-left: 0.5em;
+        margin-left: 0.4em;
     }
 
     p {
@@ -132,9 +139,9 @@
     }
 
     div.account-settings-block {
-        margin-bottom: 1em;
-        padding-bottom: 1em;
-        border-bottom: 1px grey solid;
+        margin-top: 1em;
+        padding-top: 1em;
+        border-top: 1px grey solid;
         display: flex;
         flex-direction: column;
     }
@@ -143,6 +150,14 @@
         background-color: rgb(238, 238, 238);
         padding: 0.5em;
         padding-top: 0.3em;
+        border: 1px solid grey;
+        --overflown-element-background: rgb(238, 238, 238);
+    }
+
+    button {
+        padding: 0.5em 3em;
+        margin: 0.3em 0;
+        cursor: pointer;
         border: 1px solid grey;
     }
 </style>

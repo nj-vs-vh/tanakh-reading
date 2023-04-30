@@ -41,6 +41,9 @@
                 <MenuFolder icon="user" title="Войти" />
             </Navigate>
         {:else}
+            <Navigate to="/bookmarks">
+                <MenuFolder icon="bookmark" title="Мои закладки" iconSizeEm={0.75} />
+            </Navigate>
             <Navigate to="/account">
                 <MenuFolder icon="user" title="Аккаунт" />
             </Navigate>

@@ -3,6 +3,7 @@
 
     export let icon: string | null = null;
     export let title: string;
+    export let iconSizeEm: number = 0.9;
 
     let isFolded = true;
     function toggleFolded() {
@@ -13,7 +14,7 @@
 <h2 on:click={toggleFolded} on:keydown={toggleFolded}>
     {#if icon !== null}
         <div class="nav-icon">
-            <Icon heightEm={0.9} {icon} color="black" />
+            <Icon heightEm={iconSizeEm} {icon} color="black" />
         </div>
     {/if}
     <span class={icon !== null ? "nav-caption-with-icon" : ""}>{title}</span>

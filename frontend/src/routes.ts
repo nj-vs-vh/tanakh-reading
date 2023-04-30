@@ -8,6 +8,7 @@ import Search from "./routes/Search.svelte"
 
 import type { Route } from "svelte-router-spa/types/components/router";
 import { parshaPath, signupPath } from "./utils";
+import Bookmarks from "./routes/Bookmarks.svelte";
 
 
 export const routes: Route[] = [
@@ -34,6 +35,10 @@ export const routes: Route[] = [
     {
         name: "/search",
         component: Search,
+    },
+    {
+        name: "/bookmarks",
+        component: Bookmarks,
     },
     {
         name: "404",
