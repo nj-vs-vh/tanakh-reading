@@ -282,7 +282,7 @@ class MongoDatabase(DatabaseInterface):
     async def count_starred_comments(self, starrer_username: str) -> int:
         return await self._awrap(self.starred_comments_coll.count_documents, {"starrer_username": starrer_username})
 
-    async def load_random_starred_comment(self, starrer_username: str) -> Optional[StarredCommentData]:
+    async def load_random_starred_comment_data(self, starrer_username: str) -> Optional[StarredCommentData]:
         def blocking() -> Optional[StarredCommentData]:
             cursor = self.starred_comments_coll.aggregate(
                 [
@@ -312,8 +312,67 @@ class MongoDatabase(DatabaseInterface):
 
         return await self._awrap(blocking)
 
+    async def lookup_starred_comments_data(
+        self, starrer_username: str, parsha_indices: list[int], page: int, page_size: int
+    ) -> list[StarredCommentData]:
+        def blocking() -> list[StarredCommentData]:
+            if parsha_indices:
+                pipeline: list[dict[str, Any]] = [
+                    {"$match": {"$expr": {"$in": ["$text_coords.parsha", parsha_indices]}}}
+                ]
+            else:
+                pipeline = []
+
+            pipeline.extend(
+                [
+                    self._text_sorting_pipeline_step(start_to_end=True),
+                    {
+                        "$lookup": {
+                            "from": self.starred_comments_coll.name,
+                            "as": "starred",
+                            "let": {"comment_id": "$_id"},
+                            "pipeline": [
+                                {
+                                    "$match": {
+                                        "$expr": {
+                                            "$and": [
+                                                {"$eq": ["$starrer_username", starrer_username]},
+                                                {"$eq": ["$comment_id", "$$comment_id"]},
+                                            ]
+                                        }
+                                    }
+                                }
+                            ],
+                        }
+                    },
+                    {"$match": {"$expr": {"$toBool": {"$size": "$starred"}}}},
+                    {"$skip": page * page_size},
+                    {"$limit": page_size},
+                    {"$project": {"starred": False}},
+                ]
+            )
+
+            logger.info(f"generated pipeline: {pipeline}")
+            cursor = self.comments_coll.aggregate(pipeline)
+            comments = [StoredComment.from_mongo_db(doc) for doc in cursor]
+            for c in comments:
+                c.is_starred = True
+            single_verse_parsha_data_by_coords = self._lookup_single_verses_as_parsha_data(
+                username=starrer_username,
+                coord_triplets={CoordsTriplet.from_text_or_comment(c) for c in comments},
+            )
+            return [
+                StarredCommentData(
+                    comment=comment,
+                    parsha_data=single_verse_parsha_data_by_coords.get(CoordsTriplet.from_text_or_comment(comment)),
+                )
+                for comment in comments
+            ]
+
+        return await self._awrap(blocking)
+
     def _set_is_starred(self, starrer_username: str, stored_comments: list[StoredComment]):
-        """Modify StoredComment objects with data from starred-comments collection"""
+        """Modify StoredComment objects setting is_starred flag based on the data from starred-comments collection"""
         stored_comments_by_id = {sc.db_id: sc for sc in stored_comments if sc.is_stored()}
 
         logger.info(f"Setting is_starred flag on {len(stored_comments)} comments with {starrer_username = }")
@@ -342,12 +401,12 @@ class MongoDatabase(DatabaseInterface):
                         ],
                     }
                 },
-                {"$project": {"comment_id": True, "is_starred": {"$size": "$starred"}}},
+                {"$project": {"comment_id": True, "is_starred": {"$toBool": {"$size": "$starred"}}}},
             ]
         )
         total_starred = 0
         for doc in cursor:
-            is_starred = bool(doc["is_starred"])
+            is_starred = doc["is_starred"]
             if is_starred:
                 total_starred += 1
             stored_comments_by_id[doc["comment_id"]].is_starred = is_starred
@@ -509,6 +568,19 @@ class MongoDatabase(DatabaseInterface):
         stored_text = StoredText.from_mongo_db(text_doc)
         self.parsha_data_cache.pop(stored_text.text_coords.parsha, None)
 
+    def _text_sorting_pipeline_step(self, start_to_end: bool) -> dict[str, Any]:
+        order = pymongo.ASCENDING if start_to_end else pymongo.DESCENDING
+        return {
+            "$sort": {
+                key: order
+                for key in [
+                    "text_coords.parsha",
+                    "text_coords.chapter",
+                    "text_coords.verse",
+                ]
+            }
+        }
+
     async def search_text(
         self,
         query: str,
@@ -526,19 +598,15 @@ class MongoDatabase(DatabaseInterface):
                 + f"{search_in = } {with_verse_parsha_data = }"
             )
             if sorting is SearchTextSorting.BEST_TO_WORST:
-                sort_step: dict[str, Any] = {"score": {"$meta": "textScore"}}
+                sort_step = {"$sort": {"score": {"$meta": "textScore"}}}
             else:
-                if sorting is SearchTextSorting.END_TO_START:
-                    order = pymongo.DESCENDING
-                else:
-                    order = pymongo.ASCENDING
-                sort_step = {key: order for key in ["text_coords.parsha", "text_coords.chapter", "text_coords.verse"]}
+                sort_step = self._text_sorting_pipeline_step(start_to_end=sorting is SearchTextSorting.START_TO_END)
 
             match_step = {"$match": {"$text": {"$search": query, "$language": to_mongo_language(language)}}}
             count_pipeline: list[dict[str, Any]] = [match_step, {"$count": "total"}]
             search_pipeline: list[dict[str, Any]] = [
                 match_step,
-                {"$sort": sort_step},
+                sort_step,
                 {"$skip": page * page_size},
                 {"$limit": page_size},
             ]

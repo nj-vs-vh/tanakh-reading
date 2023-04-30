@@ -93,7 +93,7 @@ class DbSchemaModel(PydanticModel):
         return self.db_id != UNSET_DB_ID
 
     def to_mongo_db(self) -> dict[str, Any]:
-        dump = self.dict()
+        dump = self.dict(exclude={"db_id"})
         if self.db_id != UNSET_DB_ID:
             dump["_id"] = self.db_id
         return dump
@@ -261,3 +261,7 @@ class StarredCommentData(PydanticModel):
 class StarredCommentMetaResponse(PydanticModel):
     total: int
     random_starred_comment_data: Optional[StarredCommentData]
+
+
+class StarredCommentLookupResponse(PydanticModel):
+    starred_comments: list[StarredCommentData]

@@ -106,8 +106,14 @@ class DatabaseInterface(abc.ABC):
         ...
 
     @abc.abstractmethod
-    async def load_random_starred_comment(self, starrer_username: str) -> Optional[StarredCommentData]:
+    async def load_random_starred_comment_data(self, starrer_username: str) -> Optional[StarredCommentData]:
         pass
+
+    @abc.abstractmethod
+    async def lookup_starred_comments_data(
+        self, starrer_username: str, parsha_indices: list[int], page: int, page_size: int
+    ) -> list[StarredCommentData]:
+        ...
 
     # parsha data storage
 

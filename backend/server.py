@@ -25,6 +25,7 @@ from backend.model import (
     SignupToken,
     StarCommentRequest,
     StarredComment,
+    StarredCommentLookupResponse,
     StarredCommentMetaResponse,
     StoredUser,
     UserCredentials,
@@ -333,7 +334,45 @@ async def get_starred_comments_meta(request: web.Request) -> web.Response:
     return web.json_response(
         text=StarredCommentMetaResponse(
             total=await db.count_starred_comments(user.username),
-            random_starred_comment_data=await db.load_random_starred_comment(user.username),
+            random_starred_comment_data=await db.load_random_starred_comment_data(user.username),
+        ).to_public_json()
+    )
+
+
+def _get_pagination_query_params(request: web.Request) -> tuple[int, int]:
+    try:
+        page_size = int(request.query.get("page_size", "50"))
+        if not 1 <= page_size <= 100:
+            raise ValueError("page_size must be between 1 and 100")
+        page = int(request.query.get("page", "0"))
+        if page < 0:
+            raise ValueError("page must be positive")
+        return page_size, page
+    except Exception as e:
+        raise web.HTTPBadRequest(reason=f"Invalid pagination query param: {e}")
+
+
+@routes.get("/starred-comments")
+async def get_starred_comments(request: web.Request) -> web.Response:
+    user, _ = await get_authorized_user(request)
+
+    parsha_indices_str = request.query.get("parsha_indices", "")
+    try:
+        if parsha_indices_str:
+            parsha_indices = [int(p.strip()) for p in parsha_indices_str.split(",")]
+        else:
+            parsha_indices = []
+    except Exception:
+        raise web.HTTPBadRequest(reason="parsha_indices query param must be a comma-separated list of integers")
+
+    page_size, page = _get_pagination_query_params(request)
+
+    db = get_db(request)
+    return web.json_response(
+        text=StarredCommentLookupResponse(
+            starred_comments=await db.lookup_starred_comments_data(
+                starrer_username=user.username, parsha_indices=parsha_indices, page=page, page_size=page_size
+            )
         ).to_public_json()
     )
 
@@ -359,13 +398,7 @@ async def search_text(request: web.Request) -> web.Response:
         query = query_peproc_re.sub(" ", query.strip())
         if len(query) < MIN_QUERY_LEN:
             raise ValueError(f"Query is too short: must be over {MIN_QUERY_LEN} meaningful characters")
-        page_size = int(request.query.get("page_size", "50"))
-        if not 1 <= page_size <= 100:
-            raise ValueError("page_size must be between 1 and 100")
-        page = int(request.query.get("page", "0"))
-        if page < 0:
-            raise ValueError("page must be positive")
-
+        page_size, page = _get_pagination_query_params(request)
         search_text_results = await db.search_text(
             query=query,
             language=worst_language_detection_ever(query),
