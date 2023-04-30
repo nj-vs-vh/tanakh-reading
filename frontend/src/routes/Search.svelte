@@ -55,7 +55,6 @@
     async function loadSearchResponse() {
         window.location.hash = encodeURIComponent(currentQuery);
         isLoading = true;
-        // await sleep(1);
         const searchIn = [];
         if (searchInComments) {
             searchIn.push(SearchTextIn.COMMENTS);

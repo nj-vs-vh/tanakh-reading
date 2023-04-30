@@ -279,6 +279,28 @@ class MongoDatabase(DatabaseInterface):
 
         return await self._awrap(blocking)
 
+    async def count_starred_comments_by_parsha(self, starrer_username: str) -> dict[int, int]:
+        def blocking():
+            cursor = self.starred_comments_coll.aggregate(
+                [
+                    {"$match": {"starrer_username": starrer_username}},
+                    {
+                        "$lookup": {
+                            "from": self.comments_coll.name,
+                            "localField": "comment_id",
+                            "foreignField": "_id",
+                            "as": "comments",
+                        }
+                    },
+                    {"$project": {"comment": {"$first": "$comments"}}},
+                    {"$project": {"parsha": "$comment.text_coords.parsha"}},
+                    {"$group": {"_id": "$parsha", "count": {"$sum": 1}}},
+                ]
+            )
+            return {doc["_id"]: doc["count"] for doc in cursor if isinstance(doc["_id"], int)}
+
+        return await self._awrap(blocking)
+
     async def count_starred_comments(self, starrer_username: str) -> int:
         return await self._awrap(self.starred_comments_coll.count_documents, {"starrer_username": starrer_username})
 

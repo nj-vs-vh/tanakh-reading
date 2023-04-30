@@ -331,9 +331,13 @@ async def unstar_comment(request: web.Request) -> web.Response:
 async def get_starred_comments_meta(request: web.Request) -> web.Response:
     user, _ = await get_authorized_user(request)
     db = get_db(request)
+    total_by_parsha=await db.count_starred_comments_by_parsha(user.username)
+    total = sum(total_by_parsha.values()) or 0
+    logger.info(f"Starred comments meta: {total_by_parsha = } {total = }")
     return web.json_response(
         text=StarredCommentMetaResponse(
-            total=await db.count_starred_comments(user.username),
+            total=total,
+            total_by_parsha=total_by_parsha,
             random_starred_comment_data=await db.load_random_starred_comment_data(user.username),
         ).to_public_json()
     )
@@ -366,6 +370,8 @@ async def get_starred_comments(request: web.Request) -> web.Response:
         raise web.HTTPBadRequest(reason="parsha_indices query param must be a comma-separated list of integers")
 
     page_size, page = _get_pagination_query_params(request)
+
+    logger.info(f"Looking up starred comments with {parsha_indices = } {page = } {page_size = }")
 
     db = get_db(request)
     return web.json_response(

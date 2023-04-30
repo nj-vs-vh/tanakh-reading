@@ -250,18 +250,18 @@ export interface SearchTextResponse {
 export async function searchText(request: SearchTextRequest): Promise<SearchTextResponse> {
     console.log(`Params for text search:`);
     console.log(request);
-    let parts = new Array<string>();
-    parts.push(`query=${encodeURIComponent(request.query)}`);
-    parts.push(`page=${encodeURIComponent(request.page)}`);
-    parts.push(`page_size=${encodeURIComponent(request.page_size)}`);
-    parts.push(`sorting=${encodeURIComponent(request.sorting)}`);
+    let queryParts = new Array<string>();
+    queryParts.push(`query=${encodeURIComponent(request.query)}`);
+    queryParts.push(`page=${encodeURIComponent(request.page)}`);
+    queryParts.push(`page_size=${encodeURIComponent(request.page_size)}`);
+    queryParts.push(`sorting=${encodeURIComponent(request.sorting)}`);
     for (const searchInOption of request.search_in) {
-        parts.push(`search_in=${encodeURIComponent(searchInOption)}`);
+        queryParts.push(`search_in=${encodeURIComponent(searchInOption)}`);
 
     }
     if (request.with_verse_parsha_data)
-        parts.push(`with_verse_parsha_data=true`);
-    const query = parts.join("&")
+        queryParts.push(`with_verse_parsha_data=true`);
+    const query = queryParts.join("&")
     const requestUrl = `${BASE_API_URL}/search-text?${query}`;
     console.log(`Generated request URL for text search: ${requestUrl}`)
     const resp = await fetch(requestUrl, { headers: withAccessTokenHeader({}) });
@@ -278,11 +278,31 @@ export interface StarredCommentData {
 
 export interface StarredCommentsMeta {
     total: number;
+    total_by_parsha: Record<string, number>;
     random_starred_comment_data: StarredCommentData;
 }
 
 export async function getStarredCommentsMeta(): Promise<StarredCommentsMeta> {
     const resp = await fetch(`${BASE_API_URL}/starred-comments-meta`, { headers: withAccessTokenHeader({}) })
+    const respText = await resp.text();
+    if (resp.ok) return JSON.parse(respText);
+    else throw (respText);
+}
+
+
+export interface StarredCommentsLookupResult {
+    starred_comments: Array<StarredCommentData>;
+}
+
+export async function lookupStarredComments(parshaIndices: Array<number>, page: number, page_size: number): Promise<StarredCommentsLookupResult> {
+    let queryParts = new Array<string>();
+    queryParts.push(`page=${encodeURIComponent(page)}`);
+    queryParts.push(`page_size=${encodeURIComponent(page_size)}`);
+    if (parshaIndices.length > 0)
+        queryParts.push(`parsha_indices=${encodeURIComponent(parshaIndices.join(","))}`);
+    const query = queryParts.join("&")
+    console.log(`starred comments lookup query: ${query}`)
+    const resp = await fetch(`${BASE_API_URL}/starred-comments?${query}`, { headers: withAccessTokenHeader({}) })
     const respText = await resp.text();
     if (resp.ok) return JSON.parse(respText);
     else throw (respText);

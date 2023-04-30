@@ -115,6 +115,10 @@ class DatabaseInterface(abc.ABC):
     ) -> list[StarredCommentData]:
         ...
 
+    @abc.abstractmethod
+    async def count_starred_comments_by_parsha(self, starrer_username: str) -> dict[int, int]:
+        ...
+
     # parsha data storage
 
     @abc.abstractmethod

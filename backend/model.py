@@ -260,6 +260,7 @@ class StarredCommentData(PydanticModel):
 
 class StarredCommentMetaResponse(PydanticModel):
     total: int
+    total_by_parsha: dict[int, int]
     random_starred_comment_data: Optional[StarredCommentData]
 
 

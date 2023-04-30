@@ -60,7 +60,9 @@
                     Пока ни одной...
                 {:else}
                     <p>
-                        Всего комментариев: <strong>{starredCommentsMeta.total}</strong>, например:
+                        Всего комментариев: <strong>{starredCommentsMeta.total}</strong> в {Object.keys(
+                            starredCommentsMeta.total_by_parsha,
+                        ).length} недельных разделах. Например:
                     </p>
                     {#if starredCommentsMeta.random_starred_comment_data !== null}
                         <div class="random-starred-comment-container">
@@ -75,16 +77,10 @@
                             />
                         </div>
                     {/if}
-                    <!-- <p> -->
-                    <!-- <span style="display: flex; justify-items: baseline; margin-top: 0.5em;"> -->
-                    <!-- <Icon icon="angle-right" heightEm={1} /> -->
-                    <!-- <a id="link-to-bookmarks" href="/bookmarks">Все закладки</a> -->
-                    <!-- </span> -->
                     <button on:click={() => navigateTo("/bookmarks")}>
                         <Icon icon="angle-right" heightEm={0.7} />
                         <span>Все закладки</span>
                     </button>
-                    <!-- </p> -->
                 {/if}
             {/await}
         </div>
@@ -156,7 +152,7 @@
 
     button {
         padding: 0.5em 3em;
-        margin: 0.3em 0;
+        margin: 0.5em 0;
         cursor: pointer;
         border: 1px solid grey;
     }
