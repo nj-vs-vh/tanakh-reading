@@ -17,5 +17,6 @@ python parsers/hebrew_parser.py $PARSHA
 
 # review 'json/10.json' and if it's ok,
 export ADMIN_TOKEN='whatever'
+export BASE_URL='https://yoursite.com'
 python parsers/upload.py $PARSHA
 ```

@@ -93,7 +93,7 @@ class DbSchemaModel(PydanticModel):
         return self.db_id != UNSET_DB_ID
 
     def to_mongo_db(self) -> dict[str, Any]:
-        dump = self.dict(exclude={"db_id"})
+        dump = self.dict()
         if self.db_id != UNSET_DB_ID:
             dump["_id"] = self.db_id
         return dump
