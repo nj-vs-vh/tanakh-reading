@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { getContext } from "svelte";
+
     import Icon from "../shared/Icon.svelte";
     import MenuFolder from "./MenuFolder.svelte";
     import MenuFolderBlock from "./MenuFolderBlock.svelte";
@@ -15,6 +17,9 @@
         textDecorationSettingsStore,
     } from "../../settings/textDecorationSettings";
     import { onDestroy } from "svelte";
+
+    // @ts-ignore
+    let { toggle, current } = getContext("theme");
 
     function setTextDecorationStyleFromEvent(e) {
         setTextDecorationStyle(e.target.value);
@@ -126,6 +131,11 @@
                 <span class="description">(без вариантов перевода)</span>
             </label>
         </div>
+    </MenuFolderBlock>
+    <MenuFolderBlock title="Тема">
+        <button on:click={toggle} style="width: 100%; padding: 0.5em;">
+            {$current}
+        </button>
     </MenuFolderBlock>
 </MenuFolder>
 

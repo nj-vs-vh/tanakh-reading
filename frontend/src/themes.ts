@@ -1,6 +1,6 @@
 
 const themes = {
-    default: {
+    Стандартная: {
         color: {
             background: 'white',
             text: '#242424',
@@ -28,7 +28,7 @@ const themes = {
             }
         }
     },
-    dark: {
+    Тёмная: {
         color: {
             background: '#21252B',
             text: '#ABB2BF',

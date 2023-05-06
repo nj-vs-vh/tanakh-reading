@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { ThemeToggle } from "svelte-themer";
-
     export let open;
 
     export let duration;
@@ -21,9 +19,6 @@
         <slot />
     </div>
     <footer>
-        <div class="footer-row">
-            <ThemeToggle />
-        </div>
         <div class="footer-row">
             <span>С Б-жьей помощью</span>
             <a
