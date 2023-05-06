@@ -235,12 +235,12 @@
     div.search-entry-li-container {
         margin-top: 0.8em;
         padding-top: 0.4em;
-        border-top: 1px grey solid;
+        border-top: 1px var(--theme-color-secondary-border) solid;
     }
 
     p.search-meta {
         margin: 0;
-        color: grey;
+        color: var(--theme-color-secondary-text);
         font-size: small;
     }
 </style>

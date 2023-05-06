@@ -46,7 +46,7 @@
         /* width: max(90%, 300px); */
     }
     .not-uploaded-yet-parsha {
-        color: var(--theme-color-secondary-background);
+        color: var(--theme-color-secondary-text);
         cursor: not-allowed;
     }
 </style>

@@ -81,4 +81,5 @@ select {
 	border-radius: 3px;
 	border: 1px var(--theme-color-border) solid;
 	background-color: var(--theme-color-secondary-background);
+	color: var(--theme-color-text);
 }

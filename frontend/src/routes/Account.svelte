@@ -110,7 +110,7 @@
 
 <style>
     span.username {
-        color: grey;
+        color: var(--theme-color-secondary-text);
         margin-left: 0.3em;
         font-size: large;
     }
@@ -137,7 +137,7 @@
     div.account-settings-block {
         margin-top: 1em;
         padding-top: 1em;
-        border-top: 1px grey solid;
+        border-top: 1px var(--theme-color-secondary-border) solid;
         display: flex;
         flex-direction: column;
     }

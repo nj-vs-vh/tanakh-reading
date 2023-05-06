@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let color: string = "grey";
+    export let color: string = "var(--theme-color-secondary-text)";
     export let icon: string;
     export let heightEm: number;
 </script>

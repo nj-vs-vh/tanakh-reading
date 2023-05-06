@@ -176,6 +176,7 @@
 <style>
     .container {
         padding: 1rem;
+        margin-bottom: 1em;
     }
 
     p {

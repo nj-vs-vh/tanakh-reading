@@ -33,7 +33,12 @@
 
 <Modal
     styleCloseButton={{ boxShadow: "none", top: "0.5rem", right: "0.8rem", cursor: "pointer" }}
-    styleContent={{ padding: "0", overflowX: "hidden", color: "var(--theme-color-text)" }}
+    styleContent={{
+        padding: "0",
+        overflowX: "hidden",
+        color: "var(--theme-color-text)",
+        backgroundColor: "var(--theme-color-background)",
+    }}
     styleBg={{ justifyContent: "flex-start" }}
     styleWindow={{ margin: "auto auto" }}
     on:close={() => {

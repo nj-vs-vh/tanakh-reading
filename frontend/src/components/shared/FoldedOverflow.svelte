@@ -65,6 +65,10 @@
         font-size: larger;
         border: none;
         cursor: pointer;
-        background: linear-gradient(0deg, var(--overflown-element-background, white), transparent);
+        background: linear-gradient(
+            0deg,
+            var(--overflown-element-background, var(--theme-color-background)),
+            transparent
+        );
     }
 </style>

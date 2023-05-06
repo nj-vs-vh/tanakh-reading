@@ -84,6 +84,6 @@
 
 <style>
     span.text-source-short-name {
-        color: grey;
+        color: var(--theme-color-secondary-text);
     }
 </style>

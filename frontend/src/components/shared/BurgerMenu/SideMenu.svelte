@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { ThemeToggle } from "svelte-themer";
+
     export let open;
 
     export let duration;
@@ -19,13 +21,18 @@
         <slot />
     </div>
     <footer>
-        <span>С Б-жьей помощью</span>
-        <a
-            href="https://github.com/nj-vs-vh/torah-reading/tree/buildTimeReplacedVersion"
-            target="_blank"
-            rel="noreferrer"
-            style="text-decoration: dashed">buildTimeReplacedVersion</a
-        >
+        <div class="footer-row">
+            <ThemeToggle />
+        </div>
+        <div class="footer-row">
+            <span>С Б-жьей помощью</span>
+            <a
+                href="https://github.com/nj-vs-vh/torah-reading/tree/buildTimeReplacedVersion"
+                target="_blank"
+                rel="noreferrer"
+                style="text-decoration: dashed">buildTimeReplacedVersion</a
+            >
+        </div>
     </footer>
 </div>
 
@@ -49,6 +56,14 @@
         color: var(--theme-color-secondary-text);
         padding: 1em;
         display: flex;
+        flex-direction: column;
+    }
+
+    div.footer-row {
+        width: 100%;
+        margin-top: 1em;
+        display: flex;
         justify-content: space-around;
+        align-items: center;
     }
 </style>
