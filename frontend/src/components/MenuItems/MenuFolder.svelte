@@ -14,7 +14,7 @@
 <h2 on:click={toggleFolded} on:keydown={toggleFolded}>
     {#if icon !== null}
         <div class="nav-icon">
-            <Icon heightEm={iconSizeEm} {icon} color="black" />
+            <Icon heightEm={iconSizeEm} {icon} color="var(--theme-color-text)" />
         </div>
     {/if}
     <span class={icon !== null ? "nav-caption-with-icon" : ""}>{title}</span>

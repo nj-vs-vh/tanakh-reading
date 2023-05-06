@@ -143,17 +143,17 @@
     }
 
     div.random-starred-comment-container {
-        background-color: rgb(238, 238, 238);
+        background-color: var(--theme-color-secondary-background);
         padding: 0.5em;
         padding-top: 0.3em;
-        border: 1px solid grey;
-        --overflown-element-background: rgb(238, 238, 238);
+        border: 1px solid var(--theme-color-secondary-border);
+        --overflown-element-background: var(--theme-color-secondary-background);
     }
 
     button {
         padding: 0.5em 3em;
         margin: 0.5em 0;
         cursor: pointer;
-        border: 1px solid grey;
+        border: 1px solid var(--theme-color-secondary-border);
     }
 </style>

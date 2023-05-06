@@ -8,9 +8,9 @@
     export let width: string = "300px";
     export let padding: string = "25px";
     export let paddingTop: string = "50px";
-    export let backgroundColor: string = "rgb(1, 0, 74)";
-    export let burgerColor: string = "rgb(18.4, 18.4, 18.4)";
-    export let menuColor: string = "rgb(180, 180, 180)";
+    export let backgroundColor: string;
+    export let burgerColor: string;
+    export let menuColor: string;
 
     let burgerProps = {
         duration: duration,

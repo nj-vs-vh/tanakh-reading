@@ -24,8 +24,8 @@
     blockquote {
         margin: 0.1em;
         padding: 0.1em 0.1em 0.1em 0.5em;
-        border-left: solid rgb(179, 179, 179) 2px;
-        color: rgb(68, 68, 68);
+        border-left: solid var(--theme-color-secondary-border) 2px;
+        color: var(--theme-color-text_tinted);
         width: 95%;
     }
 
@@ -38,6 +38,6 @@
         align-items: center;
         justify-content: space-between;
         margin: 0.3em 0.5em 0.9em 0.1em;
-        color: grey;
+        color: var(--theme-color-secondary-text);
     }
 </style>

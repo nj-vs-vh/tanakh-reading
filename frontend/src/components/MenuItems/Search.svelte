@@ -53,7 +53,7 @@
                         dispatch("verseSearchResult", { parsha: parsha, chapter: vc.chapter, verse: vc.verse });
                         navigateTo(versePath(parsha, vc));
                     } else {
-                        searchResultsNote = "Недельный раздел со стихом ещё не доступен";
+                        searchResultsNote = "Недельный раздел не доступен";
                     }
                 }
             }
@@ -126,7 +126,7 @@
         padding: 0.2em;
         margin-top: 0.3em;
         text-align: center;
-        color: rgb(126, 0, 0);
+        color: var(--theme-color-bad);
         font-size: medium;
     }
 

@@ -30,7 +30,7 @@
     let textCoords: TextCoords;
     let textCoordsStr: string;
     let parshaHref: string;
-    let parshaLinkColor = "rgb(180, 180, 180)";
+    let parshaLinkColor = "var(--theme-color-secondary-text)";
     let parshaLinkSizeEm = 0.7;
 
     const openVerseDetailsModal = () =>
@@ -102,7 +102,7 @@
 
 <style>
     div.match-header {
-        color: rgb(80, 80, 80);
+        color: var(--theme-color-secondary-text);
         margin: 0.4em 0;
         display: flex;
         justify-content: space-between;

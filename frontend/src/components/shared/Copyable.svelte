@@ -21,8 +21,8 @@
 <style>
     div.container {
         padding: 0.3em;
-        border: 1px grey solid;
-        background-color: rgb(238, 238, 238);
+        border: 1px var(--theme-color-secondary-border) solid;
+        background-color: var(--theme-color-secondary-background);
         border-radius: 4px;
         display: flex;
         justify-content: space-between;

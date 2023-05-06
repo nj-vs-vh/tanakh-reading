@@ -7,7 +7,7 @@
 {#if starredCommentsCount > 0}
     <span class="badge">
         <span class="badge-item">
-            <Icon icon="bookmark" color="var(--starred-comment-color)" heightEm={1} />
+            <Icon icon="bookmark" color="var(--theme-color-bookmark-active)" heightEm={1} />
         </span>
     </span>
 {/if}

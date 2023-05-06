@@ -127,7 +127,11 @@
     <p class="verse-nav">
         {#if navigable}
             <span class="icon-button verse-nav-element" on:click={(e) => prevVerse()} on:keyup={(e) => {}}>
-                <Icon heightEm={0.8} icon="chevron-left" color={prevVerseCoords !== null ? "grey" : "white"} />
+                <Icon
+                    heightEm={0.8}
+                    icon="chevron-left"
+                    color={prevVerseCoords !== null ? "var(--theme-color-secondary-text)" : "transparent"}
+                />
             </span>
         {/if}
         <span class="verse-number verse-nav-element">
@@ -136,7 +140,11 @@
         </span>
         {#if navigable}
             <span class="icon-button verse-nav-element" on:click={(e) => nextVerse()} on:keyup={(e) => {}}>
-                <Icon heightEm={0.8} icon="chevron-right" color={nextVerseCoords !== null ? "grey" : "white"} />
+                <Icon
+                    heightEm={0.8}
+                    icon="chevron-right"
+                    color={nextVerseCoords !== null ? "var(--theme-color-secondary-text)" : "transparent"}
+                />
             </span>
         {/if}
         <span
@@ -148,7 +156,11 @@
             }}
             on:keyup={(e) => {}}
         >
-            <Icon heightEm={0.8} icon={isCurrentVerseLinkCopied ? "check" : "link"} color="grey" />
+            <Icon
+                heightEm={0.8}
+                icon={isCurrentVerseLinkCopied ? "check" : "link"}
+                color="var(--theme-color-secondary-text)"
+            />
         </span>
     </p>
     {#each textSources as textSource}
@@ -186,10 +198,10 @@
     }
 
     span.icon-button:hover {
-        background-image: radial-gradient(closest-side, rgb(221, 221, 221), transparent);
+        background-image: radial-gradient(closest-side, var(--theme-color-secondary-background), transparent);
     }
 
     span.verse-number {
-        color: grey;
+        color: var(--theme-color-secondary-text);
     }
 </style>

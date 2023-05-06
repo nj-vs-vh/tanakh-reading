@@ -46,7 +46,7 @@
     }
 
     footer {
-        color: rgb(94, 94, 94);
+        color: var(--theme-color-secondary-text);
         padding: 1em;
         display: flex;
         justify-content: space-around;

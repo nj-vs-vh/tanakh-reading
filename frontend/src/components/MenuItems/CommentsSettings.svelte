@@ -10,8 +10,6 @@
         commentSourcesConfigStore,
         toggleCommentFilterBySource,
         setCommentFilterBySource,
-        setCommentFilterByBookmarkMode,
-        CommentFilterByBookmarkMode,
         swapElementsInSourceOrder as moveElementInSourceOrder,
     } from "../../settings/commentSources";
     import type { Metadata } from "../../types";

@@ -42,14 +42,14 @@
     }
 
     p.comment-source-name {
-        color: rgb(80, 80, 80);
+        color: var(--theme-color-secondary-text);
         margin-bottom: 0.4em;
         margin-top: 0;
     }
 
     div.comments-block {
         padding: 0.8em 0;
-        border-bottom: 1px rgb(189, 189, 189) solid;
+        border-bottom: 1px var(--theme-color-secondary-border) solid;
     }
 
     div.comments-block:first-of-type {

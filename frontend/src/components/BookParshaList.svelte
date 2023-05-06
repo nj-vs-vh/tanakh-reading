@@ -39,14 +39,14 @@
 <style>
     .container {
         --custom-border-spacing: 0.5em;
-        border: 1px grey solid;
+        border: 1px var(--theme-color-secondary-border) solid;
         border-radius: 5px 0 0 5px;
         padding: 0 0.5em;
         align-self: start;
         /* width: max(90%, 300px); */
     }
     .not-uploaded-yet-parsha {
-        color: rgb(196, 196, 196);
+        color: var(--theme-color-secondary-background);
         cursor: not-allowed;
     }
 </style>

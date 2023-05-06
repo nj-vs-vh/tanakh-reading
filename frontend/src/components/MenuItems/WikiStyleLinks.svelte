@@ -12,12 +12,8 @@
 
 <style>
     a.external-link {
-        color: rgb(50, 50, 77);
+        color: var(--theme-color-secondary-text);
         padding: 0 0.2em;
         text-decoration: underline;
-    }
-
-    a.external-link:hover {
-        color: rgb(26, 26, 182);
     }
 </style>

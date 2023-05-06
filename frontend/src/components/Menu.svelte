@@ -14,7 +14,7 @@
 
     const metadata: Metadata = getContext("metadata");
 
-    const backgroundColor = "#dddddd";
+    const backgroundColor = "var(--theme-color-secondary-background)";
 </script>
 
 <BurgerMenu
@@ -22,7 +22,7 @@
     width="400px"
     {backgroundColor}
     burgerColor={backgroundColor}
-    menuColor="black"
+    menuColor="var(--theme-color-text)"
     padding="10px"
     paddingTop="60px"
 >

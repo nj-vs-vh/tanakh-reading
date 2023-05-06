@@ -217,7 +217,7 @@
                             on:click={() => openVerseDetails(verseData, chapter)}
                             on:keydown={() => openVerseDetails(verseData, chapter)}
                         >
-                            <Icon heightEm={0.7} icon={"asterisk"} color={"#aaaaaa"} />
+                            <Icon heightEm={0.7} icon={"asterisk"} color={"var(--theme-color-secondary-text)"} />
                         </span>
                     {/if}
                 </span>
@@ -271,7 +271,7 @@
     }
 
     span.verse-number {
-        color: rgb(105, 105, 105);
+        color: var(--theme-color-secondary-text);
         user-select: none;
         margin-right: 0.2em;
         display: inline-flex;
@@ -295,7 +295,7 @@
     .inline-verse-comment-container {
         margin: 0.8em 0 0.8em 0.2em;
         padding: 0.2em 0 0.2em 1em;
-        border-left: 1px rgb(189, 189, 189) solid;
+        border-left: 1px var(--theme-color-secondary-border) solid;
     }
 
     .no-background-in-unhovered {
@@ -303,15 +303,12 @@
     }
 
     button.inline-btn {
-        background: rgb(240, 240, 240);
-        border-color: grey;
+        background: var(--theme-color-secondary-background);
+        border-color: var(--theme-color-secondary-border);
         cursor: pointer;
         padding: 0.2em 0.6em;
     }
     button.inline-btn:hover {
-        border-color: black;
-    }
-    button.inline-btn:active {
-        background: rgb(231, 231, 231);
+        filter: brightness(95%);
     }
 </style>

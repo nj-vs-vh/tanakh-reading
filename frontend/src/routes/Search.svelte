@@ -214,7 +214,7 @@
 
     div.secondary-query-controls {
         font-size: smaller;
-        color: rgb(80, 80, 80);
+        color: var(--theme-color-secondary-text);
     }
 
     span.inline-controls-container {

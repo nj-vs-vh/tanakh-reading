@@ -1,22 +1,10 @@
 html {
 	overflow-y: scroll;
-}
-
-html,
-body {
 	position: relative;
 	width: 100%;
 	height: 100%;
 	margin: 0;
 	padding: 0;
-}
-
-:root {
-	--starred-comment-color: #c6a059
-}
-
-body {
-	color: rgb(36, 36, 36);
 	box-sizing: border-box;
 	font-family: 'verdana', 'Times New Roman', Times, serif;
 }
@@ -31,28 +19,31 @@ a {
 }
 
 ::-webkit-scrollbar-track {
-	background: #cccccc;
+	background: var(--theme-color-scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-	background: #aaaaaa;
+	background: var(--theme-color-scrollbar-thumb);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: #808080;
+	background: var(--theme-color-scrollbar-thumb_hober);
 }
 
 ::-webkit-scrollbar-thumb:active {
-	background: #606060;
+	background: var(--theme-color-scrollbar-thumb_active);
 }
+
+
+/* TODO: move from global style */
 
 span.clickable {
 	cursor: pointer;
-	background-color: rgb(241, 241, 241);
+	background-color: var(--theme-color-clickable_text-clickable);
 }
 
 span.clickable:hover {
-	background-color: rgb(214, 214, 214);
+	background-color: var(--theme-color-clickable_text-hovered);
 }
 
 div.input-with-label {
@@ -72,7 +63,7 @@ div.input-with-label>label {
 }
 
 .sortable-chosen {
-	background-color: rgb(236, 236, 236);
+	background-color: var(--theme-color-clickable_text-clickable);
 }
 
 div.error-badge {
@@ -88,5 +79,5 @@ button,
 select {
 	padding: 0.3em;
 	border-radius: 3px;
-	border: 1px black solid;
+	border: 1px var(--theme-color-border) solid;
 }

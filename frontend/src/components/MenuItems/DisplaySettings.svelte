@@ -68,7 +68,7 @@
             />
             <label for={TextDecorationStyle.ASTRERISK}>
                 <span>Звёздочки</span>
-                <Icon heightEm={0.7} icon={"asterisk"} color={"#606060"} />
+                <Icon heightEm={0.7} icon={"asterisk"} color={"var(--theme-color-secondary-text)"} />
             </label>
         </div>
         <div class="input-with-label">
@@ -131,6 +131,6 @@
 
 <style>
     span.description {
-        color: grey;
+        color: var(--theme-color-secondary-text);
     }
 </style>

@@ -92,9 +92,9 @@
                     <Icon
                         icon="bookmark"
                         color={isStarred
-                            ? "var(--starred-comment-color)"
+                            ? "var(--theme-color-bookmark-active)"
                             : isHovering
-                            ? "rgb(200, 200, 200)"
+                            ? "var(--theme-color-bookmark-potential)"
                             : "transparent"}
                         heightEm={0.7}
                     />

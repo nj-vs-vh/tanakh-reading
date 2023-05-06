@@ -2,7 +2,6 @@
     import { getContext } from "svelte";
     import { inview } from "svelte-inview";
     import MultiSelect from "svelte-multiselect";
-    import type { ObjectOption } from "svelte-multiselect";
 
     import Menu from "../components/Menu.svelte";
     import SearchResultEntry from "../components/SearchResultEntry.svelte";
@@ -162,7 +161,7 @@
         max-width: 60%;
         --sms-min-height: 100%;
         --sms-font-size: medium;
-        --sms-text-color: rgb(59, 59, 59);
+        --sms-text-color: var(--theme-color-secondary-text);
     }
 
     div.query-input-row {
