@@ -1,7 +1,7 @@
 <script lang="ts">
     import { afterUpdate } from "svelte";
 
-    const maxHeightWindowHeightFraction = 2;
+    const maxHeightWindowHeightFraction = 1.5;
     export let maxHeightPx: number = window.innerHeight / maxHeightWindowHeightFraction;
 
     // HACK: used to force rerender of folded overflow component

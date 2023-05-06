@@ -116,6 +116,11 @@
         font-size: inherit;
         margin-right: 0.4em;
         flex-grow: 10;
+        background-color: var(--theme-color-background);
+    }
+
+    select {
+        background-color: var(--theme-color-background);
     }
 
     #chapter-verse-input {
