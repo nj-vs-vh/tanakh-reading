@@ -31,12 +31,12 @@ const themes = {
     Тёмная: {
         color: {
             background: '#21252B',
-            text: '#ABB2BF',
-            text_tinted: '#8c95a6',
+            text: '#b2b2b2',
+            text_tinted: '#929496',
             border: '#4a4d66',
             secondary: {
                 background: '#12151a',
-                text: '#8c94a0',
+                text: '#868f9c',
                 border: '#5c6474',
             },
             bad: '#7e0000',
