@@ -16,12 +16,6 @@ const themes = {
                 active: '#c6a059',
                 potential: 'rgb(200, 200, 200)'
             },
-            scrollbar: {
-                track: '#cccccc',
-                thumb: '#aaaaaa',
-                thumb_hover: '#808080',
-                thumb_active: '#606060'
-            },
             clickable_text: {
                 clickable: '#efefef',
                 hovered: '#e3e3e3'
@@ -43,12 +37,6 @@ const themes = {
             bookmark: {
                 active: '#c4522e',
                 potential: '#495162'
-            },
-            scrollbar: {
-                track: '#cccccc',
-                thumb: '#aaaaaa',
-                thumb_hover: '#808080',
-                thumb_active: '#606060'
             },
             clickable_text: {
                 clickable: '#2c313a',
