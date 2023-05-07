@@ -131,7 +131,7 @@
 
 <style>
     .comment-body-container {
-        margin-top: 0.1em;
+        margin-top: 0.3em;
         display: flex;
         position: relative;
         left: -1em;
@@ -172,5 +172,10 @@
         resize: vertical;
         min-height: 5em;
         padding: 0.3em;
+    }
+
+    .html-wrapper > p {
+        margin: 0;
+        margin-top: 0.5em;
     }
 </style>
