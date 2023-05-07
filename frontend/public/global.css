@@ -24,19 +24,19 @@ a {
 }
 
 ::-webkit-scrollbar-track {
-	background: var(--theme-color-scrollbar-track);
+	background: var(--theme-color-secondary-background);
 }
 
 ::-webkit-scrollbar-thumb {
-	background: var(--theme-color-scrollbar-thumb);
+	background: var(--theme-color-secondary-border);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: var(--theme-color-scrollbar-thumb_hober);
+	background: var(--theme-color-border);
 }
 
 ::-webkit-scrollbar-thumb:active {
-	background: var(--theme-color-scrollbar-thumb_active);
+	background: var(--theme-color-border);
 }
 
 

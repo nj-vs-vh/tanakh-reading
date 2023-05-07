@@ -14,7 +14,7 @@
         margin-top: 1em;
         padding-left: var(--custom-border-spacing, 1em);
         margin-left: var(--custom-border-spacing, 1em);
-        border-left: 1px var(--theme-color-border) solid;
+        border-left: 1px var(--theme-color-secondary-border) solid;
         font-size: large;
     }
     h4 {
