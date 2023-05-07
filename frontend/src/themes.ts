@@ -33,10 +33,10 @@ const themes = {
             background: '#21252B',
             text: '#b2b2b2',
             text_tinted: '#929496',
-            border: '#4a4d66',
+            border: '#c2c4ce',
             secondary: {
                 background: '#12151a',
-                text: '#868f9c',
+                text: '#6f767e',
                 border: '#5c6474',
             },
             bad: '#7e0000',

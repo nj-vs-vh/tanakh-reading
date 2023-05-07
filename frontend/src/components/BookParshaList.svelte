@@ -39,7 +39,7 @@
 <style>
     .container {
         --custom-border-spacing: 0.5em;
-        border: 1px var(--theme-color-secondary-border) solid;
+        border: 1px var(--theme-color-border) solid;
         border-radius: 5px 0 0 5px;
         padding: 0 0.5em;
         align-self: start;
