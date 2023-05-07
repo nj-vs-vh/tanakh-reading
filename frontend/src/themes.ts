@@ -5,11 +5,11 @@ const themes = {
             background: 'white',
             text: '#242424',
             text_tinted: '#454545',
-            border: 'black',
+            border: '#626262',
             secondary: {
                 background: '#e1e1e1',
-                text: '#5c5c5c',
-                border: '#8d8d8d',
+                text: '#868686',
+                border: '#c1c1c1',
             },
             bad: '#7e0000',
             bookmark: {
