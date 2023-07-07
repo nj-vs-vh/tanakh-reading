@@ -39,10 +39,15 @@ from backend.model import (
     UserCommentPayload,
     UserCredentials,
 )
-from backend.utils import safe_request_json, worst_language_detection_ever
+from backend.static import setup_frontend_routes
+from backend.utils import (
+    safe_request_json,
+    worst_language_detection_ever,
+)
 
 logger = logging.getLogger(__name__)
 routes = web.RouteTableDef()
+setup_frontend_routes(routes)
 
 
 @web.middleware
@@ -52,7 +57,11 @@ async def cors_middleware(request: web.Request, handler: Handler) -> web.StreamR
     except web.HTTPException as e:
         resp = e
 
-    allowed_origins = ["https://torah-reading.surge.sh", "http://torah-reading.surge.sh", "http://localhost:8080"]
+    allowed_origins = [
+        "https://torah-reading.surge.sh",
+        "http://torah-reading.surge.sh",
+        "http://localhost:8080",
+    ]
     request_origin = request.headers.get(hdrs.ORIGIN)
     logger.debug(f"CORS: request origin = {request_origin}")
     if request_origin is not None:

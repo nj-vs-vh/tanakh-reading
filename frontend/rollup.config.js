@@ -22,6 +22,10 @@ if (!version) {
 console.log(`Building with version ${version}`);
 
 const production = !process.env.ROLLUP_WATCH;
+console.log(`production = ${production}`);
+
+const forceDevBuild = process.env.FORCE_DEV_BUILD !== undefined;
+console.log(`forceDevBuild  = ${forceDevBuild}`);
 
 function serve() {
 	let server;
@@ -55,7 +59,7 @@ export default {
 	plugins: [
 		replace({
 			buildTimeReplacedVersion: version,
-			buildTimeReplacedIsProduction: production,
+			buildTimeReplacedIsProduction: production && !forceDevBuild,
 			preventAssignment: true,
 		}),
 		svelte({

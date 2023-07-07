@@ -57,5 +57,6 @@
             }
         }}
     />
-    <Router {routes} />
+    <!-- TODO configure prefix from build system -->
+    <Router {routes} options={{ prefix: "frontend" }} />
 </Modal>
