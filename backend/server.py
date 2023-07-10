@@ -331,7 +331,7 @@ async def unstar_comment(request: web.Request) -> web.Response:
 async def get_starred_comments_meta(request: web.Request) -> web.Response:
     user, _ = await get_authorized_user(request)
     db = get_db(request)
-    total_by_parsha=await db.count_starred_comments_by_parsha(user.username)
+    total_by_parsha = await db.count_starred_comments_by_parsha(user.username)
     total = sum(total_by_parsha.values()) or 0
     logger.info(f"Starred comments meta: {total_by_parsha = } {total = }")
     return web.json_response(
@@ -350,7 +350,7 @@ def _get_pagination_query_params(request: web.Request) -> tuple[int, int]:
             raise ValueError("page_size must be between 1 and 100")
         page = int(request.query.get("page", "0"))
         if page < 0:
-            raise ValueError("page must be positive")
+            raise ValueError("page must be non-negative")
         return page_size, page
     except Exception as e:
         raise web.HTTPBadRequest(reason=f"Invalid pagination query param: {e}")

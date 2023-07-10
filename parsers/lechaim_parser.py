@@ -25,7 +25,7 @@ HTML_DIR = Path("html/lechaim")
 HTML_DIR.mkdir(exist_ok=True)
 
 
-def get_per_day_htmls(parsha: int, parsha_url_path: str) -> list[BeautifulSoup]:
+def get_per_day_htmls(parsha: int, parsha_url_path: str, allow_incomplete: bool) -> list[BeautifulSoup]:
     parsha_htmls_dir = HTML_DIR / str(parsha)
     parsha_htmls_dir.mkdir(exist_ok=True)
 
@@ -33,6 +33,8 @@ def get_per_day_htmls(parsha: int, parsha_url_path: str) -> list[BeautifulSoup]:
     for day in range(1, 8):
         html = parsha_htmls_dir / f"day{day}.html"
         if not html.exists():
+            if allow_incomplete:
+                continue
             url = f"https://lechaim.ru/academy/{parsha_url_path}{day}/"
             print(f"Downloading parsha HTML for day {day} from {url}...")
             resp = requests.get(url)
@@ -40,15 +42,17 @@ def get_per_day_htmls(parsha: int, parsha_url_path: str) -> list[BeautifulSoup]:
                 raise ValueError(f"Non-200 status for {resp}")
             html.write_bytes(resp.content)
         res.append(BeautifulSoup(html.read_text(), features="html.parser"))
+    if not res:
+        raise ValueError("allow incomplete = True but not a single file found")
     return res
 
 
-def parse(parsha: int, parsha_url_path: str):
+def parse(parsha: int, parsha_url_path: str, allow_incomplete: bool):
     parsha_data = ParshaData(book=get_book_by_parsha(parsha), parsha=parsha, chapters=[])
 
     chapter_data_by_chapter: dict[int, ChapterData] = dict()
 
-    parsha_day_docs = get_per_day_htmls(parsha, parsha_url_path)
+    parsha_day_docs = get_per_day_htmls(parsha, parsha_url_path, allow_incomplete=allow_incomplete)
     for parsha_day_doc in parsha_day_docs:
         for chapter_container in parsha_day_doc.find_all(tag_filter("div", ["article-part_text"])):
             chapter_container = cast(Tag, chapter_container)
@@ -181,5 +185,6 @@ if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
     argparser.add_argument("parsha_index", type=int)
     argparser.add_argument("parsha_url_path", type=str)
+    argparser.add_argument("--allow-incomplete", action="store_true")
     args = argparser.parse_args()
-    parse(args.parsha_index, args.parsha_url_path)
+    parse(args.parsha_index, args.parsha_url_path, allow_incomplete=bool(args.allow_incomplete))
