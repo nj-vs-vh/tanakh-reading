@@ -6,7 +6,7 @@ import json
 import logging
 import random
 from concurrent.futures import ThreadPoolExecutor
-from typing import Any, Callable, NamedTuple, Optional, TypeVar, Union
+from typing import Any, Callable, Literal, NamedTuple, Optional, TypeVar, Union
 
 import bson
 import pymongo
@@ -38,6 +38,7 @@ from backend.model import (
     StoredText,
     StoredUser,
     TextCoords,
+    TextOrCommentIterRequest,
     VerseData,
 )
 
@@ -45,6 +46,8 @@ logger = logging.getLogger(__name__)
 
 
 T = TypeVar("T")
+
+MongoAggregationPipeline = list[dict[str, Any]]
 
 
 class CoordsTriplet(NamedTuple):
@@ -339,7 +342,7 @@ class MongoDatabase(DatabaseInterface):
     ) -> list[StarredCommentData]:
         def blocking() -> list[StarredCommentData]:
             if parsha_indices:
-                pipeline: list[dict[str, Any]] = [
+                pipeline: MongoAggregationPipeline = [
                     {"$match": {"$expr": {"$in": ["$text_coords.parsha", parsha_indices]}}}
                 ]
             else:
@@ -625,8 +628,8 @@ class MongoDatabase(DatabaseInterface):
                 sort_step = self._text_sorting_pipeline_step(start_to_end=sorting is SearchTextSorting.START_TO_END)
 
             match_step = {"$match": {"$text": {"$search": query, "$language": to_mongo_language(language)}}}
-            count_pipeline: list[dict[str, Any]] = [match_step, {"$count": "total"}]
-            search_pipeline: list[dict[str, Any]] = [
+            count_pipeline: MongoAggregationPipeline = [match_step, {"$count": "total"}]
+            search_pipeline: MongoAggregationPipeline = [
                 match_step,
                 sort_step,
                 {"$skip": page * page_size},
@@ -701,6 +704,73 @@ class MongoDatabase(DatabaseInterface):
             )
 
         return await self._awrap(blocking)
+
+    def _match_entities_pipeline(
+        self, request: TextOrCommentIterRequest, collection: Literal["texts", "comments"]
+    ) -> MongoAggregationPipeline:
+        return [
+            {"$sort": {"_id": pymongo.ASCENDING}},
+            {
+                "$match": {
+                    k: v
+                    for k, v in {
+                        "text_coords.parsha": request.position.parsha,
+                        "text_coords.chapter": request.position.chapter,
+                        "text_coords.verse": request.position.verse,
+                        ("comment_source" if collection == "comments" else "text_source"): request.source,
+                    }.items()
+                    if v is not None
+                }
+            },
+        ]
+
+    def _iter_entities_pipeline(
+        self, request: TextOrCommentIterRequest, collection: Literal["texts", "comments"]
+    ) -> MongoAggregationPipeline:
+        return [
+            *self._match_entities_pipeline(request, collection),
+            {"$skip": request.offset},
+            {"$limit": 1},
+        ]
+
+    def _count_entities_pipeline(
+        self, request: TextOrCommentIterRequest, collection: Literal["texts", "comments"]
+    ) -> MongoAggregationPipeline:
+        return [*self._match_entities_pipeline(request, collection), {"$count": "count"}]
+
+    async def count_texts(self, request: TextOrCommentIterRequest) -> int:
+        count_doc = list(
+            await self._awrap(self.texts_coll.aggregate, self._count_entities_pipeline(request, collection="texts"))
+        )
+        return count_doc[0]["count"]
+
+    async def count_comments(self, request: TextOrCommentIterRequest) -> int:
+        count_doc = list(
+            await self._awrap(
+                self.comments_coll.aggregate, self._count_entities_pipeline(request, collection="comments")
+            )
+        )
+        return count_doc[0]["count"]
+
+    async def iter_texts(self, request: TextOrCommentIterRequest) -> Optional[StoredText]:
+        docs = list(
+            await self._awrap(self.texts_coll.aggregate, self._iter_entities_pipeline(request, collection="texts"))
+        )
+        if docs:
+            return StoredText.from_mongo_db(docs[0])
+        else:
+            return None
+
+    async def iter_comments(self, request: TextOrCommentIterRequest) -> Optional[StoredComment]:
+        docs = list(
+            await self._awrap(
+                self.comments_coll.aggregate, self._iter_entities_pipeline(request, collection="comments")
+            )
+        )
+        if docs:
+            return StoredComment.from_mongo_db(docs[0])
+        else:
+            return None
 
 
 def to_mongo_language(iso: str) -> str:

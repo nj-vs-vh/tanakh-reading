@@ -13,7 +13,10 @@ from backend.model import (
     SignupToken,
     StarredComment,
     StarredCommentData,
+    StoredComment,
+    StoredText,
     StoredUser,
+    TextOrCommentIterRequest,
 )
 
 logger = logging.getLogger(__name__)
@@ -164,4 +167,20 @@ class DatabaseInterface(abc.ABC):
         username: Optional[str],
     ) -> SearchTextResult:
         """Each returned ParshaData will have only one chapter with one verse, containing the matched phrase"""
+        ...
+
+    @abc.abstractmethod
+    async def count_texts(self, request: TextOrCommentIterRequest) -> int:
+        ...
+
+    @abc.abstractmethod
+    async def count_comments(self, request: TextOrCommentIterRequest) -> int:
+        ...
+
+    @abc.abstractmethod
+    async def iter_texts(self, request: TextOrCommentIterRequest) -> Optional[StoredText]:
+        ...
+
+    @abc.abstractmethod
+    async def iter_comments(self, request: TextOrCommentIterRequest) -> Optional[StoredComment]:
         ...

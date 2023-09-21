@@ -266,3 +266,18 @@ class StarredCommentMetaResponse(PydanticModel):
 
 class StarredCommentLookupResponse(PydanticModel):
     starred_comments: list[StarredCommentData]
+
+
+# filters for searching texts & comments
+
+
+class TextPositionFilter(PydanticModel):
+    parsha: Optional[int] = None
+    chapter: Optional[int] = None
+    verse: Optional[int] = None
+
+
+class TextOrCommentIterRequest(PydanticModel):
+    position: TextPositionFilter
+    source: Optional[str]
+    offset: int

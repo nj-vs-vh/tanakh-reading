@@ -28,6 +28,7 @@ from backend.model import (
     StarredCommentLookupResponse,
     StarredCommentMetaResponse,
     StoredUser,
+    TextOrCommentIterRequest,
     UserCredentials,
 )
 from backend.utils import (
@@ -76,7 +77,7 @@ def get_db(request: web.Request) -> DatabaseInterface:
     return request.app[AppExtensions.DB]
 
 
-async def get_authorized_user(request: web.Request) -> tuple[StoredUser, str]:
+async def get_authorized_user(request: web.Request, require_editor: bool = False) -> tuple[StoredUser, str]:
     access_token = request.headers.get(ACCESS_TOKEN_HEADER)
     if access_token is None:
         raise web.HTTPUnauthorized(reason=f"No {ACCESS_TOKEN_HEADER} header found")
@@ -85,6 +86,8 @@ async def get_authorized_user(request: web.Request) -> tuple[StoredUser, str]:
     if user is None:
         raise web.HTTPUnauthorized(reason="Invalid access token, please log in again")
     logger.info(f"Authorized user {user.to_public_json()}")
+    if require_editor and not user.is_editor:
+        raise web.HTTPUnauthorized(reason="Editor permissions required")
     return user, access_token
 
 
@@ -185,9 +188,7 @@ async def invalidate_parsha_cache(request: web.Request) -> web.Response:
 
 @routes.put("/text")
 async def edit_text(request: web.Request) -> web.Response:
-    user, _ = await get_authorized_user(request)
-    if not user.is_editor:
-        raise web.HTTPUnauthorized(reason="Editor permissions required")
+    await get_authorized_user(request, require_editor=True)
     edit_text_request = EditTextRequest.from_request_json(await safe_request_json(request))
     logger.info(f"Editing text: {edit_text_request}")
     db = get_db(request)
@@ -200,9 +201,7 @@ async def edit_text(request: web.Request) -> web.Response:
 
 @routes.put("/comment")
 async def edit_comment(request: web.Request) -> web.Response:
-    user, _ = await get_authorized_user(request)
-    if not user.is_editor:
-        raise web.HTTPUnauthorized(reason="Editor permissions required")
+    await get_authorized_user(request, require_editor=True)
     edit_comment_request = EditCommentRequest.from_request_json(await safe_request_json(request))
     logger.info(f"Editing comment: {edit_comment_request}")
     db = get_db(request)
@@ -214,7 +213,7 @@ async def edit_comment(request: web.Request) -> web.Response:
 
 @routes.get("/")
 async def index(request: web.Request) -> web.Response:
-    return web.Response(text="שְׁמַע יִשְׂרָאֵל יְהוָה אֱלֹהֵינוּ יְהוָה אֶחָֽד׃")
+    return web.Response(text="hello")
 
 
 async def get_signup_token(request: web.Request) -> SignupToken:
@@ -420,6 +419,46 @@ async def search_text(request: web.Request) -> web.Response:
     except ValueError as e:
         raise web.HTTPBadRequest(reason=f"Invalid query param: {e}")
     return web.json_response(text=search_text_results.to_public_json())
+
+
+@routes.get("/count/comments")
+async def count_comments(request: web.Request) -> web.Response:
+    await get_authorized_user(request, require_editor=True)
+    db = get_db(request)
+    parsed = TextOrCommentIterRequest.from_request_json(await safe_request_json(request))
+    return web.json_response({"count": await db.count_comments(parsed)})
+
+
+@routes.get("/count/texts")
+async def count_texts(request: web.Request) -> web.Response:
+    await get_authorized_user(request, require_editor=True)
+    db = get_db(request)
+    parsed = TextOrCommentIterRequest.from_request_json(await safe_request_json(request))
+    return web.json_response({"count": await db.count_texts(parsed)})
+
+
+@routes.get("/iter/comments")
+async def iter_comments(request: web.Request) -> web.Response:
+    await get_authorized_user(request, require_editor=True)
+    db = get_db(request)
+    parsed = TextOrCommentIterRequest.from_request_json(await safe_request_json(request))
+    next_comment = await db.iter_comments(parsed)
+    if next_comment is None:
+        raise web.HTTPNotFound()
+    else:
+        return web.json_response(text=next_comment.to_public_json())
+
+
+@routes.get("/iter/texts")
+async def iter_texts(request: web.Request) -> web.Response:
+    await get_authorized_user(request, require_editor=True)
+    db = get_db(request)
+    parsed = TextOrCommentIterRequest.from_request_json(await safe_request_json(request))
+    next_text = await db.iter_texts(parsed)
+    if next_text is None:
+        raise web.HTTPNotFound()
+    else:
+        return web.json_response(text=next_text.to_public_json())
 
 
 async def start_background_jobs(app: web.Application) -> None:
