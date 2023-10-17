@@ -2,7 +2,7 @@
     import { getContext } from "svelte";
     import type { Metadata } from "../types";
     import Error from "../components/shared/Error.svelte";
-    import EditTexts from "../components/EditTexts.svelte";
+    import EditTexts from "../components/Editing/EditTexts.svelte";
 
     const metadata: Metadata = getContext("metadata");
 </script>

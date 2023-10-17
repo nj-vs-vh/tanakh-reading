@@ -421,7 +421,7 @@ async def search_text(request: web.Request) -> web.Response:
     return web.json_response(text=search_text_results.to_public_json())
 
 
-@routes.get("/count/comments")
+@routes.post("/count/comments")
 async def count_comments(request: web.Request) -> web.Response:
     await get_authorized_user(request, require_editor=True)
     db = get_db(request)
@@ -429,7 +429,7 @@ async def count_comments(request: web.Request) -> web.Response:
     return web.json_response({"count": await db.count_comments(parsed)})
 
 
-@routes.get("/count/texts")
+@routes.post("/count/texts")
 async def count_texts(request: web.Request) -> web.Response:
     await get_authorized_user(request, require_editor=True)
     db = get_db(request)
@@ -437,7 +437,7 @@ async def count_texts(request: web.Request) -> web.Response:
     return web.json_response({"count": await db.count_texts(parsed)})
 
 
-@routes.get("/iter/comments")
+@routes.post("/iter/comments")
 async def iter_comments(request: web.Request) -> web.Response:
     await get_authorized_user(request, require_editor=True)
     db = get_db(request)
@@ -449,7 +449,7 @@ async def iter_comments(request: web.Request) -> web.Response:
         return web.json_response(text=next_comment.to_public_json())
 
 
-@routes.get("/iter/texts")
+@routes.post("/iter/texts")
 async def iter_texts(request: web.Request) -> web.Response:
     await get_authorized_user(request, require_editor=True)
     db = get_db(request)

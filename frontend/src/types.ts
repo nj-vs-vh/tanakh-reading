@@ -12,7 +12,6 @@ export interface CommentData {
     is_starred_by_me?: boolean;
 }
 
-
 export interface VerseData {
     verse: number;
     text: Record<string, string>;
@@ -20,19 +19,16 @@ export interface VerseData {
     comments: Record<string, Array<CommentData>>;
 }
 
-
 export interface ChapterData {
     chapter: number;
     verses: Array<VerseData>;
 }
-
 
 export interface ParshaData {
     book: number;
     parsha: number;
     chapters: Array<ChapterData>;
 }
-
 
 export interface Metadata {
     book_names: Record<number, Record<string, string>>;
@@ -51,23 +47,19 @@ export interface Metadata {
     logged_in_user: LoggedInUser | null;
 }
 
-
 export interface UserCredentials {
     username: string;
     password: string;
 }
 
-
 export interface UserData {
     full_name: string;
 }
-
 
 export interface SignupData {
     credentials: UserCredentials;
     data: UserData;
 }
-
 
 export interface LoggedInUser {
     username: string;
@@ -108,4 +100,16 @@ export interface SingleComment {
 export interface CommentStarToggledEvent {
     commentId: string;
     newIsStarred: boolean;
+}
+
+export interface TextPositionFilter {
+    parsha?: number;
+    chapter?: number;
+    verse?: number;
+}
+
+export interface TextOrCommentIterRequest {
+    position: TextPositionFilter;
+    source: string | null;
+    offset: number;
 }
