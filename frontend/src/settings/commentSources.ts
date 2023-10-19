@@ -55,14 +55,14 @@ export function initCommentSourcesConfig(metadata: Metadata) {
     // NOTE: filtering by bookmark is disabled
     config.filterByBookmarkMode = CommentFilterByBookmarkMode.NONE;
 
-    const metadataCommentSources = Object.keys(metadata.commenter_names);
-    for (const commentSource of metadataCommentSources) {
+    const metadataCommentSourceKeys = metadata.section.comment_sources.map(cs => cs.key);
+    for (const commentSource of metadataCommentSourceKeys) {
         if (config.filterBySource[commentSource] === undefined) {
             config.filterBySource[commentSource] = true;
         }
     }
-    if (config.sourcesOrder === undefined || config.sourcesOrder.length != metadataCommentSources.length) {
-        config.sourcesOrder = metadataCommentSources;
+    if (config.sourcesOrder === undefined || config.sourcesOrder.length != metadataCommentSourceKeys.length) {
+        config.sourcesOrder = metadataCommentSourceKeys;
     }
 
     commentSourcesConfigStore.set(config);

@@ -32,9 +32,9 @@ export function initTextSourcesConfig(metadata: Metadata) {
         config = JSON.parse(configDump);
     }
 
-    for (const textSource of metadata.text_sources) {
-        if (config.enabledInDetails[textSource] === undefined) {
-            config.enabledInDetails[textSource] = true;
+    for (const textSourceInfo of metadata.section.text_sources) {
+        if (config.enabledInDetails[textSourceInfo.key] === undefined) {
+            config.enabledInDetails[textSourceInfo.key] = true;
         }
     }
     textSourcesConfigStore.set(config);

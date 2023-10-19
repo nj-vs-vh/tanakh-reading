@@ -9,7 +9,7 @@ from aiohttp import hdrs, web
 from aiohttp.typedefs import Handler
 from dictdiffer import diff  # type: ignore
 
-from backend import config, metadata
+from backend import config
 from backend.auth import generate_signup_token, hash_password
 from backend.constants import ACCESS_TOKEN_HEADER, SIGNUP_TOKEN_HEADER, AppExtensions
 from backend.database.interface import (
@@ -17,6 +17,7 @@ from backend.database.interface import (
     SearchTextIn,
     SearchTextSorting,
 )
+from backend.metadata.torah import TORAH_METADATA
 from backend.model import (
     EditCommentRequest,
     EditTextRequest,
@@ -102,16 +103,7 @@ async def get_metadata(request: web.Request) -> web.Response:
     db = get_db(request)
     return web.json_response(
         {
-            "book_names": metadata.torah_book_names,
-            "parsha_ranges": metadata.torah_book_parsha_ranges,
-            "chapter_verse_ranges": metadata.chapter_verse_ranges,
-            "parsha_names": metadata.parsha_names,
-            "text_sources": metadata.TextSource.all(),
-            "text_source_marks": metadata.text_source_marks,
-            "text_source_descriptions": metadata.text_source_descriptions,
-            "text_source_links": metadata.text_source_links,
-            "commenter_names": metadata.comment_source_names,
-            "commenter_links": metadata.comment_source_links,
+            "section": TORAH_METADATA.dict(),
             "available_parsha": await db.get_available_parsha_indices(),
             "logged_in_user": user_json,
         }

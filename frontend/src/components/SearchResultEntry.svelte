@@ -6,7 +6,7 @@
     import VerseText from "./VerseText.svelte";
     import type { Metadata, TextCoords } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
-    import { bookNoByParsha, versePath } from "../utils";
+    import { bookNoByParsha, lookupBookInfo, versePath } from "../utils";
     import VerseDetailsModal from "./VerseDetailsModal.svelte";
     import Icon from "./shared/Icon.svelte";
 
@@ -43,9 +43,8 @@
 
     $: {
         textCoords = match.comment !== null ? match.comment.text_coords : match.text.text_coords;
-        textCoordsStr = `${
-            metadata.book_names[bookNoByParsha(textCoords.parsha, metadata)][$textSourcesConfigStore.main]
-        } ${textCoords.chapter}:${textCoords.verse}`;
+        let bookName = lookupBookInfo(metadata, bookNoByParsha(textCoords.parsha, metadata)).bookInfo.name
+        textCoordsStr = `${bookName[$textSourcesConfigStore.main]} ${textCoords.chapter}:${textCoords.verse}`;
         parshaHref = versePath(textCoords.parsha, {
             chapter: textCoords.chapter,
             verse: textCoords.verse,
@@ -61,7 +60,7 @@
                     <Icon icon="tanakh-book" heightEm={1} />
                 {/if}
                 <span style={addTextCommentIcon ? "margin-left: 0.4em" : ""}>
-                    {metadata.commenter_names[match.comment.comment_source]} к
+                    {metadata.section.comment_sources.find((cs) => cs.key == match.comment.comment_source).name} к
                     <button on:click={openVerseDetailsModal} on:keypress={openVerseDetailsModal}>{textCoordsStr}</button
                     >
                 </span>
@@ -89,7 +88,7 @@
                 <span style={addTextCommentIcon ? "margin-left: 0.4em" : ""}>
                     <button on:click={openVerseDetailsModal} on:keypress={openVerseDetailsModal}>{textCoordsStr}</button
                     >
-                    {metadata.text_source_marks[match.text.text_source]}
+                    {metadata.section.text_sources.find(ts => ts.key === match.text.text_source).mark}
                 </span>
             </span>
             <a href={parshaHref} target="_blank" rel="noreferrer">

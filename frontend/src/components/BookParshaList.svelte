@@ -3,32 +3,30 @@
     import type { Metadata } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
     import MenuFolder from "./MenuItems/MenuFolder.svelte";
-    import { parshaPath, range } from "../utils";
+    import { parshaPath} from "../utils";
     import { Navigate } from "svelte-router-spa";
 
     let metadata: Metadata = getContext("metadata");
-    const parshaArrays = {};
 
-    for (const [bookIndex, parshaMinMax] of Object.entries(metadata.parsha_ranges)) {
-        parshaArrays[bookIndex] = range(parshaMinMax[0], parshaMinMax[1]);
-    }
+    export let bookId: number;
+    const bookParshaInfos = metadata.section.parshas.filter((pi) => pi.book_id === bookId).sort((a, b) => a.id - b.id);
+    const bookName = metadata.section.books.find(bookInfo => bookInfo.id === bookId).name;
 
-    export let bookIndex: number;
 </script>
 
 <div class="container">
-    <MenuFolder title={metadata.book_names[bookIndex][$textSourcesConfigStore.main]}>
+    <MenuFolder title={bookName[$textSourcesConfigStore.main]}>
         <div>
-            {#each parshaArrays[bookIndex] as parshaIndex}
-                {#if metadata.available_parsha.includes(parshaIndex)}
-                    <Navigate to={parshaPath(parshaIndex)}>
+            {#each bookParshaInfos as parshaInfo}
+                {#if metadata.available_parsha.includes(parshaInfo.id)}
+                    <Navigate to={parshaPath(parshaInfo.id)}>
                         <h3>
-                            {parshaIndex}. {metadata.parsha_names[parshaIndex][$textSourcesConfigStore.main]}
+                            {parshaInfo.id}. {parshaInfo.name[$textSourcesConfigStore.main]}
                         </h3>
                     </Navigate>
                 {:else}
                     <h3 class="not-uploaded-yet-parsha">
-                        {parshaIndex}. {metadata.parsha_names[parshaIndex][$textSourcesConfigStore.main]}
+                        {parshaInfo.id}. {parshaInfo.name[$textSourcesConfigStore.main]}
                     </h3>
                 {/if}
             {/each}

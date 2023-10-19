@@ -9,8 +9,6 @@ from pydantic.error_wrappers import display_errors
 from pymongo.results import InsertOneResult, UpdateResult
 from typing_extensions import NotRequired, TypedDict
 
-from backend.metadata import CommentSource, TextSource
-
 logger = logging.getLogger(__name__)
 
 
@@ -200,12 +198,6 @@ class StoredText(PublicIdDbSchemaModel):
     text: str
     language: str
 
-    @pydantic.validator("text_source")
-    def text_source_key_must_be_known(cls, text_source):
-        if text_source not in TextSource.all():
-            raise ValueError(f"Unexpectede text source: {text_source}")
-        return text_source
-
 
 class StoredComment(PublicIdDbSchemaModel):
     text_coords: TextCoords
@@ -218,12 +210,6 @@ class StoredComment(PublicIdDbSchemaModel):
     legacy_id: Optional[str] = None
 
     is_starred: Optional[bool] = None
-
-    @pydantic.validator("comment_source")
-    def validate_comment_source(cls, comment_source):
-        if comment_source not in CommentSource.all():
-            raise ValueError(f"Unexpectede comment source: {comment_source}")
-        return comment_source
 
 
 # search result models

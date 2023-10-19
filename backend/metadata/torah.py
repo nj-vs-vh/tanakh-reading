@@ -1,5 +1,14 @@
 from typing import Any
 
+from backend.metadata.types import CommentSource as CommentSourceInfo
+from backend.metadata.types import (
+    IsoLang,
+    ParshaInfo,
+    TanakhBookInfo,
+    TanakhSectionMetadata,
+)
+from backend.metadata.types import TextSource as TextSourceInfo
+
 
 class TextSource:
     FG = "fg"
@@ -89,13 +98,7 @@ torah_book_names = {
 }
 
 
-class IsoLang:
-    RU = "ru"
-    EN = "en"
-    HE = "he"  # hebrew
-
-
-text_source_languages: dict[str, str] = {
+text_source_languages: dict[str, IsoLang] = {
     TextSource.FG: IsoLang.RU,
     TextSource.PLAUT: IsoLang.EN,
     TextSource.LECHAIM: IsoLang.RU,
@@ -175,13 +178,6 @@ chapter_verse_ranges: dict[int, tuple[ChapterVerse, ChapterVerse]] = {  # upper 
     54: ((33, 1), (34, 12)),
 }
 
-
-def get_book_by_parsha(parsha: int) -> int:
-    for book, parsha_range in torah_book_parsha_ranges.items():
-        if parsha >= parsha_range[0] and parsha < parsha_range[1]:
-            return book
-    else:
-        raise ValueError(f"No Torah book found for parsha {parsha}")
 
 
 parsha_names = {
@@ -550,7 +546,7 @@ comment_source_names = {
 }
 
 
-comment_source_links = {
+comment_source_links: dict[str, list[str]] = {
     CommentSource.SONCHINO: [
         r"https://toldot.com/Sonchino.html",
         r"https://ru.wikipedia.org/wiki/%D0%93%D0%B5%D1%80%D1%86,_%D0%99%D0%BE%D1%81%D0%B5%D1%84_%D0%A6%D0%B2%D0%B8",
@@ -590,3 +586,54 @@ comment_source_languages = {
 CommentSource.validate_per_comment_source_dict(comment_source_names)
 CommentSource.validate_per_comment_source_dict(comment_source_links)
 CommentSource.validate_per_comment_source_dict(comment_source_languages)
+
+
+TORAH_METADATA = TanakhSectionMetadata(
+    title={
+        TextSource.FG: "Тора",
+        TextSource.LECHAIM: "Тора",
+        TextSource.PLAUT: "The Torah",
+        TextSource.HEBREW: "תּוֹרָה",
+    },
+    subtitle=None,
+    text_sources=[
+        TextSourceInfo(
+            key=key,
+            mark=text_source_marks[key],
+            description=text_source_descriptions[key],
+            links=text_source_links[key],
+            language=text_source_languages[key],
+        )
+        for key in TextSource.all()
+    ],
+    comment_sources=[
+        CommentSourceInfo(
+            key=key,
+            name=comment_source_names[key],
+            links=comment_source_links[key],
+            language=comment_source_languages[key],
+        )
+        for key in CommentSource.all()
+    ],
+    books=[
+        TanakhBookInfo(
+            id=id,
+            name=name,
+        )
+        for id, name in torah_book_names.items()
+    ],
+    parshas=[
+        ParshaInfo(
+            id=parsha_id,
+            name=name,
+            book_id=[
+                book_id
+                for book_id, (min_parsha_id, max_parsha_id) in torah_book_parsha_ranges.items()
+                if min_parsha_id <= parsha_id < max_parsha_id
+            ][0],
+            chapter_verse_start=chapter_verse_ranges[parsha_id][0],
+            chapter_verse_end=chapter_verse_ranges[parsha_id][1],
+        )
+        for parsha_id, name in parsha_names.items()
+    ],
+)

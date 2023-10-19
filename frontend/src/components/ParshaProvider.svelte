@@ -7,14 +7,14 @@
     import Error from "./shared/Error.svelte";
     import Spinner from "./shared/Spinner.svelte";
 
-    import type { ParshaData, Metadata } from "../types";
+    import type { Metadata, ParshaData } from "../types";
     import { getParsha } from "../api";
 
     const metadata: Metadata = getContext("metadata");
 
     export let currentRoute: CurrentRoute;
 
-    let parshaPromise = new Promise<ParshaData>((resolve, reject) => {});
+    let parshaPromise: Promise<ParshaData>;
     let lastLoadedParshaIndex: number | null = null;
     $: {
         let parshaIndex = parseInt(currentRoute.namedParams.parshaIndex);

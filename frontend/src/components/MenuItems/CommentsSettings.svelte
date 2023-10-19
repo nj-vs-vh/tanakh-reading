@@ -16,6 +16,7 @@
     import Icon from "../shared/Icon.svelte";
 
     const metadata: Metadata = getContext("metadata");
+    const commentSourceByKey = Object.fromEntries(metadata.section.comment_sources.map(cs => [cs.key, cs]));
     const initialSourcesOrder = $commentSourcesConfigStore.sourcesOrder;
 </script>
 
@@ -28,26 +29,26 @@
                 moveElementInSourceOrder(e.oldIndex, e.newIndex);
             }}
         >
-            {#each initialSourcesOrder as commentSource}
+            {#each initialSourcesOrder as commentSourceKey}
                 <div class="input-with-label">
                     <div class="checkbox-with-grip">
                         <input
                             type="checkbox"
-                            id={commentSource}
-                            name={commentSource}
-                            checked={$commentSourcesConfigStore.filterBySource[commentSource]}
-                            on:change={() => toggleCommentFilterBySource(commentSource)}
+                            id={commentSourceKey}
+                            name={commentSourceKey}
+                            checked={$commentSourcesConfigStore.filterBySource[commentSourceKey]}
+                            on:change={() => toggleCommentFilterBySource(commentSourceKey)}
                         />
                         <div class="grip-handle-container">
                             <Icon icon="grip" heightEm={1} />
                         </div>
                     </div>
-                    <label for={commentSource}>
+                    <label for={commentSourceKey}>
                         <span>
                             <span>
-                                {metadata.commenter_names[commentSource]}
+                                {commentSourceByKey[commentSourceKey].name}
                             </span>
-                            <WikiStyleLinks urls={metadata.commenter_links[commentSource]} />
+                            <WikiStyleLinks urls={commentSourceByKey[commentSourceKey].links} />
                         </span>
                     </label>
                 </div>

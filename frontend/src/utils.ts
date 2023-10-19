@@ -1,5 +1,6 @@
 import { CommentFilterByBookmarkMode, CommentSourcesConfig } from "./settings/commentSources";
 import type { CommentData, Metadata, ParshaData, VerseData } from "./types";
+import type { ParshaInfo, TanakhBookInfo } from "./typesGenerated";
 
 export function getUrlHash(): string {
     const url = new URL(window.location.href);
@@ -75,6 +76,15 @@ export function cmpVerseCoords(a: VerseCoords, b: VerseCoords): number {
     }
 }
 
+export function lookupBookInfo(metadata: Metadata, bookId: number): {index: number, bookInfo: TanakhBookInfo} {
+    return metadata.section.books.map((bookInfo, index) => {return {bookInfo, index}}).find(({bookInfo}) => bookInfo.id === bookId);
+}
+
+
+export function lookupParshaInfo(metadata: Metadata, parshaId: number): {index: number, parshaInfo: ParshaInfo} {
+    return metadata.section.parshas.map((parshaInfo, index) => {return {parshaInfo, index}}).find(({parshaInfo}) => parshaInfo.id === parshaId);
+}
+
 
 export const range = (start: number, end: number): number[] => {
     const length = end - start;
@@ -119,13 +129,13 @@ export function anyCommentPassesFilters(verseData: VerseData, commentSourcesConf
 }
 
 
-export function bookNoByParsha(parsha: number, metadata: Metadata): number {
-    for (const [bookNo, parshaRange] of Object.entries(metadata.parsha_ranges)) {
-        if (parsha >= parshaRange[0] && parsha < parshaRange[1]) {
-            return parseInt(bookNo)
+export function bookNoByParsha(parshaId: number, metadata: Metadata): number {
+    for (const parshaInfo of metadata.section.parshas) {
+        if (parshaId === parshaInfo.id) {
+            return parshaInfo.book_id;
         }
     }
-    throw Error(`No book found for parsha ${parsha}`)
+    throw Error(`No book found for parsha ${parshaId}`)
 }
 
 
@@ -186,7 +196,7 @@ export function toHebrewNumberal(i: number): string {
 export function setPageTitle(subtitle: string | null) {
     const titleTags = document.getElementsByTagName("title");
     if (titleTags.length > 0) {
-        if (subtitle !== null && subtitle.length > 0) {
+        if (subtitle && subtitle.length > 0) {
             titleTags[0].innerText = `Тора | ${subtitle}`;
         } else {
             titleTags[0].innerText = `Тора`;

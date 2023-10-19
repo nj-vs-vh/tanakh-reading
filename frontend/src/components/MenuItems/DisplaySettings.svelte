@@ -21,11 +21,11 @@
     // @ts-ignore
     let { toggle, current } = getContext("theme");
 
-    function setTextDecorationStyleFromEvent(e) {
+    function setTextDecorationStyleFromEvent(e: any) {
         setTextDecorationStyle(e.target.value);
     }
 
-    function setCommentStyleFromEvent(e) {
+    function setCommentStyleFromEvent(e: any) {
         setCommentStyle(e.target.value);
     }
 

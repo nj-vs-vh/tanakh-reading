@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getContext } from "svelte";
-    import { Navigate, navigateTo } from "svelte-router-spa";
+    import { navigateTo } from "svelte-router-spa";
     import { generateSignupToken, getStarredCommentsMeta, logout } from "../api";
 
     import Menu from "../components/Menu.svelte";

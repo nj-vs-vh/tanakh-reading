@@ -13,6 +13,7 @@
         versePath,
         verseCoords2String,
         bookNoByParsha,
+        lookupBookInfo,
     } from "../utils";
     import { isEditingStore } from "../editing";
     import VerseTextBadge from "./VerseTextBadge.svelte";
@@ -126,7 +127,7 @@
 >
     <p class="verse-nav">
         {#if navigable}
-            <span class="icon-button verse-nav-element" on:click={(e) => prevVerse()} on:keyup={(e) => {}}>
+            <span class="icon-button verse-nav-element" on:click={() => prevVerse()} on:keyup={() => {}}>
                 <Icon
                     heightEm={0.8}
                     icon="chevron-left"
@@ -135,11 +136,11 @@
             </span>
         {/if}
         <span class="verse-number verse-nav-element">
-            {metadata.book_names[bookNoByParsha(parsha.parsha, metadata)][$textSourcesConfigStore.main]}
+            {lookupBookInfo(metadata, bookNoByParsha(parsha.parsha, metadata)).bookInfo.name[$textSourcesConfigStore.main]}
             {verseCoords2String(currentVerseCoords)}
         </span>
         {#if navigable}
-            <span class="icon-button verse-nav-element" on:click={(e) => nextVerse()} on:keyup={(e) => {}}>
+            <span class="icon-button verse-nav-element" on:click={() => nextVerse()} on:keyup={() => {}}>
                 <Icon
                     heightEm={0.8}
                     icon="chevron-right"
@@ -149,12 +150,12 @@
         {/if}
         <span
             class="icon-button verse-nav-element"
-            on:click={(e) => {
+            on:click={() => {
                 const url = `${window.location.origin}${versePath(parsha.parsha, currentVerseCoords)}`;
                 navigator.clipboard.writeText(url);
                 isCurrentVerseLinkCopied = true;
             }}
-            on:keyup={(e) => {}}
+            on:keyup={() => {}}
         >
             <Icon
                 heightEm={0.8}

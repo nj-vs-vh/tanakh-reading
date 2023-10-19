@@ -16,7 +16,7 @@
         <VerseText {textId} {text} {textSource} />
     </blockquote>
     <span class="verse-text-source-mark">
-        {metadata.text_source_marks[textSource]}
+        {metadata.section.text_sources.find(ts => ts.key === textSource).mark}
     </span>
 </div>
 

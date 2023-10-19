@@ -6,22 +6,25 @@
 
     import { setPageTitle } from "../utils";
     import type { Metadata } from "../types";
+    import { textSourcesConfigStore } from "../settings/textSources";
 
     setPageTitle(null);
 
     let metadata: Metadata = getContext("metadata");
 
-    const bookIndices = Object.keys(metadata.book_names).map((v) => parseInt(v));
-    bookIndices.sort();
+    const bookIndices = metadata.section.books.map(bi => bi.id).sort();
 </script>
 
 <Menu />
 <div class="horizontal-centering">
     <div class="vertical-flow-container">
-        <h1>Тора</h1>
+        <h1>{metadata.section.title[$textSourcesConfigStore.main]}</h1>
+        {#if metadata.section.subtitle}
+            <p>{metadata.section.subtitle[$textSourcesConfigStore.main]}</p>
+        {/if}
         <div class="cards-container">
-            {#each bookIndices as bookIndex}
-                <BookParshaList {bookIndex} />
+            {#each bookIndices as bookId}
+                <BookParshaList {bookId} />
             {/each}
         </div>
     </div>

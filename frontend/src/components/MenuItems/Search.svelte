@@ -12,46 +12,40 @@
     import SearchButton from "../shared/SearchButton.svelte";
 
     const metadata: Metadata = getContext("metadata");
-    const latestParsha = metadata.available_parsha[metadata.available_parsha.length - 1];
-    const availableBooks = Object.keys(metadata.book_names).filter(
-        (book) => metadata.parsha_ranges[book][0] <= latestParsha,
-    );
+    const availableBookIdsRaw = metadata.section.parshas.filter(pi => metadata.available_parsha.includes(pi.id )).map((pi) => pi.book_id);
+    const availableBookIds = [...new Set(availableBookIdsRaw)];
+    availableBookIds.sort();
 
     const dispatch = createEventDispatcher<{
         verseSearchResult: { parsha: number; chapter: number; verse: number };
     }>();
 
     let currentVerseCoordsInput: string = "";
-    let currentBook: string = availableBooks[availableBooks.length - 1];
+    let currentBookId = availableBookIds[availableBookIds.length - 1];
     let searchResultsNote = "";
 
     function findVerse() {
         const vc = string2verseCoords(currentVerseCoordsInput);
         if (vc !== null) {
-            const parshasToSearch = range(
-                metadata.parsha_ranges[currentBook][0],
-                metadata.parsha_ranges[currentBook][1],
-            );
-
+            const parshasToSearch = metadata.section.parshas.filter(pi => pi.book_id === currentBookId);
             let parshaFound = false;
-            for (const parsha of parshasToSearch) {
-                const chapterVerseRange = metadata.chapter_verse_ranges[parsha];
+            for (const parshaInfo of parshasToSearch) {
                 const vcStart: VerseCoords = {
-                    chapter: chapterVerseRange[0][0],
-                    verse: chapterVerseRange[0][1],
+                    chapter: parshaInfo.chapter_verse_start[0],
+                    verse: parshaInfo.chapter_verse_start[1],
                 };
                 const vcEnd: VerseCoords = {
-                    chapter: chapterVerseRange[1][0],
-                    verse: chapterVerseRange[1][1],
+                    chapter: parshaInfo.chapter_verse_end[0],
+                    verse: parshaInfo.chapter_verse_end[1],
                 };
                 if (
                     cmpVerseCoords(vc, vcStart) >= 0 && // both edges are inclusive
                     cmpVerseCoords(vcEnd, vc) >= 0 // both edges are inclusive
                 ) {
                     parshaFound = true;
-                    if (metadata.available_parsha.includes(parsha)) {
-                        dispatch("verseSearchResult", { parsha: parsha, chapter: vc.chapter, verse: vc.verse });
-                        navigateTo(versePath(parsha, vc));
+                    if (metadata.available_parsha.includes(parshaInfo.id)) {
+                        dispatch("verseSearchResult", { parsha: parshaInfo.id, chapter: vc.chapter, verse: vc.verse });
+                        navigateTo(versePath(parshaInfo.id, vc));
                     } else {
                         searchResultsNote = "Недельный раздел не доступен";
                     }
@@ -73,10 +67,10 @@
 <MenuFolder icon="search" title="Поиск">
     <MenuFolderBlock title="По стиху">
         <div class="search-bar-container">
-            <select bind:value={currentBook}>
-                {#each Object.entries(metadata.book_names) as [book, bookName]}
-                    <option value={book} disabled={!availableBooks.includes(book)}
-                        >{bookName[$textSourcesConfigStore.main]}</option
+            <select bind:value={currentBookId}>
+                {#each metadata.section.books as bookInfo}
+                    <option value={bookInfo.id} disabled={!availableBookIds.includes(bookInfo.id)}
+                        >{bookInfo.name[$textSourcesConfigStore.main]}</option
                     >
                 {/each}
             </select>

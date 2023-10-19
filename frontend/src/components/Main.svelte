@@ -9,7 +9,7 @@
     import { initTextDecorationStyle } from "../settings/textDecorationStyle";
     import { initCommentStyle } from "../settings/commentStyle";
     import { initTextSourcesConfig } from "../settings/textSources";
-    import { getUrlHashVerseCoords, range, setUrlHash } from "../utils";
+    import { getUrlHashVerseCoords, setUrlHash } from "../utils";
 
     import { routes } from "../routes";
     import { deleteAccessToken } from "../auth";

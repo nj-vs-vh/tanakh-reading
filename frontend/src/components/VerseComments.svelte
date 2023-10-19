@@ -9,7 +9,7 @@
     export let verseData: VerseData;
 
     const metadata: Metadata = getContext("metadata");
-    const commenterNames = metadata.commenter_names;
+    const commenterNames =Object.fromEntries( metadata.section.comment_sources.map(cs => [cs.key, cs.name]));
 </script>
 
 <div class="container">

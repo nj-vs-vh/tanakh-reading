@@ -1,6 +1,7 @@
 <script lang="ts">
     import { getContext } from "svelte";
     import { inview } from "svelte-inview";
+    // @ts-expect-error
     import MultiSelect from "svelte-multiselect";
 
     import Menu from "../components/Menu.svelte";
@@ -19,8 +20,8 @@
 
     const metadata: Metadata = getContext("metadata");
     const textSourceMain = $textSourcesConfigStore.main; // this is not reactive, but so what
-    const parshaIndex2OptionText = (parshaIndex: number) =>
-        `${parshaIndex}. ${metadata.parsha_names[parshaIndex][textSourceMain]}`;
+    const parshaIndex2OptionText = (parshaId: number) =>
+        `${parshaId}. ${metadata.section.parshas.find((pi) => pi.id === parshaId).name[textSourceMain]}`;
     const optionText2ParshaIndex = (optionText: string) => parseInt(optionText.slice(0, optionText.indexOf(".")));
 
     const currentHash = decodeURIComponent(window.location.hash.split("#").pop());

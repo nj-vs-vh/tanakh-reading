@@ -1,3 +1,5 @@
+import type { TanakhSectionMetadata } from "./typesGenerated";
+
 export enum CommentFormat {
     HTML = "html",
     MARKDOWN = "markdown",
@@ -31,18 +33,7 @@ export interface ParshaData {
 }
 
 export interface Metadata {
-    book_names: Record<number, Record<string, string>>;
-    // book idx -> [parshas included]
-    parsha_ranges: Record<number, Array<number>>;
-    // parsha idx -> [[start chapter, verse], [end chapter, verse]]
-    chapter_verse_ranges: Record<number, Array<Array<number>>>;
-    parsha_names: Record<number, Record<string, string>>;
-    text_sources: Array<string>;
-    text_source_marks: Record<string, string>;
-    text_source_descriptions: Record<string, string>;
-    text_source_links: Record<string, Array<string>>;
-    commenter_links: Record<string, Array<string>>;
-    commenter_names: Record<string, string>;
+    section: TanakhSectionMetadata;
     available_parsha: Array<number>;
     logged_in_user: LoggedInUser | null;
 }

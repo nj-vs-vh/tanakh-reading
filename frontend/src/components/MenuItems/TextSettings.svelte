@@ -11,10 +11,10 @@
     import MenuFolderBlock from "./MenuFolderBlock.svelte";
     import WikiStyleLinks from "./WikiStyleLinks.svelte";
 
-    let mainTextSource: string;
+    let mainTextSourceKey: string;
     let enabledTextSources: Record<string, boolean>;
     const textSourcesConfigStoreUnsubscribe = textSourcesConfigStore.subscribe((config) => {
-        mainTextSource = config.main;
+        mainTextSourceKey = config.main;
         enabledTextSources = config.enabledInDetails;
     });
 
@@ -25,57 +25,57 @@
     }
 
     const metadata: Metadata = getContext("metadata");
+    const textSourceByKey = Object.fromEntries(metadata.section.text_sources.map(ts => [ts.key, ts]))
 
     onDestroy(textSourcesConfigStoreUnsubscribe);
 </script>
 
 <MenuFolder icon="torah-scroll" title="Текст">
     <MenuFolderBlock title="Основной">
-        {#each metadata.text_sources as textSource}
+        {#each metadata.section.text_sources as textSource}
             <div class="input-with-label">
                 <input
                     type="radio"
                     name="mainTextSource"
-                    id={textSource}
-                    value={textSource}
-                    checked={mainTextSource == textSource}
+                    id={textSource.key}
+                    value={textSource.key}
+                    checked={mainTextSourceKey == textSource.key}
                     on:change={setMainTextSourceFromEvent}
                 />
-                <label for={textSource}>
+                <label for={textSource.key}>
                     <span>
                         <span class="text-source-short-name">
-                            {metadata.text_source_marks[textSource]}
+                            {textSource.mark}
                         </span>
                         <span>
-                            {metadata.text_source_descriptions[textSource]}
+                            {textSource.description}
                         </span>
-                        <WikiStyleLinks urls={metadata.text_source_links[textSource]} />
+                        <WikiStyleLinks urls={textSource.links} />
                     </span>
                 </label>
             </div>
         {/each}
     </MenuFolderBlock>
     <MenuFolderBlock title="В окне с комментариями">
-        {#each Object.entries(enabledTextSources) as [source, isActive]}
+        {#each Object.entries(enabledTextSources) as [textSourceKey, isActive]}
             <div class="input-with-label">
                 <input
                     type="checkbox"
-                    id={`${source}-in-comments`}
-                    name={`${source}-in-comments`}
-                    checked={isActive || source === mainTextSource}
+                    id={`${textSourceKey}-in-comments`}
+                    name={`${textSourceKey}-in-comments`}
+                    checked={isActive || textSourceKey === mainTextSourceKey}
                     on:change|preventDefault={(e) => {
-                        if (source === mainTextSource) {
-                            // @ts-ignore
+                        if (textSourceKey === mainTextSourceKey) {
+                            // @ts-expect-error
                             e.target.checked = true;
-                            enableTextSource(source);
+                            enableTextSource(textSourceKey);
                         } else {
-                            // @ts-ignore
-                            toggleTextSourceEnabled(source);
+                            toggleTextSourceEnabled(textSourceKey);
                         }
                     }}
                 />
-                <label for={`${source}-in-comments`}>
-                    {metadata.text_source_marks[source]}
+                <label for={`${textSourceKey}-in-comments`}>
+                    {textSourceByKey[textSourceKey].mark}
                 </label>
             </div>
         {/each}
