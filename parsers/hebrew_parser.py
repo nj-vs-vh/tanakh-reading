@@ -45,7 +45,7 @@ def parse_hebrew_text(parsha_index: int):
 
     for chapter in parsha_data["chapters"]:
         for verse in chapter["verses"]:
-            verse["text"][metadata.TextSource.HEBREW] = hebrew_text_doc["text"][chapter["chapter"] - 1][
+            verse["text"][metadata.TorahTextSource.HEBREW] = hebrew_text_doc["text"][chapter["chapter"] - 1][
                 verse["verse"] - 1
             ]
 

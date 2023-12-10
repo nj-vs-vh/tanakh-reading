@@ -32,7 +32,18 @@ export interface ParshaData {
     chapters: Array<ChapterData>;
 }
 
-export interface Metadata {
+export enum SectionKey {
+    TORAH = "torah",
+    NEVIIM = "neviim"
+}
+
+export interface MultisectionMetadata {
+    sections: Record<SectionKey, TanakhSectionMetadata>;
+    available_parsha: Array<number>;
+    logged_in_user: LoggedInUser | null;
+}
+
+export interface SectionMetadata {
     section: TanakhSectionMetadata;
     available_parsha: Array<number>;
     logged_in_user: LoggedInUser | null;

@@ -98,7 +98,7 @@ def parse_ramban_commentaries(parsha_index: int):
                 )
 
             if ramban_comments:
-                verse_data["comments"][metadata.CommentSource.RAMBAN] = ramban_comments
+                verse_data["comments"][metadata.TorahCommentSource.RAMBAN] = ramban_comments
 
     parsha_path(parsha_index).write_text(dump_parsha(parsha_data))
 

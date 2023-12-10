@@ -5,13 +5,13 @@
     import MenuFolder from "./MenuFolder.svelte";
     import MenuFolderBlock from "./MenuFolderBlock.svelte";
     import { createEventDispatcher, getContext } from "svelte";
-    import type { Metadata } from "../../types";
+    import type { SectionMetadata } from "../../types";
     import { textSourcesConfigStore } from "../../settings/textSources";
 
     import { cmpVerseCoords, range, string2verseCoords, VerseCoords, versePath } from "../../utils";
     import SearchButton from "../shared/SearchButton.svelte";
 
-    const metadata: Metadata = getContext("metadata");
+    const metadata: SectionMetadata = getContext("metadata");
     const availableBookIdsRaw = metadata.section.parshas.filter(pi => metadata.available_parsha.includes(pi.id )).map((pi) => pi.book_id);
     const availableBookIds = [...new Set(availableBookIdsRaw)];
     availableBookIds.sort();

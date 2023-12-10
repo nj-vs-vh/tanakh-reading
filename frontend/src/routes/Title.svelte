@@ -5,12 +5,12 @@
     import BookParshaList from "../components/BookParshaList.svelte";
 
     import { setPageTitle } from "../utils";
-    import type { Metadata } from "../types";
+    import type { SectionMetadata } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
 
     setPageTitle(null);
 
-    let metadata: Metadata = getContext("metadata");
+    let metadata: SectionMetadata = getContext("metadata");
 
     const bookIndices = metadata.section.books.map(bi => bi.id).sort();
 </script>

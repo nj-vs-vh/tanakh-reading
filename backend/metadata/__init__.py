@@ -1,4 +1,6 @@
-from backend.metadata.torah import *  # backwards compatibility
+# backwards compatibility
+from backend.metadata.torah import *  # noqa: F403, F401
+from backend.metadata.torah import TORAH_METADATA
 
 
 def get_book_by_parsha(parsha: int) -> int:

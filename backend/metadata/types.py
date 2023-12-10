@@ -14,7 +14,7 @@ TextSourceKey = str
 
 
 class TextSource(BaseModel):
-    key: TextSourceKey  # key throughout the app
+    key: TextSourceKey  # key used hroughout the section
     mark: str  # short mark, conventionally in [brackets]
     description: str
     links: list[str]
@@ -29,7 +29,8 @@ class CommentSource(BaseModel):
 
 
 class TanakhBookInfo(BaseModel):
-    # for Torah: 1-based number (1 Genesis, 2 Exodus, ...), after that continues in increasing order (6 Joshua, 7 Judges, ...)
+    # for Torah: 1-based book number (1: Genesis, 2: Exodus, ...),
+    # after that continues in ascending order (6: Joshua, 7: Judges, ...)
     id: int
     name: dict[TextSourceKey, str]
 

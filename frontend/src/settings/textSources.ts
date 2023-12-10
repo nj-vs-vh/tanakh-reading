@@ -1,5 +1,5 @@
 import { Writable, writable } from 'svelte/store';
-import type { Metadata } from "../types";
+import type { SectionMetadata } from "../types";
 
 
 interface TextSourcesConfig {
@@ -20,7 +20,7 @@ function saveConfig(config: TextSourcesConfig) {
 }
 
 
-export function initTextSourcesConfig(metadata: Metadata) {
+export function initTextSourcesConfig(metadata: SectionMetadata) {
     const configDump = localStorage.getItem(LOCAL_STORAGE_KEY);
     let config: TextSourcesConfig;
     if (configDump === null)

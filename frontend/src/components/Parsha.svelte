@@ -11,7 +11,7 @@
     import { commentSourcesConfigStore } from "../settings/commentSources";
     import { textDecorationSettingsStore } from "../settings/textDecorationSettings";
 
-    import type { Metadata, ParshaData, VerseData, ChapterData, CommentStarToggledEvent } from "../types";
+    import type { SectionMetadata, ParshaData, VerseData, ChapterData, CommentStarToggledEvent } from "../types";
     import {
         anyCommentPassesFilters,
         areInsideVerseCoordsList,
@@ -33,7 +33,7 @@
     parshaData.chapters.sort((ch1, ch2) => ch1.chapter - ch2.chapter);
     const parshaVerseCoords = getVerseCoords(parshaData);
 
-    const metadata: Metadata = getContext("metadata");
+    const metadata: SectionMetadata = getContext("metadata");
 
     let bookNumberInSection: number;
     let bookInfo: TanakhBookInfo;

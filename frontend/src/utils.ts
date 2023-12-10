@@ -1,5 +1,5 @@
 import { CommentFilterByBookmarkMode, CommentSourcesConfig } from "./settings/commentSources";
-import type { CommentData, Metadata, ParshaData, VerseData } from "./types";
+import type { CommentData, SectionMetadata, ParshaData, VerseData } from "./types";
 import type { ParshaInfo, TanakhBookInfo } from "./typesGenerated";
 
 export function getUrlHash(): string {
@@ -76,12 +76,12 @@ export function cmpVerseCoords(a: VerseCoords, b: VerseCoords): number {
     }
 }
 
-export function lookupBookInfo(metadata: Metadata, bookId: number): {index: number, bookInfo: TanakhBookInfo} {
+export function lookupBookInfo(metadata: SectionMetadata, bookId: number): {index: number, bookInfo: TanakhBookInfo} {
     return metadata.section.books.map((bookInfo, index) => {return {bookInfo, index}}).find(({bookInfo}) => bookInfo.id === bookId);
 }
 
 
-export function lookupParshaInfo(metadata: Metadata, parshaId: number): {index: number, parshaInfo: ParshaInfo} {
+export function lookupParshaInfo(metadata: SectionMetadata, parshaId: number): {index: number, parshaInfo: ParshaInfo} {
     return metadata.section.parshas.map((parshaInfo, index) => {return {parshaInfo, index}}).find(({parshaInfo}) => parshaInfo.id === parshaId);
 }
 
@@ -129,7 +129,7 @@ export function anyCommentPassesFilters(verseData: VerseData, commentSourcesConf
 }
 
 
-export function bookNoByParsha(parshaId: number, metadata: Metadata): number {
+export function bookNoByParsha(parshaId: number, metadata: SectionMetadata): number {
     for (const parshaInfo of metadata.section.parshas) {
         if (parshaId === parshaInfo.id) {
             return parshaInfo.book_id;

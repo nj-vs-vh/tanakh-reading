@@ -15,10 +15,10 @@
     import { getStarredCommentsMeta, lookupStarredComments } from "../api";
     import type { StarredCommentData } from "../api";
     import { setPageTitle } from "../utils";
-    import type { Metadata } from "../types";
+    import type { SectionMetadata } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
 
-    const metadata: Metadata = getContext("metadata");
+    const metadata: SectionMetadata = getContext("metadata");
     const textSourceMain = $textSourcesConfigStore.main; // this is not reactive, but so what
     const parshaIndex2OptionText = (parshaId: number) =>
         `${parshaId}. ${metadata.section.parshas.find((pi) => pi.id === parshaId).name[textSourceMain]}`;

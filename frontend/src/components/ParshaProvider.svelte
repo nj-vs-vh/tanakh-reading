@@ -7,10 +7,10 @@
     import Error from "./shared/Error.svelte";
     import Spinner from "./shared/Spinner.svelte";
 
-    import type { Metadata, ParshaData } from "../types";
+    import type { SectionMetadata, ParshaData } from "../types";
     import { getParsha } from "../api";
 
-    const metadata: Metadata = getContext("metadata");
+    const metadata: SectionMetadata = getContext("metadata");
 
     export let currentRoute: CurrentRoute;
 

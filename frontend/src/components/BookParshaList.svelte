@@ -1,12 +1,12 @@
 <script lang="ts">
     import { getContext } from "svelte";
-    import type { Metadata } from "../types";
+    import type { SectionMetadata } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
     import MenuFolder from "./MenuItems/MenuFolder.svelte";
     import { parshaPath} from "../utils";
     import { Navigate } from "svelte-router-spa";
 
-    let metadata: Metadata = getContext("metadata");
+    let metadata: SectionMetadata = getContext("metadata");
 
     export let bookId: number;
     const bookParshaInfos = metadata.section.parshas.filter((pi) => pi.book_id === bookId).sort((a, b) => a.id - b.id);

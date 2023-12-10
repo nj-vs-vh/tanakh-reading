@@ -11,11 +11,11 @@
     import Spinner from "../components/shared/Spinner.svelte";
 
     import { getMySignupToken } from "../api";
-    import type { Metadata } from "../types";
+    import type { SectionMetadata } from "../types";
     import { setPageTitle, signupPath } from "../utils";
     import { deleteAccessToken } from "../auth";
 
-    const metadata: Metadata = getContext("metadata");
+    const metadata: SectionMetadata = getContext("metadata");
 
     if (metadata.logged_in_user === null) {
         navigateTo("/login");

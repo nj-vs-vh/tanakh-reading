@@ -5,12 +5,12 @@
     import FoldedOverflow from "./shared/FoldedOverflow.svelte";
     import Icon from "./shared/Icon.svelte";
 
-    import type { CommentData, CommentStarToggledEvent, Metadata } from "../types";
+    import type { CommentData, CommentStarToggledEvent, SectionMetadata } from "../types";
     import { CommentFormat } from "../types";
     import { editComment, CommentCoords, starComment, unstarComment } from "../api";
     import { isEditingStore } from "../editing";
 
-    const metadata: Metadata = getContext("metadata");
+    const metadata: SectionMetadata = getContext("metadata");
     export let commentData: CommentData;
     export let isStarrable: boolean = true;
 

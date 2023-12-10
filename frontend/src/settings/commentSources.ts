@@ -1,5 +1,5 @@
 import { Writable, writable } from 'svelte/store';
-import type { Metadata } from '../types';
+import type { SectionMetadata } from '../types';
 
 
 export enum CommentFilterByBookmarkMode {
@@ -42,7 +42,7 @@ function save(current: CommentSourcesConfig) {
 }
 
 
-export function initCommentSourcesConfig(metadata: Metadata) {
+export function initCommentSourcesConfig(metadata: SectionMetadata) {
     const config = load();
 
     // migration from old fields

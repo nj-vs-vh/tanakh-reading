@@ -12,10 +12,10 @@
         setCommentFilterBySource,
         swapElementsInSourceOrder as moveElementInSourceOrder,
     } from "../../settings/commentSources";
-    import type { Metadata } from "../../types";
+    import type { SectionMetadata } from "../../types";
     import Icon from "../shared/Icon.svelte";
 
-    const metadata: Metadata = getContext("metadata");
+    const metadata: SectionMetadata = getContext("metadata");
     const commentSourceByKey = Object.fromEntries(metadata.section.comment_sources.map(cs => [cs.key, cs]));
     const initialSourcesOrder = $commentSourcesConfigStore.sourcesOrder;
 </script>

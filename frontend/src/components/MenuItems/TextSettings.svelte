@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getContext, onDestroy } from "svelte";
-    import type { Metadata } from "../../types";
+    import type { SectionMetadata } from "../../types";
     import {
         enableTextSource,
         setMainTextSource,
@@ -24,7 +24,7 @@
         enableTextSource(source);
     }
 
-    const metadata: Metadata = getContext("metadata");
+    const metadata: SectionMetadata = getContext("metadata");
     const textSourceByKey = Object.fromEntries(metadata.section.text_sources.map(ts => [ts.key, ts]))
 
     onDestroy(textSourcesConfigStoreUnsubscribe);

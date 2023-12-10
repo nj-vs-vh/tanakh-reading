@@ -2,7 +2,7 @@
     import { getContext, onDestroy } from "svelte";
     import Keydown from "svelte-keydown";
     import { swipe } from "svelte-gestures";
-    import type { CommentStarToggledEvent, Metadata, ParshaData, VerseData } from "../types";
+    import type { CommentStarToggledEvent, SectionMetadata, ParshaData, VerseData } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
     import VerseComments from "./VerseComments.svelte";
     import Icon from "./shared/Icon.svelte";
@@ -20,7 +20,7 @@
 
     let textSources: Array<string>;
 
-    const metadata: Metadata = getContext("metadata");
+    const metadata: SectionMetadata = getContext("metadata");
 
     const textSourcesConfigStoreUnsubscribe = textSourcesConfigStore.subscribe((config) => {
         textSources = [];

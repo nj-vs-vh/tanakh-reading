@@ -1,10 +1,10 @@
 <script lang="ts">
     import { getContext } from "svelte";
-    import type { Metadata } from "../types";
+    import type { SectionMetadata } from "../types";
 
     import VerseText from "./VerseText.svelte";
 
-    const metadata: Metadata = getContext("metadata");
+    const metadata: SectionMetadata = getContext("metadata");
 
     export let textId: string;
     export let text: string;

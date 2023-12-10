@@ -7,12 +7,12 @@
     import TextSettings from "./MenuItems/TextSettings.svelte";
     import CommentsSettings from "./MenuItems/CommentsSettings.svelte";
     import Search from "./MenuItems/Search.svelte";
-    import type { Metadata } from "../types";
+    import type { SectionMetadata } from "../types";
     import DisplaySettings from "./MenuItems/DisplaySettings.svelte";
 
     export let homeButton: boolean = false;
 
-    const metadata: Metadata = getContext("metadata");
+    const metadata: SectionMetadata = getContext("metadata");
 
     const backgroundColor = "var(--theme-color-secondary-background)";
 </script>

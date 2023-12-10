@@ -4,7 +4,7 @@
     import type { FoundMatch } from "../api";
     import VerseComment from "./VerseComment.svelte";
     import VerseText from "./VerseText.svelte";
-    import type { Metadata, TextCoords } from "../types";
+    import type { SectionMetadata, TextCoords } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
     import { bookNoByParsha, lookupBookInfo, versePath } from "../utils";
     import VerseDetailsModal from "./VerseDetailsModal.svelte";
@@ -16,7 +16,7 @@
     // add icon specifying text / comment
     export let addTextCommentIcon: boolean = true;
 
-    const metadata: Metadata = getContext("metadata");
+    const metadata: SectionMetadata = getContext("metadata");
 
     // @ts-ignore
     const { open, close } = getContext("simple-modal");

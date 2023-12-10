@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Metadata } from "../types";
+    import type { SectionMetadata } from "../types";
     import { getContext } from "svelte";
     import type { VerseData } from "../types";
     import { commentSourcesConfigStore, CommentFilterByBookmarkMode } from "../settings/commentSources";
@@ -8,7 +8,7 @@
 
     export let verseData: VerseData;
 
-    const metadata: Metadata = getContext("metadata");
+    const metadata: SectionMetadata = getContext("metadata");
     const commenterNames =Object.fromEntries( metadata.section.comment_sources.map(cs => [cs.key, cs.name]));
 </script>
 

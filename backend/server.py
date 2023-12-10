@@ -17,6 +17,7 @@ from backend.database.interface import (
     SearchTextIn,
     SearchTextSorting,
 )
+from backend.metadata.neviim import NEVIIM_METADATA
 from backend.metadata.torah import TORAH_METADATA
 from backend.model import (
     EditCommentRequest,
@@ -103,7 +104,10 @@ async def get_metadata(request: web.Request) -> web.Response:
     db = get_db(request)
     return web.json_response(
         {
-            "section": TORAH_METADATA.dict(),
+            "sections": {
+                "torah": TORAH_METADATA.dict(),
+                "neviim": NEVIIM_METADATA.dict(),
+            },
             "available_parsha": await db.get_available_parsha_indices(),
             "logged_in_user": user_json,
         }
