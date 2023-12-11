@@ -1,6 +1,6 @@
 <script lang="ts">
     import Keydown from "svelte-keydown";
-    import type { SectionMetadata } from "../types";
+    import type { MultisectionMetadata } from "../types";
     import { setContext } from "svelte";
     import Modal from "svelte-simple-modal";
     import { Router } from "svelte-router-spa";
@@ -16,7 +16,7 @@
     import { initTextDecorationSettings } from "../settings/textDecorationSettings";
     import { isEditingStore } from "../editing";
 
-    export let metadata: SectionMetadata;
+    export let metadata: MultisectionMetadata;
     setContext("metadata", metadata);
 
     console.log(metadata);

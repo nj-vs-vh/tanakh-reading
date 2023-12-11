@@ -6,18 +6,21 @@ from backend.metadata.types import (
     TextSource,
 )
 
-TEXT_SOURCE = "dummy"
+MOSAD_RAV_KUK_SOURCE = "mosad-harav-cook"
 
 
 NEVIIM_METADATA = TanakhSectionMetadata(
-    title={TEXT_SOURCE: "Пророки"},
+    title={MOSAD_RAV_KUK_SOURCE: "Пророки"},
     subtitle=None,
     text_sources=[
         TextSource(
-            key=TEXT_SOURCE,
-            mark="[Dummy]",
-            description="Dummy",
-            links=[],
+            key=MOSAD_RAV_KUK_SOURCE,
+            mark="[МРК]",
+            description="Текст в переводе издательства Мосад hаРав Кук, под руководством р. Давида Йосифона",
+            links=[
+                r"https://toraonline.ru/index.htm",
+                r"http://holyscripture.ru/bible/?t=josiphon",
+            ],
             language=IsoLang.RU,
         )
     ],
@@ -25,12 +28,20 @@ NEVIIM_METADATA = TanakhSectionMetadata(
     books=[
         TanakhBookInfo(
             id=6,
-            name={TEXT_SOURCE: "Йеhошуа"},
+            name={
+                MOSAD_RAV_KUK_SOURCE: "Йеhошуа",
+            },
         )
     ],
     parshas=[
         ParshaInfo(
-            id=100, book_id=6, chapter_verse_start=(1, 1), chapter_verse_end=(2, 2), name={TEXT_SOURCE: "Йеhошуа 1"}
+            id=55,
+            book_id=6,
+            chapter_verse_start=(1, 1),
+            chapter_verse_end=(11, 40),
+            name={
+                MOSAD_RAV_KUK_SOURCE: "Йеhошуа 1-11",
+            },
         )
     ],
 )

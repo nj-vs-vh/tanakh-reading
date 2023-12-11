@@ -2,12 +2,12 @@ import { withAccessTokenHeader } from "./auth";
 import { isProduction } from "./config";
 import type {
     ParshaData,
-    SectionMetadata,
     SignupData,
     UserCredentials,
     SingleText,
     SingleComment,
     TextOrCommentIterRequest,
+    MultisectionMetadata as Metadata,
 } from "./types";
 
 // @ts-ignore
@@ -28,8 +28,7 @@ export async function getParsha(index: number, withUserData: boolean): Promise<P
     else throw respText;
 }
 
-// FIXME
-export async function getMetadata(): Promise<SectionMetadata> {
+export async function getMetadata(): Promise<Metadata> {
     const resp = await fetch(`${BASE_API_URL}/metadata`, {
         headers: withAccessTokenHeader({ "Content-Type": "application/json" }),
     });

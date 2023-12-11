@@ -1,16 +1,20 @@
 import { Writable, writable } from 'svelte/store';
-import type { SectionMetadata } from "../types";
+import type { MultisectionMetadata, SectionKey, SectionMetadata } from "../types";
 
 
-interface TextSourcesConfig {
+interface SectionTextSourcesConfig {
     main: string;
     enabledInDetails: Record<string, boolean>;
 }
 
+type TextSourcesConfig = Record<SectionKey, SectionTextSourcesConfig>;
 
-const DEFAULT_MAIN_TEXT_SOURCE = "fg"
+const DEFAULT_TEXT_SOURCES_CONFIG: TextSourcesConfig = {
+    "torah": { main: "fg", enabledInDetails: {} },
+    "neviim": { main: "mosad-harav-cook", enabledInDetails: {} },
+}
 
-export const textSourcesConfigStore: Writable<TextSourcesConfig> = writable({ main: DEFAULT_MAIN_TEXT_SOURCE, enabledInDetails: {} })
+export const textSourcesConfigStore: Writable<TextSourcesConfig> = writable(DEFAULT_TEXT_SOURCES_CONFIG)
 
 const LOCAL_STORAGE_KEY = 'textSourcesConfig';
 
@@ -20,21 +24,30 @@ function saveConfig(config: TextSourcesConfig) {
 }
 
 
-export function initTextSourcesConfig(metadata: SectionMetadata) {
+export function initTextSourcesConfig(metadata: MultisectionMetadata) {
     const configDump = localStorage.getItem(LOCAL_STORAGE_KEY);
     let config: TextSourcesConfig;
     if (configDump === null)
-        config = {
-            main: DEFAULT_MAIN_TEXT_SOURCE,
-            enabledInDetails: {},
-        }
+        config = DEFAULT_TEXT_SOURCES_CONFIG
     else {
         config = JSON.parse(configDump);
     }
 
-    for (const textSourceInfo of metadata.section.text_sources) {
-        if (config.enabledInDetails[textSourceInfo.key] === undefined) {
-            config.enabledInDetails[textSourceInfo.key] = true;
+    // migration from single-section config to multi-section
+    if (config.enabledInDetails !== undefined) {
+        config = {
+            // @ts-expect-error
+            torah: { ...config },
+            neviim: DEFAULT_TEXT_SOURCES_CONFIG.neviim,
+        }
+    }
+
+    for (const [key, sectionConfig] of Object.entries(config)) {
+        const sectionKey = key as SectionKey;
+        for (const textSourceInfo of metadata.sections[sectionKey].text_sources) {
+            if (sectionConfig.enabledInDetails[textSourceInfo.key] === undefined) {
+                sectionConfig.enabledInDetails[textSourceInfo.key] = true;
+            }
         }
     }
     textSourcesConfigStore.set(config);
@@ -42,27 +55,27 @@ export function initTextSourcesConfig(metadata: SectionMetadata) {
 }
 
 
-export function setMainTextSource(newMainSource: string) {
+export function setMainTextSource(sectionKey: SectionKey, newMainSource: string) {
     textSourcesConfigStore.update(config => {
-        config.main = newMainSource;
+        config[sectionKey].main = newMainSource;
         saveConfig(config);
         return config;
     })
 }
 
 
-export function toggleTextSourceEnabled(source: string) {
+export function toggleTextSourceEnabled(sectionKey: SectionKey, source: string) {
     textSourcesConfigStore.update(config => {
-        config.enabledInDetails[source] = !config.enabledInDetails[source];
+        config[sectionKey].enabledInDetails[source] = !config[sectionKey].enabledInDetails[source];
         saveConfig(config);
         return config;
     })
 }
 
 
-export function enableTextSource(source: string) {
+export function enableTextSource(sectionKey: SectionKey, source: string) {
     textSourcesConfigStore.update(config => {
-        config.enabledInDetails[source] = true;
+        config[sectionKey].enabledInDetails[source] = true;
         saveConfig(config);
         return config;
     })

@@ -32,10 +32,13 @@ export interface ParshaData {
     chapters: Array<ChapterData>;
 }
 
-export enum SectionKey {
+enum KnownSectionKey {
     TORAH = "torah",
     NEVIIM = "neviim"
 }
+
+// NOTE: arbitrary section key is allowed but we want to handle known cases in the code and get autocompletion from enum
+export type SectionKey = KnownSectionKey | string;
 
 export interface MultisectionMetadata {
     sections: Record<SectionKey, TanakhSectionMetadata>;

@@ -2,31 +2,39 @@
     import { getContext } from "svelte";
 
     import Menu from "../components/Menu.svelte";
-    import BookParshaList from "../components/BookParshaList.svelte";
+    import TanakhBookCard from "../components/TanakhBookCard.svelte";
 
     import { setPageTitle } from "../utils";
-    import type { SectionMetadata } from "../types";
+    import type { MultisectionMetadata } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
 
     setPageTitle(null);
 
-    let metadata: SectionMetadata = getContext("metadata");
-
-    const bookIndices = metadata.section.books.map(bi => bi.id).sort();
+    let metadata: MultisectionMetadata = getContext("metadata");
 </script>
 
-<Menu />
+<!-- FIXME -->
+<!-- <Menu /> -->
 <div class="horizontal-centering">
-    <div class="vertical-flow-container">
-        <h1>{metadata.section.title[$textSourcesConfigStore.main]}</h1>
-        {#if metadata.section.subtitle}
-            <p>{metadata.section.subtitle[$textSourcesConfigStore.main]}</p>
-        {/if}
-        <div class="cards-container">
-            {#each bookIndices as bookId}
-                <BookParshaList {bookId} />
-            {/each}
-        </div>
+    <div class="vertical-flow">
+        {#each Object.entries(metadata.sections) as [sectionKey, section]}
+            <div class="section-container">
+                <h1>{section.title[$textSourcesConfigStore[sectionKey].main]}</h1>
+                {#if section.subtitle}
+                    <p>{section.subtitle[$textSourcesConfigStore[sectionKey].main]}</p>
+                {/if}
+                <div class="cards-container">
+                    {#each section.books as bookInfo}
+                        <TanakhBookCard
+                            {sectionKey}
+                            {bookInfo}
+                            sectionParshaInfos={section.parshas}
+                            availableParshaId={metadata.available_parsha}
+                        />
+                    {/each}
+                </div>
+            </div>
+        {/each}
     </div>
 </div>
 
@@ -37,14 +45,17 @@
         justify-content: center;
         align-items: center;
     }
-    .vertical-flow-container {
+    .vertical-flow {
         min-width: 40vw;
         max-width: 100%;
         margin-top: 4em;
     }
+    .section-container {
+        margin-top: 2em;
+    }
 
     h1 {
-        margin-bottom: 1em;
+        margin-bottom: 0.5em;
     }
 
     .cards-container {
