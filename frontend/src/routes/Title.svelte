@@ -13,8 +13,7 @@
     let metadata: MultisectionMetadata = getContext("metadata");
 </script>
 
-<!-- FIXME -->
-<!-- <Menu /> -->
+<Menu />
 <div class="horizontal-centering">
     <div class="vertical-flow">
         {#each Object.entries(metadata.sections) as [sectionKey, section]}

@@ -13,10 +13,8 @@
     import { CommentStyle, commentStyleStore, setCommentStyle } from "../../settings/commentStyle";
     import {
         setTextDecorationSettings,
-        TextDecorationSettings,
         textDecorationSettingsStore,
     } from "../../settings/textDecorationSettings";
-    import { onDestroy } from "svelte";
 
     // @ts-ignore
     let { toggle, current } = getContext("theme");
@@ -28,15 +26,6 @@
     function setCommentStyleFromEvent(e: any) {
         setCommentStyle(e.target.value);
     }
-
-    let onlyDecorateTextWithComments: boolean;
-    let textDecorationSettings: TextDecorationSettings;
-    const textDecorationSettingsStoreUnsubscribe = textDecorationSettingsStore.subscribe((v) => {
-        textDecorationSettings = v;
-        onlyDecorateTextWithComments = v.onlyDecorateTextWithComments;
-    });
-
-    onDestroy(textDecorationSettingsStoreUnsubscribe);
 </script>
 
 <MenuFolder icon="sliders" title="Настройки">
@@ -46,11 +35,11 @@
                 type="checkbox"
                 id="onlyDecorateTextWithCommentsCheckbox"
                 name="onlyDecorateTextWithComments"
-                checked={onlyDecorateTextWithComments}
+                checked={$textDecorationSettingsStore.onlyDecorateTextWithComments}
                 on:change={(e) => {
                     setTextDecorationSettings({
-                        ...textDecorationSettings,
-                        // @ts-ignore
+                        ...$textDecorationSettingsStore,
+                        // @ts-expect-error
                         onlyDecorateTextWithComments: e.target.checked,
                     });
                 }}

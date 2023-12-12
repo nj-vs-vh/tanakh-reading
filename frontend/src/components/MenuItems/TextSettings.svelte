@@ -1,6 +1,5 @@
 <script lang="ts">
-    import { getContext, onDestroy } from "svelte";
-    import type { SectionMetadata } from "../../types";
+    import type { MultisectionMetadata } from "../../types";
     import {
         enableTextSource,
         setMainTextSource,
@@ -11,78 +10,73 @@
     import MenuFolderBlock from "./MenuFolderBlock.svelte";
     import WikiStyleLinks from "./WikiStyleLinks.svelte";
 
-    let mainTextSourceKey: string;
-    let enabledTextSources: Record<string, boolean>;
-    const textSourcesConfigStoreUnsubscribe = textSourcesConfigStore.subscribe((config) => {
-        mainTextSourceKey = config.main;
-        enabledTextSources = config.enabledInDetails;
-    });
-
-    function setMainTextSourceFromEvent(e) {
-        const source = e.target.value;
-        setMainTextSource(source);
-        enableTextSource(source);
-    }
-
-    const metadata: SectionMetadata = getContext("metadata");
-    const textSourceByKey = Object.fromEntries(metadata.section.text_sources.map(ts => [ts.key, ts]))
-
-    onDestroy(textSourcesConfigStoreUnsubscribe);
+    export let metadata: MultisectionMetadata;
 </script>
 
 <MenuFolder icon="torah-scroll" title="Текст">
-    <MenuFolderBlock title="Основной">
-        {#each metadata.section.text_sources as textSource}
-            <div class="input-with-label">
-                <input
-                    type="radio"
-                    name="mainTextSource"
-                    id={textSource.key}
-                    value={textSource.key}
-                    checked={mainTextSourceKey == textSource.key}
-                    on:change={setMainTextSourceFromEvent}
-                />
-                <label for={textSource.key}>
-                    <span>
-                        <span class="text-source-short-name">
-                            {textSource.mark}
-                        </span>
+    {#each Object.entries(metadata.sections) as [sectionKey, section]}
+        <h3 class="section-title">{section.title[$textSourcesConfigStore[sectionKey].main]}</h3>
+        <MenuFolderBlock title="Основной">
+            {#each section.text_sources as textSource}
+                <div class="input-with-label">
+                    <input
+                        type="radio"
+                        id={`select-main-${textSource.key}`}
+                        name={`select-main-${textSource.key}`}
+                        checked={$textSourcesConfigStore[sectionKey].main === textSource.key}
+                        on:change={() => {
+                            setMainTextSource(sectionKey, textSource.key);
+                            enableTextSource(sectionKey, textSource.key);
+                        }}
+                    />
+                    <label for={`select-main-${textSource.key}`}>
                         <span>
-                            {textSource.description}
+                            <span class="text-source-short-name">
+                                {textSource.mark}
+                            </span>
+                            <span>
+                                {textSource.description}
+                            </span>
+                            <WikiStyleLinks urls={textSource.links} />
                         </span>
-                        <WikiStyleLinks urls={textSource.links} />
-                    </span>
-                </label>
-            </div>
-        {/each}
-    </MenuFolderBlock>
-    <MenuFolderBlock title="В окне с комментариями">
-        {#each Object.entries(enabledTextSources) as [textSourceKey, isActive]}
-            <div class="input-with-label">
-                <input
-                    type="checkbox"
-                    id={`${textSourceKey}-in-comments`}
-                    name={`${textSourceKey}-in-comments`}
-                    checked={isActive || textSourceKey === mainTextSourceKey}
-                    on:change|preventDefault={(e) => {
-                        if (textSourceKey === mainTextSourceKey) {
-                            // @ts-expect-error
-                            e.target.checked = true;
-                            enableTextSource(textSourceKey);
-                        } else {
-                            toggleTextSourceEnabled(textSourceKey);
-                        }
-                    }}
-                />
-                <label for={`${textSourceKey}-in-comments`}>
-                    {textSourceByKey[textSourceKey].mark}
-                </label>
-            </div>
-        {/each}
-    </MenuFolderBlock>
+                    </label>
+                </div>
+            {/each}
+        </MenuFolderBlock>
+        <MenuFolderBlock title="В окне с комментариями">
+            {#each Object.entries($textSourcesConfigStore[sectionKey].enabledInDetails) as [textSourceKey, isActive]}
+                <div class="input-with-label">
+                    <input
+                        type="checkbox"
+                        id={`${textSourceKey}-in-comments`}
+                        name={`${textSourceKey}-in-comments`}
+                        checked={isActive || textSourceKey === $textSourcesConfigStore[sectionKey].main}
+                        on:change|preventDefault={(e) => {
+                            if (textSourceKey === $textSourcesConfigStore[sectionKey].main) {
+                                // @ts-expect-error
+                                e.target.checked = true;
+                                enableTextSource(sectionKey, textSourceKey);
+                            } else {
+                                toggleTextSourceEnabled(sectionKey, textSourceKey);
+                            }
+                        }}
+                    />
+                    <label for={`${textSourceKey}-in-comments`}>
+                        {section.text_sources.find((textSource) => textSource.key == textSourceKey).mark}
+                    </label>
+                </div>
+            {/each}
+        </MenuFolderBlock>
+    {/each}
 </MenuFolder>
 
 <style>
+    h3.section-title {
+        margin-left: 0.7em;
+        margin-bottom: 0.7em;
+        margin-top: 1em;
+        font-size: larger;
+    }
     span.text-source-short-name {
         color: var(--theme-color-secondary-text);
     }

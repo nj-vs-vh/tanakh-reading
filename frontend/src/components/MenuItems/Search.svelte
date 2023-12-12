@@ -4,16 +4,19 @@
 
     import MenuFolder from "./MenuFolder.svelte";
     import MenuFolderBlock from "./MenuFolderBlock.svelte";
-    import { createEventDispatcher, getContext } from "svelte";
-    import type { SectionMetadata } from "../../types";
+    import { createEventDispatcher } from "svelte";
+    import type { MultisectionMetadata } from "../../types";
     import { textSourcesConfigStore } from "../../settings/textSources";
 
-    import { cmpVerseCoords, range, string2verseCoords, VerseCoords, versePath } from "../../utils";
+    import { cmpVerseCoords, string2verseCoords, VerseCoords, versePath } from "../../utils";
     import SearchButton from "../shared/SearchButton.svelte";
 
-    const metadata: SectionMetadata = getContext("metadata");
-    const availableBookIdsRaw = metadata.section.parshas.filter(pi => metadata.available_parsha.includes(pi.id )).map((pi) => pi.book_id);
-    const availableBookIds = [...new Set(availableBookIdsRaw)];
+    export let metadata: MultisectionMetadata;
+    const availableBookIdsList = Object.values(metadata.sections)
+        .flatMap((section) => section.parshas)
+        .filter((parshaInfo) => metadata.available_parsha.includes(parshaInfo.id))
+        .map((parshaInfo) => parshaInfo.book_id);
+    const availableBookIds = [...new Set(availableBookIdsList)];
     availableBookIds.sort();
 
     const dispatch = createEventDispatcher<{
@@ -21,15 +24,17 @@
     }>();
 
     let currentVerseCoordsInput: string = "";
-    let currentBookId = availableBookIds[availableBookIds.length - 1];
+    let selectedBookId = availableBookIds[availableBookIds.length - 1];
     let searchResultsNote = "";
 
     function findVerse() {
         const vc = string2verseCoords(currentVerseCoordsInput);
         if (vc !== null) {
-            const parshasToSearch = metadata.section.parshas.filter(pi => pi.book_id === currentBookId);
+            const booksParshaInfoList = Object.values(metadata.sections)
+                .flatMap((section) => section.parshas)
+                .filter((pi) => pi.book_id === selectedBookId);
             let parshaFound = false;
-            for (const parshaInfo of parshasToSearch) {
+            for (const parshaInfo of booksParshaInfoList) {
                 const vcStart: VerseCoords = {
                     chapter: parshaInfo.chapter_verse_start[0],
                     verse: parshaInfo.chapter_verse_start[1],
@@ -62,15 +67,21 @@
     function fullTextSearch() {
         navigateTo(`/search#${encodeURIComponent(currentSearchQueryInput)}`);
     }
+
+    let bookInfoWithSectionKeys = Object.entries(metadata.sections).flatMap(([sectionKey, section]) =>
+        section.books.map((bookInfo) => {
+            return { sectionKey, bookInfo };
+        }),
+    );
 </script>
 
 <MenuFolder icon="search" title="Поиск">
     <MenuFolderBlock title="По стиху">
         <div class="search-bar-container">
-            <select bind:value={currentBookId}>
-                {#each metadata.section.books as bookInfo}
+            <select bind:value={selectedBookId}>
+                {#each bookInfoWithSectionKeys as { sectionKey, bookInfo }}
                     <option value={bookInfo.id} disabled={!availableBookIds.includes(bookInfo.id)}
-                        >{bookInfo.name[$textSourcesConfigStore.main]}</option
+                        >{bookInfo.name[$textSourcesConfigStore[sectionKey].main]}</option
                     >
                 {/each}
             </select>
