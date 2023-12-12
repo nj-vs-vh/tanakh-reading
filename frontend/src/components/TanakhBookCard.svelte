@@ -13,7 +13,7 @@
 
     const bookParshaInfos = sectionParshaInfos.filter((p) => p.book_id === bookInfo.id).sort((p1, p2) => p1.id - p2.id);
     const minSectionParshaId: number = Math.min.apply(null, sectionParshaInfos.map(p => p.id));
-    const parshaIndexInBook = (parshaId: number) => parshaId - minSectionParshaId + 1;
+    const parshaIndexInSection = (parshaId: number) => parshaId - minSectionParshaId + 1;
 </script>
 
 <div class="container">
@@ -23,12 +23,12 @@
                 {#if availableParshaId.includes(parshaInfo.id)}
                     <Navigate to={parshaPath(parshaInfo.id)}>
                         <h3>
-                            {parshaIndexInBook(parshaInfo.id)}. {parshaInfo.name[$textSourcesConfigStore[sectionKey].main]}
+                            {parshaIndexInSection(parshaInfo.id)}. {parshaInfo.name[$textSourcesConfigStore[sectionKey].main]}
                         </h3>
                     </Navigate>
                 {:else}
                     <h3 class="not-uploaded-yet-parsha">
-                        {parshaIndexInBook(parshaInfo.id)}. {parshaInfo.name[$textSourcesConfigStore[sectionKey].main]}
+                        {parshaIndexInSection(parshaInfo.id)}. {parshaInfo.name[$textSourcesConfigStore[sectionKey].main]}
                     </h3>
                 {/if}
             {/each}
