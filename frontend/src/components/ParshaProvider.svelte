@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext } from "svelte";
+    import { getContext, setContext } from "svelte";
     import type { CurrentRoute } from "svelte-router-spa/types/components/route";
 
     import Parsha from "./Parsha.svelte";
@@ -7,21 +7,27 @@
     import Error from "./shared/Error.svelte";
     import Spinner from "./shared/Spinner.svelte";
 
-    import type { SectionMetadata, ParshaData } from "../types";
+    import type { ParshaData, MultisectionMetadata } from "../types";
     import { getParsha } from "../api";
 
-    const metadata: SectionMetadata = getContext("metadata");
+    const metadata: MultisectionMetadata = getContext("metadata");
 
     export let currentRoute: CurrentRoute;
 
     let parshaPromise: Promise<ParshaData>;
-    let lastLoadedParshaIndex: number | null = null;
+    let lastLoadedParshaId: number | null = null;
     $: {
-        let parshaIndex = parseInt(currentRoute.namedParams.parshaIndex);
-        if (parshaIndex !== lastLoadedParshaIndex) {
+        let parshaId = parseInt(currentRoute.namedParams.parshaId);
+        if (parshaId !== lastLoadedParshaId) {
             console.log(`Parsha provider: path change detected ${currentRoute.path}`);
-            parshaPromise = getParsha(parshaIndex, metadata.logged_in_user !== null);
-            lastLoadedParshaIndex = parshaIndex;
+            let sectionKey = Object.entries(metadata.sections).find(
+                ([_sectionKey, section]) =>
+                    section.parshas.find((parshaInfo) => parshaInfo.id === parshaId) !== undefined,
+            )[0];
+            console.log(`Inferred section key from parsha id = ${parshaId}: ${sectionKey}`)
+            setContext("sectionKey", sectionKey);
+            parshaPromise = getParsha(parshaId, metadata.logged_in_user !== null);
+            lastLoadedParshaId = parshaId;
         }
     }
 </script>

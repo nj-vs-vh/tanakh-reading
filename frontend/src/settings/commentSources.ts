@@ -14,7 +14,7 @@ export interface SectionCommentSourcesConfig {
     sourcesOrder: Array<string>,
 }
 
-type CommentSourcesConfig = Record<SectionKey, SectionCommentSourcesConfig>;
+export type CommentSourcesConfig = Record<SectionKey, SectionCommentSourcesConfig>;
 
 
 const DEFAULT_COMMENT_SOURCES_CONFIG: CommentSourcesConfig = {

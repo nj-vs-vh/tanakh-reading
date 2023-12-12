@@ -18,7 +18,7 @@ export const routes: Route[] = [
         component: Title,
     },
     {
-        name: parshaPath(":parshaIndex"),
+        name: parshaPath(":parshaId"),
         component: ParshaProvider,
     },
     {

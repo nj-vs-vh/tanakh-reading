@@ -1,4 +1,4 @@
-import { CommentFilterByBookmarkMode, CommentSourcesConfig } from "./settings/commentSources";
+import { CommentFilterByBookmarkMode, SectionCommentSourcesConfig } from "./settings/commentSources";
 import type { CommentData, SectionMetadata, ParshaData, VerseData } from "./types";
 import type { ParshaInfo, TanakhBookInfo } from "./typesGenerated";
 
@@ -112,14 +112,14 @@ export const sleep = (delaySec: number) => {
 }
 
 
-export function commentPassesFilters(commentData: CommentData, commentSource: string, commentSourcesConfig: CommentSourcesConfig): boolean {
+export function commentPassesFilters(commentData: CommentData, commentSource: string, commentSourcesConfig: SectionCommentSourcesConfig): boolean {
     if (commentSourcesConfig.filterByBookmarkMode == CommentFilterByBookmarkMode.MY && commentData.is_starred_by_me !== true) return false;
     if (commentSourcesConfig.filterBySource[commentSource] !== true) return false;
     return true;
 }
 
 
-export function anyCommentPassesFilters(verseData: VerseData, commentSourcesConfig: CommentSourcesConfig): boolean {
+export function anyCommentPassesFilters(verseData: VerseData, commentSourcesConfig: SectionCommentSourcesConfig): boolean {
     for (const [commentSource, comments] of Object.entries(verseData.comments)) {
         for (const commentData of comments) {
             if (commentPassesFilters(commentData, commentSource, commentSourcesConfig)) return true;

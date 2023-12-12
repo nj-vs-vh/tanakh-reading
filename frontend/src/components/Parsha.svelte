@@ -11,7 +11,15 @@
     import { commentSourcesConfigStore } from "../settings/commentSources";
     import { textDecorationSettingsStore } from "../settings/textDecorationSettings";
 
-    import type { SectionMetadata, ParshaData, VerseData, ChapterData, CommentStarToggledEvent } from "../types";
+    import type {
+        SectionMetadata,
+        ParshaData,
+        VerseData,
+        ChapterData,
+        CommentStarToggledEvent,
+        MultisectionMetadata,
+        SectionKey,
+    } from "../types";
     import {
         anyCommentPassesFilters,
         areInsideVerseCoordsList,
@@ -33,20 +41,28 @@
     parshaData.chapters.sort((ch1, ch2) => ch1.chapter - ch2.chapter);
     const parshaVerseCoords = getVerseCoords(parshaData);
 
-    const metadata: SectionMetadata = getContext("metadata");
+    const metadata: MultisectionMetadata = getContext("metadata");
+    const sectionKey: SectionKey = getContext("sectionKey");
+    // NOTE: subtree components may use single-section metadata as before,
+    //       just accessing it via a new "sectionMetadata" context
+    const sectionMetadata: SectionMetadata = {
+        section: metadata.sections[sectionKey],
+        available_parsha: metadata.available_parsha,
+        logged_in_user: metadata.logged_in_user,
+    };
 
     let bookNumberInSection: number;
     let bookInfo: TanakhBookInfo;
     let parshaNumberInSection: number;
     let parshaInfo: ParshaInfo;
     $: {
-        let bookMatch = lookupBookInfo(metadata, parshaData.book);
+        let bookMatch = lookupBookInfo(sectionMetadata, parshaData.book);
         bookNumberInSection = bookMatch.index;
-        bookInfo = bookMatch.bookInfo
+        bookInfo = bookMatch.bookInfo;
 
-        let parshaMatch = lookupParshaInfo(metadata, parshaData.parsha);
+        let parshaMatch = lookupParshaInfo(sectionMetadata, parshaData.parsha);
         parshaNumberInSection = parshaMatch.index;
-        parshaInfo = parshaMatch.parshaInfo
+        parshaInfo = parshaMatch.parshaInfo;
     }
 
     // non-trivial subscriptions
@@ -62,9 +78,9 @@
     let mainTextSource: string;
     let isMainTextHebrew: boolean;
     textSourcesConfigStore.subscribe((config) => {
-        mainTextSource = config.main;
+        mainTextSource = config[sectionKey].main;
         isMainTextHebrew = isHebrewTextSource(mainTextSource);
-        setPageTitle(metadata.section.parshas.find((pi)=> pi.id === parshaData.parsha)[mainTextSource]);
+        setPageTitle(sectionMetadata.section.parshas.find((pi) => pi.id === parshaData.parsha).name[mainTextSource]);
     });
 
     // modal and URL hash stuff setup
@@ -151,7 +167,7 @@
 
     const shouldDecorateVerseText = (verseData: VerseData): boolean => {
         if ($textDecorationSettingsStore.onlyDecorateTextWithComments) {
-            return anyCommentPassesFilters(verseData, $commentSourcesConfigStore);
+            return anyCommentPassesFilters(verseData, $commentSourcesConfigStore[sectionKey]);
         } else return true;
     };
 
@@ -172,9 +188,9 @@
 <div class="page">
     <div class="container">
         <div>
-            <p class="header-info"><strong>{metadata.section.title[mainTextSource]}</strong></p>
-            {#if metadata.section.subtitle }
-            <p class="header-info">{metadata.section.subtitle[mainTextSource]}</p>
+            <p class="header-info"><strong>{sectionMetadata.section.title[mainTextSource]}</strong></p>
+            {#if sectionMetadata.section.subtitle}
+                <p class="header-info">{sectionMetadata.section.subtitle[mainTextSource]}</p>
             {/if}
             <p class="header-info">
                 Книга

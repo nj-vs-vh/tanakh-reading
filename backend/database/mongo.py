@@ -819,7 +819,6 @@ def parsha_data_to_texts_and_comments(parsha_data: ParshaData) -> tuple[list[Sto
     for chapter_data in parsha_data["chapters"]:
         for verse_data in chapter_data["verses"]:
             text_coords = TextCoords(
-                book=parsha_data["book"],
                 parsha=parsha_data["parsha"],
                 chapter=chapter_data["chapter"],
                 verse=verse_data["verse"],

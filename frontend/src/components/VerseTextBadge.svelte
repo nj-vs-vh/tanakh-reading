@@ -4,7 +4,7 @@
 
     import VerseText from "./VerseText.svelte";
 
-    const metadata: SectionMetadata = getContext("metadata");
+    const sectionMetadata: SectionMetadata = getContext("sectionMetadata");
 
     export let textId: string;
     export let text: string;
@@ -16,7 +16,7 @@
         <VerseText {textId} {text} {textSource} />
     </blockquote>
     <span class="verse-text-source-mark">
-        {metadata.section.text_sources.find(ts => ts.key === textSource).mark}
+        {sectionMetadata.section.text_sources.find(ts => ts.key === textSource).mark}
     </span>
 </div>
 

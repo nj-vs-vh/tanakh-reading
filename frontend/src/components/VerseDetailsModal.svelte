@@ -2,7 +2,7 @@
     import { getContext, onDestroy } from "svelte";
     import Keydown from "svelte-keydown";
     import { swipe } from "svelte-gestures";
-    import type { CommentStarToggledEvent, SectionMetadata, ParshaData, VerseData } from "../types";
+    import type { CommentStarToggledEvent, SectionMetadata, ParshaData, VerseData, SectionKey } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
     import VerseComments from "./VerseComments.svelte";
     import Icon from "./shared/Icon.svelte";
@@ -20,13 +20,15 @@
 
     let textSources: Array<string>;
 
-    const metadata: SectionMetadata = getContext("metadata");
+    const sectionMetadata: SectionMetadata = getContext("sectionMetadata");
+    // FIXME this context is not accessible because modal is not a child of Parsha component!
+    const sk: SectionKey = getContext("sectionKey");
 
     const textSourcesConfigStoreUnsubscribe = textSourcesConfigStore.subscribe((config) => {
         textSources = [];
-        textSources.push(config.main);
+        textSources.push(config[sk].main);
         for (const [source, isEnabled] of Object.entries(config.enabledInDetails)) {
-            if (isEnabled && source != config.main) textSources.push(source);
+            if (isEnabled && source != config[sk].main) textSources.push(source);
         }
     });
 
@@ -136,7 +138,9 @@
             </span>
         {/if}
         <span class="verse-number verse-nav-element">
-            {lookupBookInfo(metadata, bookNoByParsha(parsha.parsha, metadata)).bookInfo.name[$textSourcesConfigStore.main]}
+            {lookupBookInfo(sectionMetadata, bookNoByParsha(parsha.parsha, sectionMetadata)).bookInfo.name[
+                $textSourcesConfigStore[sk].main
+            ]}
             {verseCoords2String(currentVerseCoords)}
         </span>
         {#if navigable}
