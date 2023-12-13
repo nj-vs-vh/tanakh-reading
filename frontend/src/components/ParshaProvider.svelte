@@ -10,6 +10,7 @@
     import type { ParshaData, MultisectionMetadata } from "../types";
     import { getParsha } from "../api";
     import NotFound from "../routes/NotFound.svelte";
+    import { findParshaSectionKey } from "../utils";
 
     const metadata: MultisectionMetadata = getContext("metadata");
 
@@ -48,10 +49,7 @@
             loadParshaPromise = Promise.resolve(null);
         } else if (parshaId !== lastLoadedParshaId) {
             console.log(`Parsha provider: path change detected ${currentRoute.path}`);
-            let sectionKey = Object.entries(metadata.sections).find(
-                ([_sectionKey, section]) =>
-                    section.parshas.find((parshaInfo) => parshaInfo.id === parshaId) !== undefined,
-            )[0];
+            let sectionKey = findParshaSectionKey(metadata, parshaId);
             console.log(`Inferred section key from parsha id = ${parshaId}: ${sectionKey}`);
             setContext("sectionKey", sectionKey);
             loadParshaPromise = loadParsha(parshaId);

@@ -2,12 +2,13 @@
     import { getContext, onDestroy, setContext } from "svelte";
     import Keydown from "svelte-keydown";
     import { swipe } from "svelte-gestures";
-    import type {
-        CommentStarToggledEvent,
-        SectionMetadata,
-        ParshaData,
-        VerseData,
-        MultisectionMetadata,
+    import {
+        type CommentStarToggledEvent,
+        type SectionMetadata,
+        type ParshaData,
+        type VerseData,
+        type MultisectionMetadata,
+        toSingleSection,
     } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
     import VerseComments from "./VerseComments.svelte";
@@ -20,6 +21,7 @@
         verseCoords2String,
         bookNoByParsha,
         lookupBookInfo,
+        findBookSectionKey,
     } from "../utils";
     import { isEditingStore } from "../editing";
     import VerseTextBadge from "./VerseTextBadge.svelte";
@@ -34,14 +36,8 @@
     // NOTE: since modal is in a separate subtree, it doesn't get section key
     // and section metadata contexts...
     // so, we rebuild them here
-    const sk = Object.entries(metadata.sections).find(
-        ([_sectionKey, section]) => section.books.find((bookInfo) => bookInfo.id === parsha.book) !== undefined,
-    )[0];
-    const sectionMetadata: SectionMetadata = {
-        section: metadata.sections[sk],
-        available_parsha: metadata.available_parsha,
-        logged_in_user: metadata.logged_in_user,
-    };
+    const sk = findBookSectionKey(metadata, parsha.book);
+    const sectionMetadata: SectionMetadata = toSingleSection(metadata, sk);
     setContext("sectionKey", sk);
     setContext("sectionMetadata", sectionMetadata);
 

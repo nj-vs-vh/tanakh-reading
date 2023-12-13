@@ -1,12 +1,18 @@
 <script lang="ts">
-    import { getContext } from "svelte";
+    import { getContext, setContext } from "svelte";
 
     import type { FoundMatch } from "../api";
     import VerseComment from "./VerseComment.svelte";
     import VerseText from "./VerseText.svelte";
-    import type { SectionMetadata, TextCoords } from "../types";
+    import {
+        toSingleSection,
+        type MultisectionMetadata,
+        type SectionKey,
+        type SectionMetadata,
+        type TextCoords,
+    } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
-    import { bookNoByParsha, lookupBookInfo, versePath } from "../utils";
+    import { bookNoByParsha, findBookSectionKey, findParshaSectionKey, lookupBookInfo, versePath } from "../utils";
     import VerseDetailsModal from "./VerseDetailsModal.svelte";
     import Icon from "./shared/Icon.svelte";
 
@@ -16,7 +22,7 @@
     // add icon specifying text / comment
     export let addTextCommentIcon: boolean = true;
 
-    const metadata: SectionMetadata = getContext("metadata");
+    const metadata: MultisectionMetadata = getContext("metadata");
 
     // @ts-ignore
     const { open, close } = getContext("simple-modal");
@@ -33,6 +39,10 @@
     let parshaLinkColor = "var(--theme-color-secondary-text)";
     let parshaLinkSizeEm = 0.7;
 
+    // figured out dynamically based on match section
+    let sectionKey: SectionKey;
+    let sectionMetadata: SectionMetadata;
+
     const openVerseDetailsModal = () =>
         open(VerseDetailsModal, {
             parsha: match.parsha_data,
@@ -43,8 +53,18 @@
 
     $: {
         textCoords = match.comment !== null ? match.comment.text_coords : match.text.text_coords;
-        let bookName = lookupBookInfo(metadata, bookNoByParsha(textCoords.parsha, metadata)).bookInfo.name
-        textCoordsStr = `${bookName[$textSourcesConfigStore.main]} ${textCoords.chapter}:${textCoords.verse}`;
+
+        // find section-specific stuff based on match's text coords, and set contexts for children
+        sectionKey = findParshaSectionKey(metadata, textCoords.parsha);
+        sectionMetadata = toSingleSection(metadata, sectionKey);
+        setContext("sectionKey", sectionKey);
+        setContext("sectionMetadata", sectionMetadata);
+
+        let bookName = lookupBookInfo(sectionMetadata, bookNoByParsha(textCoords.parsha, sectionMetadata)).bookInfo
+            .name;
+        textCoordsStr = `${bookName[$textSourcesConfigStore[sectionKey].main]} ${textCoords.chapter}:${
+            textCoords.verse
+        }`;
         parshaHref = versePath(textCoords.parsha, {
             chapter: textCoords.chapter,
             verse: textCoords.verse,
@@ -60,7 +80,7 @@
                     <Icon icon="tanakh-book" heightEm={1} />
                 {/if}
                 <span style={addTextCommentIcon ? "margin-left: 0.4em" : ""}>
-                    {metadata.section.comment_sources.find((cs) => cs.key == match.comment.comment_source).name} к
+                    {sectionMetadata.section.comment_sources.find((cs) => cs.key == match.comment.comment_source).name} к
                     <button on:click={openVerseDetailsModal} on:keypress={openVerseDetailsModal}>{textCoordsStr}</button
                     >
                 </span>
@@ -88,7 +108,7 @@
                 <span style={addTextCommentIcon ? "margin-left: 0.4em" : ""}>
                     <button on:click={openVerseDetailsModal} on:keypress={openVerseDetailsModal}>{textCoordsStr}</button
                     >
-                    {metadata.section.text_sources.find(ts => ts.key === match.text.text_source).mark}
+                    {sectionMetadata.section.text_sources.find((ts) => ts.key === match.text.text_source).mark}
                 </span>
             </span>
             <a href={parshaHref} target="_blank" rel="noreferrer">

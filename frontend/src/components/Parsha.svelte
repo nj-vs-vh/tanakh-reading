@@ -11,14 +11,15 @@
     import { commentSourcesConfigStore } from "../settings/commentSources";
     import { textDecorationSettingsStore } from "../settings/textDecorationSettings";
 
-    import type {
-        SectionMetadata,
-        ParshaData,
-        VerseData,
-        ChapterData,
-        CommentStarToggledEvent,
-        MultisectionMetadata,
-        SectionKey,
+    import {
+        type SectionMetadata,
+        type ParshaData,
+        type VerseData,
+        type ChapterData,
+        type CommentStarToggledEvent,
+        type MultisectionMetadata,
+        type SectionKey,
+        toSingleSection,
     } from "../types";
     import {
         anyCommentPassesFilters,
@@ -45,11 +46,7 @@
     const sectionKey: SectionKey = getContext("sectionKey");
     // NOTE: subtree components may use single-section metadata as before,
     //       just accessing it via a new "sectionMetadata" context
-    const sectionMetadata: SectionMetadata = {
-        section: metadata.sections[sectionKey],
-        available_parsha: metadata.available_parsha,
-        logged_in_user: metadata.logged_in_user,
-    };
+    const sectionMetadata: SectionMetadata = toSingleSection(metadata, sectionKey);
     setContext("sectionMetadata", sectionMetadata);
 
     let bookNumberInSection: number;

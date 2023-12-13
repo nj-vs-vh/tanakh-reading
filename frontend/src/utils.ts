@@ -1,5 +1,5 @@
 import { CommentFilterByBookmarkMode, SectionCommentSourcesConfig } from "./settings/commentSources";
-import type { CommentData, SectionMetadata, ParshaData, VerseData } from "./types";
+import type { CommentData, SectionMetadata, ParshaData, VerseData, MultisectionMetadata } from "./types";
 import type { ParshaInfo, TanakhBookInfo } from "./typesGenerated";
 
 export function getUrlHash(): string {
@@ -76,13 +76,26 @@ export function cmpVerseCoords(a: VerseCoords, b: VerseCoords): number {
     }
 }
 
-export function lookupBookInfo(metadata: SectionMetadata, bookId: number): {index: number, bookInfo: TanakhBookInfo} {
-    return metadata.section.books.map((bookInfo, index) => {return {bookInfo, index}}).find(({bookInfo}) => bookInfo.id === bookId);
+export function lookupBookInfo(metadata: SectionMetadata, bookId: number): { index: number, bookInfo: TanakhBookInfo } {
+    return metadata.section.books.map((bookInfo, index) => { return { bookInfo, index } }).find(({ bookInfo }) => bookInfo.id === bookId);
 }
 
 
-export function lookupParshaInfo(metadata: SectionMetadata, parshaId: number): {index: number, parshaInfo: ParshaInfo} {
-    return metadata.section.parshas.map((parshaInfo, index) => {return {parshaInfo, index}}).find(({parshaInfo}) => parshaInfo.id === parshaId);
+export function lookupParshaInfo(metadata: SectionMetadata, parshaId: number): { index: number, parshaInfo: ParshaInfo } {
+    return metadata.section.parshas.map((parshaInfo, index) => { return { parshaInfo, index } }).find(({ parshaInfo }) => parshaInfo.id === parshaId);
+}
+
+
+export function findBookSectionKey(metadata: MultisectionMetadata, bookId: number) {
+    return Object.entries(metadata.sections).find(
+        ([_sectionKey, section]) => section.books.find((bookInfo) => bookInfo.id === bookId) !== undefined,
+    )[0];
+}
+
+export function findParshaSectionKey(metadata: MultisectionMetadata, parshaId: number) {
+    return Object.entries(metadata.sections).find(
+        ([_sectionKey, section]) => section.parshas.find((parshaInfo) => parshaInfo.id === parshaId) !== undefined,
+    )[0];
 }
 
 

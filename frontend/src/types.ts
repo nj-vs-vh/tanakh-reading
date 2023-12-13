@@ -52,6 +52,14 @@ export interface SectionMetadata {
     logged_in_user: LoggedInUser | null;
 }
 
+export function toSingleSection(metadata: MultisectionMetadata, sectionKey: SectionKey): SectionMetadata {
+    return {
+        section: metadata.sections[sectionKey],
+        available_parsha: metadata.available_parsha,
+        logged_in_user: metadata.logged_in_user,
+    }
+}
+
 export interface UserCredentials {
     username: string;
     password: string;
