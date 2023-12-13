@@ -42,6 +42,7 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             name={
                 MOSAD_RAV_KUK_SOURCE: "Йеhошуа 1-11",
             },
+            url_name="joshua-1-11",
         )
     ],
 )

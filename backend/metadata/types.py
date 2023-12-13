@@ -42,6 +42,9 @@ class ParshaInfo(BaseModel):
     chapter_verse_end: tuple[int, int]
     name: dict[TextSourceKey, str]
 
+    # only latin characters and dashes; used in urls like https://<base-url>/parsha/<url_name>
+    url_name: str
+
 
 class TanakhSectionMetadata(BaseModel):
     title: dict[TextSourceKey, str]

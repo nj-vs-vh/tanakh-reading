@@ -1,8 +1,14 @@
 <script lang="ts">
-    import { getContext, onDestroy } from "svelte";
+    import { getContext, onDestroy, setContext } from "svelte";
     import Keydown from "svelte-keydown";
     import { swipe } from "svelte-gestures";
-    import type { CommentStarToggledEvent, SectionMetadata, ParshaData, VerseData, SectionKey } from "../types";
+    import type {
+        CommentStarToggledEvent,
+        SectionMetadata,
+        ParshaData,
+        VerseData,
+        MultisectionMetadata,
+    } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
     import VerseComments from "./VerseComments.svelte";
     import Icon from "./shared/Icon.svelte";
@@ -18,27 +24,37 @@
     import { isEditingStore } from "../editing";
     import VerseTextBadge from "./VerseTextBadge.svelte";
 
+    export let parsha: ParshaData;
+    export let verse: number;
+    export let chapter: number;
+    export let navigable: boolean = true;
+
+    const metadata: MultisectionMetadata = getContext("metadata");
+
+    // NOTE: since modal is in a separate subtree, it doesn't get section key
+    // and section metadata contexts...
+    // so, we rebuild them here
+    const sk = Object.entries(metadata.sections).find(
+        ([_sectionKey, section]) => section.books.find((bookInfo) => bookInfo.id === parsha.book) !== undefined,
+    )[0];
+    const sectionMetadata: SectionMetadata = {
+        section: metadata.sections[sk],
+        available_parsha: metadata.available_parsha,
+        logged_in_user: metadata.logged_in_user,
+    };
+    setContext("sectionKey", sk);
+    setContext("sectionMetadata", sectionMetadata);
+
     let textSources: Array<string>;
-
-    const sectionMetadata: SectionMetadata = getContext("sectionMetadata");
-    // FIXME this context is not accessible because modal is not a child of Parsha component!
-    const sk: SectionKey = getContext("sectionKey");
-
     const textSourcesConfigStoreUnsubscribe = textSourcesConfigStore.subscribe((config) => {
         textSources = [];
         textSources.push(config[sk].main);
-        for (const [source, isEnabled] of Object.entries(config.enabledInDetails)) {
+        for (const [source, isEnabled] of Object.entries(config[sk].enabledInDetails)) {
             if (isEnabled && source != config[sk].main) textSources.push(source);
         }
     });
 
-    export let parsha: ParshaData;
     const parshaVerseCoords = getVerseCoords(parsha);
-
-    export let verse: number;
-    export let chapter: number;
-
-    export let navigable: boolean = true;
 
     export let onCommentStarToggled: (e: CustomEvent<CommentStarToggledEvent>) => void = (e) => {};
 

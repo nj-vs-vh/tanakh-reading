@@ -7,12 +7,13 @@
     import TextSettings from "./MenuItems/TextSettings.svelte";
     import CommentsSettings from "./MenuItems/CommentsSettings.svelte";
     import Search from "./MenuItems/Search.svelte";
-    import type { MultisectionMetadata } from "../types";
+    import type { MultisectionMetadata, SectionKey } from "../types";
     import DisplaySettings from "./MenuItems/DisplaySettings.svelte";
 
     export let homeButton: boolean = false;
 
     const metadata: MultisectionMetadata = getContext("metadata");
+    const sectionKey: SectionKey | undefined = getContext("sectionKey");
 
     const backgroundColor = "var(--theme-color-secondary-background)";
 </script>
@@ -32,8 +33,8 @@
                 <MenuFolder icon="synagogue" title="Главная" />
             </Navigate>
         {/if}
-        <TextSettings {metadata} />
-        <CommentsSettings {metadata} />
+        <TextSettings {metadata} {sectionKey} />
+        <CommentsSettings {metadata} {sectionKey} />
         <DisplaySettings />
         <Search {metadata} on:verseSearchResult />
         {#if metadata.logged_in_user === null}

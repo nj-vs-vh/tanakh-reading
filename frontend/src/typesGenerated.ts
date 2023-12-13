@@ -29,6 +29,7 @@ export interface ParshaInfo {
   name: {
     [k: string]: string;
   };
+  url_name: string;
 }
 export interface TanakhBookInfo {
   id: number;

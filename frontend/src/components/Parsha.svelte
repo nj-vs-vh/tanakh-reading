@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext } from "svelte";
+    import { getContext, onDestroy, setContext } from "svelte";
     import VerseDetailsModal from "./VerseDetailsModal.svelte";
     import VerseComments from "./VerseComments.svelte";
     import Icon from "./shared/Icon.svelte";
@@ -50,6 +50,7 @@
         available_parsha: metadata.available_parsha,
         logged_in_user: metadata.logged_in_user,
     };
+    setContext("sectionMetadata", sectionMetadata);
 
     let bookNumberInSection: number;
     let bookInfo: TanakhBookInfo;
@@ -67,7 +68,7 @@
 
     // non-trivial subscriptions
     let commentStyle: CommentStyle;
-    commentStyleStore.subscribe((v) => {
+    const unsubscribeCommentStyleStore = commentStyleStore.subscribe((v) => {
         commentStyle = v;
         if (commentStyle === CommentStyle.MODAL) {
             try {
@@ -77,7 +78,7 @@
     });
     let mainTextSource: string;
     let isMainTextHebrew: boolean;
-    textSourcesConfigStore.subscribe((config) => {
+    const unsubscribeTextSourcesConfigStore = textSourcesConfigStore.subscribe((config) => {
         mainTextSource = config[sectionKey].main;
         isMainTextHebrew = isHebrewTextSource(mainTextSource);
         setPageTitle(sectionMetadata.section.parshas.find((pi) => pi.id === parshaData.parsha).name[mainTextSource]);
@@ -171,10 +172,18 @@
         } else return true;
     };
 
+    let currentTextDecorationStyle: TextDecorationStyle;
+    textDecorationStyleStore.subscribe((style) => (currentTextDecorationStyle = style));
+
     const shouldVerseTextBeClickable = (verseData: VerseData) =>
-        $textDecorationStyleStore === TextDecorationStyle.CLICKABLE_TEXT && shouldDecorateVerseText(verseData);
+        currentTextDecorationStyle === TextDecorationStyle.CLICKABLE_TEXT && shouldDecorateVerseText(verseData);
     const shouldVerseTextHaveAsterisk = (verseData: VerseData) =>
-        $textDecorationStyleStore === TextDecorationStyle.ASTRERISK && shouldDecorateVerseText(verseData);
+        currentTextDecorationStyle === TextDecorationStyle.ASTRERISK && shouldDecorateVerseText(verseData);
+
+    onDestroy(() => {
+        unsubscribeCommentStyleStore();
+        unsubscribeTextSourcesConfigStore();
+    });
 </script>
 
 <Menu

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { MultisectionMetadata } from "../../types";
+    import type { MultisectionMetadata, SectionKey } from "../../types";
     import {
         enableTextSource,
         setMainTextSource,
@@ -11,11 +11,20 @@
     import WikiStyleLinks from "./WikiStyleLinks.svelte";
 
     export let metadata: MultisectionMetadata;
+    export let sectionKey: SectionKey | undefined;
+
+    const sectionKeyDefined = sectionKey !== undefined;
+    let sections = Object.entries(metadata.sections);
+    if (sectionKeyDefined) {
+        sections = sections.filter(([sk, _]) => sk === sectionKey);
+    }
 </script>
 
 <MenuFolder icon="torah-scroll" title="Текст">
-    {#each Object.entries(metadata.sections) as [sectionKey, section]}
-        <h3 class="section-title">{section.title[$textSourcesConfigStore[sectionKey].main]}</h3>
+    {#each sections as [sectionKey, section]}
+        {#if !sectionKeyDefined}
+            <h3 class="section-title">{section.title[$textSourcesConfigStore[sectionKey].main]}</h3>
+        {/if}
         <MenuFolderBlock title="Основной">
             {#each section.text_sources as textSource}
                 <div class="input-with-label">
