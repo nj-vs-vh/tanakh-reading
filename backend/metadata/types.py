@@ -45,6 +45,11 @@ class ParshaInfo(BaseModel):
     # only latin characters and dashes; used in urls like https://<base-url>/parsha/<url_name>
     url_name: str
 
+    # "parsha" is constrained to a single book, but sometimes real weekly portion has several
+    # of these "single-book parshas" (e.g. Seder Ha-Mishmarah puts Joel and Amos together in
+    # a single "superparsha"). in this case parshas have this id set to the first of them (i.e. to Joel)
+    parsha_group_leader_id: Optional[int] = None
+
 
 class TanakhSectionMetadata(BaseModel):
     title: dict[TextSourceKey, str]
