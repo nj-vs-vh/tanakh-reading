@@ -42,7 +42,10 @@
             const parshaInfo = Object.values(metadata.sections)
                 .flatMap((section) => section.parshas)
                 .find((parshaInfo) => parshaInfo.url_name === parshaIdOrUrlName);
-            if (parshaInfo !== undefined) parshaId = parshaInfo.id;
+            if (parshaInfo !== undefined) {
+                console.log(`Parsha id = ${parshaInfo.id} from URL name "${parshaInfo.url_name}"`);
+                parshaId = parshaInfo.id;
+            }
         }
 
         if (parshaId === undefined) {

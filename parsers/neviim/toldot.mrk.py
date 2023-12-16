@@ -13,13 +13,17 @@ from backend.metadata.neviim import MRK_SOURCE, NEVIIM_METADATA
 from backend.metadata.types import IsoLang
 from backend.model import ParshaData, StoredText, TextCoords
 from parsers.merge import merge_parsha_data
+from parsers.utils import dump_parsha
 
 SCRIPT_DIR = Path(__file__).parent
-HTML_DIR = SCRIPT_DIR / "../../html/neviim/mrk"
+PROJECT_ROOT = SCRIPT_DIR / "../.."
+HTML_DIR = PROJECT_ROOT / "html/neviim/mrk"
 HTML_DIR.mkdir(parents=True, exist_ok=True)
+JSON_DIR = PROJECT_ROOT / "json/neviim/mrk"
+JSON_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def parse_book(book_id: int, urlname: str):
+def parse_book(book_id: int, urlname: str, upload: bool):
     expected_book = next(b for b in NEVIIM_METADATA.books if b.id == book_id)
     print(f"Book info: {expected_book}")
 
@@ -27,12 +31,14 @@ def parse_book(book_id: int, urlname: str):
     print("Parsha info: ")
     print(*parsha_infos, sep="\n")
 
-    file = HTML_DIR / f"{book_id}.html"
+    file = HTML_DIR / f"book-{book_id}.html"
     if not file.exists():
+        print("Downloading book's page...")
         resp = requests.get(f"https://toldot.com/limud/library/neviim/{urlname}/")
         print(resp)
         file.write_text(resp.text)
 
+    print("Parsing...")
     soup = bs4.BeautifulSoup(markup=file.read_text(), features="html.parser")
     article_body = soup.find("span", attrs={"class": "articletext rt"})
     assert isinstance(article_body, bs4.Tag)
@@ -106,24 +112,30 @@ def parse_book(book_id: int, urlname: str):
         print(f"Downloading existing data for {parsha_data['parsha']}...")
         response = requests.get(f"{os.environ['BASE_URL']}/parsha/{parsha_data['parsha']}")
         if response.status_code == 404:
-            print("No such parsha, uploading for the first time, OK")
+            print("No such parsha, skipping validation")
         elif response.status_code == 200:
             print("Parsha data exists, validating it")
             existing_parsha_data = response.json()
             merge_parsha_data(existing_parsha_data, parsha_data)
-        print("Uploading parsha data...")
-        response = requests.put(
-            f"{os.environ['BASE_URL']}/parsha",
-            json=parsha_data,
-            headers={"X-Admin-Token": os.environ["ADMIN_TOKEN"]},
-        )
-        print(f"Response: {response}")
+
+        print("Saving JSON")
+        (JSON_DIR / f"parsha-{parsha_data['parsha']}.json").write_text(dump_parsha(parsha_data))
+
+        if upload:
+            print("Uploading parsha data...")
+            response = requests.put(
+                f"{os.environ['BASE_URL']}/parsha",
+                json=parsha_data,
+                headers={"X-Admin-Token": os.environ["ADMIN_TOKEN"]},
+            )
+            print(f"Response: {response}")
 
 
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
     argparser.add_argument("book_idx", type=int)
     argparser.add_argument("book_url_name", type=str)
+    argparser.add_argument("--upload", action="store_true", default=False)
     args = argparser.parse_args()
 
-    parse_book(args.book_idx, args.book_url_name)
+    parse_book(args.book_idx, args.book_url_name, args.upload)

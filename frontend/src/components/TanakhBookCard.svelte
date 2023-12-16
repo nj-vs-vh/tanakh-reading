@@ -21,7 +21,7 @@
         <div>
             {#each bookParshaInfos as parshaInfo}
                 {#if availableParshaId.includes(parshaInfo.id)}
-                    <Navigate to={parshaPath(parshaInfo.id)}>
+                    <Navigate to={parshaPath(parshaInfo.url_name)}>
                         <h3>
                             {parshaIndexInSection(parshaInfo.id)}. {parshaInfo.name[$textSourcesConfigStore[sectionKey].main]}
                         </h3>
