@@ -117,7 +117,11 @@ def parse_book(book_id: int, upload: bool):
         elif response.status_code == 200:
             print("Parsha data exists, validating it")
             existing_parsha_data = response.json()
-            merge_parsha_data(existing_parsha_data, parsha_data)
+            try:
+                merge_parsha_data(existing_parsha_data, parsha_data)
+            except Exception as e:
+                print(f"Validation failed: {e!r}, skipping the parsha")
+                continue
 
         if upload:
             print("Uploading parsha data...")

@@ -119,11 +119,11 @@ def parse_book(book_id: int, urlname: str, upload: bool):
         elif response.status_code == 200:
             print("Parsha data exists, validating it")
             existing_parsha_data = response.json()
-            # merge_parsha_data(existing_parsha_data, parsha_data)
+            merge_parsha_data(existing_parsha_data, parsha_data)
 
         if upload:
             print("Uploading parsha data...")
-            response = requests.post(
+            response = requests.put(
                 f"{os.environ['BASE_URL']}/parsha",
                 json=parsha_data,
                 headers={"X-Admin-Token": os.environ["ADMIN_TOKEN"]},
