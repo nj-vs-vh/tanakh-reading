@@ -19,12 +19,11 @@ from backend.database.interface import (
     SearchTextIn,
     SearchTextSorting,
 )
-from backend.metadata import (
-    comment_source_languages,
-    get_book_by_parsha,
-    text_source_languages,
-)
+from backend.metadata import get_comment_source_language, get_text_source_language
+from backend.metadata.neviim import NEVIIM_METADATA
+from backend.metadata.torah import TORAH_METADATA
 from backend.model import (
+    UNSET_DB_ID,
     ChapterData,
     CommentData,
     EditedComment,
@@ -547,9 +546,9 @@ class MongoDatabase(DatabaseInterface):
                 self.parsha_data_cache[index] = parsha_data
         return copy.deepcopy(parsha_data)
 
-    async def save_parsha_data(self, parsha_data: ParshaData) -> None:
-        delete_existing = parsha_data["parsha"] in await self.get_available_parsha_indices()
-        logger.info(f"Saving parsha data, {delete_existing = }")
+    async def save_parsha_data(self, parsha_data: ParshaData, replace: bool) -> None:
+        delete_existing = replace and (parsha_data["parsha"] in await self.get_available_parsha_indices())
+        logger.info(f"Saving parsha data, {replace = }, {delete_existing = }")
 
         def blocking(parsha_data: ParshaData) -> None:
             if delete_existing:
@@ -557,8 +556,11 @@ class MongoDatabase(DatabaseInterface):
                 self.texts_coll.delete_many(filter_)
                 self.comments_coll.delete_many(filter_)
             texts, comments = parsha_data_to_texts_and_comments(parsha_data)
-            self.texts_coll.insert_many([t.to_mongo_db() for t in texts])
-            self.comments_coll.insert_many([c.to_mongo_db() for c in comments])
+            logger.info(f"Extracted {len(texts)} texts and {len(comments)} comments")
+            if texts:
+                self.texts_coll.insert_many([t.to_mongo_db() for t in texts])
+            if comments:
+                self.comments_coll.insert_many([c.to_mongo_db() for c in comments])
 
         await self._awrap(blocking, parsha_data)
         self.parsha_data_cache.pop(parsha_data["parsha"], None)
@@ -831,7 +833,7 @@ def parsha_data_to_texts_and_comments(parsha_data: ParshaData) -> tuple[list[Sto
                         text_coords=text_coords,
                         text_source=text_source,
                         text=text,
-                        language=to_mongo_language(text_source_languages[text_source]),
+                        language=to_mongo_language(get_text_source_language(text_source)),
                     )
                 )
             for comment_source, comments in verse_data["comments"].items():
@@ -843,7 +845,7 @@ def parsha_data_to_texts_and_comments(parsha_data: ParshaData) -> tuple[list[Sto
                             anchor_phrase=comment["anchor_phrase"],
                             comment=comment["comment"],
                             format=comment["format"],
-                            language=to_mongo_language(comment_source_languages[comment_source]),
+                            language=to_mongo_language(get_comment_source_language(comment_source)),
                             index=index,
                             legacy_id=comment.get("id"),
                             is_starred=comment.get("is_starred_by_me"),
@@ -858,11 +860,25 @@ def texts_and_comments_to_parsha_data(texts: list[StoredText], comments: list[St
     parsha_values = {t.text_coords.parsha for t in texts} | {c.text_coords.parsha for c in comments}
     if len(parsha_values) > 1:
         raise ValueError("Stored texts and comments are from several parshas, can't construct parsha data")
-    parsha = next(iter(parsha_values))
-    book = get_book_by_parsha(parsha)
+    parsha_id = next(iter(parsha_values))
+    section_metadata = next(
+        iter(
+            [
+                section
+                for section in [TORAH_METADATA, NEVIIM_METADATA]
+                if any(parsha_info.id == parsha_id for parsha_info in section.parshas)
+            ]
+        ),
+        None,
+    )
+    if section_metadata is None:
+        raise ValueError("Failed to lookup Tanakh section metadata from book id")
+    parsha_info = next(iter(p for p in section_metadata.parshas if p.id == parsha_id))
+    book_id = parsha_info.book_id
+
     parsha_data = ParshaData(
-        book=book,
-        parsha=parsha,
+        book=book_id,
+        parsha=parsha_id,
         chapters=[],
     )
 
@@ -891,13 +907,13 @@ def texts_and_comments_to_parsha_data(texts: list[StoredText], comments: list[St
                     comment_data["is_starred_by_me"] = True
                 verse_data_by_source[vc.comment_source].append(comment_data)
 
-            chapter_data["verses"].append(
-                VerseData(
-                    verse=verse,
-                    text={vt.text_source: vt.text for vt in verse_texts},
-                    text_ids={vt.text_source: str(vt.db_id) for vt in verse_texts},
-                    comments=verse_data_by_source,
-                )
+            verse_data = VerseData(
+                verse=verse,
+                text={vt.text_source: vt.text for vt in verse_texts},
+                comments=verse_data_by_source,
             )
+            if all(vt.db_id != UNSET_DB_ID for vt in verse_texts):
+                verse_data["text_ids"] = {vt.text_source: str(vt.db_id) for vt in verse_texts}
+            chapter_data["verses"].append(verse_data)
 
     return parsha_data

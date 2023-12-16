@@ -4,7 +4,7 @@ from typing import Any, Literal, Optional, Type, TypeVar
 import pydantic
 from aiohttp import web
 from bson import ObjectId
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field, ValidationError, create_model_from_typeddict
 from pydantic.error_wrappers import display_errors
 from pymongo.results import InsertOneResult, UpdateResult
 from typing_extensions import NotRequired, TypedDict
@@ -44,6 +44,9 @@ class ParshaData(TypedDict):
     book: int
     parsha: int
     chapters: list[ChapterData]
+
+
+ParshaDataModel = create_model_from_typeddict(ParshaData)  # used for input validation
 
 
 # pydantic models for DB and request data validation

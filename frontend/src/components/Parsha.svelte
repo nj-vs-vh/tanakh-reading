@@ -200,12 +200,13 @@
             {/if}
             <p class="header-info">
                 Книга
-                <strong>{bookInfo.id}</strong>:
+                <!-- NOTE: id is meaningless so we need to replace it with index in section maybe? -->
+                <!-- <strong>{bookInfo.id}</strong>: -->
                 <strong>{bookInfo.name[mainTextSource]}</strong>
             </p>
             <p class="header-info">
                 Недельный раздел
-                <strong>{parshaInfo.id}</strong>:
+                <!-- <strong>{parshaInfo.id}</strong>: -->
                 <strong>{parshaInfo.name[mainTextSource]}</strong>
             </p>
             <p class="header-info">

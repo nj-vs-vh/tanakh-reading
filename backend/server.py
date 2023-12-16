@@ -24,6 +24,7 @@ from backend.model import (
     EditTextRequest,
     NewUser,
     ParshaData,
+    ParshaDataModel,
     SignupToken,
     StarCommentRequest,
     StarredComment,
@@ -159,10 +160,15 @@ def check_admin_token(request: web.Request) -> None:
 
 
 @routes.post("/parsha")
-async def save_parsha(request: web.Request) -> web.Response:
+async def save_parsha_data(request: web.Request) -> web.Response:
+    """Upload a whole new parsha, replacing all currently existing data for it"""
     check_admin_token(request)
     db = get_db(request)
     parsha_data = cast(ParshaData, await safe_request_json(request))
+    try:
+        ParshaDataModel(**parsha_data)
+    except Exception as e:
+        raise web.HTTPBadRequest(reason=repr(e))
     logger.info(f"Saving parsha data for book {parsha_data['book']}, parsha {parsha_data['parsha']}")
     current_parsha_data = await db.get_parsha_data(parsha_data["parsha"])
     if current_parsha_data is not None:
@@ -171,8 +177,23 @@ async def save_parsha(request: web.Request) -> web.Response:
     else:
         logger.info("No current parsha data, creating new one")
         diff_ = []
-    await db.save_parsha_data(parsha_data)
+    await db.save_parsha_data(parsha_data, replace=True)
     return web.json_response(diff_)
+
+
+@routes.put("/parsha")
+async def append_parsha_data(request: web.Request) -> web.Response:
+    """Upload data in form of a Parsha object, but not remove already existing data"""
+    check_admin_token(request)
+    db = get_db(request)
+    parsha_data = cast(ParshaData, await safe_request_json(request))
+    try:
+        ParshaDataModel(**parsha_data)
+    except Exception as e:
+        raise web.HTTPBadRequest(reason=repr(e))
+    logger.info(f"Appending data from parsha data object (book {parsha_data['book']}, parsha {parsha_data['parsha']})")
+    await db.save_parsha_data(parsha_data, replace=False)
+    return web.Response()
 
 
 @routes.delete("/parsha-cache")

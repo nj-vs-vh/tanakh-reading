@@ -133,7 +133,7 @@ class DatabaseInterface(abc.ABC):
         ...
 
     @abc.abstractmethod
-    async def save_parsha_data(self, parsha_data: ParshaData) -> None:
+    async def save_parsha_data(self, parsha_data: ParshaData, replace: bool) -> None:
         ...
 
     @abc.abstractmethod
