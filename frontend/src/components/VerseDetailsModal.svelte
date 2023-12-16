@@ -38,6 +38,7 @@
     // so, we rebuild them here
     const sk = findBookSectionKey(metadata, parsha.book);
     const sectionMetadata: SectionMetadata = toSingleSection(metadata, sk);
+    const parshaInfo = sectionMetadata.section.parshas.find(p => p.id == parsha.parsha);
     setContext("sectionKey", sk);
     setContext("sectionMetadata", sectionMetadata);
 
@@ -167,7 +168,7 @@
         <span
             class="icon-button verse-nav-element"
             on:click={() => {
-                const url = `${window.location.origin}${versePath(parsha.parsha, currentVerseCoords)}`;
+                const url = `${window.location.origin}${versePath(parshaInfo.url_name, currentVerseCoords)}`;
                 navigator.clipboard.writeText(url);
                 isCurrentVerseLinkCopied = true;
             }}
