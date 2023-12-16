@@ -7,12 +7,11 @@ from backend.metadata.types import (
 )
 
 MRK_SOURCE = "mosad-harav-cook"
+JPS_GSE_SOURCE = "JPS-gender-sensitive"
 
 
 NEVIIM_METADATA = TanakhSectionMetadata(
-    title={
-        MRK_SOURCE: "Пророки",
-    },
+    title={MRK_SOURCE: "Пророки", JPS_GSE_SOURCE: "Prophets"},
     subtitle=None,
     text_sources=[
         TextSource(
@@ -24,31 +23,45 @@ NEVIIM_METADATA = TanakhSectionMetadata(
                 r"http://holyscripture.ru/bible/?t=josiphon",
             ],
             language=IsoLang.RU,
-        )
+        ),
+        TextSource(
+            key=JPS_GSE_SOURCE,
+            mark="[RJPS]",
+            description=(
+                "The JPS Tanakh: Gender-Sensitive Edition издательства "
+                + "The Jewish Publication Society под редакцией р. Давида Е. С. Штейна"
+            ),
+            links=[
+                r"https://jps.org/books/the-jps-tanakh-gender-sensitive-edition/",
+                r"https://jps.org/wp-content/uploads/2023/05/JPS-TANAKH-Gender-Sensitive-Preface.pdf",
+                r"https://jps.org/wp-content/uploads/2023/05/JPS-Gender-Sensitive-Tanakh-Notes-on-Gender.pdf",
+            ],
+            language=IsoLang.EN,
+        ),
     ],
     comment_sources=[],
     books=[
-        TanakhBookInfo(id=6, name={MRK_SOURCE: "Йеhошуа"}),
-        TanakhBookInfo(id=7, name={MRK_SOURCE: "Шойфтим"}),
-        TanakhBookInfo(id=8, name={MRK_SOURCE: "Шемуэйл I"}),
-        TanakhBookInfo(id=9, name={MRK_SOURCE: "Шемуэйл II"}),
-        TanakhBookInfo(id=10, name={MRK_SOURCE: "Мелахим I"}),
-        TanakhBookInfo(id=11, name={MRK_SOURCE: "Мелахим II"}),
-        TanakhBookInfo(id=12, name={MRK_SOURCE: "Йирмейа"}),
-        TanakhBookInfo(id=13, name={MRK_SOURCE: "Йехэзкэйл"}),
-        TanakhBookInfo(id=14, name={MRK_SOURCE: "Йешайа"}),
-        TanakhBookInfo(id=15, name={MRK_SOURCE: "Ошеа"}),
-        TanakhBookInfo(id=16, name={MRK_SOURCE: "Йоель"}),
-        TanakhBookInfo(id=17, name={MRK_SOURCE: "Амос"}),
-        TanakhBookInfo(id=18, name={MRK_SOURCE: "Овадья"}),
-        TanakhBookInfo(id=19, name={MRK_SOURCE: "Йона"}),
-        TanakhBookInfo(id=20, name={MRK_SOURCE: "Миха"}),
-        TanakhBookInfo(id=21, name={MRK_SOURCE: "Нахум"}),
-        TanakhBookInfo(id=22, name={MRK_SOURCE: "Хавакук"}),
-        TanakhBookInfo(id=23, name={MRK_SOURCE: "Цфанья"}),
-        TanakhBookInfo(id=24, name={MRK_SOURCE: "Хагай"}),
-        TanakhBookInfo(id=25, name={MRK_SOURCE: "Зехарья"}),
-        TanakhBookInfo(id=26, name={MRK_SOURCE: "Малахи"}),
+        TanakhBookInfo(id=6, name={MRK_SOURCE: "Йеhошуа", JPS_GSE_SOURCE: "Joshua"}),
+        TanakhBookInfo(id=7, name={MRK_SOURCE: "Шойфтим", JPS_GSE_SOURCE: "Judges"}),
+        TanakhBookInfo(id=8, name={MRK_SOURCE: "Шемуэйл I", JPS_GSE_SOURCE: "I Samuel"}),
+        TanakhBookInfo(id=9, name={MRK_SOURCE: "Шемуэйл II", JPS_GSE_SOURCE: "II Samuel"}),
+        TanakhBookInfo(id=10, name={MRK_SOURCE: "Мелахим I", JPS_GSE_SOURCE: "I Kings"}),
+        TanakhBookInfo(id=11, name={MRK_SOURCE: "Мелахим II", JPS_GSE_SOURCE: "II Kings"}),
+        TanakhBookInfo(id=12, name={MRK_SOURCE: "Йирмейа", JPS_GSE_SOURCE: "Jeremiah"}),
+        TanakhBookInfo(id=13, name={MRK_SOURCE: "Йехэзкэйл", JPS_GSE_SOURCE: "Ezekiel"}),
+        TanakhBookInfo(id=14, name={MRK_SOURCE: "Йешайа", JPS_GSE_SOURCE: "Isaiah"}),
+        TanakhBookInfo(id=15, name={MRK_SOURCE: "Ошеа", JPS_GSE_SOURCE: "Hosea"}),
+        TanakhBookInfo(id=16, name={MRK_SOURCE: "Йоель", JPS_GSE_SOURCE: "Joel"}),
+        TanakhBookInfo(id=17, name={MRK_SOURCE: "Амос", JPS_GSE_SOURCE: "Amos"}),
+        TanakhBookInfo(id=18, name={MRK_SOURCE: "Овадья", JPS_GSE_SOURCE: "Obadiah"}),
+        TanakhBookInfo(id=19, name={MRK_SOURCE: "Йона", JPS_GSE_SOURCE: "Jonah"}),
+        TanakhBookInfo(id=20, name={MRK_SOURCE: "Миха", JPS_GSE_SOURCE: "Micah"}),
+        TanakhBookInfo(id=21, name={MRK_SOURCE: "Нахум", JPS_GSE_SOURCE: "Nahum"}),
+        TanakhBookInfo(id=22, name={MRK_SOURCE: "Хавакук", JPS_GSE_SOURCE: "Habakkuk"}),
+        TanakhBookInfo(id=23, name={MRK_SOURCE: "Цфанья", JPS_GSE_SOURCE: "Zephaniah"}),
+        TanakhBookInfo(id=24, name={MRK_SOURCE: "Хагай", JPS_GSE_SOURCE: "Haggai"}),
+        TanakhBookInfo(id=25, name={MRK_SOURCE: "Зехарья", JPS_GSE_SOURCE: "Zechariah"}),
+        TanakhBookInfo(id=26, name={MRK_SOURCE: "Малахи", JPS_GSE_SOURCE: "Malachi"}),
     ],
     parshas=[
         ParshaInfo(
@@ -56,7 +69,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=6,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(11, 23),
-            name={MRK_SOURCE: "Йеhошуа 1–11"},
+            name={
+                MRK_SOURCE: "Йеhошуа 1–11",
+                JPS_GSE_SOURCE: "Joshua 1–11",
+            },
             url_name="joshua-1-11",
         ),
         ParshaInfo(
@@ -64,7 +80,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=6,
             chapter_verse_start=(12, 1),
             chapter_verse_end=(19, 51),
-            name={MRK_SOURCE: "Йеhошуа 12–19"},
+            name={
+                MRK_SOURCE: "Йеhошуа 12–19",
+                JPS_GSE_SOURCE: "Joshua 12–19",
+            },
             url_name="joshua-12-19",
         ),
         ParshaInfo(
@@ -72,7 +91,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=6,
             chapter_verse_start=(20, 1),
             chapter_verse_end=(24, 33),
-            name={MRK_SOURCE: "Йеhошуа 20–24"},
+            name={
+                MRK_SOURCE: "Йеhошуа 20–24",
+                JPS_GSE_SOURCE: "Joshua 20–24",
+            },
             url_name="joshua-20-24",
         ),
         ParshaInfo(
@@ -80,7 +102,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=7,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(11, 40),
-            name={MRK_SOURCE: "Шойфтим 1–11"},
+            name={
+                MRK_SOURCE: "Шойфтим 1–11",
+                JPS_GSE_SOURCE: "Judges 1–11",
+            },
             url_name="judges-1-11",
         ),
         ParshaInfo(
@@ -88,7 +113,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=7,
             chapter_verse_start=(12, 1),
             chapter_verse_end=(21, 25),
-            name={MRK_SOURCE: "Шойфтим 12–21"},
+            name={
+                MRK_SOURCE: "Шойфтим 12–21",
+                JPS_GSE_SOURCE: "Judges 12–21",
+            },
             url_name="judges-12-21",
         ),
         ParshaInfo(
@@ -96,7 +124,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=8,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(8, 22),
-            name={MRK_SOURCE: "Шемуэйл I 1–8"},
+            name={
+                MRK_SOURCE: "Шемуэйл I 1–8",
+                JPS_GSE_SOURCE: "I Samuel 1–8",
+            },
             url_name="first-samuel-1-8",
         ),
         ParshaInfo(
@@ -104,7 +135,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=8,
             chapter_verse_start=(9, 1),
             chapter_verse_end=(13, 23),
-            name={MRK_SOURCE: "Шемуэйл I 9–13"},
+            name={
+                MRK_SOURCE: "Шемуэйл I 9–13",
+                JPS_GSE_SOURCE: "I Samuel 9–13",
+            },
             url_name="first-samuel-9-13",
         ),
         ParshaInfo(
@@ -112,7 +146,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=8,
             chapter_verse_start=(14, 1),
             chapter_verse_end=(25, 44),
-            name={MRK_SOURCE: "Шемуэйл I 14–25"},
+            name={
+                MRK_SOURCE: "Шемуэйл I 14–25",
+                JPS_GSE_SOURCE: "I Samuel 14–25",
+            },
             url_name="first-samuel-14-25",
         ),
         ParshaInfo(
@@ -120,7 +157,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=8,
             chapter_verse_start=(26, 1),
             chapter_verse_end=(31, 13),
-            name={MRK_SOURCE: "Шемуэйл I 26–31"},
+            name={
+                MRK_SOURCE: "Шемуэйл I 26–31",
+                JPS_GSE_SOURCE: "I Samuel 26–31",
+            },
             url_name="first-samuel-26-31",
             parsha_group_leader_id=63,
         ),
@@ -129,7 +169,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=9,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(7, 29),
-            name={MRK_SOURCE: "Шемуэйл II 1–7"},
+            name={
+                MRK_SOURCE: "Шемуэйл II 1–7",
+                JPS_GSE_SOURCE: "II Samuel 1–7",
+            },
             url_name="second-samuel-1-7",
             parsha_group_leader_id=63,
         ),
@@ -138,7 +181,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=9,
             chapter_verse_start=(8, 1),
             chapter_verse_end=(18, 32),
-            name={MRK_SOURCE: "Шемуэйл II 8–18"},
+            name={
+                MRK_SOURCE: "Шемуэйл II 8–18",
+                JPS_GSE_SOURCE: "II Samuel 8–18",
+            },
             url_name="second-samuel-8-18",
         ),
         ParshaInfo(
@@ -146,7 +192,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=9,
             chapter_verse_start=(19, 1),
             chapter_verse_end=(24, 25),
-            name={MRK_SOURCE: "Шемуэйл II 19–24"},
+            name={
+                MRK_SOURCE: "Шемуэйл II 19–24",
+                JPS_GSE_SOURCE: "II Samuel 19–24",
+            },
             url_name="second-samuel-19-24",
         ),
         ParshaInfo(
@@ -154,7 +203,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=10,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(6, 38),
-            name={MRK_SOURCE: "Мелахим I 1–6"},
+            name={
+                MRK_SOURCE: "Мелахим I 1–6",
+                JPS_GSE_SOURCE: "I Kings 1–6",
+            },
             url_name="first-kings-1-6",
         ),
         ParshaInfo(
@@ -162,7 +214,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=10,
             chapter_verse_start=(7, 1),
             chapter_verse_end=(10, 29),
-            name={MRK_SOURCE: "Мелахим I 7–10"},
+            name={
+                MRK_SOURCE: "Мелахим I 7–10",
+                JPS_GSE_SOURCE: "I Kings 7–10",
+            },
             url_name="first-kings-7-10",
         ),
         ParshaInfo(
@@ -170,7 +225,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=10,
             chapter_verse_start=(11, 1),
             chapter_verse_end=(19, 21),
-            name={MRK_SOURCE: "Мелахим I 11–19"},
+            name={
+                MRK_SOURCE: "Мелахим I 11–19",
+                JPS_GSE_SOURCE: "I Kings 11–19",
+            },
             url_name="first-kings-11-19",
         ),
         ParshaInfo(
@@ -178,7 +236,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=10,
             chapter_verse_start=(20, 1),
             chapter_verse_end=(22, 54),
-            name={MRK_SOURCE: "Мелахим I 20–22"},
+            name={
+                MRK_SOURCE: "Мелахим I 20–22",
+                JPS_GSE_SOURCE: "I Kings 20–22",
+            },
             url_name="first-kings-20-22",
             parsha_group_leader_id=70,
         ),
@@ -187,7 +248,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=11,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(5, 27),
-            name={MRK_SOURCE: "Мелахим II 1–5"},
+            name={
+                MRK_SOURCE: "Мелахим II 1–5",
+                JPS_GSE_SOURCE: "II Kings 1–5",
+            },
             url_name="second-kings-1-5",
             parsha_group_leader_id=70,
         ),
@@ -196,7 +260,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=11,
             chapter_verse_start=(6, 1),
             chapter_verse_end=(12, 22),
-            name={MRK_SOURCE: "Мелахим II 6–12"},
+            name={
+                MRK_SOURCE: "Мелахим II 6–12",
+                JPS_GSE_SOURCE: "II Kings 6–12",
+            },
             url_name="second-kings-6-12",
         ),
         ParshaInfo(
@@ -204,7 +271,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=11,
             chapter_verse_start=(13, 1),
             chapter_verse_end=(18, 37),
-            name={MRK_SOURCE: "Мелахим II 13–18"},
+            name={
+                MRK_SOURCE: "Мелахим II 13–18",
+                JPS_GSE_SOURCE: "II Kings 13–18",
+            },
             url_name="second-kings-13-18",
         ),
         ParshaInfo(
@@ -212,7 +282,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=11,
             chapter_verse_start=(19, 1),
             chapter_verse_end=(25, 30),
-            name={MRK_SOURCE: "Мелахим II 19–25"},
+            name={
+                MRK_SOURCE: "Мелахим II 19–25",
+                JPS_GSE_SOURCE: "II Kings 19–25",
+            },
             url_name="second-kings-19-25",
         ),
         ParshaInfo(
@@ -220,7 +293,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=12,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(8, 23),
-            name={MRK_SOURCE: "Йирмейа 1–8"},
+            name={
+                MRK_SOURCE: "Йирмейа 1–8",
+                JPS_GSE_SOURCE: "Jeremiah 1–8",
+            },
             url_name="jeremiah-1-8",
         ),
         ParshaInfo(
@@ -228,7 +304,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=12,
             chapter_verse_start=(9, 1),
             chapter_verse_end=(17, 27),
-            name={MRK_SOURCE: "Йирмейа 9–17"},
+            name={
+                MRK_SOURCE: "Йирмейа 9–17",
+                JPS_GSE_SOURCE: "Jeremiah 9–17",
+            },
             url_name="jeremiah-9-17",
         ),
         ParshaInfo(
@@ -236,7 +315,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=12,
             chapter_verse_start=(18, 1),
             chapter_verse_end=(31, 39),
-            name={MRK_SOURCE: "Йирмейа 18–31"},
+            name={
+                MRK_SOURCE: "Йирмейа 18–31",
+                JPS_GSE_SOURCE: "Jeremiah 18–31",
+            },
             url_name="jeremiah-18-31",
         ),
         ParshaInfo(
@@ -244,7 +326,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=12,
             chapter_verse_start=(32, 1),
             chapter_verse_end=(37, 21),
-            name={MRK_SOURCE: "Йирмейа 32–37"},
+            name={
+                MRK_SOURCE: "Йирмейа 32–37",
+                JPS_GSE_SOURCE: "Jeremiah 32–37",
+            },
             url_name="jeremiah-32-37",
         ),
         ParshaInfo(
@@ -252,7 +337,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=12,
             chapter_verse_start=(38, 1),
             chapter_verse_end=(48, 47),
-            name={MRK_SOURCE: "Йирмейа 38–48"},
+            name={
+                MRK_SOURCE: "Йирмейа 38–48",
+                JPS_GSE_SOURCE: "Jeremiah 38–48",
+            },
             url_name="jeremiah-38-48",
         ),
         ParshaInfo(
@@ -260,7 +348,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=12,
             chapter_verse_start=(49, 1),
             chapter_verse_end=(52, 34),
-            name={MRK_SOURCE: "Йирмейа 49–52"},
+            name={
+                MRK_SOURCE: "Йирмейа 49–52",
+                JPS_GSE_SOURCE: "Jeremiah 49–52",
+            },
             url_name="jeremiah-49-52",
         ),
         ParshaInfo(
@@ -268,7 +359,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=13,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(9, 11),
-            name={MRK_SOURCE: "Йехэзкэйл 1–9"},
+            name={
+                MRK_SOURCE: "Йехэзкэйл 1–9",
+                JPS_GSE_SOURCE: "Ezekiel 1–9",
+            },
             url_name="ezekiel-1-9",
         ),
         ParshaInfo(
@@ -276,7 +370,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=13,
             chapter_verse_start=(10, 1),
             chapter_verse_end=(17, 24),
-            name={MRK_SOURCE: "Йехэзкэйл 10–17"},
+            name={
+                MRK_SOURCE: "Йехэзкэйл 10–17",
+                JPS_GSE_SOURCE: "Ezekiel 10–17",
+            },
             url_name="ezekiel-10-17",
         ),
         ParshaInfo(
@@ -284,7 +381,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=13,
             chapter_verse_start=(18, 1),
             chapter_verse_end=(22, 31),
-            name={MRK_SOURCE: "Йехэзкэйл 18–22"},
+            name={
+                MRK_SOURCE: "Йехэзкэйл 18–22",
+                JPS_GSE_SOURCE: "Ezekiel 18–22",
+            },
             url_name="ezekiel-18-22",
         ),
         ParshaInfo(
@@ -292,7 +392,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=13,
             chapter_verse_start=(23, 1),
             chapter_verse_end=(27, 36),
-            name={MRK_SOURCE: "Йехэзкэйл 23–27"},
+            name={
+                MRK_SOURCE: "Йехэзкэйл 23–27",
+                JPS_GSE_SOURCE: "Ezekiel 23–27",
+            },
             url_name="ezekiel-23-27",
         ),
         ParshaInfo(
@@ -300,7 +403,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=13,
             chapter_verse_start=(28, 1),
             chapter_verse_end=(30, 26),
-            name={MRK_SOURCE: "Йехэзкэйл 28–30"},
+            name={
+                MRK_SOURCE: "Йехэзкэйл 28–30",
+                JPS_GSE_SOURCE: "Ezekiel 28–30",
+            },
             url_name="ezekiel-28-30",
         ),
         ParshaInfo(
@@ -308,7 +414,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=13,
             chapter_verse_start=(31, 1),
             chapter_verse_end=(40, 49),
-            name={MRK_SOURCE: "Йехэзкэйл 31–40"},
+            name={
+                MRK_SOURCE: "Йехэзкэйл 31–40",
+                JPS_GSE_SOURCE: "Ezekiel 31–40",
+            },
             url_name="ezekiel-31-40",
         ),
         ParshaInfo(
@@ -316,7 +425,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=13,
             chapter_verse_start=(41, 1),
             chapter_verse_end=(43, 27),
-            name={MRK_SOURCE: "Йехэзкэйл 41–43"},
+            name={
+                MRK_SOURCE: "Йехэзкэйл 41–43",
+                JPS_GSE_SOURCE: "Ezekiel 41–43",
+            },
             url_name="ezekiel-41-43",
         ),
         ParshaInfo(
@@ -324,7 +436,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=13,
             chapter_verse_start=(44, 1),
             chapter_verse_end=(46, 24),
-            name={MRK_SOURCE: "Йехэзкэйл 44–46"},
+            name={
+                MRK_SOURCE: "Йехэзкэйл 44–46",
+                JPS_GSE_SOURCE: "Ezekiel 44–46",
+            },
             url_name="ezekiel-44-46",
         ),
         ParshaInfo(
@@ -332,7 +447,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=13,
             chapter_verse_start=(47, 1),
             chapter_verse_end=(48, 35),
-            name={MRK_SOURCE: "Йехэзкэйл 47–48"},
+            name={
+                MRK_SOURCE: "Йехэзкэйл 47–48",
+                JPS_GSE_SOURCE: "Ezekiel 47–48",
+            },
             url_name="ezekiel-47-48",
         ),
         ParshaInfo(
@@ -340,7 +458,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=14,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(5, 30),
-            name={MRK_SOURCE: "Йешайа 1–5"},
+            name={
+                MRK_SOURCE: "Йешайа 1–5",
+                JPS_GSE_SOURCE: "Isaiah 1–5",
+            },
             url_name="firstsaiah-1-5",
         ),
         ParshaInfo(
@@ -348,7 +469,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=14,
             chapter_verse_start=(6, 1),
             chapter_verse_end=(9, 20),
-            name={MRK_SOURCE: "Йешайа 6–9"},
+            name={
+                MRK_SOURCE: "Йешайа 6–9",
+                JPS_GSE_SOURCE: "Isaiah 6–9",
+            },
             url_name="firstsaiah-6-9",
         ),
         ParshaInfo(
@@ -356,7 +480,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=14,
             chapter_verse_start=(10, 1),
             chapter_verse_end=(13, 22),
-            name={MRK_SOURCE: "Йешайа 10–13"},
+            name={
+                MRK_SOURCE: "Йешайа 10–13",
+                JPS_GSE_SOURCE: "Isaiah 10–13",
+            },
             url_name="firstsaiah-10-13",
         ),
         ParshaInfo(
@@ -364,7 +491,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=14,
             chapter_verse_start=(14, 1),
             chapter_verse_end=(20, 6),
-            name={MRK_SOURCE: "Йешайа 14–20"},
+            name={
+                MRK_SOURCE: "Йешайа 14–20",
+                JPS_GSE_SOURCE: "Isaiah 14–20",
+            },
             url_name="firstsaiah-14-20",
         ),
         ParshaInfo(
@@ -372,7 +502,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=14,
             chapter_verse_start=(21, 1),
             chapter_verse_end=(24, 23),
-            name={MRK_SOURCE: "Йешайа 21–24"},
+            name={
+                MRK_SOURCE: "Йешайа 21–24",
+                JPS_GSE_SOURCE: "Isaiah 21–24",
+            },
             url_name="firstsaiah-21-24",
         ),
         ParshaInfo(
@@ -380,7 +513,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=14,
             chapter_verse_start=(25, 1),
             chapter_verse_end=(29, 24),
-            name={MRK_SOURCE: "Йешайа 25–29"},
+            name={
+                MRK_SOURCE: "Йешайа 25–29",
+                JPS_GSE_SOURCE: "Isaiah 25–29",
+            },
             url_name="firstsaiah-25-29",
         ),
         ParshaInfo(
@@ -388,7 +524,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=14,
             chapter_verse_start=(30, 1),
             chapter_verse_end=(33, 24),
-            name={MRK_SOURCE: "Йешайа 30–33"},
+            name={
+                MRK_SOURCE: "Йешайа 30–33",
+                JPS_GSE_SOURCE: "Isaiah 30–33",
+            },
             url_name="firstsaiah-30-33",
         ),
         ParshaInfo(
@@ -396,7 +535,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=14,
             chapter_verse_start=(34, 1),
             chapter_verse_end=(40, 31),
-            name={MRK_SOURCE: "Йешайа 34–40"},
+            name={
+                MRK_SOURCE: "Йешайа 34–40",
+                JPS_GSE_SOURCE: "Isaiah 34–40",
+            },
             url_name="firstsaiah-34-40",
         ),
         ParshaInfo(
@@ -404,7 +546,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=14,
             chapter_verse_start=(41, 1),
             chapter_verse_end=(44, 28),
-            name={MRK_SOURCE: "Йешайа 41–44"},
+            name={
+                MRK_SOURCE: "Йешайа 41–44",
+                JPS_GSE_SOURCE: "Isaiah 41–44",
+            },
             url_name="firstsaiah-41-44",
         ),
         ParshaInfo(
@@ -412,7 +557,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=14,
             chapter_verse_start=(45, 1),
             chapter_verse_end=(49, 26),
-            name={MRK_SOURCE: "Йешайа 45–49"},
+            name={
+                MRK_SOURCE: "Йешайа 45–49",
+                JPS_GSE_SOURCE: "Isaiah 45–49",
+            },
             url_name="firstsaiah-45-49",
         ),
         ParshaInfo(
@@ -420,7 +568,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=14,
             chapter_verse_start=(50, 1),
             chapter_verse_end=(58, 14),
-            name={MRK_SOURCE: "Йешайа 50–58"},
+            name={
+                MRK_SOURCE: "Йешайа 50–58",
+                JPS_GSE_SOURCE: "Isaiah 50–58",
+            },
             url_name="firstsaiah-50-58",
         ),
         ParshaInfo(
@@ -428,7 +579,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=14,
             chapter_verse_start=(59, 1),
             chapter_verse_end=(66, 24),
-            name={MRK_SOURCE: "Йешайа 59–66"},
+            name={
+                MRK_SOURCE: "Йешайа 59–66",
+                JPS_GSE_SOURCE: "Isaiah 59–66",
+            },
             url_name="firstsaiah-59-66",
         ),
         ParshaInfo(
@@ -436,7 +590,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=15,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(6, 11),
-            name={MRK_SOURCE: "Ошеа 1–6"},
+            name={
+                MRK_SOURCE: "Ошеа 1–6",
+                JPS_GSE_SOURCE: "Hosea 1–6",
+            },
             url_name="hosea-1-6",
         ),
         ParshaInfo(
@@ -444,7 +601,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=15,
             chapter_verse_start=(7, 1),
             chapter_verse_end=(12, 15),
-            name={MRK_SOURCE: "Ошеа 7–12"},
+            name={
+                MRK_SOURCE: "Ошеа 7–12",
+                JPS_GSE_SOURCE: "Hosea 7–12",
+            },
             url_name="hosea-7-12",
         ),
         ParshaInfo(
@@ -452,7 +612,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=15,
             chapter_verse_start=(13, 1),
             chapter_verse_end=(14, 10),
-            name={MRK_SOURCE: "Ошеа 13–14"},
+            name={
+                MRK_SOURCE: "Ошеа 13–14",
+                JPS_GSE_SOURCE: "Hosea 13–14",
+            },
             url_name="hosea-13-14",
         ),
         ParshaInfo(
@@ -460,7 +623,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=16,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(4, 21),
-            name={MRK_SOURCE: "Йоель"},
+            name={
+                MRK_SOURCE: "Йоель",
+                JPS_GSE_SOURCE: "Joel",
+            },
             url_name="joel",
             parsha_group_leader_id=105,
         ),
@@ -469,7 +635,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=17,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(9, 15),
-            name={MRK_SOURCE: "Амос"},
+            name={
+                MRK_SOURCE: "Амос",
+                JPS_GSE_SOURCE: "Amos",
+            },
             url_name="amos",
             parsha_group_leader_id=105,
         ),
@@ -478,7 +647,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=18,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(1, 21),
-            name={MRK_SOURCE: "Овадья"},
+            name={
+                MRK_SOURCE: "Овадья",
+                JPS_GSE_SOURCE: "Obadiah",
+            },
             url_name="obadiah",
             parsha_group_leader_id=107,
         ),
@@ -487,7 +659,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=19,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(4, 11),
-            name={MRK_SOURCE: "Йона"},
+            name={
+                MRK_SOURCE: "Йона",
+                JPS_GSE_SOURCE: "Jonah",
+            },
             url_name="jonah",
             parsha_group_leader_id=107,
         ),
@@ -496,7 +671,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=20,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(7, 20),
-            name={MRK_SOURCE: "Миха"},
+            name={
+                MRK_SOURCE: "Миха",
+                JPS_GSE_SOURCE: "Micah",
+            },
             url_name="micah",
             parsha_group_leader_id=107,
         ),
@@ -505,7 +683,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=21,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(3, 19),
-            name={MRK_SOURCE: "Нахум"},
+            name={
+                MRK_SOURCE: "Нахум",
+                JPS_GSE_SOURCE: "Nahum",
+            },
             url_name="nahum",
             parsha_group_leader_id=110,
         ),
@@ -514,7 +695,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=22,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(3, 19),
-            name={MRK_SOURCE: "Хавакук"},
+            name={
+                MRK_SOURCE: "Хавакук",
+                JPS_GSE_SOURCE: "Habakkuk",
+            },
             url_name="habakkuk",
             parsha_group_leader_id=110,
         ),
@@ -523,7 +707,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=23,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(3, 20),
-            name={MRK_SOURCE: "Цфанья"},
+            name={
+                MRK_SOURCE: "Цфанья",
+                JPS_GSE_SOURCE: "Zephaniah",
+            },
             url_name="zephaniah",
             parsha_group_leader_id=110,
         ),
@@ -532,7 +719,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=24,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(2, 23),
-            name={MRK_SOURCE: "Хагай"},
+            name={
+                MRK_SOURCE: "Хагай",
+                JPS_GSE_SOURCE: "Haggai",
+            },
             url_name="haggai",
             parsha_group_leader_id=110,
         ),
@@ -541,7 +731,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=25,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(11, 17),
-            name={MRK_SOURCE: "Зехарья 1–11"},
+            name={
+                MRK_SOURCE: "Зехарья 1–11",
+                JPS_GSE_SOURCE: "Zechariah 1–11",
+            },
             url_name="zechariah-1-11",
         ),
         ParshaInfo(
@@ -549,7 +742,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=25,
             chapter_verse_start=(12, 1),
             chapter_verse_end=(14, 21),
-            name={MRK_SOURCE: "Зехарья 12–14"},
+            name={
+                MRK_SOURCE: "Зехарья 12–14",
+                JPS_GSE_SOURCE: "Zechariah 12–14",
+            },
             url_name="zechariah-12-14",
         ),
         ParshaInfo(
@@ -557,7 +753,10 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             book_id=26,
             chapter_verse_start=(1, 1),
             chapter_verse_end=(3, 24),
-            name={MRK_SOURCE: "Малахи"},
+            name={
+                MRK_SOURCE: "Малахи",
+                JPS_GSE_SOURCE: "Malachi",
+            },
             url_name="malachi",
         ),
     ],

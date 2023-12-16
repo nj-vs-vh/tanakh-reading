@@ -109,7 +109,10 @@ def parse_book(book_id: int, urlname: str, upload: bool):
         raise ValueError(f"Unexpected number of parshas parsed {len(parsha_data_list) = } {len(parsha_infos) = }")
 
     for parsha_data in parsha_data_list:
-        print(f"Downloading existing data for {parsha_data['parsha']}...")
+        print("Saving JSON")
+        (JSON_DIR / f"parsha-{parsha_data['parsha']}.json").write_text(dump_parsha(parsha_data))
+    
+        print(f"Downloading existing data for {parsha_data['parsha']} to validate...")
         response = requests.get(f"{os.environ['BASE_URL']}/parsha/{parsha_data['parsha']}")
         if response.status_code == 404:
             print("No such parsha, skipping validation")
@@ -117,9 +120,6 @@ def parse_book(book_id: int, urlname: str, upload: bool):
             print("Parsha data exists, validating it")
             existing_parsha_data = response.json()
             merge_parsha_data(existing_parsha_data, parsha_data)
-
-        print("Saving JSON")
-        (JSON_DIR / f"parsha-{parsha_data['parsha']}.json").write_text(dump_parsha(parsha_data))
 
         if upload:
             print("Uploading parsha data...")
