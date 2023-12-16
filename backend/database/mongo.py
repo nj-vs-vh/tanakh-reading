@@ -834,6 +834,7 @@ def parsha_data_to_texts_and_comments(parsha_data: ParshaData) -> tuple[list[Sto
                         text_source=text_source,
                         text=text,
                         language=to_mongo_language(get_text_source_language(text_source)),
+                        format=verse_data.get("text_formats", {}).get(text_source, "plain"),
                     )
                 )
             for comment_source, comments in verse_data["comments"].items():
@@ -911,6 +912,7 @@ def texts_and_comments_to_parsha_data(texts: list[StoredText], comments: list[St
                 verse=verse,
                 text={vt.text_source: vt.text for vt in verse_texts},
                 comments=verse_data_by_source,
+                text_formats={vt.text_source: vt.format for vt in verse_texts},
             )
             if all(vt.db_id != UNSET_DB_ID for vt in verse_texts):
                 verse_data["text_ids"] = {vt.text_source: str(vt.db_id) for vt in verse_texts}

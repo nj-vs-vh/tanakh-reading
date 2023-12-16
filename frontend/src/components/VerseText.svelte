@@ -4,10 +4,12 @@
     import { isEditingStore } from "../editing";
     import { isHebrewTextSource } from "../utils";
     import Hoverable from "./shared/Hoverable.svelte";
+    import { Format } from "../types";
 
     export let textId: string;
     export let text: string;
     export let textSource: string;
+    export let textFormat: Format;
 
     let isHovering = false;
     let isEditing = false;
@@ -46,7 +48,11 @@
                 </div>
             </div>
         {:else}
-            {text}
+            {#if textFormat == Format.PLAIN}
+                {text}
+            {:else if textFormat === Format.HTML}
+                {@html text}
+            {/if}
         {/if}
     </Hoverable>
 </span>

@@ -1,8 +1,7 @@
 import type { TanakhSectionMetadata } from "./typesGenerated";
 
-export enum CommentFormat {
+export enum Format {
     HTML = "html",
-    MARKDOWN = "markdown",
     PLAIN = "plain",
 }
 
@@ -10,7 +9,7 @@ export interface CommentData {
     id: string;
     anchor_phrase: null | string;
     comment: string;
-    format: CommentFormat;
+    format: Format;
     is_starred_by_me?: boolean;
 }
 
@@ -18,6 +17,7 @@ export interface VerseData {
     verse: number;
     text: Record<string, string>;
     text_ids: Record<string, string>;
+    text_formats: Record<string, Format>;
     comments: Record<string, Array<CommentData>>;
 }
 
@@ -95,6 +95,7 @@ export interface SingleText {
     text_source: string;
     text: string;
     language: string;
+    format: Format;
 }
 
 export interface SingleComment {
@@ -103,7 +104,7 @@ export interface SingleComment {
     comment_source: string;
     anchor_phrase: string | null;
     comment: string;
-    format: CommentFormat;
+    format: Format;
     language: string;
     index: number;
     legacy_id: string | null;

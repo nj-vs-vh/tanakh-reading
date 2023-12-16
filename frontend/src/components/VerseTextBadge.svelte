@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getContext } from "svelte";
-    import type { SectionMetadata } from "../types";
+    import type { Format, SectionMetadata } from "../types";
 
     import VerseText from "./VerseText.svelte";
 
@@ -9,11 +9,12 @@
     export let textId: string;
     export let text: string;
     export let textSource: string;
+    export let textFormat: Format;
 </script>
 
 <div class="verse-text-container">
     <blockquote>
-        <VerseText {textId} {text} {textSource} />
+        <VerseText {textId} {text} {textSource} {textFormat} />
     </blockquote>
     <span class="verse-text-source-mark">
         {sectionMetadata.section.text_sources.find(ts => ts.key === textSource).mark}

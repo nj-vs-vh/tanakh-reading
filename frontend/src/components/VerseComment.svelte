@@ -6,7 +6,7 @@
     import Icon from "./shared/Icon.svelte";
 
     import type { CommentData, CommentStarToggledEvent, SectionMetadata } from "../types";
-    import { CommentFormat } from "../types";
+    import { Format } from "../types";
     import { editComment, CommentCoords, starComment, unstarComment } from "../api";
     import { isEditingStore } from "../editing";
 
@@ -118,7 +118,7 @@
                         <strong>{commentData.anchor_phrase}</strong>
                         <span>—</span>
                     {/if}
-                    {#if commentData.format == CommentFormat.HTML}
+                    {#if commentData.format == Format.HTML}
                         <span class="html-wrapper">{@html commentData.comment}</span>
                     {:else}
                         <span>{commentData.comment}</span>

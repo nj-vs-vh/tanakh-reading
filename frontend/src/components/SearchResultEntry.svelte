@@ -12,7 +12,7 @@
         type TextCoords,
     } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
-    import { bookNoByParsha, findBookSectionKey, findParshaSectionKey, lookupBookInfo, versePath } from "../utils";
+    import { bookNoByParsha, findParshaSectionKey, lookupBookInfo, versePath } from "../utils";
     import VerseDetailsModal from "./VerseDetailsModal.svelte";
     import Icon from "./shared/Icon.svelte";
 
@@ -115,7 +115,12 @@
                 <Icon icon="external-link" heightEm={parshaLinkSizeEm} color={parshaLinkColor} />
             </a>
         </div>
-        <VerseText textId={match.text.db_id} text={match.text.text} textSource={match.text.text_source} />
+        <VerseText
+            textId={match.text.db_id}
+            text={match.text.text}
+            textSource={match.text.text_source}
+            textFormat={match.text.format}
+        />
     {/if}
 </div>
 

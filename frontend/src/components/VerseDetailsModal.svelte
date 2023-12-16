@@ -186,6 +186,7 @@
             textId={currentVerseData.text_ids[textSource]}
             text={currentVerseData.text[textSource]}
             {textSource}
+            textFormat={currentVerseData.text_formats[textSource]}
         />
     {/each}
     <VerseComments verseData={currentVerseData} on:commentStarToggled={onCommentStarToggled} />

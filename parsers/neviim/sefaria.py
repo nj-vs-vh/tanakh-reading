@@ -3,6 +3,8 @@ import itertools
 import json
 import os
 from pathlib import Path
+import re
+import bs4  # type: ignore
 
 import requests  # type: ignore
 
@@ -63,7 +65,19 @@ def parse_book(book_id: int, upload: bool):
     texts: list[StoredText] = []
     for chapter_idx, verses in enumerate(texts_raw):
         chapter_num = chapter_idx + 1
-        for verse_idx, verse_text in enumerate(verses):
+        for verse_idx, verse_text_raw in enumerate(verses):
+            verse_text_soup = bs4.BeautifulSoup(verse_text_raw, features="html.parser")
+            verse_text = ""
+            for element in verse_text_soup.children:
+                if not isinstance(element, bs4.Tag) or not (
+                    # removing footnotes-related stuff because there's no way to render them right now
+                    element.name == "sup"
+                    or any("footnote" in css_class for css_class in element.attrs.get("class", []))
+                ):
+                    verse_text += str(element)
+            verse_text = re.sub(r"\s*\—\s*", " — ", verse_text)
+            verse_text = verse_text.strip()
+
             verse_num = verse_idx + 1
             parsha_info = next(
                 (p for p in parsha_infos if p.chapter_verse_start[0] <= chapter_num <= p.chapter_verse_end[0]), None
@@ -75,6 +89,7 @@ def parse_book(book_id: int, upload: bool):
                     text_source=JPS_GSE_SOURCE,
                     text=verse_text,
                     language=IsoLang.RU,
+                    format="html",
                 )
             )
 
@@ -89,7 +104,7 @@ def parse_book(book_id: int, upload: bool):
     for parsha_data in parsha_data_list:
         print("Saving JSON")
         (JSON_DIR / f"parsha-{parsha_data['parsha']}.json").write_text(dump_parsha(parsha_data))
-    
+
         print(f"Downloading existing data for {parsha_data['parsha']} to validate...")
         response = requests.get(f"{os.environ['BASE_URL']}/parsha/{parsha_data['parsha']}")
         if response.status_code == 404:

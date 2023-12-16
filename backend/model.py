@@ -15,14 +15,14 @@ logger = logging.getLogger(__name__)
 # TypedDict types are used in parsers and on frontend for default parsha page rendering
 
 
-CommentFormat = Literal["plain", "markdown", "html"]
+Format = Literal["plain", "html"]
 
 
 class CommentData(TypedDict):
     id: NotRequired[str]
     anchor_phrase: Optional[str]
     comment: str
-    format: CommentFormat
+    format: Format
     is_starred_by_me: NotRequired[bool]
 
 
@@ -32,6 +32,7 @@ class VerseData(TypedDict):
     # not parsed, but returned to frontend from DB
     # text_ids object has the same keys as text, returned separately only for backwards compatibility
     text_ids: NotRequired[dict[str, str]]
+    text_formats: NotRequired[dict[str, Format]]
     comments: dict[str, list[CommentData]]
 
 
@@ -200,6 +201,7 @@ class StoredText(PublicIdDbSchemaModel):
     text_source: str
     text: str
     language: str
+    format: Format = "plain"  # default for texts stored before this field is introduced
 
 
 class StoredComment(PublicIdDbSchemaModel):
@@ -207,7 +209,7 @@ class StoredComment(PublicIdDbSchemaModel):
     comment_source: str
     anchor_phrase: Optional[str]
     comment: str
-    format: CommentFormat
+    format: Format
     language: str
     index: int  # index within one source's comments
     legacy_id: Optional[str] = None
