@@ -210,10 +210,15 @@ export function setPageTitle(subtitle: string | null) {
     const titleTags = document.getElementsByTagName("title");
     if (titleTags.length > 0) {
         if (subtitle && subtitle.length > 0) {
-            titleTags[0].innerText = `Тора | ${subtitle}`;
+            titleTags[0].innerText = `Танах | ${subtitle}`;
         } else {
-            titleTags[0].innerText = `Тора`;
+            titleTags[0].innerText = `Танах`;
         }
 
     }
+}
+
+
+export function removeHtmlLinebreaks(html: string): string {
+    return html.replaceAll(/\<\s*br\s*\/\s*\>/gim, " ")
 }

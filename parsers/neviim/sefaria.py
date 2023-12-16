@@ -13,7 +13,7 @@ from backend.metadata.neviim import NEVIIM_METADATA, JPS_GSE_SOURCE
 from backend.metadata.types import IsoLang
 from backend.model import ParshaData, StoredText, TextCoords
 from parsers.merge import merge_parsha_data
-from parsers.utils import dump_parsha
+from parsers.utils import collapse_whitespace, dump_parsha
 
 SCRIPT_DIR = Path(__file__).parent
 PROJECT_ROOT = SCRIPT_DIR / "../.."
@@ -67,16 +67,21 @@ def parse_book(book_id: int, upload: bool):
         chapter_num = chapter_idx + 1
         for verse_idx, verse_text_raw in enumerate(verses):
             verse_text_soup = bs4.BeautifulSoup(verse_text_raw, features="html.parser")
-            verse_text = ""
-            for element in verse_text_soup.children:
-                if not isinstance(element, bs4.Tag) or not (
+            redundant_elements: list[bs4.Tag] = []
+            for element in verse_text_soup.descendants:
+                if isinstance(element, bs4.Tag) and (
                     # removing footnotes-related stuff because there's no way to render them right now
                     element.name == "sup"
                     or any("footnote" in css_class for css_class in element.attrs.get("class", []))
                 ):
-                    verse_text += str(element)
+                    redundant_elements.append(element)
+            for e in redundant_elements:
+                e.decompose()
+            verse_text = str(verse_text_soup)
             verse_text = re.sub(r"\s*\—\s*", " — ", verse_text)
             verse_text = verse_text.strip()
+            verse_text = collapse_whitespace(verse_text)
+            # print("\n", verse_text_raw, "\n", verse_text, "\n", sep="")
 
             verse_num = verse_idx + 1
             parsha_info = next(

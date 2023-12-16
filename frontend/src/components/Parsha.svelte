@@ -20,6 +20,7 @@
         type MultisectionMetadata,
         type SectionKey,
         toSingleSection,
+        Format,
     } from "../types";
     import {
         anyCommentPassesFilters,
@@ -33,6 +34,7 @@
         setPageTitle,
         lookupBookInfo,
         lookupParshaInfo,
+        removeHtmlLinebreaks,
     } from "../utils";
     import UpButton from "./shared/UpButton.svelte";
     import VerseBadge from "./VerseBadge.svelte";
@@ -253,8 +255,14 @@
                         }}
                         on:keydown={() => {
                             shouldVerseTextBeClickable(verseData) ? openVerseDetails(verseData, chapter) : null;
-                        }}>{verseData.text[mainTextSource]}</span
+                        }}
                     >
+                        {#if verseData.text_formats[mainTextSource] === Format.PLAIN}
+                            {verseData.text[mainTextSource]}
+                        {:else if verseData.text_formats[mainTextSource] === Format.HTML}
+                            {@html removeHtmlLinebreaks(verseData.text[mainTextSource])}
+                        {/if}
+                    </span>
                     {#if shouldVerseTextHaveAsterisk(verseData)}
                         <span
                             class="comment-asterisk"
@@ -295,6 +303,7 @@
     span.verse {
         /* dummy */
         background-color: transparent;
+        line-height: 1.3em;
     }
 
     span.verse-hebrew {
