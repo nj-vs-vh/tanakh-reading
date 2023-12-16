@@ -1,6 +1,5 @@
 <script lang="ts">
-    import { getContext, onDestroy } from "svelte";
-    import type { Metadata } from "../../types";
+    import type { MultisectionMetadata, SectionKey } from "../../types";
     import {
         enableTextSource,
         setMainTextSource,
@@ -11,78 +10,82 @@
     import MenuFolderBlock from "./MenuFolderBlock.svelte";
     import WikiStyleLinks from "./WikiStyleLinks.svelte";
 
-    let mainTextSource: string;
-    let enabledTextSources: Record<string, boolean>;
-    const textSourcesConfigStoreUnsubscribe = textSourcesConfigStore.subscribe((config) => {
-        mainTextSource = config.main;
-        enabledTextSources = config.enabledInDetails;
-    });
+    export let metadata: MultisectionMetadata;
+    export let sectionKey: SectionKey | undefined;
 
-    function setMainTextSourceFromEvent(e) {
-        const source = e.target.value;
-        setMainTextSource(source);
-        enableTextSource(source);
+    const sectionKeyDefined = sectionKey !== undefined;
+    let sections = Object.entries(metadata.sections);
+    if (sectionKeyDefined) {
+        sections = sections.filter(([sk, _]) => sk === sectionKey);
     }
-
-    const metadata: Metadata = getContext("metadata");
-
-    onDestroy(textSourcesConfigStoreUnsubscribe);
 </script>
 
 <MenuFolder icon="torah-scroll" title="Текст">
-    <MenuFolderBlock title="Основной">
-        {#each metadata.text_sources as textSource}
-            <div class="input-with-label">
-                <input
-                    type="radio"
-                    name="mainTextSource"
-                    id={textSource}
-                    value={textSource}
-                    checked={mainTextSource == textSource}
-                    on:change={setMainTextSourceFromEvent}
-                />
-                <label for={textSource}>
-                    <span>
-                        <span class="text-source-short-name">
-                            {metadata.text_source_marks[textSource]}
-                        </span>
+    {#each sections as [sectionKey, section]}
+        {#if !sectionKeyDefined}
+            <h3 class="section-title">{section.title[$textSourcesConfigStore[sectionKey].main]}</h3>
+        {/if}
+        <MenuFolderBlock title="Основной">
+            {#each section.text_sources as textSource}
+                <div class="input-with-label">
+                    <input
+                        type="radio"
+                        id={`select-main-${textSource.key}`}
+                        name={`select-main-${textSource.key}`}
+                        checked={$textSourcesConfigStore[sectionKey].main === textSource.key}
+                        on:change={() => {
+                            setMainTextSource(sectionKey, textSource.key);
+                            enableTextSource(sectionKey, textSource.key);
+                        }}
+                    />
+                    <label for={`select-main-${textSource.key}`}>
                         <span>
-                            {metadata.text_source_descriptions[textSource]}
+                            <span class="text-source-short-name">
+                                {textSource.mark}
+                            </span>
+                            <span>
+                                {textSource.description}
+                            </span>
+                            <WikiStyleLinks urls={textSource.links} />
                         </span>
-                        <WikiStyleLinks urls={metadata.text_source_links[textSource]} />
-                    </span>
-                </label>
-            </div>
-        {/each}
-    </MenuFolderBlock>
-    <MenuFolderBlock title="В окне с комментариями">
-        {#each Object.entries(enabledTextSources) as [source, isActive]}
-            <div class="input-with-label">
-                <input
-                    type="checkbox"
-                    id={`${source}-in-comments`}
-                    name={`${source}-in-comments`}
-                    checked={isActive || source === mainTextSource}
-                    on:change|preventDefault={(e) => {
-                        if (source === mainTextSource) {
-                            // @ts-ignore
-                            e.target.checked = true;
-                            enableTextSource(source);
-                        } else {
-                            // @ts-ignore
-                            toggleTextSourceEnabled(source);
-                        }
-                    }}
-                />
-                <label for={`${source}-in-comments`}>
-                    {metadata.text_source_marks[source]}
-                </label>
-            </div>
-        {/each}
-    </MenuFolderBlock>
+                    </label>
+                </div>
+            {/each}
+        </MenuFolderBlock>
+        <MenuFolderBlock title="В окне с комментариями">
+            {#each Object.entries($textSourcesConfigStore[sectionKey].enabledInDetails) as [textSourceKey, isActive]}
+                <div class="input-with-label">
+                    <input
+                        type="checkbox"
+                        id={`${textSourceKey}-in-comments`}
+                        name={`${textSourceKey}-in-comments`}
+                        checked={isActive || textSourceKey === $textSourcesConfigStore[sectionKey].main}
+                        on:change|preventDefault={(e) => {
+                            if (textSourceKey === $textSourcesConfigStore[sectionKey].main) {
+                                // @ts-expect-error
+                                e.target.checked = true;
+                                enableTextSource(sectionKey, textSourceKey);
+                            } else {
+                                toggleTextSourceEnabled(sectionKey, textSourceKey);
+                            }
+                        }}
+                    />
+                    <label for={`${textSourceKey}-in-comments`}>
+                        {section.text_sources.find((textSource) => textSource.key == textSourceKey).mark}
+                    </label>
+                </div>
+            {/each}
+        </MenuFolderBlock>
+    {/each}
 </MenuFolder>
 
 <style>
+    h3.section-title {
+        margin-left: 0.7em;
+        margin-bottom: 0.7em;
+        margin-top: 1em;
+        font-size: larger;
+    }
     span.text-source-short-name {
         color: var(--theme-color-secondary-text);
     }

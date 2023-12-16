@@ -10,7 +10,7 @@ import bs4  # type: ignore
 import requests  # type: ignore
 
 from backend import metadata
-from backend.metadata import CommentSource, TextSource, get_book_by_parsha
+from backend.metadata import TorahCommentSource, TorahTextSource, get_book_by_parsha
 from backend.model import ChapterData, CommentData, ParshaData, VerseData
 from parsers.local_storage import parsha_path
 from parsers.utils import (
@@ -56,8 +56,8 @@ def parse_parsha(parsha: int):
     )
 
     print(
-        f"Parsing shabat-shalom.info for book {metadata.torah_book_names[book][TextSource.FG]!r}, "
-        + f"parsha {metadata.parsha_names[parsha][TextSource.FG]!r}"
+        f"Parsing shabat-shalom.info for book {metadata.torah_book_names[book][TorahTextSource.FG]!r}, "
+        + f"parsha {metadata.parsha_names[parsha][TorahTextSource.FG]!r}"
     )
 
     html = parsha_html(parsha)
@@ -133,7 +133,7 @@ def parse_parsha(parsha: int):
                             continue
                     comment_text_html += " " + collapse_whitespace(str(comment_span_child))
                 if current_verse_data is not None:
-                    current_verse_data["comments"][CommentSource.RASHI].append(
+                    current_verse_data["comments"][TorahCommentSource.RASHI].append(
                         CommentData(
                             anchor_phrase=anchor_phrase,
                             comment=strip_leading_dot(postprocess_patched_text(strip_html_breaks(comment_text_html))),
@@ -180,7 +180,7 @@ def parse_parsha(parsha: int):
                     comment_data["comment"] = strip_html_breaks(comment_data["comment"])
 
                 if current_verse_data is not None:
-                    current_verse_data["comments"][CommentSource.SONCHINO] = sonchino_comments
+                    current_verse_data["comments"][TorahCommentSource.SONCHINO] = sonchino_comments
 
                 # the actual handle is not inserted in the final text
                 continue
@@ -217,12 +217,12 @@ def parse_parsha(parsha: int):
             expected_next_verse = parsed_expected_next_verse
 
         if current_verse_data is not None:
-            current_verse_data["text"][TextSource.FG] += " " + text_part_current_verse
+            current_verse_data["text"][TorahTextSource.FG] += " " + text_part_current_verse
 
         while text_part_next_verse is not None:
             if current_verse_data is not None:
-                current_verse_data["text"][TextSource.FG] = postprocess_patched_text(
-                    current_verse_data["text"][TextSource.FG]
+                current_verse_data["text"][TorahTextSource.FG] = postprocess_patched_text(
+                    current_verse_data["text"][TorahTextSource.FG]
                 )
                 current_chapter_data["verses"].append(current_verse_data)
             if expected_next_verse is None:
@@ -233,7 +233,7 @@ def parse_parsha(parsha: int):
             text_part_current_verse, text_part_next_verse, _ = split_on_next_verse_start(text_part, expected_next_verse)
             current_verse_data = VerseData(
                 verse=current_verse,
-                text={TextSource.FG: text_part_current_verse},
+                text={TorahTextSource.FG: text_part_current_verse},
                 comments=defaultdict(list),
             )
 

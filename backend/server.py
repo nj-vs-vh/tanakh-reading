@@ -9,7 +9,7 @@ from aiohttp import hdrs, web
 from aiohttp.typedefs import Handler
 from dictdiffer import diff  # type: ignore
 
-from backend import config, metadata
+from backend import config
 from backend.auth import generate_signup_token, hash_password
 from backend.constants import ACCESS_TOKEN_HEADER, SIGNUP_TOKEN_HEADER, AppExtensions
 from backend.database.interface import (
@@ -17,11 +17,14 @@ from backend.database.interface import (
     SearchTextIn,
     SearchTextSorting,
 )
+from backend.metadata.neviim import NEVIIM_METADATA
+from backend.metadata.torah import TORAH_METADATA
 from backend.model import (
     EditCommentRequest,
     EditTextRequest,
     NewUser,
     ParshaData,
+    ParshaDataModel,
     SignupToken,
     StarCommentRequest,
     StarredComment,
@@ -102,16 +105,10 @@ async def get_metadata(request: web.Request) -> web.Response:
     db = get_db(request)
     return web.json_response(
         {
-            "book_names": metadata.torah_book_names,
-            "parsha_ranges": metadata.torah_book_parsha_ranges,
-            "chapter_verse_ranges": metadata.chapter_verse_ranges,
-            "parsha_names": metadata.parsha_names,
-            "text_sources": metadata.TextSource.all(),
-            "text_source_marks": metadata.text_source_marks,
-            "text_source_descriptions": metadata.text_source_descriptions,
-            "text_source_links": metadata.text_source_links,
-            "commenter_names": metadata.comment_source_names,
-            "commenter_links": metadata.comment_source_links,
+            "sections": {
+                "torah": TORAH_METADATA.dict(),
+                "neviim": NEVIIM_METADATA.dict(),
+            },
             "available_parsha": await db.get_available_parsha_indices(),
             "logged_in_user": user_json,
         }
@@ -163,10 +160,15 @@ def check_admin_token(request: web.Request) -> None:
 
 
 @routes.post("/parsha")
-async def save_parsha(request: web.Request) -> web.Response:
+async def save_parsha_data(request: web.Request) -> web.Response:
+    """Upload a whole new parsha, replacing all currently existing data for it"""
     check_admin_token(request)
     db = get_db(request)
     parsha_data = cast(ParshaData, await safe_request_json(request))
+    try:
+        ParshaDataModel(**parsha_data)
+    except Exception as e:
+        raise web.HTTPBadRequest(reason=repr(e))
     logger.info(f"Saving parsha data for book {parsha_data['book']}, parsha {parsha_data['parsha']}")
     current_parsha_data = await db.get_parsha_data(parsha_data["parsha"])
     if current_parsha_data is not None:
@@ -175,8 +177,23 @@ async def save_parsha(request: web.Request) -> web.Response:
     else:
         logger.info("No current parsha data, creating new one")
         diff_ = []
-    await db.save_parsha_data(parsha_data)
+    await db.save_parsha_data(parsha_data, replace=True)
     return web.json_response(diff_)
+
+
+@routes.put("/parsha")
+async def append_parsha_data(request: web.Request) -> web.Response:
+    """Upload data in form of a Parsha object, but not remove already existing data"""
+    check_admin_token(request)
+    db = get_db(request)
+    parsha_data = cast(ParshaData, await safe_request_json(request))
+    try:
+        ParshaDataModel(**parsha_data)
+    except Exception as e:
+        raise web.HTTPBadRequest(reason=repr(e))
+    logger.info(f"Appending data from parsha data object (book {parsha_data['book']}, parsha {parsha_data['parsha']})")
+    await db.save_parsha_data(parsha_data, replace=False)
+    return web.Response()
 
 
 @routes.delete("/parsha-cache")

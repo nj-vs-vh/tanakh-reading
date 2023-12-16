@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext } from "svelte";
+    import { getContext, onDestroy, setContext } from "svelte";
     import VerseDetailsModal from "./VerseDetailsModal.svelte";
     import VerseComments from "./VerseComments.svelte";
     import Icon from "./shared/Icon.svelte";
@@ -11,7 +11,16 @@
     import { commentSourcesConfigStore } from "../settings/commentSources";
     import { textDecorationSettingsStore } from "../settings/textDecorationSettings";
 
-    import type { Metadata, ParshaData, VerseData, ChapterData, CommentStarToggledEvent } from "../types";
+    import {
+        type SectionMetadata,
+        type ParshaData,
+        type VerseData,
+        type ChapterData,
+        type CommentStarToggledEvent,
+        type MultisectionMetadata,
+        type SectionKey,
+        toSingleSection,
+    } from "../types";
     import {
         anyCommentPassesFilters,
         areInsideVerseCoordsList,
@@ -22,19 +31,41 @@
         setUrlHash,
         verseCoords2String,
         setPageTitle,
+        lookupBookInfo,
+        lookupParshaInfo,
     } from "../utils";
     import UpButton from "./shared/UpButton.svelte";
     import VerseBadge from "./VerseBadge.svelte";
+    import type { ParshaInfo, TanakhBookInfo } from "../typesGenerated";
 
     export let parshaData: ParshaData;
     parshaData.chapters.sort((ch1, ch2) => ch1.chapter - ch2.chapter);
     const parshaVerseCoords = getVerseCoords(parshaData);
 
-    const metadata: Metadata = getContext("metadata");
+    const metadata: MultisectionMetadata = getContext("metadata");
+    const sectionKey: SectionKey = getContext("sectionKey");
+    // NOTE: subtree components may use single-section metadata as before,
+    //       just accessing it via a new "sectionMetadata" context
+    const sectionMetadata: SectionMetadata = toSingleSection(metadata, sectionKey);
+    setContext("sectionMetadata", sectionMetadata);
+
+    let bookNumberInSection: number;
+    let bookInfo: TanakhBookInfo;
+    let parshaNumberInSection: number;
+    let parshaInfo: ParshaInfo;
+    $: {
+        let bookMatch = lookupBookInfo(sectionMetadata, parshaData.book);
+        bookNumberInSection = bookMatch.index;
+        bookInfo = bookMatch.bookInfo;
+
+        let parshaMatch = lookupParshaInfo(sectionMetadata, parshaData.parsha);
+        parshaNumberInSection = parshaMatch.index;
+        parshaInfo = parshaMatch.parshaInfo;
+    }
 
     // non-trivial subscriptions
     let commentStyle: CommentStyle;
-    commentStyleStore.subscribe((v) => {
+    const unsubscribeCommentStyleStore = commentStyleStore.subscribe((v) => {
         commentStyle = v;
         if (commentStyle === CommentStyle.MODAL) {
             try {
@@ -44,10 +75,10 @@
     });
     let mainTextSource: string;
     let isMainTextHebrew: boolean;
-    textSourcesConfigStore.subscribe((config) => {
-        mainTextSource = config.main;
+    const unsubscribeTextSourcesConfigStore = textSourcesConfigStore.subscribe((config) => {
+        mainTextSource = config[sectionKey].main;
         isMainTextHebrew = isHebrewTextSource(mainTextSource);
-        setPageTitle(metadata.parsha_names[parshaData.parsha][mainTextSource]);
+        setPageTitle(sectionMetadata.section.parshas.find((pi) => pi.id === parshaData.parsha).name[mainTextSource]);
     });
 
     // modal and URL hash stuff setup
@@ -134,14 +165,22 @@
 
     const shouldDecorateVerseText = (verseData: VerseData): boolean => {
         if ($textDecorationSettingsStore.onlyDecorateTextWithComments) {
-            return anyCommentPassesFilters(verseData, $commentSourcesConfigStore);
+            return anyCommentPassesFilters(verseData, $commentSourcesConfigStore[sectionKey]);
         } else return true;
     };
 
+    let currentTextDecorationStyle: TextDecorationStyle;
+    textDecorationStyleStore.subscribe((style) => (currentTextDecorationStyle = style));
+
     const shouldVerseTextBeClickable = (verseData: VerseData) =>
-        $textDecorationStyleStore === TextDecorationStyle.CLICKABLE_TEXT && shouldDecorateVerseText(verseData);
+        currentTextDecorationStyle === TextDecorationStyle.CLICKABLE_TEXT && shouldDecorateVerseText(verseData);
     const shouldVerseTextHaveAsterisk = (verseData: VerseData) =>
-        $textDecorationStyleStore === TextDecorationStyle.ASTRERISK && shouldDecorateVerseText(verseData);
+        currentTextDecorationStyle === TextDecorationStyle.ASTRERISK && shouldDecorateVerseText(verseData);
+
+    onDestroy(() => {
+        unsubscribeCommentStyleStore();
+        unsubscribeTextSourcesConfigStore();
+    });
 </script>
 
 <Menu
@@ -155,15 +194,20 @@
 <div class="page">
     <div class="container">
         <div>
+            <p class="header-info"><strong>{sectionMetadata.section.title[mainTextSource]}</strong></p>
+            {#if sectionMetadata.section.subtitle}
+                <p class="header-info">{sectionMetadata.section.subtitle[mainTextSource]}</p>
+            {/if}
             <p class="header-info">
                 Книга
-                <strong>{parshaData.book}</strong>:
-                <strong>{metadata.book_names[parshaData.book][mainTextSource]}</strong>
+                <!-- NOTE: id is meaningless so we need to replace it with index in section maybe? -->
+                <!-- <strong>{bookInfo.id}</strong>: -->
+                <strong>{bookInfo.name[mainTextSource]}</strong>
             </p>
             <p class="header-info">
                 Недельный раздел
-                <strong>{parshaData.parsha}</strong>:
-                <strong>{metadata.parsha_names[parshaData.parsha][mainTextSource]}</strong>
+                <!-- <strong>{parshaInfo.id}</strong>: -->
+                <strong>{parshaInfo.name[mainTextSource]}</strong>
             </p>
             <p class="header-info">
                 <span style="white-space: nowrap;">

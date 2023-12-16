@@ -1,6 +1,6 @@
 <script lang="ts">
     import Keydown from "svelte-keydown";
-    import type { Metadata } from "../types";
+    import type { MultisectionMetadata } from "../types";
     import { setContext } from "svelte";
     import Modal from "svelte-simple-modal";
     import { Router } from "svelte-router-spa";
@@ -9,14 +9,14 @@
     import { initTextDecorationStyle } from "../settings/textDecorationStyle";
     import { initCommentStyle } from "../settings/commentStyle";
     import { initTextSourcesConfig } from "../settings/textSources";
-    import { getUrlHashVerseCoords, range, setUrlHash } from "../utils";
+    import { getUrlHashVerseCoords, setUrlHash } from "../utils";
 
     import { routes } from "../routes";
     import { deleteAccessToken } from "../auth";
     import { initTextDecorationSettings } from "../settings/textDecorationSettings";
     import { isEditingStore } from "../editing";
 
-    export let metadata: Metadata;
+    export let metadata: MultisectionMetadata;
     setContext("metadata", metadata);
 
     console.log(metadata);

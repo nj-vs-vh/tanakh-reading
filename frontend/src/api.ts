@@ -2,19 +2,19 @@ import { withAccessTokenHeader } from "./auth";
 import { isProduction } from "./config";
 import type {
     ParshaData,
-    Metadata,
     SignupData,
     UserCredentials,
     SingleText,
     SingleComment,
     TextOrCommentIterRequest,
+    MultisectionMetadata,
 } from "./types";
 
 // @ts-ignore
 const BASE_API_URL = isProduction ? "https://torah-reading-backend.herokuapp.com" : "http://localhost:8081";
 
-export async function getParsha(index: number, withUserData: boolean): Promise<ParshaData> {
-    let url = `${BASE_API_URL}/parsha/${index}`;
+export async function getParsha(id: number, withUserData: boolean): Promise<ParshaData> {
+    let url = `${BASE_API_URL}/parsha/${id}`;
     if (withUserData) {
         const queryParams = new URLSearchParams({
             my_starred_comments: "true",
@@ -28,7 +28,7 @@ export async function getParsha(index: number, withUserData: boolean): Promise<P
     else throw respText;
 }
 
-export async function getMetadata(): Promise<Metadata> {
+export async function getMetadata(): Promise<MultisectionMetadata> {
     const resp = await fetch(`${BASE_API_URL}/metadata`, {
         headers: withAccessTokenHeader({ "Content-Type": "application/json" }),
     });

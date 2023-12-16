@@ -1,3 +1,5 @@
+import type { TanakhSectionMetadata } from "./typesGenerated";
+
 export enum CommentFormat {
     HTML = "html",
     MARKDOWN = "markdown",
@@ -30,21 +32,32 @@ export interface ParshaData {
     chapters: Array<ChapterData>;
 }
 
-export interface Metadata {
-    book_names: Record<number, Record<string, string>>;
-    // book idx -> [parshas included]
-    parsha_ranges: Record<number, Array<number>>;
-    // parsha idx -> [[start chapter, verse], [end chapter, verse]]
-    chapter_verse_ranges: Record<number, Array<Array<number>>>;
-    parsha_names: Record<number, Record<string, string>>;
-    text_sources: Array<string>;
-    text_source_marks: Record<string, string>;
-    text_source_descriptions: Record<string, string>;
-    text_source_links: Record<string, Array<string>>;
-    commenter_links: Record<string, Array<string>>;
-    commenter_names: Record<string, string>;
+enum KnownSectionKey {
+    TORAH = "torah",
+    NEVIIM = "neviim"
+}
+
+// NOTE: arbitrary section key is allowed but we want to handle known cases in the code and get autocompletion from enum
+export type SectionKey = KnownSectionKey | string;
+
+export interface MultisectionMetadata {
+    sections: Record<SectionKey, TanakhSectionMetadata>;
     available_parsha: Array<number>;
     logged_in_user: LoggedInUser | null;
+}
+
+export interface SectionMetadata {
+    section: TanakhSectionMetadata;
+    available_parsha: Array<number>;
+    logged_in_user: LoggedInUser | null;
+}
+
+export function toSingleSection(metadata: MultisectionMetadata, sectionKey: SectionKey): SectionMetadata {
+    return {
+        section: metadata.sections[sectionKey],
+        available_parsha: metadata.available_parsha,
+        logged_in_user: metadata.logged_in_user,
+    }
 }
 
 export interface UserCredentials {

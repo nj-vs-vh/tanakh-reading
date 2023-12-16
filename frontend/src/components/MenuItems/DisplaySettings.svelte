@@ -11,32 +11,14 @@
         setTextDecorationStyle,
     } from "../../settings/textDecorationStyle";
     import { CommentStyle, commentStyleStore, setCommentStyle } from "../../settings/commentStyle";
-    import {
-        setTextDecorationSettings,
-        TextDecorationSettings,
-        textDecorationSettingsStore,
-    } from "../../settings/textDecorationSettings";
-    import { onDestroy } from "svelte";
+    import { setTextDecorationSettings, textDecorationSettingsStore } from "../../settings/textDecorationSettings";
 
     // @ts-ignore
     let { toggle, current } = getContext("theme");
 
-    function setTextDecorationStyleFromEvent(e) {
-        setTextDecorationStyle(e.target.value);
-    }
-
-    function setCommentStyleFromEvent(e) {
+    function setCommentStyleFromEvent(e: any) {
         setCommentStyle(e.target.value);
     }
-
-    let onlyDecorateTextWithComments: boolean;
-    let textDecorationSettings: TextDecorationSettings;
-    const textDecorationSettingsStoreUnsubscribe = textDecorationSettingsStore.subscribe((v) => {
-        textDecorationSettings = v;
-        onlyDecorateTextWithComments = v.onlyDecorateTextWithComments;
-    });
-
-    onDestroy(textDecorationSettingsStoreUnsubscribe);
 </script>
 
 <MenuFolder icon="sliders" title="Настройки">
@@ -46,11 +28,11 @@
                 type="checkbox"
                 id="onlyDecorateTextWithCommentsCheckbox"
                 name="onlyDecorateTextWithComments"
-                checked={onlyDecorateTextWithComments}
+                checked={$textDecorationSettingsStore.onlyDecorateTextWithComments}
                 on:change={(e) => {
                     setTextDecorationSettings({
-                        ...textDecorationSettings,
-                        // @ts-ignore
+                        ...$textDecorationSettingsStore,
+                        // @ts-expect-error
                         onlyDecorateTextWithComments: e.target.checked,
                     });
                 }}
@@ -65,13 +47,11 @@
         <div class="input-with-label">
             <input
                 type="radio"
-                id={TextDecorationStyle.ASTRERISK}
-                name="textDecorationStyle"
-                value={TextDecorationStyle.ASTRERISK}
+                id={`setDecorationStyleTo${TextDecorationStyle.ASTRERISK}`}
                 checked={$textDecorationStyleStore == TextDecorationStyle.ASTRERISK}
-                on:change={setTextDecorationStyleFromEvent}
+                on:change={() => setTextDecorationStyle(TextDecorationStyle.ASTRERISK)}
             />
-            <label for={TextDecorationStyle.ASTRERISK}>
+            <label for={`setDecorationStyleTo${TextDecorationStyle.ASTRERISK}`}>
                 <span>Звёздочки</span>
                 <Icon heightEm={0.7} icon={"asterisk"} color={"var(--theme-color-secondary-text)"} />
             </label>
@@ -79,13 +59,11 @@
         <div class="input-with-label">
             <input
                 type="radio"
-                id={TextDecorationStyle.CLICKABLE_TEXT}
-                name="textDecorationStyle"
-                value={TextDecorationStyle.CLICKABLE_TEXT}
+                id={`setDecorationStyleTo${TextDecorationStyle.CLICKABLE_TEXT}`}
                 checked={$textDecorationStyleStore == TextDecorationStyle.CLICKABLE_TEXT}
-                on:change={setTextDecorationStyleFromEvent}
+                on:change={() => setTextDecorationStyle(TextDecorationStyle.CLICKABLE_TEXT)}
             />
-            <label for={TextDecorationStyle.CLICKABLE_TEXT}>
+            <label for={`setDecorationStyleTo${TextDecorationStyle.CLICKABLE_TEXT}`}>
                 <span>
                     <span class="clickable">Нажимаемый текст стиха</span>
                 </span>
@@ -94,13 +72,11 @@
         <div class="input-with-label">
             <input
                 type="radio"
-                id={TextDecorationStyle.NONE}
-                name="textDecorationStyle"
-                value={TextDecorationStyle.NONE}
+                id={`setDecorationStyleTo${TextDecorationStyle.NONE}`}
                 checked={$textDecorationStyleStore == TextDecorationStyle.NONE}
-                on:change={setTextDecorationStyleFromEvent}
+                on:change={() => setTextDecorationStyle(TextDecorationStyle.NONE)}
             />
-            <label for={TextDecorationStyle.NONE}>
+            <label for={`setDecorationStyleTo${TextDecorationStyle.NONE}`}>
                 <span>Нет</span>
             </label>
         </div>

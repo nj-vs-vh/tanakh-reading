@@ -1,10 +1,10 @@
 <script lang="ts">
     import { getContext } from "svelte";
-    import type { Metadata } from "../types";
+    import type { SectionMetadata } from "../types";
 
     import VerseText from "./VerseText.svelte";
 
-    const metadata: Metadata = getContext("metadata");
+    const sectionMetadata: SectionMetadata = getContext("sectionMetadata");
 
     export let textId: string;
     export let text: string;
@@ -16,7 +16,7 @@
         <VerseText {textId} {text} {textSource} />
     </blockquote>
     <span class="verse-text-source-mark">
-        {metadata.text_source_marks[textSource]}
+        {sectionMetadata.section.text_sources.find(ts => ts.key === textSource).mark}
     </span>
 </div>
 

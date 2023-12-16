@@ -4,54 +4,53 @@
 
     import MenuFolder from "./MenuFolder.svelte";
     import MenuFolderBlock from "./MenuFolderBlock.svelte";
-    import { createEventDispatcher, getContext } from "svelte";
-    import type { Metadata } from "../../types";
+    import { createEventDispatcher } from "svelte";
+    import type { MultisectionMetadata } from "../../types";
     import { textSourcesConfigStore } from "../../settings/textSources";
 
-    import { cmpVerseCoords, range, string2verseCoords, VerseCoords, versePath } from "../../utils";
+    import { cmpVerseCoords, string2verseCoords, VerseCoords, versePath } from "../../utils";
     import SearchButton from "../shared/SearchButton.svelte";
 
-    const metadata: Metadata = getContext("metadata");
-    const latestParsha = metadata.available_parsha[metadata.available_parsha.length - 1];
-    const availableBooks = Object.keys(metadata.book_names).filter(
-        (book) => metadata.parsha_ranges[book][0] <= latestParsha,
-    );
+    export let metadata: MultisectionMetadata;
+    const availableBookIdsList = Object.values(metadata.sections)
+        .flatMap((section) => section.parshas)
+        .filter((parshaInfo) => metadata.available_parsha.includes(parshaInfo.id))
+        .map((parshaInfo) => parshaInfo.book_id);
+    const availableBookIds = [...new Set(availableBookIdsList)];
+    availableBookIds.sort();
 
     const dispatch = createEventDispatcher<{
         verseSearchResult: { parsha: number; chapter: number; verse: number };
     }>();
 
     let currentVerseCoordsInput: string = "";
-    let currentBook: string = availableBooks[availableBooks.length - 1];
+    let selectedBookId = availableBookIds[availableBookIds.length - 1];
     let searchResultsNote = "";
 
     function findVerse() {
         const vc = string2verseCoords(currentVerseCoordsInput);
         if (vc !== null) {
-            const parshasToSearch = range(
-                metadata.parsha_ranges[currentBook][0],
-                metadata.parsha_ranges[currentBook][1],
-            );
-
+            const booksParshaInfoList = Object.values(metadata.sections)
+                .flatMap((section) => section.parshas)
+                .filter((pi) => pi.book_id === selectedBookId);
             let parshaFound = false;
-            for (const parsha of parshasToSearch) {
-                const chapterVerseRange = metadata.chapter_verse_ranges[parsha];
+            for (const parshaInfo of booksParshaInfoList) {
                 const vcStart: VerseCoords = {
-                    chapter: chapterVerseRange[0][0],
-                    verse: chapterVerseRange[0][1],
+                    chapter: parshaInfo.chapter_verse_start[0],
+                    verse: parshaInfo.chapter_verse_start[1],
                 };
                 const vcEnd: VerseCoords = {
-                    chapter: chapterVerseRange[1][0],
-                    verse: chapterVerseRange[1][1],
+                    chapter: parshaInfo.chapter_verse_end[0],
+                    verse: parshaInfo.chapter_verse_end[1],
                 };
                 if (
                     cmpVerseCoords(vc, vcStart) >= 0 && // both edges are inclusive
                     cmpVerseCoords(vcEnd, vc) >= 0 // both edges are inclusive
                 ) {
                     parshaFound = true;
-                    if (metadata.available_parsha.includes(parsha)) {
-                        dispatch("verseSearchResult", { parsha: parsha, chapter: vc.chapter, verse: vc.verse });
-                        navigateTo(versePath(parsha, vc));
+                    if (metadata.available_parsha.includes(parshaInfo.id)) {
+                        dispatch("verseSearchResult", { parsha: parshaInfo.id, chapter: vc.chapter, verse: vc.verse });
+                        navigateTo(versePath(parshaInfo.id, vc));
                     } else {
                         searchResultsNote = "Недельный раздел не доступен";
                     }
@@ -68,15 +67,21 @@
     function fullTextSearch() {
         navigateTo(`/search#${encodeURIComponent(currentSearchQueryInput)}`);
     }
+
+    let bookInfoWithSectionKeys = Object.entries(metadata.sections).flatMap(([sectionKey, section]) =>
+        section.books.map((bookInfo) => {
+            return { sectionKey, bookInfo };
+        }),
+    );
 </script>
 
 <MenuFolder icon="search" title="Поиск">
     <MenuFolderBlock title="По стиху">
         <div class="search-bar-container">
-            <select bind:value={currentBook}>
-                {#each Object.entries(metadata.book_names) as [book, bookName]}
-                    <option value={book} disabled={!availableBooks.includes(book)}
-                        >{bookName[$textSourcesConfigStore.main]}</option
+            <select bind:value={selectedBookId}>
+                {#each bookInfoWithSectionKeys as { sectionKey, bookInfo }}
+                    <option value={bookInfo.id} disabled={!availableBookIds.includes(bookInfo.id)}
+                        >{bookInfo.name[$textSourcesConfigStore[sectionKey].main]}</option
                     >
                 {/each}
             </select>

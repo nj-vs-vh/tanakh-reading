@@ -1,6 +1,7 @@
 <script lang="ts">
     import { getContext } from "svelte";
     import { inview } from "svelte-inview";
+    // @ts-expect-error
     import MultiSelect from "svelte-multiselect";
 
     import Menu from "../components/Menu.svelte";
@@ -14,13 +15,22 @@
     import { getStarredCommentsMeta, lookupStarredComments } from "../api";
     import type { StarredCommentData } from "../api";
     import { setPageTitle } from "../utils";
-    import type { Metadata } from "../types";
+    import type { MultisectionMetadata } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
 
-    const metadata: Metadata = getContext("metadata");
-    const textSourceMain = $textSourcesConfigStore.main; // this is not reactive, but so what
-    const parshaIndex2OptionText = (parshaIndex: number) =>
-        `${parshaIndex}. ${metadata.parsha_names[parshaIndex][textSourceMain]}`;
+    const metadata: MultisectionMetadata = getContext("metadata");
+    const textSourcesConfig = $textSourcesConfigStore; // this is not reactive, but so what
+    const allParshaInfo = Object.entries(metadata.sections).flatMap(([sectionKey, section]) =>
+        section.parshas.map((parshaInfo) => {
+            return { sectionKey, parshaInfo };
+        }),
+    );
+    const parshaIndex2OptionText = (parshaId: number) => {
+        const { sectionKey, parshaInfo } = allParshaInfo.find(
+            ({ parshaInfo }) => parshaInfo.id === parshaId,
+        );
+        return `${parshaId}. ${parshaInfo.name[textSourcesConfig[sectionKey].main]}`;
+    };
     const optionText2ParshaIndex = (optionText: string) => parseInt(optionText.slice(0, optionText.indexOf(".")));
 
     const currentHash = decodeURIComponent(window.location.hash.split("#").pop());

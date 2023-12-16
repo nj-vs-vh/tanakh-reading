@@ -5,12 +5,12 @@
     import FoldedOverflow from "./shared/FoldedOverflow.svelte";
     import Icon from "./shared/Icon.svelte";
 
-    import type { CommentData, CommentStarToggledEvent, Metadata } from "../types";
+    import type { CommentData, CommentStarToggledEvent, SectionMetadata } from "../types";
     import { CommentFormat } from "../types";
     import { editComment, CommentCoords, starComment, unstarComment } from "../api";
     import { isEditingStore } from "../editing";
 
-    const metadata: Metadata = getContext("metadata");
+    const sectionMetadata: SectionMetadata = getContext("sectionMetadata");
     export let commentData: CommentData;
     export let isStarrable: boolean = true;
 
@@ -25,7 +25,7 @@
         isStarred = commentData.is_starred_by_me === true;
     }
 
-    let isLoggedIn = metadata.logged_in_user !== null;
+    let isLoggedIn = sectionMetadata.logged_in_user !== null;
     let isHovering = false;
     let isEditing = false;
     const isEditingStoreUnsubscribe = isEditingStore.subscribe((newIsEditing) => {

@@ -2,7 +2,7 @@
     export let title: string | null = null;
 </script>
 
-<div class="settings-block">
+<div class="block">
     {#if title !== null}
         <h4>{title}</h4>
     {/if}
@@ -10,11 +10,11 @@
 </div>
 
 <style>
-    .settings-block {
-        margin-top: 1em;
-        padding-left: var(--custom-border-spacing, 1em);
-        margin-left: var(--custom-border-spacing, 1em);
-        border-left: 1px var(--theme-color-secondary-border) solid;
+    .block {
+        margin-top: 0.7em;
+        padding-left: var(--custom-border-spacing, 0.7em);
+        margin-left: var(--custom-border-spacing, 0.7em);
+        border-left: 2px var(--theme-color-secondary-border) solid;
         font-size: large;
     }
     h4 {

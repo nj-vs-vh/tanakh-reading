@@ -1,8 +1,15 @@
 <script lang="ts">
-    import { getContext, onDestroy } from "svelte";
+    import { getContext, onDestroy, setContext } from "svelte";
     import Keydown from "svelte-keydown";
     import { swipe } from "svelte-gestures";
-    import type { CommentStarToggledEvent, Metadata, ParshaData, VerseData } from "../types";
+    import {
+        type CommentStarToggledEvent,
+        type SectionMetadata,
+        type ParshaData,
+        type VerseData,
+        type MultisectionMetadata,
+        toSingleSection,
+    } from "../types";
     import { textSourcesConfigStore } from "../settings/textSources";
     import VerseComments from "./VerseComments.svelte";
     import Icon from "./shared/Icon.svelte";
@@ -13,29 +20,37 @@
         versePath,
         verseCoords2String,
         bookNoByParsha,
+        lookupBookInfo,
+        findBookSectionKey,
     } from "../utils";
     import { isEditingStore } from "../editing";
     import VerseTextBadge from "./VerseTextBadge.svelte";
 
+    export let parsha: ParshaData;
+    export let verse: number;
+    export let chapter: number;
+    export let navigable: boolean = true;
+
+    const metadata: MultisectionMetadata = getContext("metadata");
+
+    // NOTE: since modal is in a separate subtree, it doesn't get section key
+    // and section metadata contexts...
+    // so, we rebuild them here
+    const sk = findBookSectionKey(metadata, parsha.book);
+    const sectionMetadata: SectionMetadata = toSingleSection(metadata, sk);
+    setContext("sectionKey", sk);
+    setContext("sectionMetadata", sectionMetadata);
+
     let textSources: Array<string>;
-
-    const metadata: Metadata = getContext("metadata");
-
     const textSourcesConfigStoreUnsubscribe = textSourcesConfigStore.subscribe((config) => {
         textSources = [];
-        textSources.push(config.main);
-        for (const [source, isEnabled] of Object.entries(config.enabledInDetails)) {
-            if (isEnabled && source != config.main) textSources.push(source);
+        textSources.push(config[sk].main);
+        for (const [source, isEnabled] of Object.entries(config[sk].enabledInDetails)) {
+            if (isEnabled && source != config[sk].main) textSources.push(source);
         }
     });
 
-    export let parsha: ParshaData;
     const parshaVerseCoords = getVerseCoords(parsha);
-
-    export let verse: number;
-    export let chapter: number;
-
-    export let navigable: boolean = true;
 
     export let onCommentStarToggled: (e: CustomEvent<CommentStarToggledEvent>) => void = (e) => {};
 
@@ -126,7 +141,7 @@
 >
     <p class="verse-nav">
         {#if navigable}
-            <span class="icon-button verse-nav-element" on:click={(e) => prevVerse()} on:keyup={(e) => {}}>
+            <span class="icon-button verse-nav-element" on:click={() => prevVerse()} on:keyup={() => {}}>
                 <Icon
                     heightEm={0.8}
                     icon="chevron-left"
@@ -135,11 +150,13 @@
             </span>
         {/if}
         <span class="verse-number verse-nav-element">
-            {metadata.book_names[bookNoByParsha(parsha.parsha, metadata)][$textSourcesConfigStore.main]}
+            {lookupBookInfo(sectionMetadata, bookNoByParsha(parsha.parsha, sectionMetadata)).bookInfo.name[
+                $textSourcesConfigStore[sk].main
+            ]}
             {verseCoords2String(currentVerseCoords)}
         </span>
         {#if navigable}
-            <span class="icon-button verse-nav-element" on:click={(e) => nextVerse()} on:keyup={(e) => {}}>
+            <span class="icon-button verse-nav-element" on:click={() => nextVerse()} on:keyup={() => {}}>
                 <Icon
                     heightEm={0.8}
                     icon="chevron-right"
@@ -149,12 +166,12 @@
         {/if}
         <span
             class="icon-button verse-nav-element"
-            on:click={(e) => {
+            on:click={() => {
                 const url = `${window.location.origin}${versePath(parsha.parsha, currentVerseCoords)}`;
                 navigator.clipboard.writeText(url);
                 isCurrentVerseLinkCopied = true;
             }}
-            on:keyup={(e) => {}}
+            on:keyup={() => {}}
         >
             <Icon
                 heightEm={0.8}

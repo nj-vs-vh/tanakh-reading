@@ -9,7 +9,7 @@ from typing import Optional, cast
 import requests  # type: ignore
 from bs4 import BeautifulSoup, Tag  # type: ignore
 
-from backend.metadata import CommentSource, TextSource, get_book_by_parsha
+from backend.metadata import TorahCommentSource, TorahTextSource, get_book_by_parsha
 from backend.model import ChapterData, CommentData, ParshaData, VerseData
 from parsers.merge import merge_and_save_parsha_data
 from parsers.utils import (
@@ -76,7 +76,7 @@ def parse(parsha: int, parsha_url_path: str, allow_incomplete: bool):
                 verse_data = VerseData(
                     verse=int(verse_number_el.attrs["value"]),
                     text={
-                        TextSource.LECHAIM: inner_tag_text(verse_text_container),
+                        TorahTextSource.LECHAIM: inner_tag_text(verse_text_container),
                     },
                     comments=defaultdict(list),
                 )
@@ -140,9 +140,9 @@ def parse(parsha: int, parsha_url_path: str, allow_incomplete: bool):
                             continue
 
                         if css_class_prefix == "rashi" or css_class_prefix == "editor":
-                            new_comment_source = CommentSource.RASHI_ALT
+                            new_comment_source = TorahCommentSource.RASHI_ALT
                         elif css_class_prefix == "ezra":
-                            new_comment_source = CommentSource.IBN_EZRA
+                            new_comment_source = TorahCommentSource.IBN_EZRA
                         else:
                             print(
                                 "Ignoring element with unexpected css class prefix "

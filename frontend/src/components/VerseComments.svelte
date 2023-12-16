@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Metadata } from "../types";
+    import type { SectionKey, SectionMetadata } from "../types";
     import { getContext } from "svelte";
     import type { VerseData } from "../types";
     import { commentSourcesConfigStore, CommentFilterByBookmarkMode } from "../settings/commentSources";
@@ -8,22 +8,23 @@
 
     export let verseData: VerseData;
 
-    const metadata: Metadata = getContext("metadata");
-    const commenterNames = metadata.commenter_names;
+    const sectionMetadata: SectionMetadata = getContext("sectionMetadata");
+    const sk: SectionKey = getContext("sectionKey");
+    const commenterNames = Object.fromEntries(sectionMetadata.section.comment_sources.map((cs) => [cs.key, cs.name]));
 </script>
 
 <div class="container">
-    {#each $commentSourcesConfigStore.sourcesOrder as commentSource}
+    {#each $commentSourcesConfigStore[sk].sourcesOrder as commentSource}
         {#if verseData.comments[commentSource] !== undefined && verseData.comments[commentSource]
-                .map((commentData) => commentPassesFilters(commentData, commentSource, $commentSourcesConfigStore))
+                .map( (commentData) => commentPassesFilters(commentData, commentSource, $commentSourcesConfigStore[sk]), )
                 .reduce((a, b) => a || b, false)}
             <div class="comments-block">
                 <p class="comment-source-name">{commenterNames[commentSource]}</p>
                 {#each verseData.comments[commentSource] as commentData}
                     {#if // prettier-ignore
-                    $commentSourcesConfigStore.filterByBookmarkMode === CommentFilterByBookmarkMode.NONE
+                    $commentSourcesConfigStore[sk].filterByBookmarkMode === CommentFilterByBookmarkMode.NONE
                     || (
-                        $commentSourcesConfigStore.filterByBookmarkMode === CommentFilterByBookmarkMode.MY
+                        $commentSourcesConfigStore[sk].filterByBookmarkMode === CommentFilterByBookmarkMode.MY
                         && commentData.is_starred_by_me === true
                     )}
                         <div class="comment-container">

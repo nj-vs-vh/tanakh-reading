@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getContext } from "svelte";
-    import { Navigate, navigateTo } from "svelte-router-spa";
+    import { navigateTo } from "svelte-router-spa";
     import { generateSignupToken, getStarredCommentsMeta, logout } from "../api";
 
     import Menu from "../components/Menu.svelte";
@@ -11,11 +11,11 @@
     import Spinner from "../components/shared/Spinner.svelte";
 
     import { getMySignupToken } from "../api";
-    import type { Metadata } from "../types";
+    import type { MultisectionMetadata } from "../types";
     import { setPageTitle, signupPath } from "../utils";
     import { deleteAccessToken } from "../auth";
 
-    const metadata: Metadata = getContext("metadata");
+    const metadata: MultisectionMetadata = getContext("metadata");
 
     if (metadata.logged_in_user === null) {
         navigateTo("/login");

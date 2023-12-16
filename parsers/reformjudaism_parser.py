@@ -30,7 +30,7 @@ def get_listing_html() -> BeautifulSoup:
 
 
 def get_url(parsha_no: int):
-    parsha_name = metadata.parsha_names[parsha_no][metadata.TextSource.PLAUT]
+    parsha_name = metadata.parsha_names[parsha_no][metadata.TorahTextSource.PLAUT]
     print(f"Full parsha name: {parsha_name!r}")
     parsha_name = parsha_name.split("(")[0].strip()
     print(f"Parsha name on link: {parsha_name!r}")
@@ -90,7 +90,7 @@ def parse(parsha: int):
             current_verse = int(chapter_start_match.group(2))
             current_verse_data = VerseData(
                 verse=current_verse,
-                text={metadata.TextSource.PLAUT: ""},
+                text={metadata.TorahTextSource.PLAUT: ""},
                 comments={},
             )
             expected_next_verse = current_verse + 1
@@ -102,14 +102,14 @@ def parse(parsha: int):
                 current_chapter_data["verses"].append(current_verse_data)
             current_verse_data = VerseData(
                 verse=int(verse_start_match.group(1)),
-                text={metadata.TextSource.PLAUT: ""},
+                text={metadata.TorahTextSource.PLAUT: ""},
                 comments={},
             )
             expected_next_verse += 1
             continue
 
         if current_verse_data is not None:
-            current_verse_data["text"][metadata.TextSource.PLAUT] += collapse_whitespace(text_part)
+            current_verse_data["text"][metadata.TorahTextSource.PLAUT] += collapse_whitespace(text_part)
 
     if current_chapter_data is not None:
         if current_verse_data is not None:
