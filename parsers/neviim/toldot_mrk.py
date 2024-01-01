@@ -111,7 +111,7 @@ def parse_book(book_id: int, urlname: str, upload: bool):
     for parsha_data in parsha_data_list:
         print("Saving JSON")
         (JSON_DIR / f"parsha-{parsha_data['parsha']}.json").write_text(dump_parsha(parsha_data))
-    
+
         print(f"Downloading existing data for {parsha_data['parsha']} to validate...")
         response = requests.get(f"{os.environ['BASE_URL']}/parsha/{parsha_data['parsha']}")
         if response.status_code == 404:

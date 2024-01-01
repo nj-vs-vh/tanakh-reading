@@ -2,14 +2,14 @@ import argparse
 import itertools
 import json
 import os
-from pathlib import Path
 import re
-import bs4  # type: ignore
+from pathlib import Path
 
+import bs4  # type: ignore
 import requests  # type: ignore
 
 from backend.database.mongo import texts_and_comments_to_parsha_data
-from backend.metadata.neviim import NEVIIM_METADATA, JPS_GSE_SOURCE
+from backend.metadata.neviim import JPS_GSE_SOURCE, NEVIIM_METADATA
 from backend.metadata.types import IsoLang
 from backend.model import ParshaData, StoredText, TextCoords
 from parsers.merge import merge_parsha_data
@@ -49,7 +49,7 @@ JSON_PATHS = {
 
 def parse_book(book_id: int, upload: bool):
     json_path = JSON_PATHS[book_id]
-    assert json_path.exists()
+    assert json_path.exists(), json_path
     expected_book = next(b for b in NEVIIM_METADATA.books if b.id == book_id)
     print(f"Book info: {expected_book}")
     print()
