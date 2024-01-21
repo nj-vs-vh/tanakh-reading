@@ -7,6 +7,7 @@ from bson import ObjectId
 
 from backend.auth import generate_signup_token
 from backend.model import (
+    DisplayedUserComment,
     EditedComment,
     ParshaData,
     SearchTextResult,
@@ -16,6 +17,7 @@ from backend.model import (
     StoredComment,
     StoredText,
     StoredUser,
+    StoredUserComment,
     TextOrCommentIterRequest,
 )
 
@@ -183,4 +185,16 @@ class DatabaseInterface(abc.ABC):
 
     @abc.abstractmethod
     async def iter_comments(self, request: TextOrCommentIterRequest) -> Optional[StoredComment]:
+        ...
+
+    @abc.abstractmethod
+    async def save_user_comment(self, comment: StoredUserComment) -> StoredUserComment:
+        ...
+
+    @abc.abstractmethod
+    async def delete_user_comment(self, comment_id: ObjectId, author_username: str) -> bool:
+        ...
+
+    @abc.abstractmethod
+    async def lookup_user_comments(self, username: str, parsha: int) -> list[DisplayedUserComment]:
         ...

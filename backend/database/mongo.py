@@ -6,7 +6,16 @@ import json
 import logging
 import random
 from concurrent.futures import ThreadPoolExecutor
-from typing import Any, Callable, Literal, NamedTuple, Optional, TypeVar, Union
+from typing import (
+    Any,
+    Callable,
+    Iterable,
+    Literal,
+    NamedTuple,
+    Optional,
+    TypeVar,
+    Union,
+)
 
 import bson
 import pymongo
@@ -26,6 +35,7 @@ from backend.model import (
     UNSET_DB_ID,
     ChapterData,
     CommentData,
+    DisplayedUserComment,
     EditedComment,
     FoundMatch,
     ParshaData,
@@ -36,8 +46,10 @@ from backend.model import (
     StoredComment,
     StoredText,
     StoredUser,
+    StoredUserComment,
     TextCoords,
     TextOrCommentIterRequest,
+    UserData,
     VerseData,
 )
 
@@ -77,6 +89,8 @@ class MongoDatabase(DatabaseInterface):
         self.texts_coll = self.db["texts"]
         self.comments_coll = self.db["comments"]
 
+        self.user_comments_coll = self.db["user-comments"]
+
         self.parsha_data_cache: dict[int, ParshaData] = dict()
         self.threads = ThreadPoolExecutor(max_workers=8)
 
@@ -109,8 +123,18 @@ class MongoDatabase(DatabaseInterface):
             ("text_coords.chapter", pymongo.ASCENDING),
             ("text_coords.verse", pymongo.ASCENDING),
         ]
-        await self._awrap(self.texts_coll.create_index, text_coords_index + [("text_source", pymongo.HASHED)])
-        await self._awrap(self.comments_coll.create_index, text_coords_index + [("comment_source", pymongo.HASHED)])
+        await self._awrap(
+            self.texts_coll.create_index,
+            text_coords_index + [("text_source", pymongo.HASHED)],
+        )
+        await self._awrap(
+            self.comments_coll.create_index,
+            text_coords_index + [("comment_source", pymongo.HASHED)],
+        )
+        await self._awrap(
+            self.user_comments_coll.create_index,
+            text_coords_index + [("author_username", pymongo.HASHED)],
+        )
         logger.info("Indices created")
 
         self._background_task = asyncio.create_task(self.create_text_indices())
@@ -773,6 +797,45 @@ class MongoDatabase(DatabaseInterface):
             return StoredComment.from_mongo_db(docs[0])
         else:
             return None
+
+    async def save_user_comment(self, comment: StoredUserComment) -> StoredUserComment:
+        logger.info(f"Saving user comment {comment}")
+        res = await self._awrap(
+            self.user_comments_coll.insert_one,
+            {k: v for k, v in comment.to_mongo_db().items() if k != "db_id"},  # this is a HACK but I'm tireddddd
+        )
+        return comment.inserted_as(res)
+
+    async def delete_user_comment(self, user_comment_id: bson.ObjectId, author_username: str) -> bool:
+        res = await self._awrap(
+            self.user_comments_coll.delete_one,
+            {
+                "_id": user_comment_id,
+                "author_username": author_username,
+            },
+        )
+        return res.deleted_count > 0
+
+    async def lookup_user_comments(self, username: str, parsha: int) -> list[DisplayedUserComment]:
+        docs = await self._awrap(
+            self.user_comments_coll.aggregate,
+            [
+                {"$match": {"author_username": username, "text_coords.parsha": parsha}},
+                {"$sort": {"timestamp": pymongo.ASCENDING}},
+                {
+                    "$lookup": {
+                        "from": "users",
+                        "localField": "author_username",
+                        "foreignField": "username",
+                        "as": "_stored_users",
+                    }
+                },
+                {"$set": {"_author_user": {"$first": "$_stored_users"}}},
+                {"$set": {"author_user_data": "$_author_user.data"}},
+                {"$project": {"_stored_users": False, "_author_user": False}},
+            ],
+        )
+        return [DisplayedUserComment.from_mongo_db(doc) for doc in docs]
 
 
 def to_mongo_language(iso: str) -> str:

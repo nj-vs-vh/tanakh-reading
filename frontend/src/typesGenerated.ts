@@ -30,6 +30,7 @@ export interface ParshaInfo {
     [k: string]: string;
   };
   url_name: string;
+  parsha_group_leader_id?: number;
 }
 export interface TanakhBookInfo {
   id: number;

@@ -1,10 +1,12 @@
 import asyncio
+import datetime
 import json
 import logging
 import re
 import secrets
 from typing import NoReturn, Optional, cast
 
+import bson
 from aiohttp import hdrs, web
 from aiohttp.typedefs import Handler
 from dictdiffer import diff  # type: ignore
@@ -20,6 +22,7 @@ from backend.database.interface import (
 from backend.metadata.neviim import NEVIIM_METADATA
 from backend.metadata.torah import TORAH_METADATA
 from backend.model import (
+    DisplayedUserComment,
     EditCommentRequest,
     EditTextRequest,
     NewUser,
@@ -31,14 +34,12 @@ from backend.model import (
     StarredCommentLookupResponse,
     StarredCommentMetaResponse,
     StoredUser,
+    StoredUserComment,
     TextOrCommentIterRequest,
+    UserCommentPayload,
     UserCredentials,
 )
-from backend.utils import (
-    iter_parsha_comments,
-    safe_request_json,
-    worst_language_detection_ever,
-)
+from backend.utils import safe_request_json, worst_language_detection_ever
 
 logger = logging.getLogger(__name__)
 routes = web.RouteTableDef()
@@ -131,25 +132,44 @@ async def get_parsha(request: web.Request) -> web.Response:
         raise web.HTTPNotFound(reason="Parsha is not available")
 
     # optional query param things
-    add_my_starred_comments_info = request.query.get("my_starred_comments") == "true"
-    if add_my_starred_comments_info:
-        logger.info(f"Enriching parsha with user-specific data: {add_my_starred_comments_info = }")
+    add_my_starred_comments = request.query.get("my_starred_comments")
+    add_user_comments = request.query.get("add_user_comments")
+    if any(query_param is not None for query_param in (add_my_starred_comments, add_user_comments)):
+        logger.info(f"Adding user-specific data to parsha: {add_my_starred_comments = } {add_user_comments = }")
         try:
             user, _ = await get_authorized_user(request)
 
-            if add_my_starred_comments_info:
-                my_starred_comments = await db.lookup_starred_comments(
-                    starrer_username=user.username,
-                    parsha=parsha_index,
-                )
-                my_starred_comment_ids = {str(c.comment_id) for c in my_starred_comments}
-                logger.info(f"Marking {len(my_starred_comment_ids)} comment(s) as starred by the user")
-                for comment in iter_parsha_comments(parsha_data):
-                    if comment["id"] in my_starred_comment_ids:
-                        comment["is_starred_by_me"] = True
+            starred_comment_ids = set[str]()
+            if add_my_starred_comments == "true":
+                starred_comment_ids = {
+                    str(c.comment_id)
+                    for c in await db.lookup_starred_comments(
+                        starrer_username=user.username,
+                        parsha=parsha_index,
+                    )
+                }
+                logger.info(f"Found {len(starred_comment_ids)} starred comment(s)")
+
+            user_comments: list[DisplayedUserComment] = []
+            if add_user_comments == "mine":
+                user_comments = await db.lookup_user_comments(username=user.username, parsha=parsha_index)
+
+            # inserting the stuff we found into the parsha data
+            for chapter in parsha_data["chapters"]:
+                chapter_user_comments = [uc for uc in user_comments if uc.text_coords.chapter == chapter["chapter"]]
+                for verse in chapter["verses"]:
+                    verse["user_comments"] = [
+                        # HACK: this is TERRIBLE but I am not going to fix it until a proper refactoring!!! sorry!!!!!!!!
+                        json.loads(uc.json())  # type: ignore
+                        for uc in chapter_user_comments
+                        if uc.text_coords.verse == verse["verse"]
+                    ]
+                    for _, comments in verse["comments"].items():
+                        for comment in comments:
+                            if comment["id"] in starred_comment_ids:
+                                comment["is_starred_by_me"] = True
         except Exception:
-            logger.info("Failed to enrich parsha data", exc_info=True)
-            pass
+            logger.info("Failed to add user-specific data to parsha, will return without it", exc_info=True)
 
     return web.json_response(parsha_data)
 
@@ -476,6 +496,43 @@ async def iter_texts(request: web.Request) -> web.Response:
         raise web.HTTPNotFound()
     else:
         return web.json_response(text=next_text.to_public_json())
+
+
+@routes.post("/user-comment/")
+async def create_user_comment(request: web.Request) -> web.Response:
+    user, _ = await get_authorized_user(request)
+    db = get_db(request)
+    payload = UserCommentPayload.from_request_json(await safe_request_json(request))
+    comment = await db.save_user_comment(
+        StoredUserComment(
+            text_coords=payload.text_coords,
+            anchor_phrase=payload.anchor_phrase,
+            comment=payload.comment,
+            author_username=user.username,
+            timestamp=datetime.datetime.now(datetime.timezone.utc),
+        )
+    )
+    return web.json_response(text=comment.to_public_json())
+
+
+@routes.delete("/user-comment/{comment_id}")
+async def delete_user_comment(request: web.Request) -> web.Response:
+    user, _ = await get_authorized_user(request)
+    db = get_db(request)
+
+    comment_id_str = request.match_info.get("comment_id")
+    if comment_id_str is None:
+        raise web.HTTPNotFound(reason="No comment id in request path")
+    try:
+        comment_id = bson.ObjectId(comment_id_str)
+    except Exception:
+        raise web.HTTPBadRequest(reason="Invalid comment id")
+
+    is_deleted = await db.delete_user_comment(comment_id, author_username=user.username)
+    if is_deleted:
+        raise web.HTTPNoContent(reason="Comment deleted")
+    else:
+        raise web.HTTPNotFound(reason="Comment not found")
 
 
 async def start_background_jobs(app: web.Application) -> None:
