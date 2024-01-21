@@ -123,6 +123,7 @@
         border: none;
         /* padding: 1em 0 1em 0; */
         background: var(--theme-color-secondary-background);
+        color: var(--theme-color-text);
         outline: none;
         font-family: "verdana", "Times New Roman", Times, serif;
         font-size: inherit;

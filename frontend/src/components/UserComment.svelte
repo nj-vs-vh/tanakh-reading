@@ -45,6 +45,7 @@
         display: flex;
         flex-direction: column;
         margin-top: 0.4em;
+        margin-bottom: 0.4em;
     }
 
     span.comment-header {

@@ -509,7 +509,7 @@ parsha_names = {
 parsha_url_names = {
     1: "bereishit",
     2: "noach",
-    3: "lech lecha",
+    3: "lech-lecha",
     4: "vayeira",
     5: "chayei-sarah",
     6: "toledot",

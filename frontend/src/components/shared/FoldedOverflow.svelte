@@ -14,17 +14,17 @@
     afterUpdate(() => {
         // this is fucked up :0
         const isOverflownNew = overflowContainerEl.scrollHeight > maxHeightPx;
-        console.debug(
-            `afterUpdate id=${id} isOverflown ${isOverflown} -> ${isOverflownNew} hasClieckedReadMore=${hasClickedReadMore}`,
-        );
+        // console.debug(
+        //     `afterUpdate id=${id} isOverflown ${isOverflown} -> ${isOverflownNew} hasClieckedReadMore=${hasClickedReadMore}`,
+        // );
         if (!isOverflownNew && isOverflown) {
             // this is executed when the content of <slot/> is updated
             // and the new content is actually not overflown
-            console.debug("- setting isOverflown to false");
+            // console.debug("- setting isOverflown to false");
             isOverflown = false;
         }
         if (!hasClickedReadMore && isOverflownNew) {
-            console.debug("+ setting isOverflown to true");
+            // console.debug("+ setting isOverflown to true");
             isOverflown = true;
         }
         // after this callback, we reset has clicked flag so that it does not bleed to the next update
