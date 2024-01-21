@@ -42,6 +42,7 @@
             });
         } catch (e) {
             console.error(`Error creating user comment: ${e}`);
+        } finally {
             isSaving = false;
         }
     }
