@@ -99,7 +99,7 @@
                 />
                 {#if isAddingNewComment}
                     <button disabled={isSaving || newCommentText.length === 0} on:click={saveNewComment}
-                        >{isSaving ? "Сохранить" : "Сохранение..."}</button
+                        >{isSaving ? "Сохранение..." : "Сохранить"}</button
                     >
                     <button
                         on:click={() => {
