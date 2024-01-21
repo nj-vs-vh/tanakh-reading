@@ -1,3 +1,4 @@
+import datetime
 import logging
 from typing import Any, Literal, Optional, Type, TypeVar
 
@@ -8,6 +9,8 @@ from pydantic import BaseModel, Field, ValidationError, create_model_from_typedd
 from pydantic.error_wrappers import display_errors
 from pymongo.results import InsertOneResult, UpdateResult
 from typing_extensions import NotRequired, TypedDict
+
+from backend.metadata.types import CommentSourceKey, TextSourceKey
 
 logger = logging.getLogger(__name__)
 
@@ -28,12 +31,17 @@ class CommentData(TypedDict):
 
 class VerseData(TypedDict):
     verse: int
-    text: dict[str, str]
+
+    text: dict[TextSourceKey, str]
     # not parsed, but returned to frontend from DB
     # text_ids object has the same keys as text, returned separately only for backwards compatibility
-    text_ids: NotRequired[dict[str, str]]
-    text_formats: NotRequired[dict[str, Format]]
-    comments: dict[str, list[CommentData]]
+    text_ids: NotRequired[dict[TextSourceKey, str]]
+    # same for text formats
+    text_formats: NotRequired[dict[TextSourceKey, Format]]
+
+    comments: dict[CommentSourceKey, list[CommentData]]
+
+    user_comments: NotRequired[list["DisplayedUserComment"]]
 
 
 class ChapterData(TypedDict):
@@ -197,6 +205,8 @@ class EditCommentRequest(PydanticModel):
 
 
 class StoredText(PublicIdDbSchemaModel):
+    """Tanakh verse"""
+
     text_coords: TextCoords
     text_source: str
     text: str
@@ -205,6 +215,8 @@ class StoredText(PublicIdDbSchemaModel):
 
 
 class StoredComment(PublicIdDbSchemaModel):
+    """Authoritative (i.e. not user-authored) comment to a particular verse of Tanakh text"""
+
     text_coords: TextCoords
     comment_source: str
     anchor_phrase: Optional[str]
@@ -214,7 +226,25 @@ class StoredComment(PublicIdDbSchemaModel):
     index: int  # index within one source's comments
     legacy_id: Optional[str] = None
 
-    is_starred: Optional[bool] = None
+    is_starred: Optional[bool] = None  # not set in DB, used when exposing data from API
+
+
+# user-authored verse-level comment
+
+
+class UserCommentPayload(PydanticModel):
+    text_coords: TextCoords
+    anchor_phrase: Optional[str]
+    comment: str
+
+
+class StoredUserComment(PublicIdDbSchemaModel, UserCommentPayload):
+    author_username: str
+    timestamp: datetime.datetime
+
+
+class DisplayedUserComment(StoredUserComment):
+    author_user_data: UserData
 
 
 # search result models

@@ -1,7 +1,7 @@
 import { Writable, writable } from 'svelte/store';
 
 export interface TextDecorationSettings {
-    onlyDecorateTextWithComments: boolean;
+    onlyDecorateTextWithComments: boolean; // including user comments
 }
 
 const DEFAULT_TEXT_DECORATION_SETTINGS: TextDecorationSettings = {

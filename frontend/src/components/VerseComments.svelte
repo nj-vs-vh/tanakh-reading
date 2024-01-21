@@ -38,7 +38,7 @@
 </div>
 
 <style>
-    .container {
+    div.container {
         margin: 0.2em;
     }
 

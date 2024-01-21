@@ -16,6 +16,10 @@ const themes = {
                 active: '#c6a059',
                 potential: 'rgb(200, 200, 200)'
             },
+            user_comment: {
+                active: "#44B2C3",
+                potential: 'rgb(200, 200, 200)'
+            },
             clickable_text: {
                 clickable: '#efefef',
                 hovered: '#e3e3e3'
@@ -35,7 +39,11 @@ const themes = {
             },
             bad: '#7e0000',
             bookmark: {
-                active: '#c4522e',
+                active: '#AA5236',
+                potential: '#495162'
+            },
+            user_comment: {
+                active: "#3084B2",
                 potential: '#495162'
             },
             clickable_text: {

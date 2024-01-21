@@ -19,7 +19,27 @@ export interface VerseData {
     text_ids: Record<string, string>;
     text_formats: Record<string, Format>;
     comments: Record<string, Array<CommentData>>;
+
+    user_comments?: Array<DisplayedUserComment>;
 }
+
+export interface UserCommentPayload {
+    text_coords: TextCoords;
+    anchor_phrase: string | null;
+    comment: string;
+}
+
+export interface StoredUserComment extends UserCommentPayload {
+    db_id: string;
+    author_username: string;
+    timestamp: string;  // iso-format datetime string
+}
+
+
+export interface DisplayedUserComment extends StoredUserComment {
+    author_user_data: UserData
+}
+
 
 export interface ChapterData {
     chapter: number;
@@ -114,6 +134,13 @@ export interface SingleComment {
 export interface CommentStarToggledEvent {
     commentId: string;
     newIsStarred: boolean;
+}
+
+export interface UserCommentEvent {
+    chapter: number;
+    verse: number;
+    userCommentId: string;
+    action: "created" | "deleted";
 }
 
 export interface TextPositionFilter {

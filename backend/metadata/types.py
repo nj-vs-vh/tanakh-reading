@@ -21,8 +21,11 @@ class TextSource(BaseModel):
     language: IsoLang
 
 
+CommentSourceKey = str
+
+
 class CommentSource(BaseModel):
-    key: str
+    key: CommentSourceKey
     name: str
     links: list[str]
     language: IsoLang

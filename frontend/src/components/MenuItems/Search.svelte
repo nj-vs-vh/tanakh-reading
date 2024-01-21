@@ -85,7 +85,7 @@
                     >
                 {/each}
             </select>
-            <Keydown on:Enter={findVerse} />
+            <!-- <Keydown on:Enter={findVerse} /> -->
             <input
                 id="chapter-verse-input"
                 type="text"
@@ -103,7 +103,7 @@
     </MenuFolderBlock>
     <MenuFolderBlock title="По тексту">
         <div class="search-bar-container">
-            <Keydown on:Enter={fullTextSearch} />
+            <!-- <Keydown on:Enter={fullTextSearch} /> -->
             <input type="text" placeholder="" bind:value={currentSearchQueryInput} />
             <SearchButton on:click={fullTextSearch} />
         </div>
