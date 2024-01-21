@@ -18,25 +18,32 @@
     userComments.sort((c1, c2) => Date.parse(c1.timestamp) - Date.parse(c2.timestamp));
 
     let newCommentText = "";
+    let isSaving = false;
 
     async function saveNewComment() {
         if (newCommentText.length === 0) return;
-        const newCommentStored = await createUserComment({
-            text_coords: textCoords,
-            anchor_phrase: null,
-            comment: newCommentText,
-        });
-        const newCommentDisplayed = newCommentStored as DisplayedUserComment;
-        newCommentDisplayed.author_user_data = metadata.logged_in_user.data;
-        userComments = [...userComments, newCommentDisplayed];
-        newCommentText = "";
-        isAddingNewComment = false;
-        dispatch("userCommentAction", {
-            chapter: textCoords.chapter,
-            verse: textCoords.verse,
-            userCommentId: newCommentStored.db_id,
-            action: "created",
-        });
+        try {
+            isSaving = true;
+            const newCommentStored = await createUserComment({
+                text_coords: textCoords,
+                anchor_phrase: null,
+                comment: newCommentText,
+            });
+            const newCommentDisplayed = newCommentStored as DisplayedUserComment;
+            newCommentDisplayed.author_user_data = metadata.logged_in_user.data;
+            userComments = [...userComments, newCommentDisplayed];
+            newCommentText = "";
+            isAddingNewComment = false;
+            dispatch("userCommentAction", {
+                chapter: textCoords.chapter,
+                verse: textCoords.verse,
+                userCommentId: newCommentStored.db_id,
+                action: "created",
+            });
+        } catch (e) {
+            console.error(`Error creating user comment: ${e}`);
+            isSaving = false;
+        }
     }
 
     function initTextArea(el: HTMLElement) {
@@ -91,7 +98,9 @@
                     }}
                 />
                 {#if isAddingNewComment}
-                    <button disabled={newCommentText.length === 0} on:click={saveNewComment}>Сохранить</button>
+                    <button disabled={isSaving || newCommentText.length === 0} on:click={saveNewComment}
+                        >{isSaving ? "Сохранить" : "Сохранение..."}</button
+                    >
                     <button
                         on:click={() => {
                             isAddingNewComment = false;
@@ -121,7 +130,6 @@
         min-height: 1.4em;
         padding: 0.2em;
         border: none;
-        /* padding: 1em 0 1em 0; */
         background: var(--theme-color-secondary-background);
         color: var(--theme-color-text);
         outline: none;
