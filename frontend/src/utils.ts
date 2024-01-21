@@ -229,7 +229,6 @@ export function renderTimestamp(isoString: string): string {
     const dt = new Date(isoString);
     const now = new Date;
     const deltaMin = (now.getTime() - dt.getTime()) / (1000 * 60);
-    console.debug(isoString, dt, now, deltaMin);
     if (0 < deltaMin && deltaMin < 60 * 24) {
         if (deltaMin < 1) {
             return "только что"

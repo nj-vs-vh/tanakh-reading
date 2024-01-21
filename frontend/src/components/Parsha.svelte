@@ -145,7 +145,6 @@
         starredCommentsCountByVerseId[verseIdByCommentId[e.commentId]] += increment;
     }
     function handleUserCommentAction(event: CustomEvent<UserCommentEvent>) {
-        console.log(event);
         const e = event.detail;
         const increment = e.action === "created" ? 1 : -1;
         userCommentsCountByVerseId[verseId(e.chapter, e.verse)] += increment;
