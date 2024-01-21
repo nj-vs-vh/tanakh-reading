@@ -222,3 +222,23 @@ export function setPageTitle(subtitle: string | null) {
 export function removeHtmlLinebreaks(html: string): string {
     return html.replaceAll(/\<\s*br\s*\/\s*\>/gim, " ")
 }
+
+
+// twitter-style timestamp rendering, using "hours/minutes ago" fmt for recent datetimes
+export function renderTimestamp(isoString: string): string {
+    const dt = new Date(isoString);
+    const now = new Date;
+    const deltaMin = (now.getTime() - dt.getTime()) / (1000 * 60);
+    console.debug(isoString, dt, now, deltaMin);
+    if (0 < deltaMin && deltaMin < 60 * 24) {
+        if (deltaMin < 1) {
+            return "только что"
+        } else if (deltaMin < 59) {
+            return `${Math.ceil(deltaMin)}м`
+        } else {
+            return `${Math.round(deltaMin / 60)}ч`
+        }
+    } else {
+        return dt.toLocaleString();
+    }
+}

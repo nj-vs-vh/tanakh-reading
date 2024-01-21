@@ -21,6 +21,7 @@
         type SectionKey,
         toSingleSection,
         Format,
+        UserCommentEvent,
     } from "../types";
     import {
         anyCommentPassesFilters,
@@ -75,6 +76,7 @@
             } catch (e) {}
         }
     });
+
     let mainTextSource: string;
     let isMainTextHebrew: boolean;
     const unsubscribeTextSourcesConfigStore = textSourcesConfigStore.subscribe((config) => {
@@ -100,6 +102,7 @@
             chapter: chapter,
             verse: verse,
             onCommentStarToggled: handleCommentStarToggledEvent,
+            onUserCommentAction: handleUserCommentAction,
         });
 
     let urlHashVerseCoords = getUrlHashVerseCoords();
@@ -115,21 +118,21 @@
 
     const verseId = (chapterNo: number, verseNo: number): number => chapterNo * 100000 + verseNo;
 
-    //
-
+    // auxiliary maps to link verses and starred/user comments
+    // note that they are not reactive and are updated manually
     let verseIdByCommentId: Record<string, number> = {};
     let starredCommentsCountByVerseId: Record<number, number> = {};
-
-    // filling map to look up verse id by comment id it belongs to
+    let userCommentsCountByVerseId: Record<number, number> = {};
     for (const chapterData of parshaData.chapters) {
         for (const verseData of chapterData.verses) {
-            const thisVerseId = verseId(chapterData.chapter, verseData.verse);
-            starredCommentsCountByVerseId[thisVerseId] = 0;
+            const currentVerseId = verseId(chapterData.chapter, verseData.verse);
+            userCommentsCountByVerseId[currentVerseId] = verseData.user_comments ? verseData.user_comments.length : 0;
+            starredCommentsCountByVerseId[currentVerseId] = 0;
             for (const commentDataList of Object.values(verseData.comments)) {
                 for (const commentData of commentDataList) {
-                    verseIdByCommentId[commentData.id] = thisVerseId;
+                    verseIdByCommentId[commentData.id] = currentVerseId;
                     if (commentData.is_starred_by_me === true) {
-                        starredCommentsCountByVerseId[thisVerseId]++;
+                        starredCommentsCountByVerseId[currentVerseId]++;
                     }
                 }
             }
@@ -140,6 +143,12 @@
         const e = event.detail;
         const increment = e.newIsStarred ? 1 : -1;
         starredCommentsCountByVerseId[verseIdByCommentId[e.commentId]] += increment;
+    }
+    function handleUserCommentAction(event: CustomEvent<UserCommentEvent>) {
+        console.log(event);
+        const e = event.detail;
+        const increment = e.action === "created" ? 1 : -1;
+        userCommentsCountByVerseId[verseId(e.chapter, e.verse)] += increment;
     }
 
     //
@@ -167,7 +176,10 @@
 
     const shouldDecorateVerseText = (verseData: VerseData): boolean => {
         if ($textDecorationSettingsStore.onlyDecorateTextWithComments) {
-            return anyCommentPassesFilters(verseData, $commentSourcesConfigStore[sectionKey]);
+            return (
+                (verseData.user_comments && verseData.user_comments.length > 0) ||
+                anyCommentPassesFilters(verseData, $commentSourcesConfigStore[sectionKey])
+            );
         } else return true;
     };
 
@@ -236,6 +248,9 @@
                         <span class={isMainTextHebrew ? "verse-number-badge-container-hebrew" : ""}>
                             <VerseBadge
                                 starredCommentsCount={starredCommentsCountByVerseId[
+                                    verseId(chapter.chapter, verseData.verse)
+                                ]}
+                                userCommentsCount={userCommentsCountByVerseId[
                                     verseId(chapter.chapter, verseData.verse)
                                 ]}
                             /></span

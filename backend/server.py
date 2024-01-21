@@ -159,7 +159,7 @@ async def get_parsha(request: web.Request) -> web.Response:
                 chapter_user_comments = [uc for uc in user_comments if uc.text_coords.chapter == chapter["chapter"]]
                 for verse in chapter["verses"]:
                     verse["user_comments"] = [
-                        # HACK: this is TERRIBLE but I am not going to fix it until a proper refactoring!!! sorry!!!!!!!!
+                        # HACK: this is TERRIBLE but I am not going to fix it until a proper refactoring!!! sorry!!!!!!
                         json.loads(uc.json())  # type: ignore
                         for uc in chapter_user_comments
                         if uc.text_coords.verse == verse["verse"]
@@ -498,7 +498,7 @@ async def iter_texts(request: web.Request) -> web.Response:
         return web.json_response(text=next_text.to_public_json())
 
 
-@routes.post("/user-comment/")
+@routes.post("/user-comment")
 async def create_user_comment(request: web.Request) -> web.Response:
     user, _ = await get_authorized_user(request)
     db = get_db(request)

@@ -9,6 +9,7 @@
     import { Format } from "../types";
     import { editComment, CommentCoords, starComment, unstarComment } from "../api";
     import { isEditingStore } from "../editing";
+    import CommentText from "./shared/CommentText.svelte";
 
     const sectionMetadata: SectionMetadata = getContext("sectionMetadata");
     export let commentData: CommentData;
@@ -94,8 +95,8 @@
                         color={isStarred
                             ? "var(--theme-color-bookmark-active)"
                             : isHovering
-                            ? "var(--theme-color-bookmark-potential)"
-                            : "transparent"}
+                              ? "var(--theme-color-bookmark-potential)"
+                              : "transparent"}
                         heightEm={0.7}
                     />
                 </div>
@@ -111,20 +112,12 @@
                 </div>
             </div>
         {:else}
-            <p class="comment-text">
-                <FoldedOverflow id={commentData.id}>
-                    <!-- <span>{commentData.id}</span> -->
-                    {#if commentData.anchor_phrase !== null}
-                        <strong>{commentData.anchor_phrase}</strong>
-                        <span>—</span>
-                    {/if}
-                    {#if commentData.format == Format.HTML}
-                        <span class="html-wrapper">{@html commentData.comment}</span>
-                    {:else}
-                        <span>{commentData.comment}</span>
-                    {/if}
-                </FoldedOverflow>
-            </p>
+            <CommentText
+                id={commentData.id}
+                anchorPhrase={commentData.anchor_phrase}
+                comment={commentData.comment}
+                isHtml={commentData.format == Format.HTML}
+            />
         {/if}
     </div>
 </Hoverable>
@@ -143,10 +136,6 @@
         flex-direction: column;
         padding-left: 0.1em;
         margin-top: 0.1em;
-    }
-
-    p.comment-text {
-        margin: 0;
     }
 
     div.clickable-icon {
@@ -172,10 +161,5 @@
         resize: vertical;
         min-height: 5em;
         padding: 0.3em;
-    }
-
-    .html-wrapper > p {
-        margin: 0;
-        margin-top: 0.5em;
     }
 </style>

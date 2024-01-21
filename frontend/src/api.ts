@@ -8,6 +8,8 @@ import type {
     SingleComment,
     TextOrCommentIterRequest,
     MultisectionMetadata,
+    UserCommentPayload,
+    StoredUserComment,
 } from "./types";
 
 // @ts-ignore
@@ -18,6 +20,7 @@ export async function getParsha(id: number, withUserData: boolean): Promise<Pars
     if (withUserData) {
         const queryParams = new URLSearchParams({
             my_starred_comments: "true",
+            add_user_comments: "mine",
         });
         url = url + "?" + queryParams.toString();
     }
@@ -303,5 +306,26 @@ export async function iterComments(request: TextOrCommentIterRequest): Promise<S
     });
     const respText = await resp.text();
     if (resp.ok) return JSON.parse(respText);
+    else throw respText;
+}
+
+export async function createUserComment(payload: UserCommentPayload): Promise<StoredUserComment> {
+    const resp = await fetch(`${BASE_API_URL}/user-comment`, {
+        method: "POST",
+        headers: withAccessTokenHeader({}),
+        body: JSON.stringify(payload),
+    });
+    const respText = await resp.text();
+    if (resp.ok) return JSON.parse(respText);
+    else throw respText;
+}
+
+export async function deleteUserComment(commentId: string): Promise<null> {
+    const resp = await fetch(`${BASE_API_URL}/user-comment/${encodeURIComponent(commentId)}`, {
+        method: "DELETE",
+        headers: withAccessTokenHeader({}),
+    });
+    const respText = await resp.text();
+    if (resp.ok) return null;
     else throw respText;
 }

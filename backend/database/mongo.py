@@ -6,20 +6,12 @@ import json
 import logging
 import random
 from concurrent.futures import ThreadPoolExecutor
-from typing import (
-    Any,
-    Callable,
-    Iterable,
-    Literal,
-    NamedTuple,
-    Optional,
-    TypeVar,
-    Union,
-)
+from typing import Any, Callable, Literal, NamedTuple, Optional, TypeVar, Union
 
 import bson
 import pymongo
 from async_lru import alru_cache  # type: ignore
+from bson.codec_options import CodecOptions
 from pymongo import MongoClient
 
 from backend import config
@@ -49,7 +41,6 @@ from backend.model import (
     StoredUserComment,
     TextCoords,
     TextOrCommentIterRequest,
-    UserData,
     VerseData,
 )
 
@@ -818,7 +809,7 @@ class MongoDatabase(DatabaseInterface):
 
     async def lookup_user_comments(self, username: str, parsha: int) -> list[DisplayedUserComment]:
         docs = await self._awrap(
-            self.user_comments_coll.aggregate,
+            self.user_comments_coll.with_options(codec_options=CodecOptions(tz_aware=True)).aggregate,
             [
                 {"$match": {"author_username": username, "text_coords.parsha": parsha}},
                 {"$sort": {"timestamp": pymongo.ASCENDING}},
