@@ -13,7 +13,7 @@ import type {
 } from "./types";
 
 // @ts-ignore
-const BASE_API_URL = isProduction ? "https://torah-reading-backend.herokuapp.com" : "http://localhost:8081";
+const BASE_API_URL = isProduction ? "https://torah-reading-backend.herokuapp.com" : "http://0.0.0.0:8081";
 
 export async function getParsha(id: number, withUserData: boolean): Promise<ParshaData> {
     let url = `${BASE_API_URL}/parsha/${id}`;

@@ -10,3 +10,5 @@ MONGO_DB = os.getenv("MONGO_DB", "torah-reading-data")
 PEPPER = os.getenv("PEPPER", "no-pepper").encode("utf-8")
 
 ADMIN_TOKEN = os.getenv("ADMIN_TOKEN", "local-admin-token")
+
+STATIC_DIR = os.getenv("STATIC_DIR")
