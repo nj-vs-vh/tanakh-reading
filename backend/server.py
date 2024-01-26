@@ -40,10 +40,7 @@ from backend.model import (
     UserCredentials,
 )
 from backend.static import setup_frontend_routes
-from backend.utils import (
-    safe_request_json,
-    worst_language_detection_ever,
-)
+from backend.utils import safe_request_json, worst_language_detection_ever
 
 logger = logging.getLogger(__name__)
 routes = web.RouteTableDef()
