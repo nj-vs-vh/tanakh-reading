@@ -52,7 +52,13 @@ async def cors_middleware(request: web.Request, handler: Handler) -> web.StreamR
     except web.HTTPException as e:
         resp = e
 
-    allowed_origins = ["https://torah-reading.surge.sh", "http://torah-reading.surge.sh", "http://localhost:8080"]
+    allowed_origins = [
+        "https://tanakh-reading.surge.sh",
+        "http://tanakh-reading.surge.sh",
+        "https://torah-reading.surge.sh",
+        "http://torah-reading.surge.sh",
+        "http://localhost:8080",
+    ]
     request_origin = request.headers.get(hdrs.ORIGIN)
     logger.debug(f"CORS: request origin = {request_origin}")
     if request_origin is not None:
