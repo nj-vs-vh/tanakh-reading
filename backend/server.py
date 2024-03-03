@@ -53,8 +53,6 @@ async def cors_middleware(request: web.Request, handler: Handler) -> web.StreamR
         resp = e
 
     allowed_origins = [
-        "https://torah-reading-jnn6c.kinsta.page",
-        "http://torah-reading-jnn6c.kinsta.page",
         "https://torah-reading.surge.sh",
         "http://torah-reading.surge.sh",
         "http://localhost:8080",

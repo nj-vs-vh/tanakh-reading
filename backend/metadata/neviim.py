@@ -1,4 +1,5 @@
 from backend.metadata.types import (
+    CommentSource,
     IsoLang,
     ParshaInfo,
     TanakhBookInfo,
@@ -8,6 +9,7 @@ from backend.metadata.types import (
 
 MRK_SOURCE = "mosad-harav-cook"
 JPS_GSE_SOURCE = "JPS-gender-sensitive"
+RASHI_METSUDAH = "neviim-rashi-metsudah"
 
 
 NEVIIM_METADATA = TanakhSectionMetadata(
@@ -39,7 +41,16 @@ NEVIIM_METADATA = TanakhSectionMetadata(
             language=IsoLang.EN,
         ),
     ],
-    comment_sources=[],
+    comment_sources=[
+        CommentSource(
+            key=RASHI_METSUDAH,
+            name="Раши [Metshudah]",
+            links=[
+                r"https://judaicaplaza.com/products/ibs-m119",
+            ],
+            language=IsoLang.EN,
+        )
+    ],
     books=[
         TanakhBookInfo(id=6, name={MRK_SOURCE: "Йеhошуа", JPS_GSE_SOURCE: "Joshua"}),
         TanakhBookInfo(id=7, name={MRK_SOURCE: "Шойфтим", JPS_GSE_SOURCE: "Judges"}),

@@ -950,7 +950,7 @@ def texts_and_comments_to_parsha_data(texts: list[StoredText], comments: list[St
 
             verse_comments = [c for c in comments if c.text_coords.chapter == chapter and c.text_coords.verse == verse]
             verse_comments.sort(key=lambda c: c.index)
-            verse_data_by_source = collections.defaultdict[str, list[CommentData]](list)
+            comments_by_source = collections.defaultdict[str, list[CommentData]](list)
             for vc in verse_comments:
                 comment_data = CommentData(
                     id=str(vc.db_id) if vc.is_stored() else vc.legacy_id or "<unset>",
@@ -960,12 +960,12 @@ def texts_and_comments_to_parsha_data(texts: list[StoredText], comments: list[St
                 )
                 if vc.is_starred is True:
                     comment_data["is_starred_by_me"] = True
-                verse_data_by_source[vc.comment_source].append(comment_data)
+                comments_by_source[vc.comment_source].append(comment_data)
 
             verse_data = VerseData(
                 verse=verse,
                 text={vt.text_source: vt.text for vt in verse_texts},
-                comments=verse_data_by_source,
+                comments=comments_by_source,
                 text_formats={vt.text_source: vt.format for vt in verse_texts},
             )
             if all(vt.db_id != UNSET_DB_ID for vt in verse_texts):
