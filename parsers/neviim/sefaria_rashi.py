@@ -2,24 +2,24 @@ import argparse
 import itertools
 import json
 import os
-import re
 from pathlib import Path
+from typing import Optional
 
 import bs4  # type: ignore
 import requests  # type: ignore
 
 from backend.database.mongo import texts_and_comments_to_parsha_data
-from backend.metadata.neviim import JPS_GSE_SOURCE, NEVIIM_METADATA
+from backend.metadata.neviim import NEVIIM_METADATA, RASHI_METSUDAH
 from backend.metadata.types import IsoLang
-from backend.model import ParshaData, StoredText, TextCoords
+from backend.model import ParshaData, StoredComment, TextCoords
 from parsers.merge import merge_parsha_data
-from parsers.utils import collapse_whitespace, dump_parsha
+from parsers.utils import dump_parsha
 
 SCRIPT_DIR = Path(__file__).parent
 PROJECT_ROOT = SCRIPT_DIR / "../.."
 SOURCE_JSON_DIR = PROJECT_ROOT / "json/neviim/rashi-on-neviim"
 SOURCE_JSON_DIR.mkdir(parents=True, exist_ok=True)
-JSON_DIR = PROJECT_ROOT / "json/neviim/jps"
+JSON_DIR = PROJECT_ROOT / "json/neviim/rashi-on-neviim-parsha-data"
 JSON_DIR.mkdir(parents=True, exist_ok=True)
 
 JSON_PATHS = {
@@ -27,14 +27,11 @@ JSON_PATHS = {
 }
 
 
-# TODO!!!
-
-
 def parse_comments(book_id: int, upload: bool):
     json_path = JSON_PATHS[book_id]
     assert json_path.exists(), json_path
-    expected_book = next(b for b in NEVIIM_METADATA.books if b.id == book_id)
-    print(f"Book info: {expected_book}")
+    book_info = next(b for b in NEVIIM_METADATA.books if b.id == book_id)
+    print(f"Book info: {book_info}")
     print()
 
     parsha_infos = [p for p in NEVIIM_METADATA.parshas if p.book_id == book_id]
@@ -44,47 +41,53 @@ def parse_comments(book_id: int, upload: bool):
 
     print("Reading data from JSON...")
     data = json.loads(json_path.read_text())
-    texts_raw: list[list[str]] = data["text"]
-    texts: list[StoredText] = []
+    texts_raw: list[list[list[str]]] = data["text"]
+    comments: list[StoredComment] = []
     for chapter_idx, verses in enumerate(texts_raw):
         chapter_num = chapter_idx + 1
-        for verse_idx, verse_text_raw in enumerate(verses):
-            verse_text_soup = bs4.BeautifulSoup(verse_text_raw, features="html.parser")
-            redundant_elements: list[bs4.Tag] = []
-            for element in verse_text_soup.descendants:
-                if isinstance(element, bs4.Tag) and (
-                    # removing footnotes-related stuff because there's no way to render them right now
-                    element.name == "sup"
-                    or any("footnote" in css_class for css_class in element.attrs.get("class", []))
-                ):
-                    redundant_elements.append(element)
-            for e in redundant_elements:
-                e.decompose()
-            verse_text = str(verse_text_soup)
-            verse_text = re.sub(r"\s*\—\s*", " — ", verse_text)
-            verse_text = verse_text.strip()
-            verse_text = collapse_whitespace(verse_text)
-            # print("\n", verse_text_raw, "\n", verse_text, "\n", sep="")
+        for verse_idx, comments_raw in enumerate(verses):
+            for comment_idx, comment_text_raw in enumerate(comments_raw):
+                comment_text_soup = bs4.BeautifulSoup(comment_text_raw, features="html.parser")
+                anchor_phrase: Optional[str] = None
+                comment_text_parts: list[str] = []
+                for idx, element in enumerate(comment_text_soup.children):
+                    if isinstance(element, bs4.Tag):
+                        if idx == 0 and element.name == "b":
+                            anchor_phrase = element.text
+                        elif element.name == "sup":
+                            continue
+                        elif element.name == "i" and "footnote" in element.attrs.get("class", ""):
+                            comment_text_parts.append("(" + str(element).strip() + ")")
+                    else:
+                        comment_text_parts.append(str(element).strip())
+                comment_text = " ".join(comment_text_parts)
 
-            verse_num = verse_idx + 1
-            parsha_info = next(
-                (p for p in parsha_infos if p.chapter_verse_start[0] <= chapter_num <= p.chapter_verse_end[0]), None
-            )
-            assert parsha_info is not None, "Unexpected parsed text coords, no parsha info found"
-            texts.append(
-                StoredText(
-                    text_coords=TextCoords(parsha=parsha_info.id, chapter=chapter_num, verse=verse_num),
-                    text_source=JPS_GSE_SOURCE,
-                    text=verse_text,
-                    language=IsoLang.RU,
-                    format="html",
+                # print(comment_text_raw)
+                # print(f"{anchor_phrase = }")
+                # print(f"{comment_text = }")
+                # print("\n\n")
+
+                verse_num = verse_idx + 1
+                parsha_info = next(
+                    (p for p in parsha_infos if p.chapter_verse_start[0] <= chapter_num <= p.chapter_verse_end[0]), None
                 )
-            )
+                assert parsha_info is not None, "Unexpected parsed text coords, no parsha info found"
+                comments.append(
+                    StoredComment(
+                        text_coords=TextCoords(parsha=parsha_info.id, chapter=chapter_num, verse=verse_num),
+                        comment_source=RASHI_METSUDAH,
+                        comment=comment_text,
+                        anchor_phrase=anchor_phrase,
+                        index=comment_idx,
+                        language=IsoLang.RU,
+                        format="html",
+                    )
+                )
 
-    texts.sort(key=lambda t: t.text_coords.parsha)
+    comments.sort(key=lambda c: c.text_coords.parsha)
     parsha_data_list: list[ParshaData] = []
-    for _, parsha_texts in itertools.groupby(texts, key=lambda t: t.text_coords.parsha):
-        parsha_data_list.append(texts_and_comments_to_parsha_data(list(parsha_texts), []))
+    for _, parsha_comments in itertools.groupby(comments, key=lambda c: c.text_coords.parsha):
+        parsha_data_list.append(texts_and_comments_to_parsha_data([], list(parsha_comments)))
 
     if len(parsha_data_list) != len(parsha_infos):
         raise ValueError(f"Unexpected number of parshas parsed {len(parsha_data_list) = } {len(parsha_infos) = }")
