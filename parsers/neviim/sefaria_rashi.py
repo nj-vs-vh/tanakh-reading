@@ -1,18 +1,18 @@
 import argparse
+import copy
 import itertools
 import json
 import os
+import traceback
 from pathlib import Path
 from typing import Optional
 
 import bs4  # type: ignore
 import requests  # type: ignore
 
-from backend.database.mongo import texts_and_comments_to_parsha_data
 from backend.metadata.neviim import NEVIIM_METADATA, RASHI_METSUDAH
 from backend.metadata.types import IsoLang
 from backend.model import ParshaData, StoredComment, TextCoords
-from parsers.merge import merge_parsha_data
 from parsers.utils import dump_parsha
 
 SCRIPT_DIR = Path(__file__).parent
@@ -84,36 +84,66 @@ def parse_comments(book_id: int, upload: bool):
                     )
                 )
 
-    comments.sort(key=lambda c: c.text_coords.parsha)
-    parsha_data_list: list[ParshaData] = []
-    for _, parsha_comments in itertools.groupby(comments, key=lambda c: c.text_coords.parsha):
-        parsha_data_list.append(texts_and_comments_to_parsha_data([], list(parsha_comments)))
+    for parsha, parsha_comments in itertools.groupby(comments, key=lambda c: c.text_coords.parsha):
+        parsha = int(parsha)
+        parsha_comments: list[StoredComment] = list(parsha_comments)
+        print(f"Parsha {parsha} has {len(parsha_comments)} comments")
+        if not parsha_comments:
+            continue
 
-    if len(parsha_data_list) != len(parsha_infos):
-        raise ValueError(f"Unexpected number of parshas parsed {len(parsha_data_list) = } {len(parsha_infos) = }")
+        print("Downloading existing data for parsha")
+        response = requests.get(f"{os.environ['BASE_URL']}/parsha/{parsha}")
+        try:
+            if response.status_code == 404:
+                raise RuntimeError(
+                    "No saved parsha, can't add parsed comments, please parse at least one text source first!"
+                )
+            elif response.status_code != 200:
+                raise RuntimeError(f"Unexpected status code: {response.status_code}")
+            parsha_data: ParshaData = response.json()
+            for comment in parsha_comments:
+                matching_chapters = [c for c in parsha_data["chapters"] if c["chapter"] == comment.text_coords.chapter]
+                if not matching_chapters:
+                    raise RuntimeError(
+                        f"Comment {comment} is attributed to chapter {comment.text_coords.chapter} "
+                        + "but there is no such chapter in the existing parsha data"
+                    )
+                chapter = matching_chapters[0]
+                matching_verses = [v for v in chapter["verses"] if v["verse"] == comment.text_coords.verse]
+                if not matching_verses:
+                    raise RuntimeError(
+                        f"Comment {comment} is attributed to verse "
+                        + f"{comment.text_coords.chapter}:{comment.text_coords.verse} "
+                        + "but there is no such verse in the existing parsha data"
+                    )
+                verse = matching_verses[0]
+                verse["comments"].setdefault(RASHI_METSUDAH, []).append(
+                    {
+                        "anchor_phrase": comment.anchor_phrase,
+                        "comment": comment.comment,
+                        "format": comment.format,
+                    }
+                )
+        except Exception:
+            print("Unexpected error adding comments to parsha, ignoring it")
+            traceback.print_exc()
+            continue
 
-    for parsha_data in parsha_data_list:
-        print("Saving JSON")
-        (JSON_DIR / f"parsha-{parsha_data['parsha']}.json").write_text(dump_parsha(parsha_data))
-
-        print(f"Downloading existing data for {parsha_data['parsha']} to validate...")
-        response = requests.get(f"{os.environ['BASE_URL']}/parsha/{parsha_data['parsha']}")
-        if response.status_code == 404:
-            print("No such parsha, skipping validation")
-        elif response.status_code == 200:
-            print("Parsha data exists, validating it")
-            existing_parsha_data = response.json()
-            try:
-                merge_parsha_data(existing_parsha_data, parsha_data)
-            except Exception as e:
-                print(f"Validation failed: {e!r}, skipping the parsha")
-                continue
+        print("Saving parsha data with inserted comments")
+        (JSON_DIR / f"parsha-{parsha}.json").write_text(dump_parsha(parsha_data))
 
         if upload:
+            parsha_data_update = copy.deepcopy(parsha_data)
+            for chapter in parsha_data_update["chapters"]:
+                for verse in chapter["verses"]:
+                    verse.get("text_formats", {}).clear()
+                    verse.get("text", {}).clear()
+                    verse.get("text_ids", {}).clear()
+                    verse["comments"] = {k: v for k, v in verse["comments"].items() if k == RASHI_METSUDAH}
             print("Uploading parsha data...")
             response = requests.put(
                 f"{os.environ['BASE_URL']}/parsha",
-                json=parsha_data,
+                json=parsha_data_update,
                 headers={"X-Admin-Token": os.environ["ADMIN_TOKEN"]},
             )
             print(f"Response: {response}")

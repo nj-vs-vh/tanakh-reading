@@ -946,7 +946,10 @@ def texts_and_comments_to_parsha_data(texts: list[StoredText], comments: list[St
             verse_texts = list(verse_texts_iter)
             verse_texts_source_keys = {vt.text_source for vt in verse_texts}
             if len(verse_texts_source_keys) != len(verse_texts):
-                raise ValueError(f"Stored texts for verse {chapter}:{verse} contain duplicate keys: {verse_texts}")
+                raise ValueError(
+                    f"Stored texts for verse {chapter}:{verse} contain duplicate keys:"
+                    + f" {verse_texts_source_keys =} {verse_texts = }"
+                )
 
             verse_comments = [c for c in comments if c.text_coords.chapter == chapter and c.text_coords.verse == verse]
             verse_comments.sort(key=lambda c: c.index)
