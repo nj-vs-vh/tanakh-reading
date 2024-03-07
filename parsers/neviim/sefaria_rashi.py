@@ -24,6 +24,11 @@ JSON_DIR.mkdir(parents=True, exist_ok=True)
 
 JSON_PATHS = {
     6: SOURCE_JSON_DIR / "Rashi on Joshua - en - The Book of Joshua, Metsudah Publications, 1997.json",
+    7: SOURCE_JSON_DIR / "Rashi on Judges - en - The Metsudah Tanach series, Lakewood, N.J.json",
+    8: SOURCE_JSON_DIR / "Rashi on I Samuel - en - The Metsudah Tanach series, Lakewood, N.J.json",
+    9: SOURCE_JSON_DIR / "Rashi on II Samuel - en - The Metsudah Tanach series, Lakewood, N.J.json",
+    10: SOURCE_JSON_DIR / "Rashi on I Kings - en - The Metsudah Tanach series, Lakewood, N.J.json",
+    11: SOURCE_JSON_DIR / "Rashi on II Kings - en - The Metsudah Tanach series, Lakewood, N.J.json",
 }
 
 
