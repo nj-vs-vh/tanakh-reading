@@ -55,6 +55,8 @@ async def cors_middleware(request: web.Request, handler: Handler) -> web.StreamR
     allowed_origins = [
         "https://torah-reading.surge.sh",
         "http://torah-reading.surge.sh",
+        "https://tanakh-reading.nj-vs-vh.name",
+        "http://tanakh-reading.nj-vs-vh.name",
         "http://localhost:8080",
     ]
     request_origin = request.headers.get(hdrs.ORIGIN)
