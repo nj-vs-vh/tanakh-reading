@@ -473,7 +473,7 @@ NEVIIM_METADATA = TanakhSectionMetadata(
                 MRK_SOURCE: "Йешайа 1–5",
                 JPS_GSE_SOURCE: "Isaiah 1–5",
             },
-            url_name="firstsaiah-1-5",
+            url_name="isaiah-1-5",
         ),
         ParshaInfo(
             id=91,
@@ -484,7 +484,7 @@ NEVIIM_METADATA = TanakhSectionMetadata(
                 MRK_SOURCE: "Йешайа 6–9",
                 JPS_GSE_SOURCE: "Isaiah 6–9",
             },
-            url_name="firstsaiah-6-9",
+            url_name="isaiah-6-9",
         ),
         ParshaInfo(
             id=92,
@@ -495,7 +495,7 @@ NEVIIM_METADATA = TanakhSectionMetadata(
                 MRK_SOURCE: "Йешайа 10–13",
                 JPS_GSE_SOURCE: "Isaiah 10–13",
             },
-            url_name="firstsaiah-10-13",
+            url_name="isaiah-10-13",
         ),
         ParshaInfo(
             id=93,
@@ -506,7 +506,7 @@ NEVIIM_METADATA = TanakhSectionMetadata(
                 MRK_SOURCE: "Йешайа 14–20",
                 JPS_GSE_SOURCE: "Isaiah 14–20",
             },
-            url_name="firstsaiah-14-20",
+            url_name="isaiah-14-20",
         ),
         ParshaInfo(
             id=94,
@@ -517,7 +517,7 @@ NEVIIM_METADATA = TanakhSectionMetadata(
                 MRK_SOURCE: "Йешайа 21–24",
                 JPS_GSE_SOURCE: "Isaiah 21–24",
             },
-            url_name="firstsaiah-21-24",
+            url_name="isaiah-21-24",
         ),
         ParshaInfo(
             id=95,
@@ -528,7 +528,7 @@ NEVIIM_METADATA = TanakhSectionMetadata(
                 MRK_SOURCE: "Йешайа 25–29",
                 JPS_GSE_SOURCE: "Isaiah 25–29",
             },
-            url_name="firstsaiah-25-29",
+            url_name="isaiah-25-29",
         ),
         ParshaInfo(
             id=96,
@@ -539,7 +539,7 @@ NEVIIM_METADATA = TanakhSectionMetadata(
                 MRK_SOURCE: "Йешайа 30–33",
                 JPS_GSE_SOURCE: "Isaiah 30–33",
             },
-            url_name="firstsaiah-30-33",
+            url_name="isaiah-30-33",
         ),
         ParshaInfo(
             id=97,
@@ -550,7 +550,7 @@ NEVIIM_METADATA = TanakhSectionMetadata(
                 MRK_SOURCE: "Йешайа 34–40",
                 JPS_GSE_SOURCE: "Isaiah 34–40",
             },
-            url_name="firstsaiah-34-40",
+            url_name="isaiah-34-40",
         ),
         ParshaInfo(
             id=98,
@@ -561,7 +561,7 @@ NEVIIM_METADATA = TanakhSectionMetadata(
                 MRK_SOURCE: "Йешайа 41–44",
                 JPS_GSE_SOURCE: "Isaiah 41–44",
             },
-            url_name="firstsaiah-41-44",
+            url_name="isaiah-41-44",
         ),
         ParshaInfo(
             id=99,
@@ -572,7 +572,7 @@ NEVIIM_METADATA = TanakhSectionMetadata(
                 MRK_SOURCE: "Йешайа 45–49",
                 JPS_GSE_SOURCE: "Isaiah 45–49",
             },
-            url_name="firstsaiah-45-49",
+            url_name="isaiah-45-49",
         ),
         ParshaInfo(
             id=100,
@@ -583,7 +583,7 @@ NEVIIM_METADATA = TanakhSectionMetadata(
                 MRK_SOURCE: "Йешайа 50–58",
                 JPS_GSE_SOURCE: "Isaiah 50–58",
             },
-            url_name="firstsaiah-50-58",
+            url_name="isaiah-50-58",
         ),
         ParshaInfo(
             id=101,
@@ -594,7 +594,7 @@ NEVIIM_METADATA = TanakhSectionMetadata(
                 MRK_SOURCE: "Йешайа 59–66",
                 JPS_GSE_SOURCE: "Isaiah 59–66",
             },
-            url_name="firstsaiah-59-66",
+            url_name="isaiah-59-66",
         ),
         ParshaInfo(
             id=102,
