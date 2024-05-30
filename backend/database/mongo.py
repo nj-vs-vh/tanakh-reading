@@ -31,6 +31,7 @@ from backend.model import (
     EditedComment,
     FoundMatch,
     ParshaData,
+    PydanticObjectId,
     SearchTextResult,
     SignupToken,
     StarredComment,
@@ -893,19 +894,20 @@ def parsha_data_to_texts_and_comments(parsha_data: ParshaData) -> tuple[list[Sto
                 )
             for comment_source, comments in verse_data["comments"].items():
                 for index, comment in enumerate(comments):
-                    stored_comments.append(
-                        StoredComment(
-                            text_coords=text_coords,
-                            comment_source=comment_source,
-                            anchor_phrase=comment["anchor_phrase"],
-                            comment=comment["comment"],
-                            format=comment["format"],
-                            language=to_mongo_language(get_comment_source_language(comment_source)),
-                            index=index,
-                            legacy_id=comment.get("id"),
-                            is_starred=comment.get("is_starred_by_me"),
-                        )
+                    c = StoredComment(
+                        text_coords=text_coords,
+                        comment_source=comment_source,
+                        anchor_phrase=comment["anchor_phrase"],
+                        comment=comment["comment"],
+                        format=comment["format"],
+                        language=to_mongo_language(get_comment_source_language(comment_source)),
+                        index=index,
+                        legacy_id=comment.get("id"),
+                        is_starred=comment.get("is_starred_by_me"),
                     )
+                    if "id" in comment:
+                        c.db_id = PydanticObjectId(comment["id"])
+                    stored_comments.append(c)
     return stored_texts, stored_comments
 
 
