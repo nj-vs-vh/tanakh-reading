@@ -38,6 +38,12 @@ JSON_PATHS = {
     9: SOURCE_JSON_DIR / "Rashi on II Samuel - en - The Metsudah Tanach series, Lakewood, N.J.json",
     10: SOURCE_JSON_DIR / "Rashi on I Kings - en - The Metsudah Tanach series, Lakewood, N.J.json",
     11: SOURCE_JSON_DIR / "Rashi on II Kings - en - The Metsudah Tanach series, Lakewood, N.J.json",
+    12: SOURCE_JSON_DIR
+    / "Rashi on Jeremiah - en - The Judaica Press complete Tanach with Rashi, translated by A. J. Rosenberg.json",
+    13: SOURCE_JSON_DIR
+    / "Rashi on Ezekiel - en - The Judaica Press complete Tanach with Rashi, translated by A. J. Rosenberg.json",
+    14: SOURCE_JSON_DIR
+    / "Rashi on Isaiah - en - The Judaica Press complete Tanach with Rashi, translated by A. J. Rosenberg.json",
 }
 
 
@@ -82,7 +88,7 @@ def parse_comments(book_id: int, comment_insertion_mode: CommentInsertionMode, u
                                 comment_text_parts.append("(" + str(element).strip() + ")")
                             else:
                                 comment_text_parts.append(str(element))
-                        elif element.name == "b":
+                        elif element.name in {"b", "span"}:
                             comment_text_parts.append(str(element))
                         else:
                             raise RuntimeError(f"Unexpected element: {element} ({comment_text_parts = })")

@@ -44,7 +44,7 @@ NEVIIM_METADATA = TanakhSectionMetadata(
     comment_sources=[
         CommentSource(
             key=RASHI_METSUDAH,
-            name="Раши [Metshudah]",
+            name="Раши [Metsudah/Judaica press]",
             links=[
                 r"https://judaicaplaza.com/products/ibs-m119",
             ],
